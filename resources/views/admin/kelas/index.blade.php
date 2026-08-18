@@ -2,65 +2,92 @@
 
 @section('content')
 <div class="card card-custom p-4 shadow-sm border-0 rounded-4">
-    <!-- Header & Actions -->
+    <!-- Header & Action Buttons -->
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
         <div>
-            <h5 class="fw-bold mb-1 text-dark"><i class="fa-solid fa-school me-2 text-primary"></i>Kelola Data Kelas & Rombel</h5>
-            <small class="text-muted">Manajemen kelas, wali kelas penanggung jawab, dan kenaikan kelas tahun ajaran baru</small>
+            <h5 class="fw-bold mb-1 text-dark d-flex align-items-center">
+                <i class="fa-solid fa-school text-primary me-2 fs-4"></i> Kelola Data Kelas
+            </h5>
+            <small class="text-muted">Daftar kelas, penugasan Wali Kelas, dan kenaikan kelas otomatis di tahun ajaran baru</small>
         </div>
         <div class="d-flex gap-2 flex-wrap">
-            <button type="button" class="btn btn-warning rounded-pill px-4 shadow-sm fw-bold text-dark" data-bs-toggle="modal" data-bs-target="#modalKenaikanKelas">
-                <i class="fa-solid fa-angles-up me-1"></i> Proses Kenaikan Kelas
+            <button type="button" class="btn btn-outline-success rounded-pill px-3 fw-semibold shadow-sm" data-bs-toggle="modal" data-bs-target="#modalKenaikanKelas">
+                <i class="fa-solid fa-graduation-cap me-1"></i> Kenaikan Kelas (Tahun Ajaran Baru)
             </button>
-            <button type="button" class="btn btn-primary rounded-pill px-4 shadow-sm fw-semibold" data-bs-toggle="modal" data-bs-target="#modalAddKelas">
+            <button type="button" class="btn btn-primary rounded-pill px-4 fw-semibold shadow-sm" data-bs-toggle="modal" data-bs-target="#modalAddKelas">
                 <i class="fa-solid fa-plus me-1"></i> Tambah Kelas Baru
             </button>
         </div>
     </div>
 
-    <!-- Tabel Daftar Kelas -->
+    <!-- Sorting Filter -->
+    <form action="{{ route('admin.kelas.index') }}" method="GET" class="d-flex align-items-center gap-2 mb-4">
+        <label class="form-label fw-bold text-nowrap mb-0 text-dark">
+            <i class="fa-solid fa-arrow-down-up-across-line text-primary me-1"></i> Urutkan:
+        </label>
+        <select name="sort_by" class="form-select shadow-sm" style="max-width: 250px;" onchange="this.form.submit()">
+            <option value="nama_asc" {{ ($sortBy ?? '') === 'nama_asc' ? 'selected' : '' }}>Nama Kelas (A-Z)</option>
+            <option value="nama_desc" {{ ($sortBy ?? '') === 'nama_desc' ? 'selected' : '' }}>Nama Kelas (Z-A)</option>
+        </select>
+    </form>
+
+    <!-- Tabel Data Kelas -->
     <div class="table-responsive">
-        <table class="table table-bordered table-hover align-middle mb-0">
-            <thead class="table-light">
+        <table class="table table-bordered table-hover align-middle mb-0" style="font-size: 0.9rem;">
+            <thead class="table-light text-center">
                 <tr>
-                    <th style="width: 70px;" class="text-center text-dark">ID</th>
-                    <th class="text-dark">Nama Kelas / Rombel</th>
-                    <th class="text-dark">Wali Kelas</th>
-                    <th class="text-center text-dark">Jumlah Siswa</th>
-                    <th class="text-center text-dark" style="width: 120px;">Aksi</th>
+                    <th style="width: 50px;" class="text-dark">No</th>
+                    <th class="text-dark" style="width: 200px;">Nama Kelas</th>
+                    <th class="text-dark text-start">Wali Kelas Penanggung Jawab</th>
+                    <th class="text-dark" style="width: 220px;">Jumlah Peserta Didik</th>
+                    <th class="text-center text-dark" style="width: 110px;">Aksi</th>
                 </tr>
             </thead>
             <tbody>
-                @forelse($kelases as $k)
+                @forelse($kelases as $idx => $k)
                 <tr>
-                    <td class="text-center text-muted fw-bold">#{{ $k->id }}</td>
-                    <td class="fw-bold text-primary fs-6">Kelas {{ $k->nama_kelas }}</td>
+                    <td class="text-center fw-bold">{{ $kelases->firstItem() + $idx }}</td>
+                    <td class="fw-bold text-dark">
+                        <i class="fa-solid fa-graduation-cap text-primary me-2"></i> Kelas {{ $k->nama_kelas }}
+                    </td>
                     <td>
                         @if($k->waliKelas)
-                            <span class="fw-semibold text-dark">{{ $k->waliKelas->nama }}</span>
-                            <small class="text-muted d-block">NIP: {{ $k->waliKelas->nip ?? '-' }}</small>
+                            <div class="fw-semibold text-dark">
+                                <i class="fa-solid fa-user-tie text-success me-1"></i> {{ $k->waliKelas->nama }}
+                            </div>
+                            <small class="text-muted"><i class="fa-solid fa-id-card-clip me-1"></i> NIP: {{ $k->waliKelas->nip ?? '-' }}</small>
                         @else
-                            <span class="badge bg-secondary bg-opacity-10 text-muted border">Belum Ditugaskan</span>
+                            <span class="badge bg-warning text-dark px-2 py-1 rounded-2">
+                                <i class="fa-solid fa-triangle-exclamation me-1"></i> Belum ditentukan
+                            </span>
                         @endif
                     </td>
                     <td class="text-center">
-                        <span class="badge bg-primary rounded-pill px-3 py-2">
-                            {{ $k->siswas ? $k->siswas->where('status', '!=', 'alumni')->count() : 0 }} Siswa Aktif
+                        <span class="badge bg-info text-white px-3 py-2 rounded-3 shadow-sm">
+                            <i class="fa-solid fa-users me-1"></i> {{ $k->siswas ? $k->siswas->where('status', '!=', 'alumni')->count() : 0 }} Siswa Terdaftar
                         </span>
                     </td>
                     <td class="text-center">
-                        <form action="{{ route('admin.kelas.destroy', $k->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus rombel kelas ini?')">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-outline-danger rounded-circle" title="Hapus Kelas">
-                                <i class="fa-solid fa-trash"></i>
+                        <div class="d-flex gap-1 justify-content-center">
+                            <button type="button" class="btn btn-sm btn-warning text-dark rounded-circle p-1 shadow-sm d-flex align-items-center justify-content-center" style="width: 28px; height: 28px;" title="Edit Data Kelas" onclick="openEditKelasModal({{ json_encode($k) }})">
+                                <i class="fa-solid fa-pen-to-square" style="font-size: 0.75rem;"></i>
                             </button>
-                        </form>
+                            <form action="{{ route('admin.kelas.destroy', $k->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data rombel kelas ini?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-sm btn-outline-danger rounded-circle p-1 d-flex align-items-center justify-content-center" style="width: 28px; height: 28px;" title="Hapus Kelas">
+                                    <i class="fa-solid fa-trash-can" style="font-size: 0.75rem;"></i>
+                                </button>
+                            </form>
+                        </div>
                     </td>
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="5" class="text-center text-muted py-5">Belum ada data rombel kelas terdaftar.</td>
+                    <td colspan="5" class="text-center text-muted py-5">
+                        <i class="fa-solid fa-school fs-2 d-block mb-2 text-muted"></i>
+                        Belum ada data rombel kelas terdaftar.
+                    </td>
                 </tr>
                 @endforelse
             </tbody>
@@ -68,7 +95,8 @@
     </div>
 
     <!-- Pagination -->
-    <div class="mt-4">
+    <div class="mt-4 d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <small class="text-muted">Menampilkan {{ $kelases->firstItem() ?? 0 }} - {{ $kelases->lastItem() ?? 0 }} dari total {{ $kelases->total() }} rombel kelas</small>
         {{ $kelases->links() }}
     </div>
 </div>
@@ -86,12 +114,12 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label class="form-label fw-semibold text-dark">Nama Kelas / Rombel <span class="text-danger">*</span></label>
-                        <input type="text" name="nama_kelas" class="form-control" placeholder="Contoh: 7A, 8B, 9C" required>
+                        <input type="text" name="nama_kelas" class="form-control" placeholder="Contoh: 7, 8, 9, 9A, 9B" required>
                     </div>
                     <div class="mb-3">
                         <label class="form-label fw-semibold text-dark">Wali Kelas Penanggung Jawab</label>
                         <select name="guru_id" class="form-select">
-                            <option value="">-- Pilih Guru Wali Kelas --</option>
+                            <option value="">-- Belum Ditentukan --</option>
                             @foreach($gurus as $g)
                                 <option value="{{ $g->id }}">{{ $g->nama }} (NIP: {{ $g->nip ?? '-' }})</option>
                             @endforeach
@@ -100,7 +128,42 @@
                 </div>
                 <div class="modal-footer border-0 pt-0">
                     <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold">Simpan Kelas</button>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm">Simpan Kelas</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Edit Kelas -->
+<div class="modal fade" id="modalEditKelas" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 border-0 shadow">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="fw-bold text-dark"><i class="fa-solid fa-pen-to-square me-2 text-warning"></i>Edit Data Kelas</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="formEditKelas" method="POST">
+                @csrf
+                @method('PUT')
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold text-dark">Nama Kelas / Rombel <span class="text-danger">*</span></label>
+                        <input type="text" name="nama_kelas" id="edit_nama_kelas" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold text-dark">Wali Kelas Penanggung Jawab</label>
+                        <select name="guru_id" id="edit_guru_id" class="form-select">
+                            <option value="">-- Belum Ditentukan --</option>
+                            @foreach($gurus as $g)
+                                <option value="{{ $g->id }}">{{ $g->nama }} (NIP: {{ $g->nip ?? '-' }})</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 pt-0">
+                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-warning rounded-pill px-4 fw-bold text-dark shadow-sm">Simpan Perubahan</button>
                 </div>
             </form>
         </div>
@@ -111,25 +174,25 @@
 <div class="modal fade" id="modalKenaikanKelas" tabindex="-1">
     <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content rounded-4 border-0 shadow">
-            <div class="modal-header bg-warning bg-opacity-10 border-0 pb-2">
-                <h5 class="fw-bold text-dark mb-0"><i class="fa-solid fa-graduation-cap me-2 text-warning"></i>Proses Kenaikan Kelas Tahun Ajaran Baru</h5>
+            <div class="modal-header bg-success bg-opacity-10 border-0 pb-2">
+                <h5 class="fw-bold text-dark mb-0"><i class="fa-solid fa-graduation-cap me-2 text-success"></i>Proses Kenaikan Kelas (Tahun Ajaran Baru)</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form action="{{ route('admin.kenaikan.proses') }}" method="POST" onsubmit="return confirm('PERHATIAN: Tindakan ini akan menaikkan tingkat seluruh rombel siswa aktif (Kelas 7 -> 8, Kelas 8 -> 9, dan Kelas 9 -> Alumni/Lulus). Siswa yang dicentang di bawah akan DIKECUALIKAN (Tinggal Kelas). Lanjutkan proses?')">
+            <form action="{{ route('admin.kenaikan.proses') }}" method="POST" onsubmit="return confirm('PERHATIAN: Tindakan ini akan memproses kenaikan rombel seluruh siswa aktif secara otomatis (Kelas 7 -> 8, Kelas 8 -> 9, dan Kelas 9 -> Alumni/Lulus). Siswa yang dicentang di bawah akan DIKECUALIKAN (Tinggal Kelas). Lanjutkan?')">
                 @csrf
                 <div class="modal-body">
-                    <div class="alert alert-warning border-warning d-flex align-items-center mb-3 py-2">
-                        <i class="fa-solid fa-triangle-exclamation fs-4 me-3 text-warning"></i>
+                    <div class="alert alert-info border-info d-flex align-items-center mb-3 py-2">
+                        <i class="fa-solid fa-circle-info fs-4 me-3 text-info"></i>
                         <small class="text-dark">
-                            <strong>Aturan Kenaikan Otomatis:</strong><br>
+                            <strong>Alur Kenaikan Otomatis:</strong><br>
                             - Siswa <strong>Kelas 7</strong> otomatis naik ke <strong>Kelas 8</strong>.<br>
                             - Siswa <strong>Kelas 8</strong> otomatis naik ke <strong>Kelas 9</strong>.<br>
-                            - Siswa <strong>Kelas 9</strong> otomatis dialihkan statusnya menjadi <strong>Alumni (Lulus)</strong>.
+                            - Siswa <strong>Kelas 9</strong> otomatis dialihkan statusnya menjadi <strong>Arsip Alumni (Lulus)</strong>.
                         </small>
                     </div>
 
                     <h6 class="fw-bold text-danger mb-2"><i class="fa-solid fa-user-xmark me-1"></i> Pengecualian Siswa (Tinggal Kelas):</h6>
-                    <p class="small text-muted mb-2">Centang nama siswa di bawah ini jika siswa tersebut <strong>TIDAK NAIK KELAS</strong> agar tetap dipertahankan pada kelas saat ini:</p>
+                    <p class="small text-muted mb-2">Centang nama siswa di bawah jika siswa tersebut <strong>TIDAK NAIK KELAS</strong> agar tetap dipertahankan pada rombel saat ini:</p>
 
                     <!-- Live Filter Search Box di dalam Modal -->
                     <div class="mb-3">
@@ -154,7 +217,7 @@
                 </div>
                 <div class="modal-footer border-0 pt-0">
                     <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-warning rounded-pill px-4 fw-bold text-dark shadow-sm">
+                    <button type="submit" class="btn btn-success rounded-pill px-4 fw-bold shadow-sm">
                         <i class="fa-solid fa-check-double me-1"></i> Eksekusi Kenaikan Kelas
                     </button>
                 </div>
@@ -164,6 +227,14 @@
 </div>
 
 <script>
+function openEditKelasModal(kelas) {
+    document.getElementById('edit_nama_kelas').value = kelas.nama_kelas;
+    document.getElementById('edit_guru_id').value = kelas.guru_id || '';
+    document.getElementById('formEditKelas').action = `/admin/kelas/${kelas.id}`;
+    const modal = new bootstrap.Modal(document.getElementById('modalEditKelas'));
+    modal.show();
+}
+
 function filterSiswaList() {
     const input = document.getElementById('searchSiswaTinggal').value.toLowerCase();
     const items = document.querySelectorAll('.siswa-item');
