@@ -1,6 +1,20 @@
 @extends('layouts.app')
 
 @section('content')
+<style>
+    .col-header-hadir { color: #15803d !important; font-weight: 700; }
+    .col-header-terlambat { color: #b45309 !important; font-weight: 700; }
+    .col-header-izin { color: #0369a1 !important; font-weight: 700; }
+    .col-header-sakit { color: #334155 !important; font-weight: 700; }
+    .col-header-alpa { color: #b91c1c !important; font-weight: 700; }
+
+    .val-hadir { color: #15803d; font-weight: 800; font-size: 1rem; }
+    .val-terlambat { color: #b45309; font-weight: 800; font-size: 1rem; }
+    .val-izin { color: #0369a1; font-weight: 800; font-size: 1rem; }
+    .val-sakit { color: #334155; font-weight: 800; font-size: 1rem; }
+    .val-alpa { color: #b91c1c; font-weight: 800; font-size: 1rem; }
+</style>
+
 <div class="card card-custom p-4 shadow-sm border-0 rounded-4">
     <!-- Header & Mode Tabs -->
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
@@ -121,7 +135,7 @@
                     <td class="text-center fw-bold text-dark">{{ $row->siswa->nisn }}</td>
                     <td class="fw-bold text-dark">{{ $row->siswa->nama }}</td>
                     <td class="text-center">
-                        <span class="badge bg-light text-secondary border px-2">{{ $row->siswa->jenis_kelamin }}</span>
+                        <span class="badge {{ $row->siswa->jenis_kelamin === 'L' ? 'bg-primary bg-opacity-10 text-primary border border-primary' : 'bg-danger bg-opacity-10 text-danger border border-danger' }} px-2 fw-bold">{{ $row->siswa->jenis_kelamin }}</span>
                     </td>
                     <td class="text-center">
                         <span class="badge bg-primary bg-opacity-10 text-primary border border-primary px-2 py-1 rounded-2">
@@ -144,17 +158,17 @@
                     </td>
                     <td class="text-center">
                         @if($row->status === 'HADIR')
-                            <span class="badge bg-success bg-opacity-10 text-success border border-success px-3 py-2 rounded-pill"><i class="fa-solid fa-circle-check me-1"></i> HADIR</span>
+                            <span class="badge bg-success bg-opacity-10 text-success border border-success px-3 py-2 rounded-pill fw-bold"><i class="fa-solid fa-circle-check me-1"></i> HADIR</span>
                         @elseif($row->status === 'TERLAMBAT')
-                            <span class="badge bg-warning bg-opacity-10 text-dark border border-warning px-3 py-2 rounded-pill"><i class="fa-solid fa-clock me-1 text-warning"></i> TERLAMBAT</span>
+                            <span class="badge bg-warning bg-opacity-10 text-dark border border-warning px-3 py-2 rounded-pill fw-bold" style="color: #92400e !important;"><i class="fa-solid fa-clock me-1 text-warning"></i> TERLAMBAT</span>
                         @elseif($row->status === 'IZIN')
-                            <span class="badge bg-info bg-opacity-10 text-dark border border-info px-3 py-2 rounded-pill"><i class="fa-solid fa-envelope-open-text me-1"></i> IZIN</span>
+                            <span class="badge bg-info bg-opacity-10 text-primary border border-info px-3 py-2 rounded-pill fw-bold"><i class="fa-solid fa-envelope-open-text me-1"></i> IZIN</span>
                         @elseif($row->status === 'SAKIT')
-                            <span class="badge bg-secondary bg-opacity-10 text-dark border border-secondary px-3 py-2 rounded-pill"><i class="fa-solid fa-notes-medical me-1"></i> SAKIT</span>
+                            <span class="badge bg-secondary bg-opacity-10 text-dark border border-secondary px-3 py-2 rounded-pill fw-bold"><i class="fa-solid fa-notes-medical me-1"></i> SAKIT</span>
                         @elseif($row->status === 'ALPA')
-                            <span class="badge bg-danger bg-opacity-10 text-danger border border-danger px-3 py-2 rounded-pill"><i class="fa-solid fa-xmark me-1"></i> ALPA</span>
+                            <span class="badge bg-danger bg-opacity-10 text-danger border border-danger px-3 py-2 rounded-pill fw-bold"><i class="fa-solid fa-xmark me-1"></i> ALPA</span>
                         @else
-                            <span class="badge bg-light text-muted border px-3 py-2 rounded-pill"><i class="fa-regular fa-circle me-1"></i> BELUM ABSEN</span>
+                            <span class="badge bg-light text-secondary border px-3 py-2 rounded-pill fw-semibold"><i class="fa-regular fa-circle me-1"></i> BELUM ABSEN</span>
                         @endif
                     </td>
                     <td class="text-center">
@@ -190,11 +204,11 @@
                     <th rowspan="2" class="align-middle text-dark" style="width: 120px;">Persentase</th>
                 </tr>
                 <tr>
-                    <th class="text-success" style="width: 80px;"><i class="fa-solid fa-circle-check me-1"></i> Hadir</th>
-                    <th class="text-warning" style="width: 80px;"><i class="fa-solid fa-clock me-1"></i> Terlambat</th>
-                    <th class="text-info" style="width: 80px;"><i class="fa-solid fa-envelope-open me-1"></i> Izin</th>
-                    <th class="text-secondary" style="width: 80px;"><i class="fa-solid fa-notes-medical me-1"></i> Sakit</th>
-                    <th class="text-danger" style="width: 80px;"><i class="fa-solid fa-circle-xmark me-1"></i> Alpa</th>
+                    <th class="col-header-hadir" style="width: 85px;"><i class="fa-solid fa-circle-check me-1"></i> Hadir</th>
+                    <th class="col-header-terlambat" style="width: 85px;"><i class="fa-solid fa-clock me-1"></i> Terlambat</th>
+                    <th class="col-header-izin" style="width: 85px;"><i class="fa-solid fa-envelope-open me-1"></i> Izin</th>
+                    <th class="col-header-sakit" style="width: 85px;"><i class="fa-solid fa-notes-medical me-1"></i> Sakit</th>
+                    <th class="col-header-alpa" style="width: 85px;"><i class="fa-solid fa-circle-xmark me-1"></i> Alpa</th>
                 </tr>
             </thead>
             <tbody>
@@ -204,20 +218,20 @@
                     <td class="text-center fw-bold text-dark">{{ $row->siswa->nisn }}</td>
                     <td class="fw-bold text-dark">{{ $row->siswa->nama }}</td>
                     <td class="text-center">
-                        <span class="badge bg-light text-secondary border px-2">{{ $row->siswa->jenis_kelamin }}</span>
+                        <span class="badge {{ $row->siswa->jenis_kelamin === 'L' ? 'bg-primary bg-opacity-10 text-primary border border-primary' : 'bg-danger bg-opacity-10 text-danger border border-danger' }} px-2 fw-bold">{{ $row->siswa->jenis_kelamin }}</span>
                     </td>
                     <td class="text-center">
                         <span class="badge bg-primary bg-opacity-10 text-primary border border-primary px-2 py-1 rounded-2">
                             Kelas {{ $row->siswa->kelas->nama_kelas ?? '-' }}
                         </span>
                     </td>
-                    <td class="text-center fw-bold text-success">{{ $row->hadir }}</td>
-                    <td class="text-center fw-bold text-warning">{{ $row->terlambat }}</td>
-                    <td class="text-center fw-bold text-info">{{ $row->izin }}</td>
-                    <td class="text-center fw-bold text-secondary">{{ $row->sakit }}</td>
-                    <td class="text-center fw-bold text-danger">{{ $row->alpa }}</td>
+                    <td class="text-center val-hadir">{{ $row->hadir }}</td>
+                    <td class="text-center val-terlambat">{{ $row->terlambat }}</td>
+                    <td class="text-center val-izin">{{ $row->izin }}</td>
+                    <td class="text-center val-sakit">{{ $row->sakit }}</td>
+                    <td class="text-center val-alpa">{{ $row->alpa }}</td>
                     <td class="text-center">
-                        <span class="badge {{ $row->persentase >= 85 ? 'bg-success' : ($row->persentase >= 75 ? 'bg-warning text-dark' : 'bg-danger') }} rounded-pill px-3 py-2">
+                        <span class="badge {{ $row->persentase >= 85 ? 'bg-success' : ($row->persentase >= 75 ? 'bg-warning text-dark' : 'bg-danger') }} rounded-pill px-3 py-2 fw-bold">
                             {{ $row->persentase }}%
                         </span>
                     </td>
@@ -246,11 +260,11 @@
                     <th rowspan="2" class="align-middle text-dark" style="width: 120px;">Persentase</th>
                 </tr>
                 <tr>
-                    <th class="text-success" style="width: 80px;"><i class="fa-solid fa-circle-check me-1"></i> Hadir</th>
-                    <th class="text-warning" style="width: 80px;"><i class="fa-solid fa-clock me-1"></i> Terlambat</th>
-                    <th class="text-info" style="width: 80px;"><i class="fa-solid fa-envelope-open me-1"></i> Izin</th>
-                    <th class="text-secondary" style="width: 80px;"><i class="fa-solid fa-notes-medical me-1"></i> Sakit</th>
-                    <th class="text-danger" style="width: 80px;"><i class="fa-solid fa-circle-xmark me-1"></i> Alpa</th>
+                    <th class="col-header-hadir" style="width: 85px;"><i class="fa-solid fa-circle-check me-1"></i> Hadir</th>
+                    <th class="col-header-terlambat" style="width: 85px;"><i class="fa-solid fa-clock me-1"></i> Terlambat</th>
+                    <th class="col-header-izin" style="width: 85px;"><i class="fa-solid fa-envelope-open me-1"></i> Izin</th>
+                    <th class="col-header-sakit" style="width: 85px;"><i class="fa-solid fa-notes-medical me-1"></i> Sakit</th>
+                    <th class="col-header-alpa" style="width: 85px;"><i class="fa-solid fa-circle-xmark me-1"></i> Alpa</th>
                 </tr>
             </thead>
             <tbody>
@@ -260,20 +274,20 @@
                     <td class="text-center fw-bold text-dark">{{ $row->siswa->nisn }}</td>
                     <td class="fw-bold text-dark">{{ $row->siswa->nama }}</td>
                     <td class="text-center">
-                        <span class="badge bg-light text-secondary border px-2">{{ $row->siswa->jenis_kelamin }}</span>
+                        <span class="badge {{ $row->siswa->jenis_kelamin === 'L' ? 'bg-primary bg-opacity-10 text-primary border border-primary' : 'bg-danger bg-opacity-10 text-danger border border-danger' }} px-2 fw-bold">{{ $row->siswa->jenis_kelamin }}</span>
                     </td>
                     <td class="text-center">
                         <span class="badge bg-primary bg-opacity-10 text-primary border border-primary px-2 py-1 rounded-2">
                             Kelas {{ $row->siswa->kelas->nama_kelas ?? '-' }}
                         </span>
                     </td>
-                    <td class="text-center fw-bold text-success">{{ $row->hadir }}</td>
-                    <td class="text-center fw-bold text-warning">{{ $row->terlambat }}</td>
-                    <td class="text-center fw-bold text-info">{{ $row->izin }}</td>
-                    <td class="text-center fw-bold text-secondary">{{ $row->sakit }}</td>
-                    <td class="text-center fw-bold text-danger">{{ $row->alpa }}</td>
+                    <td class="text-center val-hadir">{{ $row->hadir }}</td>
+                    <td class="text-center val-terlambat">{{ $row->terlambat }}</td>
+                    <td class="text-center val-izin">{{ $row->izin }}</td>
+                    <td class="text-center val-sakit">{{ $row->sakit }}</td>
+                    <td class="text-center val-alpa">{{ $row->alpa }}</td>
                     <td class="text-center">
-                        <span class="badge {{ $row->persentase >= 85 ? 'bg-success' : ($row->persentase >= 75 ? 'bg-warning text-dark' : 'bg-danger') }} rounded-pill px-3 py-2">
+                        <span class="badge {{ $row->persentase >= 85 ? 'bg-success' : ($row->persentase >= 75 ? 'bg-warning text-dark' : 'bg-danger') }} rounded-pill px-3 py-2 fw-bold">
                             {{ $row->persentase }}%
                         </span>
                     </td>

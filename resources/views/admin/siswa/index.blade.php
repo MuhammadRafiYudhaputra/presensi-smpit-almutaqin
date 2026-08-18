@@ -104,7 +104,7 @@
                         <small class="text-muted"><i class="fa-regular fa-id-card me-1"></i>NIK: {{ $siswa->nik ?? '320504' . substr($siswa->nisn, -6) . '0001' }}</small>
                     </td>
                     <td class="text-center">
-                        <span class="badge bg-light text-secondary border px-2">{{ $siswa->jenis_kelamin }}</span>
+                        <span class="badge {{ $siswa->jenis_kelamin === 'L' ? 'bg-primary bg-opacity-10 text-primary border border-primary' : 'bg-danger bg-opacity-10 text-danger border border-danger' }} px-2 fw-bold">{{ $siswa->jenis_kelamin }}</span>
                     </td>
                     <td>
                         <div class="small text-dark"><i class="fa-solid fa-location-dot text-danger me-1"></i>{{ $siswa->tempat_lahir ?? 'Garut' }}</div>
