@@ -2,100 +2,111 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>SMP IT Al-Muttaqin - Presensi Siswa</title>
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- FontAwesome 6 -->
+    <!-- Font Awesome Pro / Free Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
+
     <style>
         :root {
+            --sidebar-bg: #0b1329;
+            --sidebar-hover: rgba(255, 255, 255, 0.06);
+            --sidebar-active: #1d4ed8;
             --primary-color: #1a56db;
-            --sidebar-bg: #0f172a;
-            --sidebar-hover: #1e293b;
-            --bg-page: #f4f6fb;
+            --body-bg: #f3f6fa;
+        }
+
+        * {
+            box-sizing: border-box;
         }
 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: var(--bg-page);
+            background-color: var(--body-bg);
             color: #1e293b;
+            min-height: 100vh;
             margin: 0;
             padding: 0;
+            overflow-x: hidden;
         }
 
         /* Sidebar Styling */
         .sidebar {
             width: 260px;
-            height: 100vh;
+            background-color: var(--sidebar-bg);
             position: fixed;
             top: 0;
+            bottom: 0;
             left: 0;
-            background-color: var(--sidebar-bg);
-            color: #fff;
+            z-index: 1050;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.08);
-            z-index: 1000;
             overflow-y: auto;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .sidebar-brand {
-            padding: 1.5rem 1.25rem 1rem;
+            padding: 1.5rem 1.25rem 1.25rem;
             display: flex;
             align-items: center;
-            gap: 10px;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .sidebar-brand-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
         .sidebar-brand-icon {
-            color: #eab308;
-            font-size: 1.3rem;
+            color: #facc15;
+            font-size: 1.5rem;
         }
 
         .sidebar-brand-text {
+            color: #ffffff;
             font-weight: 800;
             font-size: 1.15rem;
-            letter-spacing: -0.5px;
-            color: #ffffff;
             margin: 0;
+            letter-spacing: -0.3px;
+        }
+
+        .sidebar-heading {
+            font-size: 0.68rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #64748b;
+            padding: 1.25rem 1.25rem 0.5rem;
         }
 
         .sidebar-menu {
             list-style: none;
-            padding: 0.5rem 0.85rem;
+            padding: 0.5rem 0.75rem;
             margin: 0;
-            flex-grow: 1;
-        }
-
-        .sidebar-heading {
-            font-size: 0.72rem;
-            font-weight: 700;
-            color: #64748b;
-            text-transform: uppercase;
-            letter-spacing: 0.75px;
-            padding: 1.25rem 0.75rem 0.4rem;
         }
 
         .sidebar-menu .nav-item {
-            margin-bottom: 0.25rem;
+            margin-bottom: 4px;
         }
 
         .sidebar-menu .nav-link {
             color: #94a3b8;
+            font-weight: 600;
+            font-size: 0.88rem;
             padding: 0.65rem 0.9rem;
             border-radius: 12px;
             display: flex;
             align-items: center;
             gap: 12px;
-            font-size: 0.88rem;
-            font-weight: 600;
-            text-decoration: none;
             transition: all 0.2s ease;
+            text-decoration: none;
         }
 
         .sidebar-menu .nav-link i {
@@ -148,6 +159,7 @@
             margin-left: 260px;
             padding: 1.5rem 2rem;
             min-height: 100vh;
+            transition: all 0.3s ease;
         }
 
         .top-header-card {
@@ -159,7 +171,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: gap;
+            flex-wrap: wrap;
+            gap: 12px;
         }
 
         .top-header-title {
@@ -206,16 +219,92 @@
             border: none;
             box-shadow: 0 2px 14px rgba(0, 0, 0, 0.03);
         }
+
+        /* Mobile Overlay Backdrop */
+        .sidebar-backdrop {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(4px);
+            z-index: 1040;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .sidebar-backdrop.show {
+            display: block;
+            opacity: 1;
+        }
+
+        /* Mobile Header Bar */
+        .mobile-navbar {
+            display: none;
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 0.85rem 1.25rem;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+            margin-bottom: 1rem;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* Responsive Breakpoints for Mobile / Tablets */
+        @media (max-width: 991.98px) {
+            .sidebar {
+                transform: translateX(-100%);
+                width: 280px;
+                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+            }
+
+            .sidebar.show {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 1rem 0.85rem 2rem;
+            }
+
+            .mobile-navbar {
+                display: flex;
+            }
+
+            .top-header-card {
+                padding: 1rem 1.25rem;
+            }
+
+            .top-header-title {
+                font-size: 1.15rem;
+            }
+
+            .user-role-badge, .date-badge {
+                font-size: 0.75rem;
+                padding: 0.35rem 0.75rem;
+            }
+        }
     </style>
 </head>
 <body>
 
-    <!-- Sidebar -->
-    <div class="sidebar">
+    <!-- Mobile Overlay Backdrop -->
+    <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="toggleSidebar()"></div>
+
+    <!-- Sidebar Drawer -->
+    <div class="sidebar" id="sidebarDrawer">
         <div>
             <div class="sidebar-brand">
-                <i class="fa-solid fa-table-cells-large sidebar-brand-icon"></i>
-                <h5 class="sidebar-brand-text">SMP IT Al-Muttaqin</h5>
+                <div class="sidebar-brand-left">
+                    <i class="fa-solid fa-table-cells-large sidebar-brand-icon"></i>
+                    <h5 class="sidebar-brand-text">SMP IT Al-Muttaqin</h5>
+                </div>
+                <!-- Close Button on Mobile -->
+                <button type="button" class="btn btn-sm text-white-50 d-lg-none p-1" onclick="toggleSidebar()" aria-label="Tutup Menu">
+                    <i class="fa-solid fa-xmark fs-4"></i>
+                </button>
             </div>
 
             <ul class="sidebar-menu">
@@ -306,13 +395,26 @@
 
     <!-- Main Content -->
     <div class="main-content">
+        <!-- Mobile Navbar (Only Visible on Mobile & Tablet) -->
+        <div class="mobile-navbar">
+            <button type="button" class="btn btn-light border rounded-pill px-3 py-2 shadow-sm d-flex align-items-center gap-2" onclick="toggleSidebar()">
+                <i class="fa-solid fa-bars text-primary fs-5"></i>
+                <span class="fw-bold small text-dark">Menu Navigasi</span>
+            </button>
+            <div class="d-flex align-items-center gap-2">
+                <span class="user-role-badge">
+                    <i class="fa-solid fa-user"></i> {{ Auth::user()->name ?? 'User' }}
+                </span>
+            </div>
+        </div>
+
         <!-- Top Header Card -->
         <div class="top-header-card">
             <div>
                 <h4 class="top-header-title">Sistem Presensi Siswa</h4>
                 <p class="top-header-subtitle">SMP IT Al-Muttaqin Tarogong Kaler</p>
             </div>
-            <div class="d-flex align-items-center gap-2">
+            <div class="d-flex align-items-center flex-wrap gap-2">
                 <span class="date-badge">
                     <i class="fa-regular fa-calendar text-primary"></i> {{ date('d M Y') }}
                 </span>
@@ -343,6 +445,16 @@
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebarDrawer');
+            const backdrop = document.getElementById('sidebarBackdrop');
+            if (sidebar && backdrop) {
+                sidebar.classList.toggle('show');
+                backdrop.classList.toggle('show');
+            }
+        }
+
+        // Auto dismiss flash alerts
         setTimeout(function() {
             const alerts = document.querySelectorAll('.auto-dismiss-alert');
             alerts.forEach(alert => {
