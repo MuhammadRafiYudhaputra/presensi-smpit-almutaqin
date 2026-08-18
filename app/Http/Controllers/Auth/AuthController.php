@@ -48,4 +48,23 @@ class AuthController extends Controller
 
         return redirect()->route('login')->with('success', 'Anda telah berhasil keluar dari sistem.');
     }
+
+    public function forgotPassword(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email|exists:users,email',
+        ], [
+            'email.exists' => 'Email yang Anda masukkan tidak terdaftar di sistem.',
+        ]);
+
+        $user = \App\Models\User::where('email', $request->email)->first();
+
+        // Reset password ke default yang aman
+        $defaultPassword = ($user->role === 'admin') ? 'admin123' : '12345678';
+        $user->update([
+            'password' => \Illuminate\Support\Facades\Hash::make($defaultPassword),
+        ]);
+
+        return redirect()->route('login')->with('success', "Password untuk akun [{$user->email}] telah berhasil di-reset menjadi: {$defaultPassword}. Silakan masuk kembali.");
+    }
 }

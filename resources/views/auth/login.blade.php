@@ -30,7 +30,7 @@
             max-width: 960px;
             background: #2563eb;
             border-radius: 28px;
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
             overflow: hidden;
             display: flex;
             flex-direction: column;
@@ -309,12 +309,17 @@
                 </div>
             </div>
 
-            <!-- Remember Me -->
-            <div class="form-check mb-4">
-                <input class="form-check-input" type="checkbox" name="remember" id="remember" checked>
-                <label class="form-check-label text-muted small" for="remember">
-                    Ingat Saya
-                </label>
+            <!-- Remember Me & Forgot Password Link -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="remember" id="remember" checked>
+                    <label class="form-check-label text-muted small cursor-pointer" for="remember">
+                        Ingat Saya
+                    </label>
+                </div>
+                <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#modalForgotPassword" class="text-decoration-none small text-primary fw-bold">
+                    <i class="fa-solid fa-key me-1"></i> Lupa Password?
+                </a>
             </div>
 
             <!-- Submit Button -->
@@ -342,6 +347,44 @@
     </div>
 </div>
 
+<!-- Modal Lupa Password -->
+<div class="modal fade" id="modalForgotPassword" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 border-0 shadow-lg p-2">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="fw-bold text-dark d-flex align-items-center">
+                    <i class="fa-solid fa-key text-warning me-2"></i> Pemulihan Password Akun
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="{{ route('forgot.password') }}" method="POST">
+                @csrf
+                <div class="modal-body">
+                    <p class="text-muted small mb-3">
+                        Masukkan alamat email Anda yang terdaftar pada sistem. Password Anda akan di-reset ke kata sandi standar sistem secara otomatis.
+                    </p>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small text-dark">Email Akun Terdaftar</label>
+                        <div class="input-group-custom">
+                            <i class="fa-regular fa-envelope"></i>
+                            <input type="email" name="email" placeholder="admin@almutaqin.sch.id" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 pt-0 flex-column gap-2">
+                    <button type="submit" class="btn btn-primary rounded-pill w-100 fw-bold py-2 shadow-sm">
+                        <i class="fa-solid fa-rotate-right me-1"></i> Reset Password Saya
+                    </button>
+                    <a href="https://wa.me/6281234567890?text=Assalamu'alaikum%20Admin%20SMP%20IT%20Al-Muttaqin,%20saya%20membutuhkan%20bantuan%20reset%20password%20akun%20portal%20presensi." target="_blank" class="btn btn-outline-success rounded-pill w-100 fw-semibold py-2">
+                        <i class="fa-brands fa-whatsapp me-1"></i> Hubungi Admin TU via WhatsApp
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 function fillCreds(email, password) {
     document.getElementById('email').value = email;
