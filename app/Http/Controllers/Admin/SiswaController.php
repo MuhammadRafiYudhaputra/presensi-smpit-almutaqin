@@ -148,6 +148,13 @@ class SiswaController extends Controller
     public function printCard($id)
     {
         $siswa = Siswa::with(['kelas', 'orangTua'])->findOrFail($id);
-        return view('admin.siswa.card', compact('siswa'));
+        
+        try {
+            $qrSvg = $this->qrCodeService->renderSvg($siswa->qr_code_token, 160);
+        } catch (\Throwable $e) {
+            $qrSvg = '<img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=' . urlencode($siswa->qr_code_token) . '" alt="QR Code" width="160" height="160" style="display:block; margin:0 auto;" />';
+        }
+
+        return view('admin.siswa.card', compact('siswa', 'qrSvg'));
     }
 }
