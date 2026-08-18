@@ -1,0 +1,7 @@
+/vendor
+/node_modules
+/scratch
+/tests
+.env
+.git
+.gitignore
