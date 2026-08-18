@@ -204,11 +204,26 @@
                     <th rowspan="2" class="align-middle text-dark" style="width: 120px;">Persentase</th>
                 </tr>
                 <tr>
-                    <th class="col-header-hadir" style="width: 85px;"><i class="fa-solid fa-circle-check me-1"></i> Hadir</th>
-                    <th class="col-header-terlambat" style="width: 85px;"><i class="fa-solid fa-clock me-1"></i> Terlambat</th>
-                    <th class="col-header-izin" style="width: 85px;"><i class="fa-solid fa-envelope-open me-1"></i> Izin</th>
-                    <th class="col-header-sakit" style="width: 85px;"><i class="fa-solid fa-notes-medical me-1"></i> Sakit</th>
-                    <th class="col-header-alpa" style="width: 85px;"><i class="fa-solid fa-circle-xmark me-1"></i> Alpa</th>
+                    <th class="col-header-hadir text-center py-2" style="width: 85px;">
+                        <i class="fa-solid fa-circle-check d-block mb-1 fs-6"></i>
+                        <span>Hadir</span>
+                    </th>
+                    <th class="col-header-terlambat text-center py-2" style="width: 85px;">
+                        <i class="fa-solid fa-clock d-block mb-1 fs-6"></i>
+                        <span>Terlambat</span>
+                    </th>
+                    <th class="col-header-izin text-center py-2" style="width: 85px;">
+                        <i class="fa-solid fa-envelope-open d-block mb-1 fs-6"></i>
+                        <span>Izin</span>
+                    </th>
+                    <th class="col-header-sakit text-center py-2" style="width: 85px;">
+                        <i class="fa-solid fa-notes-medical d-block mb-1 fs-6"></i>
+                        <span>Sakit</span>
+                    </th>
+                    <th class="col-header-alpa text-center py-2" style="width: 85px;">
+                        <i class="fa-solid fa-circle-xmark d-block mb-1 fs-6"></i>
+                        <span>Alpa</span>
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -260,11 +275,26 @@
                     <th rowspan="2" class="align-middle text-dark" style="width: 120px;">Persentase</th>
                 </tr>
                 <tr>
-                    <th class="col-header-hadir" style="width: 85px;"><i class="fa-solid fa-circle-check me-1"></i> Hadir</th>
-                    <th class="col-header-terlambat" style="width: 85px;"><i class="fa-solid fa-clock me-1"></i> Terlambat</th>
-                    <th class="col-header-izin" style="width: 85px;"><i class="fa-solid fa-envelope-open me-1"></i> Izin</th>
-                    <th class="col-header-sakit" style="width: 85px;"><i class="fa-solid fa-notes-medical me-1"></i> Sakit</th>
-                    <th class="col-header-alpa" style="width: 85px;"><i class="fa-solid fa-circle-xmark me-1"></i> Alpa</th>
+                    <th class="col-header-hadir text-center py-2" style="width: 85px;">
+                        <i class="fa-solid fa-circle-check d-block mb-1 fs-6"></i>
+                        <span>Hadir</span>
+                    </th>
+                    <th class="col-header-terlambat text-center py-2" style="width: 85px;">
+                        <i class="fa-solid fa-clock d-block mb-1 fs-6"></i>
+                        <span>Terlambat</span>
+                    </th>
+                    <th class="col-header-izin text-center py-2" style="width: 85px;">
+                        <i class="fa-solid fa-envelope-open d-block mb-1 fs-6"></i>
+                        <span>Izin</span>
+                    </th>
+                    <th class="col-header-sakit text-center py-2" style="width: 85px;">
+                        <i class="fa-solid fa-notes-medical d-block mb-1 fs-6"></i>
+                        <span>Sakit</span>
+                    </th>
+                    <th class="col-header-alpa text-center py-2" style="width: 85px;">
+                        <i class="fa-solid fa-circle-xmark d-block mb-1 fs-6"></i>
+                        <span>Alpa</span>
+                    </th>
                 </tr>
             </thead>
             <tbody>
