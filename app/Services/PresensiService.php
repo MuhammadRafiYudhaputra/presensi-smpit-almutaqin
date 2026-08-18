@@ -64,6 +64,17 @@ class PresensiService
         } else {
             // PRESENSI PULANG / SUDAH PRESENSI
             if (empty($kehadiran->jam_pulang)) {
+                // Cegah Scan Pulang Jika Belum Waktunya
+                if ($nowTime < $jamPulangStandard) {
+                    return [
+                        'success' => false,
+                        'type' => 'belum_pulang',
+                        'message' => "BELUM WAKTUNYA PULANG! Siswa [{$siswa->nama}] sudah tercatat Masuk pukul {$kehadiran->jam_masuk}. Jam pulang resmi sekolah adalah pukul {$jamPulangStandard}.",
+                        'siswa' => $siswa,
+                        'waktu' => $nowTime,
+                    ];
+                }
+
                 // Catat Jam Pulang
                 $kehadiran->update([
                     'jam_pulang' => $nowTime,

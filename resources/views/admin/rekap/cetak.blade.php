@@ -32,7 +32,7 @@
 <body>
 
     <button onclick="window.print()" class="btn btn-primary rounded-pill mb-4 btn-print">
-        <i class="fa-solid fa-print"></i> Cetak / Save PDF
+        <i class="fa-solid fa-print"></i> Cetak / Simpan PDF
     </button>
 
     <div class="header-kop">
@@ -43,43 +43,59 @@
 
     <div class="text-center mb-4">
         <h4 class="fw-bold text-uppercase text-decoration-underline">LAPORAN REKAPITULASI KEHADIRAN SISWA</h4>
-        <p class="m-0">Periode: Bulan {{ $bulan }} / {{ $tahun }} | Kelas: {{ $kelasObj->nama_kelas ?? 'Semua Kelas' }}</p>
+        <p class="m-0">
+            @if(($mode ?? 'bulanan') === 'semester')
+                Periode: Semester {{ ucfirst($semester ?? 'Ganjil') }} / {{ $tahun ?? date('Y') }}
+            @elseif(($mode ?? 'bulanan') === 'harian')
+                Periode: Tanggal {{ $tanggal ?? date('Y-m-d') }}
+            @else
+                Periode: Bulan {{ $bulan ?? date('m') }} / {{ $tahun ?? date('Y') }}
+            @endif
+            | Kelas: {{ $kelas->nama_kelas ?? 'Semua Kelas' }}
+        </p>
     </div>
 
     <table class="table table-print table-bordered align-middle">
         <thead>
             <tr class="text-center">
-                <th>No</th>
+                <th style="width: 40px;">No</th>
                 <th>NISN</th>
-                <th>Nama Siswa</th>
+                <th>Nama Peserta Didik</th>
                 <th>Kelas</th>
                 <th>Hadir</th>
                 <th>Terlambat</th>
                 <th>Izin</th>
                 <th>Sakit</th>
                 <th>Alpa</th>
+                <th>Persentase</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($rekapData as $index => $row)
+            @forelse($dataLaporan as $index => $row)
             <tr>
                 <td class="text-center">{{ $index + 1 }}</td>
-                <td class="text-center">{{ $row['siswa']->nisn }}</td>
-                <td>{{ $row['siswa']->nama }}</td>
-                <td class="text-center">{{ $row['siswa']->kelas->nama_kelas ?? '-' }}</td>
-                <td class="text-center">{{ $row['hadir'] }}</td>
-                <td class="text-center">{{ $row['terlambat'] }}</td>
-                <td class="text-center">{{ $row['izin'] }}</td>
-                <td class="text-center">{{ $row['sakit'] }}</td>
-                <td class="text-center">{{ $row['alpa'] }}</td>
+                <td class="text-center">{{ $row->siswa->nisn }}</td>
+                <td>{{ $row->siswa->nama }}</td>
+                <td class="text-center">Kelas {{ $row->siswa->kelas->nama_kelas ?? '-' }}</td>
+                <td class="text-center">{{ $row->hadir }}</td>
+                <td class="text-center">{{ $row->terlambat }}</td>
+                <td class="text-center">{{ $row->izin }}</td>
+                <td class="text-center">{{ $row->sakit }}</td>
+                <td class="text-center">{{ $row->alpa }}</td>
+                <td class="text-center fw-bold">{{ $row->persentase }}%</td>
             </tr>
-            @endforeach
+            @empty
+            <tr>
+                <td colspan="10" class="text-center py-4 text-muted">Tidak ada data rekapitulasi untuk periode ini.</td>
+            </tr>
+            @endforelse
         </tbody>
     </table>
 
     <div class="row mt-5">
         <div class="col-8"></div>
         <div class="col-4 text-center">
+            <p class="mb-1">Tasikmalaya, {{ date('d F Y') }}</p>
             <p class="mb-1">Mengetahui,</p>
             <p class="fw-bold mb-5">Kepala Sekolah SMP IT Al-Mutaqin</p>
             <br>

@@ -160,7 +160,7 @@
                 </a>
             </li>
 
-            <li class="px-3 text-uppercase fs-7 text-secondary mt-3 mb-1 fw-bold">Monitoring & WA</li>
+            <li class="px-3 text-uppercase fs-7 text-secondary mt-3 mb-1 fw-bold">Presensi & Pengaturan</li>
             <li class="nav-item">
                 <a href="{{ route('admin.rekap.monitoring') }}" class="nav-link {{ request()->routeIs('admin.rekap.monitoring') ? 'active' : '' }}">
                     <i class="fa-solid fa-clock-rotate-left"></i> Live Monitoring
@@ -168,7 +168,12 @@
             </li>
             <li class="nav-item">
                 <a href="{{ route('admin.rekap.index') }}" class="nav-link {{ request()->routeIs('admin.rekap.index') ? 'active' : '' }}">
-                    <i class="fa-solid fa-file-invoice"></i> Rekap Bulanan
+                    <i class="fa-solid fa-file-invoice"></i> Rekap Kehadiran
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ route('admin.jampresensi.index') }}" class="nav-link {{ request()->routeIs('admin.jampresensi.*') ? 'active' : '' }}">
+                    <i class="fa-solid fa-clock"></i> Jam Operasional
                 </a>
             </li>
             <li class="nav-item">
@@ -196,14 +201,14 @@
 
         <!-- Flash Messages -->
         @if(session('success'))
-            <div class="alert alert-success alert-dismissible fade show rounded-4 border-0 shadow-sm" role="alert">
+            <div class="alert alert-success alert-dismissible fade show rounded-4 border-0 shadow-sm auto-dismiss-alert" role="alert">
                 <i class="fa-solid fa-circle-check me-2"></i> {{ session('success') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         @endif
 
         @if(session('error'))
-            <div class="alert alert-danger alert-dismissible fade show rounded-4 border-0 shadow-sm" role="alert">
+            <div class="alert alert-danger alert-dismissible fade show rounded-4 border-0 shadow-sm auto-dismiss-alert" role="alert">
                 <i class="fa-solid fa-triangle-exclamation me-2"></i> {{ session('error') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
@@ -213,7 +218,17 @@
     </div>
 
     <!-- Scripts -->
-    <script href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Auto-dismiss alert after 4 seconds
+        setTimeout(function() {
+            const alerts = document.querySelectorAll('.auto-dismiss-alert');
+            alerts.forEach(alert => {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            });
+        }, 4000);
+    </script>
     @yield('scripts')
 </body>
 </html>

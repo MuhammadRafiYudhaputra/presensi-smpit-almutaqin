@@ -8,6 +8,8 @@ use App\Http\Controllers\Admin\KelasController;
 use App\Http\Controllers\Admin\OrangTuaController;
 use App\Http\Controllers\Admin\FonnteSettingController;
 use App\Http\Controllers\Admin\RekapKehadiranController;
+use App\Http\Controllers\Admin\JamPresensiController;
+use App\Http\Controllers\Admin\KenaikanKelasController;
 use App\Http\Controllers\Presensi\ScanPresensiController;
 
 // Redirect Root to Dashboard
@@ -27,22 +29,29 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('/siswa', SiswaController::class)->except(['create', 'edit']);
     Route::get('/siswa/{id}/card', [SiswaController::class, 'printCard'])->name('siswa.card');
 
-    // Data Guru
+    // Data Guru & Reset Password 1-Klik
     Route::resource('/guru', GuruController::class)->except(['create', 'edit', 'update']);
+    Route::post('/guru/{id}/reset-password', [GuruController::class, 'resetPassword'])->name('guru.resetPassword');
 
-    // Data Kelas
+    // Data Kelas & Kenaikan Kelas Otomatis
     Route::resource('/kelas', KelasController::class)->except(['create', 'edit', 'update']);
+    Route::post('/kenaikan-kelas', [KenaikanKelasController::class, 'proses'])->name('kenaikan.proses');
 
     // Data Orang Tua
     Route::resource('/orangtua', OrangTuaController::class)->except(['create', 'edit', 'update']);
+
+    // Jam Operasional Presensi
+    Route::get('/jampresensi', [JamPresensiController::class, 'index'])->name('jampresensi.index');
+    Route::post('/jampresensi', [JamPresensiController::class, 'update'])->name('jampresensi.update');
 
     // Setting Fonnte WhatsApp API
     Route::get('/fonnte', [FonnteSettingController::class, 'index'])->name('fonnte.index');
     Route::post('/fonnte', [FonnteSettingController::class, 'update'])->name('fonnte.update');
     Route::post('/fonnte/test', [FonnteSettingController::class, 'testSend'])->name('fonnte.test');
 
-    // Monitoring & Rekap Laporan
+    // Monitoring & Rekap Laporan 3 Mode
     Route::get('/monitoring', [RekapKehadiranController::class, 'monitoring'])->name('rekap.monitoring');
     Route::get('/rekap', [RekapKehadiranController::class, 'rekap'])->name('rekap.index');
+    Route::post('/rekap/update-status', [RekapKehadiranController::class, 'updateStatus'])->name('rekap.updateStatus');
     Route::get('/rekap/cetak', [RekapKehadiranController::class, 'cetakLaporan'])->name('rekap.cetak');
 });

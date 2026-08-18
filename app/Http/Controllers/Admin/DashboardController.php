@@ -13,18 +13,28 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $today = Carbon::today()->toDateString();
+        $today = Carbon::today('Asia/Jakarta')->toDateString();
 
-        $totalSiswa = Siswa::count();
+        // Hitung siswa aktif (bukan alumni)
+        $totalSiswa = Siswa::where('status', '!=', 'alumni')->orWhereNull('status')->count();
+        $totalAlumni = Siswa::where('status', 'alumni')->count();
         $totalGuru = Guru::count();
         $totalKelas = Kelas::count();
 
-        $presensiHariIni = Kehadiran::where('tanggal', $today)->get();
+        // Kehadiran hari ini (hanya untuk siswa aktif)
+        $presensiHariIni = Kehadiran::with('siswa')
+            ->where('tanggal', $today)
+            ->whereHas('siswa', function ($q) {
+                $q->where('status', '!=', 'alumni')->orWhereNull('status');
+            })
+            ->get();
 
         $totalHadir = $presensiHariIni->where('status', 'HADIR')->count();
         $totalTerlambat = $presensiHariIni->where('status', 'TERLAMBAT')->count();
         $totalIzinSakit = $presensiHariIni->whereIn('status', ['IZIN', 'SAKIT'])->count();
-        $totalAlpa = $totalSiswa - ($totalHadir + $totalTerlambat + $totalIzinSakit);
+        
+        $totalPresensi = $totalHadir + $totalTerlambat + $totalIzinSakit;
+        $totalAlpa = max(0, $totalSiswa - $totalPresensi);
 
         $recentPresensi = Kehadiran::with(['siswa.kelas'])
             ->where('tanggal', $today)
@@ -34,6 +44,7 @@ class DashboardController extends Controller
 
         return view('admin.dashboard', compact(
             'totalSiswa',
+            'totalAlumni',
             'totalGuru',
             'totalKelas',
             'totalHadir',

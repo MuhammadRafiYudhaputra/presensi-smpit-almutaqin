@@ -6,12 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Models\Guru;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class GuruController extends Controller
 {
     public function index()
     {
-        $gurus = Guru::with('user')->latest()->paginate(15);
+        $gurus = Guru::with(['user', 'kelasBinaan'])->latest()->paginate(15);
         return view('admin.guru.index', compact('gurus'));
     }
 
@@ -29,7 +30,7 @@ class GuruController extends Controller
         $user = User::create([
             'name' => $request->nama,
             'email' => $request->email,
-            'password' => bcrypt($request->password),
+            'password' => Hash::make($request->password),
             'role' => 'guru',
         ]);
 
@@ -41,7 +42,24 @@ class GuruController extends Controller
             'alamat' => $request->alamat,
         ]);
 
-        return redirect()->back()->with('success', 'Data Guru berhasil ditambahkan!');
+        return redirect()->back()->with('success', 'Data Guru Wali Kelas berhasil ditambahkan!');
+    }
+
+    public function resetPassword(Request $request, $id)
+    {
+        $guru = Guru::with('user')->findOrFail($id);
+        
+        if (!$guru->user) {
+            return redirect()->back()->with('error', 'Akun login guru tidak ditemukan!');
+        }
+
+        $newPassword = $request->input('password', '12345678');
+
+        $guru->user->update([
+            'password' => Hash::make($newPassword),
+        ]);
+
+        return redirect()->back()->with('success', "Password akun Guru [{$guru->nama}] berhasil di-reset menjadi: {$newPassword}");
     }
 
     public function destroy($id)
