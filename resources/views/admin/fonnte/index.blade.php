@@ -40,17 +40,6 @@
                 <span class="input-group-text bg-white border-end-0 text-warning"><i class="fa-solid fa-key"></i></span>
                 <input type="password" name="api_token" class="form-control border-start-0 fw-bold" value="{{ old('api_token', $setting->api_token ?? '') }}" placeholder="Masukkan API Token Fonnte..." required>
             </div>
-            <small class="text-muted d-block mt-1">Dapatkan API Token dari dashboard akun Fonnte Anda di <a href="https://fonnte.com" target="_blank" class="text-primary fw-semibold">Fonnte.com</a></small>
-        </div>
-
-        <!-- Toggle Switch Card -->
-        <div class="toggle-card d-flex align-items-center mb-4" style="max-width: 600px;">
-            <div class="form-check form-switch mb-0 d-flex align-items-center gap-3">
-                <input class="form-check-input fs-5 cursor-pointer" type="checkbox" name="is_active" id="is_active" {{ ($setting->is_active ?? true) ? 'checked' : '' }}>
-                <label class="form-check-label fw-bold text-dark cursor-pointer" for="is_active">
-                    Aktifkan Pengiriman Notifikasi WhatsApp Otomatis ke Orang Tua
-                </label>
-            </div>
         </div>
 
         <!-- Section Title: Kustomisasi Template -->
@@ -61,10 +50,10 @@
         <!-- Template 1: Masuk (Tepat Waktu) -->
         <div class="mb-4">
             <label class="form-label fw-bold text-dark d-flex align-items-center mb-2">
-                <span class="badge bg-success me-2 px-2 py-1">1</span> Template Pesan Presensi MASUK (Tepat Waktu)
+                <span class="badge bg-success me-2 px-2 py-1">1</span> Template Pesan Presensi MASUK
             </label>
             <textarea name="template_masuk" class="form-control template-textarea shadow-sm mb-1" rows="6" required>{{ old('template_masuk', $setting->template_masuk ?? "Assalamu'alaikum Warahmatullahi Wabarakatuh.\n\nPemberitahuan Presensi MASUK SMP IT Al-Muttaqin:\nNama: {nama}\nNISN: {nisn}\nKelas: {kelas}\nStatus: {status}\n\nTelah melakukan presensi MASUK pada tanggal {tanggal} pukul {waktu}.\n\nTerima kasih.") }}</textarea>
-            <small class="text-muted d-block" style="font-size: 0.82rem;">Dikirim saat siswa melakukan scan pertama dan tiba sebelum batas keterlambatan.</small>
+            <small class="text-muted d-block" style="font-size: 0.82rem;">Dikirim saat siswa melakukan scan masuk sekolah.</small>
         </div>
 
         <!-- Template 2: Terlambat -->
@@ -82,14 +71,7 @@
                 <span class="badge bg-info text-dark me-2 px-2 py-1">3</span> Template Pesan Presensi PULANG (Kepulangan Siswa)
             </label>
             <textarea name="template_pulang" class="form-control template-textarea shadow-sm mb-1" rows="6" required>{{ old('template_pulang', $setting->template_pulang ?? "Assalamu'alaikum Warahmatullahi Wabarakatuh.\n\nPemberitahuan Presensi PULANG SMP IT Al-Muttaqin:\nNama: {nama}\nNISN: {nisn}\nKelas: {kelas}\n\nTelah menyelesaikan kegiatan belajar dan melakukan presensi PULANG pada tanggal {tanggal} pukul {waktu}.\n\nTerima kasih.") }}</textarea>
-            <small class="text-muted d-block" style="font-size: 0.82rem;">Dikirim saat siswa melakukan scan kepulangan sore hari.</small>
-        </div>
-
-        <!-- Guide Variabel -->
-        <div class="alert alert-info border-info small mb-4">
-            <i class="fa-solid fa-code me-1"></i> <strong>Variabel Dinamis Yang Tersedia:</strong><br>
-            <code>{nama}</code> : Nama Lengkap Siswa | <code>{nisn}</code> : NISN Siswa | <code>{kelas}</code> : Nama Kelas<br>
-            <code>{tanggal}</code> : Tanggal Presensi | <code>{waktu}</code> : Jam Scan | <code>{status}</code> : Status Kehadiran
+            <small class="text-muted d-block" style="font-size: 0.82rem;">Dikirim saat siswa melakukan scan kepulangan sekolah.</small>
         </div>
 
         <!-- Tombol Simpan -->

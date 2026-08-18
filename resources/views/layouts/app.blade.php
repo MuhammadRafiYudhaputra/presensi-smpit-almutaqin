@@ -282,7 +282,7 @@
             <form id="logoutForm" action="{{ route('logout') }}" method="POST" class="d-none">
                 @csrf
             </form>
-            <a href="javascript:void(0)" class="logout-btn" onclick="if(confirm('Apakah Anda yakin ingin keluar dari sistem?')) { document.getElementById('logoutForm').submit(); }">
+            <a href="javascript:void(0)" class="logout-btn" onclick="document.getElementById('logoutForm').submit();">
                 <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout / Keluar
             </a>
         </div>
