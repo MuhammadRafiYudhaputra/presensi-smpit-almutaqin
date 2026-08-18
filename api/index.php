@@ -29,6 +29,8 @@ if (!file_exists($targetDb)) {
 
 // 3. Fallback defaults for empty string environment variables to prevent Manager::createDriver() error
 $envDefaults = [
+    'APP_MAINTENANCE_DRIVER' => 'file',
+    'APP_MAINTENANCE_STORE' => 'array',
     'SESSION_DRIVER' => 'cookie',
     'CACHE_STORE' => 'array',
     'CACHE_DRIVER' => 'array',
@@ -36,6 +38,8 @@ $envDefaults = [
     'LOG_CHANNEL' => 'stderr',
     'FILESYSTEM_DISK' => 'local',
     'MAIL_MAILER' => 'log',
+    'AUTH_GUARD' => 'web',
+    'AUTH_PASSWORD_BROKER' => 'users',
     'VIEW_COMPILED_PATH' => '/tmp/storage/framework/views',
     'APP_CONFIG_CACHE' => '/tmp/bootstrap/cache/config.php',
     'APP_EVENTS_CACHE' => '/tmp/bootstrap/cache/events.php',
