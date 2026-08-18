@@ -30,6 +30,11 @@ class AuthController extends Controller
             $request->session()->regenerate();
 
             $user = Auth::user();
+            if ($user->role === 'guru') {
+                return redirect()->intended(route('guru.monitoring'))
+                    ->with('success', "Selamat datang kembali, {$user->name}!");
+            }
+
             return redirect()->intended(route('admin.dashboard'))
                 ->with('success', "Selamat datang kembali, {$user->name}!");
         }

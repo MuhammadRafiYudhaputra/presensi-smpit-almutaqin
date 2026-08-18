@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\RekapKehadiranController;
 use App\Http\Controllers\Admin\JamPresensiController;
 use App\Http\Controllers\Admin\KenaikanKelasController;
 use App\Http\Controllers\Presensi\ScanPresensiController;
+use App\Http\Controllers\Guru\PortalGuruController;
 
 // Authentication Routes
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -23,6 +24,9 @@ Route::post('/forgot-password', [AuthController::class, 'forgotPassword'])->name
 // Root Route Redirect
 Route::get('/', function () {
     if (Auth::check()) {
+        if (Auth::user()->role === 'guru') {
+            return redirect()->route('guru.monitoring');
+        }
         return redirect()->route('admin.dashboard');
     }
     return redirect()->route('login');
@@ -31,6 +35,12 @@ Route::get('/', function () {
 // Endpoint Public Kios Presensi QR Code Scanner (Bisa diakses langsung oleh alat scanner)
 Route::get('/scan', [ScanPresensiController::class, 'index'])->name('presensi.scan');
 Route::post('/scan/process', [ScanPresensiController::class, 'store'])->name('presensi.scan.store');
+
+// Guru (Wali Kelas) Routes Group (Wajib Login)
+Route::middleware(['auth'])->prefix('guru')->name('guru.')->group(function () {
+    Route::get('/monitoring', [PortalGuruController::class, 'monitoring'])->name('monitoring');
+    Route::get('/rekap', [PortalGuruController::class, 'rekap'])->name('rekap');
+});
 
 // Admin Protected Routes Group (Wajib Login)
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {

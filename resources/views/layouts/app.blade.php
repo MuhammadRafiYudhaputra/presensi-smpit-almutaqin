@@ -219,62 +219,78 @@
             </div>
 
             <ul class="sidebar-menu">
-                <li class="nav-item">
-                    <a href="{{ route('admin.dashboard') }}" class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
-                        <i class="fa-solid fa-chart-pie"></i> Dashboard Admin
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('presensi.scan') }}" class="nav-link {{ request()->routeIs('presensi.scan') ? 'active' : 'scanner-link' }}">
-                        <i class="fa-solid fa-table-cells-large"></i> Scanner QR Code
-                    </a>
-                </li>
+                @if(Auth::check() && Auth::user()->role === 'guru')
+                    <!-- MENU WALI KELAS (HANYA 2 FITUR) -->
+                    <div class="sidebar-heading">MENU WALI KELAS</div>
+                    <li class="nav-item">
+                        <a href="{{ route('guru.monitoring') }}" class="nav-link {{ request()->routeIs('guru.monitoring') ? 'active' : '' }}">
+                            <i class="fa-solid fa-rotate-left"></i> Monitoring Kehadiran
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('guru.rekap') }}" class="nav-link {{ request()->routeIs('guru.rekap') ? 'active' : '' }}">
+                            <i class="fa-solid fa-file-lines"></i> Rekap Kehadiran Siswa
+                        </a>
+                    </li>
+                @else
+                    <!-- MENU ADMIN TU -->
+                    <li class="nav-item">
+                        <a href="{{ route('admin.dashboard') }}" class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                            <i class="fa-solid fa-chart-pie"></i> Dashboard Admin
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('presensi.scan') }}" class="nav-link {{ request()->routeIs('presensi.scan') ? 'active' : 'scanner-link' }}">
+                            <i class="fa-solid fa-table-cells-large"></i> Scanner QR Code
+                        </a>
+                    </li>
 
-                <!-- MASTER DATA -->
-                <div class="sidebar-heading">MASTER DATA</div>
-                <li class="nav-item">
-                    <a href="{{ route('admin.siswa.index') }}" class="nav-link {{ request()->routeIs('admin.siswa.*') ? 'active' : '' }}">
-                        <i class="fa-solid fa-user-graduate"></i> Data Siswa & QR
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('admin.guru.index') }}" class="nav-link {{ request()->routeIs('admin.guru.*') ? 'active' : '' }}">
-                        <i class="fa-solid fa-user-plus"></i> Data Wali Kelas
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('admin.kelas.index') }}" class="nav-link {{ request()->routeIs('admin.kelas.*') ? 'active' : '' }}">
-                        <i class="fa-solid fa-school"></i> Data Kelas
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('admin.orangtua.index') }}" class="nav-link {{ request()->routeIs('admin.orangtua.*') ? 'active' : '' }}">
-                        <i class="fa-solid fa-users"></i> Data Orang Tua
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('admin.jampresensi.index') }}" class="nav-link {{ request()->routeIs('admin.jampresensi.*') ? 'active' : '' }}">
-                        <i class="fa-solid fa-clock text-warning"></i> Jam Presensi
-                    </a>
-                </li>
+                    <!-- MASTER DATA -->
+                    <div class="sidebar-heading">MASTER DATA</div>
+                    <li class="nav-item">
+                        <a href="{{ route('admin.siswa.index') }}" class="nav-link {{ request()->routeIs('admin.siswa.*') ? 'active' : '' }}">
+                            <i class="fa-solid fa-user-graduate"></i> Data Siswa & QR
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('admin.guru.index') }}" class="nav-link {{ request()->routeIs('admin.guru.*') ? 'active' : '' }}">
+                            <i class="fa-solid fa-user-plus"></i> Data Wali Kelas
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('admin.kelas.index') }}" class="nav-link {{ request()->routeIs('admin.kelas.*') ? 'active' : '' }}">
+                            <i class="fa-solid fa-school"></i> Data Kelas
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('admin.orangtua.index') }}" class="nav-link {{ request()->routeIs('admin.orangtua.*') ? 'active' : '' }}">
+                            <i class="fa-solid fa-users"></i> Data Orang Tua
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('admin.jampresensi.index') }}" class="nav-link {{ request()->routeIs('admin.jampresensi.*') ? 'active' : '' }}">
+                            <i class="fa-solid fa-clock text-warning"></i> Jam Presensi
+                        </a>
+                    </li>
 
-                <!-- MONITORING & WA -->
-                <div class="sidebar-heading">MONITORING & WA</div>
-                <li class="nav-item">
-                    <a href="{{ route('admin.rekap.monitoring') }}" class="nav-link {{ request()->routeIs('admin.rekap.monitoring') ? 'active' : '' }}">
-                        <i class="fa-solid fa-rotate-left"></i> Live Monitoring
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('admin.rekap.index') }}" class="nav-link {{ request()->routeIs('admin.rekap.index') ? 'active' : '' }}">
-                        <i class="fa-solid fa-file-lines"></i> Rekap Kehadiran
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('admin.fonnte.index') }}" class="nav-link {{ request()->routeIs('admin.fonnte.*') ? 'active' : '' }}">
-                        <i class="fa-brands fa-whatsapp text-success"></i> Fonnte WA API
-                    </a>
-                </li>
+                    <!-- MONITORING & WA -->
+                    <div class="sidebar-heading">MONITORING & WA</div>
+                    <li class="nav-item">
+                        <a href="{{ route('admin.rekap.monitoring') }}" class="nav-link {{ request()->routeIs('admin.rekap.monitoring') ? 'active' : '' }}">
+                            <i class="fa-solid fa-rotate-left"></i> Live Monitoring
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('admin.rekap.index') }}" class="nav-link {{ request()->routeIs('admin.rekap.index') ? 'active' : '' }}">
+                            <i class="fa-solid fa-file-lines"></i> Rekap Kehadiran
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('admin.fonnte.index') }}" class="nav-link {{ request()->routeIs('admin.fonnte.*') ? 'active' : '' }}">
+                            <i class="fa-brands fa-whatsapp text-success"></i> Fonnte WA API
+                        </a>
+                    </li>
+                @endif
             </ul>
         </div>
 
