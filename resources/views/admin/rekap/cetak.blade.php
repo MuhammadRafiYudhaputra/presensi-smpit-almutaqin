@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Laporan Presensi Siswa SMP IT Al-Muttaqin</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
@@ -113,10 +115,14 @@
     <!-- Lembar Dokumen Cetak Laporan -->
     <div class="paper-container">
         <!-- Kop Surat -->
-        <div class="header-kop">
-            <h4 class="fw-bold text-uppercase m-0" style="letter-spacing: 1px;">YAYASAN AL-MUTAQIN</h4>
-            <h2 class="fw-bold text-uppercase m-0" style="letter-spacing: 1.5px;">SMP IT AL-MUTTAQIN</h2>
-            <p class="m-0 small">Sistem Monitoring Kehadiran Siswa dengan Notifikasi WhatsApp Otomatis</p>
+        <div class="header-kop position-relative d-flex align-items-center justify-content-center">
+            <img src="{{ asset('images/logo.png') }}" alt="Logo SMP IT Al-Muttaqin" style="width: 75px; height: 75px; object-fit: contain; position: absolute; left: 10px; top: 0;">
+            <div>
+                <h4 class="fw-bold text-uppercase m-0" style="letter-spacing: 1px;">YAYASAN AL-MUTAQIN</h4>
+                <h2 class="fw-bold text-uppercase m-0" style="letter-spacing: 1.5px;">SMP IT AL-MUTTAQIN</h2>
+                <p class="m-0 small">Sistem Monitoring Kehadiran Siswa dengan Notifikasi WhatsApp Otomatis</p>
+                <small style="font-size: 0.8rem; color: #475569;">Tarogong Kaler - Garut, Jawa Barat</small>
+            </div>
         </div>
 
         <!-- Judul Laporan -->

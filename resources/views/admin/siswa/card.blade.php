@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kartu Presensi Siswa - {{ $siswa->nama }}</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
@@ -210,7 +212,8 @@
 
     <!-- The Exact ID Card -->
     <div class="card-container">
-        <!-- Top Header -->
+        <!-- Logo & Header -->
+        <img src="{{ asset('images/logo.png') }}" alt="Logo SMP IT" style="width: 44px; height: 44px; object-fit: contain; margin-bottom: 6px; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.25));">
         <div class="card-title">SMP IT AL-MUTTAQIN</div>
         <div class="card-subtitle">KARTU PRESENSI SISWA</div>
         <div class="header-divider"></div>

@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>SMP IT Al-Muttaqin - Presensi Siswa</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
     <!-- Google Fonts: Plus Jakarta Sans -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Bootstrap 5 CSS -->
@@ -298,7 +300,7 @@
         <div>
             <div class="sidebar-brand">
                 <div class="sidebar-brand-left">
-                    <i class="fa-solid fa-table-cells-large sidebar-brand-icon"></i>
+                    <img src="{{ asset('images/logo.png') }}" alt="Logo SMP IT Al-Muttaqin" style="width: 32px; height: 32px; object-fit: contain;">
                     <h5 class="sidebar-brand-text">SMP IT Al-Muttaqin</h5>
                 </div>
                 <!-- Close Button on Mobile -->

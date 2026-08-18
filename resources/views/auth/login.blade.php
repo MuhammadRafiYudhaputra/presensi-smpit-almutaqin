@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Sistem Monitoring Presensi Siswa SMP IT Al-Muttaqin</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -251,9 +253,7 @@
     <!-- Left Branding Panel -->
     <div class="brand-panel">
         <div class="d-flex align-items-center gap-3">
-            <div class="brand-header-icon">
-                <i class="fa-solid fa-table-cells-large"></i>
-            </div>
+            <img src="{{ asset('images/logo.png') }}" alt="Logo SMP IT Al-Muttaqin" style="width: 48px; height: 48px; object-fit: contain; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.2));">
             <div>
                 <h5 class="fw-bold mb-0 text-white">SMP IT Al-Muttaqin</h5>
                 <small style="color: rgba(255, 255, 255, 0.8);">Tarogong Kaler</small>
