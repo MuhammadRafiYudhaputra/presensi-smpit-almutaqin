@@ -279,7 +279,10 @@
         </div>
 
         <div class="sidebar-footer">
-            <a href="javascript:void(0)" class="logout-btn" onclick="alert('Anda sedang login sebagai Admin TU')">
+            <form id="logoutForm" action="{{ route('logout') }}" method="POST" class="d-none">
+                @csrf
+            </form>
+            <a href="javascript:void(0)" class="logout-btn" onclick="if(confirm('Apakah Anda yakin ingin keluar dari sistem?')) { document.getElementById('logoutForm').submit(); }">
                 <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout / Keluar
             </a>
         </div>
@@ -298,7 +301,7 @@
                     <i class="fa-regular fa-calendar text-primary"></i> {{ date('d M Y') }}
                 </span>
                 <span class="user-role-badge">
-                    <i class="fa-solid fa-user"></i> Admin TU SMP IT Al-Muttaqin (ADMIN TU)
+                    <i class="fa-solid fa-user"></i> {{ Auth::user()->name ?? 'Admin TU SMP IT Al-Muttaqin' }} ({{ strtoupper(Auth::user()->role ?? 'ADMIN TU') }})
                 </span>
             </div>
         </div>

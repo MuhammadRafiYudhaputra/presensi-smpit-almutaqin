@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\SiswaController;
 use App\Http\Controllers\Admin\GuruController;
@@ -12,17 +14,25 @@ use App\Http\Controllers\Admin\JamPresensiController;
 use App\Http\Controllers\Admin\KenaikanKelasController;
 use App\Http\Controllers\Presensi\ScanPresensiController;
 
-// Redirect Root to Dashboard
+// Authentication Routes
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [AuthController::class, 'login'])->name('login.process');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+// Root Route Redirect
 Route::get('/', function () {
-    return redirect()->route('admin.dashboard');
+    if (Auth::check()) {
+        return redirect()->route('admin.dashboard');
+    }
+    return redirect()->route('login');
 });
 
-// Endpoint Public Kios Presensi QR Code Scanner
+// Endpoint Public Kios Presensi QR Code Scanner (Bisa diakses langsung oleh alat scanner)
 Route::get('/scan', [ScanPresensiController::class, 'index'])->name('presensi.scan');
 Route::post('/scan/process', [ScanPresensiController::class, 'store'])->name('presensi.scan.store');
 
-// Admin Routes Group
-Route::prefix('admin')->name('admin.')->group(function () {
+// Admin Protected Routes Group (Wajib Login)
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Data Siswa & Generate QR Code Kartu
@@ -30,15 +40,15 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/siswa/{id}/card', [SiswaController::class, 'printCard'])->name('siswa.card');
 
     // Data Guru & Reset Password 1-Klik
-    Route::resource('/guru', GuruController::class)->except(['create', 'edit', 'update']);
+    Route::resource('/guru', GuruController::class)->except(['create', 'edit']);
     Route::post('/guru/{id}/reset-password', [GuruController::class, 'resetPassword'])->name('guru.resetPassword');
 
     // Data Kelas & Kenaikan Kelas Otomatis
-    Route::resource('/kelas', KelasController::class)->except(['create', 'edit', 'update']);
+    Route::resource('/kelas', KelasController::class)->except(['create', 'edit']);
     Route::post('/kenaikan-kelas', [KenaikanKelasController::class, 'proses'])->name('kenaikan.proses');
 
     // Data Orang Tua
-    Route::resource('/orangtua', OrangTuaController::class)->except(['create', 'edit', 'update']);
+    Route::resource('/orangtua', OrangTuaController::class)->except(['create', 'edit']);
 
     // Jam Operasional Presensi
     Route::get('/jampresensi', [JamPresensiController::class, 'index'])->name('jampresensi.index');
