@@ -82,7 +82,7 @@
 </head>
 <body>
 
-    <!-- Control Toolbar (Opsi Custom Pejabat TTD & Tombol Cetak) -->
+    <!-- Control Toolbar -->
     <div class="control-bar">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3">
             <button onclick="window.print()" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm">
