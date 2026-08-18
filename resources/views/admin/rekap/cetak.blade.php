@@ -85,13 +85,6 @@
     <!-- Control Toolbar (Opsi Custom Pejabat TTD & Tombol Cetak) -->
     <div class="control-bar">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3">
-            <div class="d-flex align-items-center gap-2">
-                <i class="fa-solid fa-file-pdf text-danger fs-3"></i>
-                <div>
-                    <h6 class="fw-bold mb-0 text-dark">Pengaturan Cetak Laporan Presensi</h6>
-                    <small class="text-muted">Kustomisasi nama Kepala Sekolah & NIP langsung di bawah atau ketik langsung pada lembar dokumen.</small>
-                </div>
-            </div>
             <button onclick="window.print()" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm">
                 <i class="fa-solid fa-print me-1"></i> Cetak / Simpan PDF
             </button>
