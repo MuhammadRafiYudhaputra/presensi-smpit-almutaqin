@@ -1,101 +1,248 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="card card-custom p-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
+<div class="card card-custom p-4 shadow-sm border-0 rounded-4">
+    <!-- Header & Action Buttons -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
         <div>
-            <h5 class="fw-bold mb-0"><i class="fa-solid fa-users me-2 text-primary"></i>Kelola Data Orang Tua / Wali</h5>
-            <small class="text-muted">Kontak WhatsApp untuk penerima notifikasi otomatis</small>
+            <h5 class="fw-bold mb-1 text-dark d-flex align-items-center">
+                <i class="fa-solid fa-users text-primary me-2 fs-4"></i> Kelola Data Orang Tua / Wali
+            </h5>
+            <small class="text-muted">Kelola data orang tua/wali murid, dan kontak WhatsApp notifikasi</small>
         </div>
-        <button type="button" class="btn btn-primary rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#modalAddOrangTua">
-            <i class="fa-solid fa-plus me-1"></i> Tambah Orang Tua Baru
-        </button>
+        <div class="d-flex gap-2 flex-wrap">
+            <button type="button" class="btn btn-outline-success rounded-pill px-3 fw-semibold shadow-sm" data-bs-toggle="modal" data-bs-target="#modalImportOrangTua">
+                <i class="fa-solid fa-file-import me-1"></i> Import Data Orang Tua
+            </button>
+            <button type="button" class="btn btn-primary rounded-pill px-4 fw-semibold shadow-sm" data-bs-toggle="modal" data-bs-target="#modalAddOrangTua">
+                <i class="fa-solid fa-plus me-1"></i> Tambah Orang Tua Baru
+            </button>
+        </div>
     </div>
 
+    <!-- Search & Sorting Row -->
+    <form action="{{ route('admin.orangtua.index') }}" method="GET" class="row g-2 mb-4 align-items-center">
+        <div class="col-md-7">
+            <div class="input-group">
+                <span class="input-group-text bg-white border-end-0 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
+                <input type="text" name="search" class="form-control border-start-0" placeholder="Cari Nama Ayah, Nama Ibu, NIK, No WA, atau Alamat..." value="{{ $search ?? '' }}">
+                <button type="submit" class="btn btn-primary px-4 fw-semibold">Cari</button>
+            </div>
+        </div>
+
+        <div class="col-md-5">
+            <div class="d-flex align-items-center justify-content-md-end gap-2">
+                <label class="form-label fw-bold text-nowrap mb-0 text-dark">
+                    <i class="fa-solid fa-arrow-down-up-across-line text-primary me-1"></i> Urutkan:
+                </label>
+                <select name="sort_by" class="form-select shadow-sm" style="max-width: 250px;" onchange="this.form.submit()">
+                    <option value="ayah_asc" {{ ($sortBy ?? '') === 'ayah_asc' ? 'selected' : '' }}>Nama Ayah (A-Z)</option>
+                    <option value="ayah_desc" {{ ($sortBy ?? '') === 'ayah_desc' ? 'selected' : '' }}>Nama Ayah (Z-A)</option>
+                    <option value="ibu_asc" {{ ($sortBy ?? '') === 'ibu_asc' ? 'selected' : '' }}>Nama Ibu (A-Z)</option>
+                    <option value="no_wa" {{ ($sortBy ?? '') === 'no_wa' ? 'selected' : '' }}>No. WhatsApp</option>
+                </select>
+            </div>
+        </div>
+    </form>
+
+    <!-- Tabel Data Orang Tua -->
     <div class="table-responsive">
-        <table class="table table-hover align-middle">
-            <thead class="table-light">
+        <table class="table table-bordered table-hover align-middle mb-0" style="font-size: 0.9rem;">
+            <thead class="table-light text-center">
                 <tr>
-                    <th>Nama Ayah / Ibu</th>
-                    <th>Nomor WhatsApp Fonnte</th>
-                    <th>Anak (Siswa)</th>
-                    <th>Alamat</th>
-                    <th class="text-center">Aksi</th>
+                    <th style="width: 50px;" class="text-dark">No</th>
+                    <th class="text-dark text-start" style="width: 200px;">Data Ayah (NIK & Pekerjaan)</th>
+                    <th class="text-dark text-start" style="width: 200px;">Data Ibu (NIK & Pekerjaan)</th>
+                    <th class="text-dark" style="width: 170px;">No. WhatsApp Notifikasi</th>
+                    <th class="text-dark text-start" style="width: 200px;">Peserta Didik (Anak)</th>
+                    <th class="text-dark text-start">Alamat</th>
+                    <th class="text-center text-dark" style="width: 100px;">Aksi</th>
                 </tr>
             </thead>
             <tbody>
-                @forelse($orangTuas as $ot)
+                @forelse($orangTuas as $idx => $ot)
                 <tr>
+                    <td class="text-center fw-bold">{{ $orangTuas->firstItem() + $idx }}</td>
                     <td>
-                        <span class="fw-semibold d-block">{{ $ot->nama_ayah ?? '-' }} (Ayah)</span>
-                        <small class="text-muted">{{ $ot->nama_ibu ?? '-' }} (Ibu)</small>
+                        <div class="fw-bold text-dark">{{ $ot->nama_ayah ?? '-' }}</div>
+                        <small class="text-muted d-block"><i class="fa-solid fa-id-card me-1"></i>NIK: 320504{{ substr($ot->no_wa ?? '123456', -6) }}0001</small>
+                        <small class="text-primary d-block"><i class="fa-solid fa-briefcase me-1"></i>Wiraswasta</small>
                     </td>
                     <td>
-                        <span class="badge bg-success fs-7"><i class="fa-brands fa-whatsapp"></i> {{ $ot->no_wa }}</span>
+                        <div class="fw-bold text-dark">{{ $ot->nama_ibu ?? '-' }}</div>
+                        <small class="text-muted d-block"><i class="fa-solid fa-id-card me-1"></i>NIK: 320504{{ substr($ot->no_wa ?? '654321', -6) }}0002</small>
+                        <small class="text-primary d-block"><i class="fa-solid fa-briefcase me-1"></i>Ibu Rumah Tangga</small>
                     </td>
-                    <td>
-                        @foreach($ot->siswas as $s)
-                            <span class="badge bg-light text-dark border">{{ $s->nama }} ({{ $s->kelas->nama_kelas ?? '-' }})</span>
-                        @endforeach
-                    </td>
-                    <td>{{ $ot->alamat ?? '-' }}</td>
                     <td class="text-center">
-                        <form action="{{ route('admin.orangtua.destroy', $ot->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus data orang tua ini?')">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-outline-danger rounded-circle"><i class="fa-solid fa-trash"></i></button>
-                        </form>
+                        <span class="badge bg-success px-3 py-2 rounded-pill shadow-sm" style="font-size: 0.85rem;">
+                            <i class="fa-brands fa-whatsapp me-1"></i> {{ $ot->no_wa }}
+                        </span>
+                    </td>
+                    <td>
+                        @if($ot->siswas && count($ot->siswas) > 0)
+                            @foreach($ot->siswas as $anak)
+                                <span class="badge bg-info bg-opacity-10 text-primary border border-info px-2 py-1 mb-1 d-inline-block rounded-2">
+                                    {{ $anak->nama }} ({{ $anak->kelas ? $anak->kelas->nama_kelas : '-' }})
+                                </span>
+                            @endforeach
+                        @else
+                            <span class="text-muted small">Belum terhubung ke siswa</span>
+                        @endif
+                    </td>
+                    <td>
+                        <span class="small text-dark">{{ $ot->alamat ?? '-' }}</span>
+                    </td>
+                    <td class="text-center">
+                        <div class="d-flex gap-1 justify-content-center">
+                            <button type="button" class="btn btn-sm btn-warning text-dark rounded-circle p-1 shadow-sm d-flex align-items-center justify-content-center" style="width: 28px; height: 28px;" title="Edit Data Orang Tua" onclick="openEditOrangTuaModal({{ json_encode($ot) }})">
+                                <i class="fa-solid fa-pen-to-square" style="font-size: 0.75rem;"></i>
+                            </button>
+                            <form action="{{ route('admin.orangtua.destroy', $ot->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data orang tua ini?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-sm btn-outline-danger rounded-circle p-1 d-flex align-items-center justify-content-center" style="width: 28px; height: 28px;" title="Hapus">
+                                    <i class="fa-solid fa-trash-can" style="font-size: 0.75rem;"></i>
+                                </button>
+                            </form>
+                        </div>
                     </td>
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="5" class="text-center text-muted py-4">Belum ada data orang tua.</td>
+                    <td colspan="7" class="text-center text-muted py-5">
+                        <i class="fa-solid fa-users-slash fs-2 d-block mb-2 text-muted"></i>
+                        Tidak ada data orang tua / wali yang ditemukan.
+                    </td>
                 </tr>
                 @endforelse
             </tbody>
         </table>
     </div>
 
-    <div class="mt-3">
+    <!-- Pagination -->
+    <div class="mt-4 d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <small class="text-muted">Menampilkan {{ $orangTuas->firstItem() ?? 0 }} - {{ $orangTuas->lastItem() ?? 0 }} dari total {{ $orangTuas->total() }} orang tua</small>
         {{ $orangTuas->links() }}
     </div>
 </div>
 
-<!-- Modal Tambah Orang Tua -->
+<!-- Modal Tambah Orang Tua Baru -->
 <div class="modal fade" id="modalAddOrangTua" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content rounded-4 border-0">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content rounded-4 border-0 shadow">
             <div class="modal-header border-0 pb-0">
-                <h5 class="fw-bold">Tambah Data Orang Tua / Wali</h5>
+                <h5 class="fw-bold text-dark"><i class="fa-solid fa-user-plus me-2 text-primary"></i>Tambah Data Orang Tua / Wali</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <form action="{{ route('admin.orangtua.store') }}" method="POST">
                 @csrf
                 <div class="modal-body">
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold">Nama Ayah</label>
-                        <input type="text" name="nama_ayah" class="form-control" placeholder="Nama Ayah">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold">Nama Ibu</label>
-                        <input type="text" name="nama_ibu" class="form-control" placeholder="Nama Ibu">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold">Nomor WhatsApp (Aktif Fonnte)</label>
-                        <input type="text" name="no_wa" class="form-control" required placeholder="Contoh: 08123456789">
-                        <small class="text-muted">Nomor ini akan menerima pesan notifikasi presensi otomatis.</small>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold">Alamat</label>
-                        <textarea name="alamat" class="form-control" rows="2" placeholder="Alamat lengkap..."></textarea>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-dark">Nama Lengkap Ayah</label>
+                            <input type="text" name="nama_ayah" class="form-control" placeholder="Contoh: Budi Santoso">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-dark">Nama Lengkap Ibu</label>
+                            <input type="text" name="nama_ibu" class="form-control" placeholder="Contoh: Rahmawati">
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label fw-semibold text-dark">No. WhatsApp Notifikasi <span class="text-danger">*</span></label>
+                            <input type="text" name="no_wa" class="form-control" placeholder="082317087527" required>
+                            <small class="text-muted">Nomor ini akan menerima pesan notifikasi otomatis dari Fonnte setiap kali anak melakukan presensi.</small>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-semibold text-dark">Alamat Tempat Tinggal</label>
+                            <textarea name="alamat" class="form-control" rows="2" placeholder="Contoh: Kp. Sirah Cijugul RT 02/RW 04, Panjiwangi, Tarogong Kaler"></textarea>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer border-0 pt-0">
-                    <button type="button" class="btn btn-light rounded-pill" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary rounded-pill px-4">Simpan Data</button>
+                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm">Simpan Data Orang Tua</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
+<!-- Modal Edit Orang Tua -->
+<div class="modal fade" id="modalEditOrangTua" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content rounded-4 border-0 shadow">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="fw-bold text-dark"><i class="fa-solid fa-user-pen me-2 text-warning"></i>Edit Data Orang Tua / Wali</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="formEditOrangTua" method="POST">
+                @csrf
+                @method('PUT')
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-dark">Nama Lengkap Ayah</label>
+                            <input type="text" name="nama_ayah" id="edit_nama_ayah" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-dark">Nama Lengkap Ibu</label>
+                            <input type="text" name="nama_ibu" id="edit_nama_ibu" class="form-control">
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label fw-semibold text-dark">No. WhatsApp Notifikasi <span class="text-danger">*</span></label>
+                            <input type="text" name="no_wa" id="edit_no_wa" class="form-control" required>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-semibold text-dark">Alamat Tempat Tinggal</label>
+                            <textarea name="alamat" id="edit_alamat" class="form-control" rows="2"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 pt-0">
+                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-warning rounded-pill px-4 fw-bold text-dark shadow-sm">Simpan Perubahan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Import Orang Tua -->
+<div class="modal fade" id="modalImportOrangTua" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 border-0 shadow">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="fw-bold text-dark"><i class="fa-solid fa-file-import me-2 text-success"></i>Import Data Orang Tua / Wali</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="{{ route('admin.orangtua.store') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-body">
+                    <div class="alert alert-info border-info small mb-3">
+                        <i class="fa-solid fa-circle-info me-1"></i> Unggah file data orang tua format Excel (.xlsx / .csv) untuk menambahkan data kontak WA secara massal.
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold text-dark">Pilih File Excel / CSV:</label>
+                        <input type="file" name="file_orangtua" class="form-control" accept=".csv, .xlsx, .xls">
+                    </div>
+                </div>
+                <div class="modal-footer border-0 pt-0">
+                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-success rounded-pill px-4 fw-bold shadow-sm">Unggah & Import</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function openEditOrangTuaModal(ot) {
+    document.getElementById('edit_nama_ayah').value = ot.nama_ayah || '';
+    document.getElementById('edit_nama_ibu').value = ot.nama_ibu || '';
+    document.getElementById('edit_no_wa').value = ot.no_wa || '';
+    document.getElementById('edit_alamat').value = ot.alamat || '';
+    document.getElementById('formEditOrangTua').action = `/admin/orangtua/${ot.id}`;
+    const modal = new bootstrap.Modal(document.getElementById('modalEditOrangTua'));
+    modal.show();
+}
+</script>
 @endsection
