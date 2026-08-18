@@ -5,25 +5,27 @@
     <!-- Header & Mode Tabs -->
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
         <div>
-            <h5 class="fw-bold mb-1 text-dark"><i class="fa-solid fa-file-invoice me-2 text-primary"></i>Rekapitulasi Kehadiran Siswa</h5>
+            <h5 class="fw-bold mb-1 text-dark d-flex align-items-center">
+                <i class="fa-solid fa-file-invoice text-primary me-2 fs-4"></i> Rekapitulasi Kehadiran Siswa
+            </h5>
             <small class="text-muted">Laporan presensi harian, rekapitulasi bulanan, dan semester</small>
         </div>
         <div class="d-flex flex-wrap gap-2 align-items-center">
             <!-- Mode Switcher Tabs -->
             <div class="btn-group p-1 bg-light rounded-pill border" role="group">
-                <a href="{{ route('admin.rekap.index', ['mode' => 'harian', 'tanggal' => $tanggal, 'kelas_id' => $kelasId, 'sort_by' => $sortBy]) }}" class="btn btn-sm rounded-pill {{ $mode === 'harian' ? 'btn-primary shadow-sm' : 'btn-light text-muted' }}">
+                <a href="{{ route('admin.rekap.index', ['mode' => 'harian', 'tanggal' => $tanggal, 'kelas_id' => $kelasId, 'sort_by' => $sortBy]) }}" class="btn btn-sm rounded-pill px-3 fw-semibold {{ $mode === 'harian' ? 'btn-primary shadow-sm' : 'btn-light text-muted' }}">
                     <i class="fa-solid fa-calendar-day me-1"></i> Harian
                 </a>
-                <a href="{{ route('admin.rekap.index', ['mode' => 'bulanan', 'bulan' => $bulan, 'tahun' => $tahun, 'kelas_id' => $kelasId, 'sort_by' => $sortBy]) }}" class="btn btn-sm rounded-pill {{ $mode === 'bulanan' ? 'btn-primary shadow-sm' : 'btn-light text-muted' }}">
-                    <i class="fa-solid fa-calendar-days me-1"></i> Bulanan
+                <a href="{{ route('admin.rekap.index', ['mode' => 'bulanan', 'bulan' => $bulan, 'tahun' => $tahun, 'kelas_id' => $kelasId, 'sort_by' => $sortBy]) }}" class="btn btn-sm rounded-pill px-3 fw-semibold {{ $mode === 'bulanan' ? 'btn-primary shadow-sm' : 'btn-light text-muted' }}">
+                    <i class="fa-solid fa-chart-simple me-1"></i> Bulanan
                 </a>
-                <a href="{{ route('admin.rekap.index', ['mode' => 'semester', 'semester' => $semester, 'tahun' => $tahun, 'kelas_id' => $kelasId, 'sort_by' => $sortBy]) }}" class="btn btn-sm rounded-pill {{ $mode === 'semester' ? 'btn-primary shadow-sm' : 'btn-light text-muted' }}">
+                <a href="{{ route('admin.rekap.index', ['mode' => 'semester', 'semester' => $semester, 'tahun' => $tahun, 'kelas_id' => $kelasId, 'sort_by' => $sortBy]) }}" class="btn btn-sm rounded-pill px-3 fw-semibold {{ $mode === 'semester' ? 'btn-primary shadow-sm' : 'btn-light text-muted' }}">
                     <i class="fa-solid fa-graduation-cap me-1"></i> Semester
                 </a>
             </div>
 
             <!-- Tombol Cetak Laporan -->
-            <a href="{{ route('admin.rekap.cetak', ['mode' => $mode, 'tanggal' => $tanggal, 'bulan' => $bulan, 'tahun' => $tahun, 'semester' => $semester, 'kelas_id' => $kelasId]) }}" target="_blank" class="btn btn-outline-primary rounded-pill px-3 shadow-sm">
+            <a href="{{ route('admin.rekap.cetak', ['mode' => $mode, 'tanggal' => $tanggal, 'bulan' => $bulan, 'tahun' => $tahun, 'semester' => $semester, 'kelas_id' => $kelasId]) }}" target="_blank" class="btn btn-outline-primary rounded-pill px-3 fw-semibold shadow-sm">
                 <i class="fa-solid fa-print me-1"></i> Cetak Laporan
             </a>
         </div>
@@ -35,13 +37,13 @@
 
         @if($mode === 'harian')
             <div class="col-md-4">
-                <label class="form-label fw-semibold text-dark">Pilih Tanggal Presensi</label>
-                <input type="date" name="tanggal" class="form-control" value="{{ $tanggal }}" onchange="this.form.submit()">
+                <label class="form-label fw-bold text-dark mb-1">Pilih Tanggal Presensi</label>
+                <input type="date" name="tanggal" class="form-control shadow-sm" value="{{ $tanggal }}" onchange="this.form.submit()">
             </div>
         @elseif($mode === 'bulanan')
             <div class="col-md-2">
-                <label class="form-label fw-semibold text-dark">Pilih Bulan</label>
-                <select name="bulan" class="form-select" onchange="this.form.submit()">
+                <label class="form-label fw-bold text-dark mb-1">Pilih Bulan</label>
+                <select name="bulan" class="form-select shadow-sm" onchange="this.form.submit()">
                     @for($m=1; $m<=12; $m++)
                         <option value="{{ $m }}" {{ $bulan == $m ? 'selected' : '' }}>
                             {{ \Carbon\Carbon::create()->month($m)->translatedFormat('F') }}
@@ -50,8 +52,8 @@
                 </select>
             </div>
             <div class="col-md-2">
-                <label class="form-label fw-semibold text-dark">Pilih Tahun</label>
-                <select name="tahun" class="form-select" onchange="this.form.submit()">
+                <label class="form-label fw-bold text-dark mb-1">Pilih Tahun</label>
+                <select name="tahun" class="form-select shadow-sm" onchange="this.form.submit()">
                     @for($y=date('Y')-2; $y<=date('Y')+1; $y++)
                         <option value="{{ $y }}" {{ $tahun == $y ? 'selected' : '' }}>{{ $y }}</option>
                     @endfor
@@ -59,15 +61,15 @@
             </div>
         @elseif($mode === 'semester')
             <div class="col-md-2">
-                <label class="form-label fw-semibold text-dark">Pilih Semester</label>
-                <select name="semester" class="form-select" onchange="this.form.submit()">
+                <label class="form-label fw-bold text-dark mb-1">Pilih Semester</label>
+                <select name="semester" class="form-select shadow-sm" onchange="this.form.submit()">
                     <option value="ganjil" {{ $semester === 'ganjil' ? 'selected' : '' }}>Semester Ganjil (Jul - Des)</option>
                     <option value="genap" {{ $semester === 'genap' ? 'selected' : '' }}>Semester Genap (Jan - Jun)</option>
                 </select>
             </div>
             <div class="col-md-2">
-                <label class="form-label fw-semibold text-dark">Tahun Ajaran</label>
-                <select name="tahun" class="form-select" onchange="this.form.submit()">
+                <label class="form-label fw-bold text-dark mb-1">Tahun Ajaran</label>
+                <select name="tahun" class="form-select shadow-sm" onchange="this.form.submit()">
                     @for($y=date('Y')-2; $y<=date('Y')+1; $y++)
                         <option value="{{ $y }}" {{ $tahun == $y ? 'selected' : '' }}>{{ $y }}/{{ $y+1 }}</option>
                     @endfor
@@ -76,8 +78,8 @@
         @endif
 
         <div class="col-md-4">
-            <label class="form-label fw-semibold text-dark">Filter Kelas</label>
-            <select name="kelas_id" class="form-select" onchange="this.form.submit()">
+            <label class="form-label fw-bold text-dark mb-1">Filter Kelas</label>
+            <select name="kelas_id" class="form-select shadow-sm" onchange="this.form.submit()">
                 <option value="">Semua Kelas</option>
                 @foreach($kelases as $k)
                     <option value="{{ $k->id }}" {{ ($kelasId ?? '') == $k->id ? 'selected' : '' }}>Kelas {{ $k->nama_kelas }}</option>
@@ -86,8 +88,8 @@
         </div>
 
         <div class="col-md-4">
-            <label class="form-label fw-semibold text-dark">Urutkan Data</label>
-            <select name="sort_by" class="form-select" onchange="this.form.submit()">
+            <label class="form-label fw-bold text-dark mb-1">Urutkan Data (Sorting)</label>
+            <select name="sort_by" class="form-select shadow-sm" onchange="this.form.submit()">
                 <option value="nama_asc" {{ ($sortBy ?? '') === 'nama_asc' ? 'selected' : '' }}>Nama Siswa (A-Z)</option>
                 <option value="nama_desc" {{ ($sortBy ?? '') === 'nama_desc' ? 'selected' : '' }}>Nama Siswa (Z-A)</option>
                 <option value="nisn" {{ ($sortBy ?? '') === 'nisn' ? 'selected' : '' }}>NISN Siswa</option>
@@ -95,118 +97,117 @@
         </div>
     </form>
 
-    <!-- TAMPILAN TABEL BERDASARKAN MODE -->
-
-    <!-- 1. MODE HARIAN -->
+    <!-- 1. TAMPILAN TABEL MODE HARIAN -->
     @if($mode === 'harian')
     <div class="table-responsive">
-        <table class="table table-bordered table-hover align-middle mb-0">
+        <table class="table table-bordered table-hover align-middle mb-0" style="font-size: 0.9rem;">
             <thead class="table-light text-center">
                 <tr>
-                    <th style="width: 45px;" class="text-dark">No</th>
-                    <th class="text-dark text-nowrap">NISN</th>
-                    <th class="text-dark text-start text-nowrap">Nama Peserta Didik</th>
-                    <th style="width: 55px;" class="text-dark">JK</th>
-                    <th class="text-dark text-nowrap">Kelas</th>
-                    <th class="text-dark text-nowrap">Jam Masuk (Pagi)</th>
-                    <th class="text-dark text-nowrap">Jam Pulang (Sore)</th>
-                    <th class="text-dark text-nowrap">Status Kehadiran Harian</th>
-                    <th style="width: 100px;" class="text-dark">Aksi</th>
+                    <th style="width: 50px;" class="text-dark">No</th>
+                    <th class="text-dark" style="width: 120px;">NISN</th>
+                    <th class="text-dark text-start">Nama Peserta Didik</th>
+                    <th style="width: 50px;" class="text-dark">JK</th>
+                    <th class="text-dark" style="width: 110px;">Kelas</th>
+                    <th class="text-dark" style="width: 130px;">Jam Masuk (Pagi)</th>
+                    <th class="text-dark" style="width: 130px;">Jam Pulang (Sore)</th>
+                    <th class="text-dark" style="width: 180px;">Status Kehadiran Harian</th>
+                    <th class="text-center text-dark" style="width: 120px;">Aksi</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($harianData as $idx => $row)
                 <tr>
-                    <td class="text-center">{{ $idx + 1 }}</td>
-                    <td class="fw-bold">{{ $row->siswa->nisn }}</td>
-                    <td class="fw-semibold text-dark">{{ $row->siswa->nama }}</td>
+                    <td class="text-center fw-bold">{{ $idx + 1 }}</td>
+                    <td class="text-center fw-bold text-dark">{{ $row->siswa->nisn }}</td>
+                    <td class="fw-bold text-dark">{{ $row->siswa->nama }}</td>
                     <td class="text-center">
-                        <span class="badge {{ $row->siswa->jenis_kelamin === 'L' ? 'bg-primary bg-opacity-10 text-primary border border-primary' : 'bg-danger bg-opacity-10 text-danger border border-danger' }} px-2">
-                            {{ $row->siswa->jenis_kelamin }}
-                        </span>
+                        <span class="badge bg-light text-secondary border px-2">{{ $row->siswa->jenis_kelamin }}</span>
                     </td>
                     <td class="text-center">
-                        <span class="badge bg-info bg-opacity-10 text-dark border border-info">
+                        <span class="badge bg-primary bg-opacity-10 text-primary border border-primary px-2 py-1 rounded-2">
                             Kelas {{ $row->siswa->kelas->nama_kelas ?? '-' }}
                         </span>
                     </td>
-                    <td class="text-center">
+                    <td class="text-center text-muted">
                         @if($row->jam_masuk)
                             <span class="badge bg-light text-dark border px-2 py-1"><i class="fa-regular fa-clock text-primary me-1"></i>{{ $row->jam_masuk }}</span>
                         @else
-                            <span class="text-muted">-</span>
+                            -
                         @endif
                     </td>
-                    <td class="text-center">
+                    <td class="text-center text-muted">
                         @if($row->jam_pulang)
                             <span class="badge bg-light text-dark border px-2 py-1"><i class="fa-solid fa-door-open text-success me-1"></i>{{ $row->jam_pulang }}</span>
                         @else
-                            <span class="text-muted">-</span>
+                            -
                         @endif
                     </td>
                     <td class="text-center">
                         @if($row->status === 'HADIR')
-                            <span class="badge bg-success bg-opacity-10 text-success border border-success px-3 py-2 rounded-pill"><i class="fa-solid fa-check me-1"></i> HADIR</span>
+                            <span class="badge bg-success bg-opacity-10 text-success border border-success px-3 py-2 rounded-pill"><i class="fa-solid fa-circle-check me-1"></i> HADIR</span>
                         @elseif($row->status === 'TERLAMBAT')
                             <span class="badge bg-warning bg-opacity-10 text-dark border border-warning px-3 py-2 rounded-pill"><i class="fa-solid fa-clock me-1 text-warning"></i> TERLAMBAT</span>
                         @elseif($row->status === 'IZIN')
                             <span class="badge bg-info bg-opacity-10 text-dark border border-info px-3 py-2 rounded-pill"><i class="fa-solid fa-envelope-open-text me-1"></i> IZIN</span>
                         @elseif($row->status === 'SAKIT')
                             <span class="badge bg-secondary bg-opacity-10 text-dark border border-secondary px-3 py-2 rounded-pill"><i class="fa-solid fa-notes-medical me-1"></i> SAKIT</span>
-                        @else
+                        @elseif($row->status === 'ALPA')
                             <span class="badge bg-danger bg-opacity-10 text-danger border border-danger px-3 py-2 rounded-pill"><i class="fa-solid fa-xmark me-1"></i> ALPA</span>
+                        @else
+                            <span class="badge bg-light text-muted border px-3 py-2 rounded-pill"><i class="fa-regular fa-circle me-1"></i> BELUM ABSEN</span>
                         @endif
                     </td>
                     <td class="text-center">
-                        <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-2 py-1" onclick="openSetStatusModal({{ $row->siswa->id }}, '{{ addslashes($row->siswa->nama) }}', '{{ $row->status }}')">
+                        <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3 py-1 fw-semibold shadow-sm" onclick="openSetStatusModal({{ $row->siswa->id }}, '{{ addslashes($row->siswa->nama) }}', '{{ $row->status }}')">
                             <i class="fa-solid fa-pen-to-square me-1"></i> Set Status
                         </button>
                     </td>
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="9" class="text-center text-muted py-5">Tidak ada data siswa ditemukan.</td>
+                    <td colspan="9" class="text-center text-muted py-5">
+                        <i class="fa-solid fa-folder-open fs-2 d-block mb-2 text-muted"></i>
+                        Tidak ada data peserta didik ditemukan.
+                    </td>
                 </tr>
                 @endforelse
             </tbody>
         </table>
     </div>
 
-    <!-- 2. MODE BULANAN -->
+    <!-- 2. TAMPILAN TABEL MODE BULANAN -->
     @elseif($mode === 'bulanan')
     <div class="table-responsive">
-        <table class="table table-bordered table-hover align-middle mb-0">
+        <table class="table table-bordered table-hover align-middle mb-0" style="font-size: 0.9rem;">
             <thead class="table-light text-center">
                 <tr>
-                    <th rowspan="2" style="width: 45px;" class="align-middle text-dark">No</th>
-                    <th rowspan="2" class="align-middle text-dark text-nowrap">NISN</th>
-                    <th rowspan="2" class="align-middle text-dark text-start text-nowrap">Nama Peserta Didik</th>
-                    <th rowspan="2" style="width: 55px;" class="align-middle text-dark">JK</th>
-                    <th rowspan="2" class="align-middle text-dark text-nowrap">Kelas</th>
-                    <th colspan="5" class="text-dark bg-light text-nowrap">Akumulasi Kehadiran (Bulan {{ $bulan }}/{{ $tahun }})</th>
-                    <th rowspan="2" class="align-middle text-dark text-nowrap">Persentase (%)</th>
+                    <th rowspan="2" style="width: 50px;" class="align-middle text-dark">No</th>
+                    <th rowspan="2" class="align-middle text-dark" style="width: 120px;">NISN</th>
+                    <th rowspan="2" class="align-middle text-dark text-start">Nama Peserta Didik</th>
+                    <th rowspan="2" style="width: 50px;" class="align-middle text-dark">JK</th>
+                    <th rowspan="2" class="align-middle text-dark" style="width: 110px;">Kelas</th>
+                    <th colspan="5" class="text-dark bg-light">Akumulasi Kehadiran (Bulan {{ $bulan }}/{{ $tahun }})</th>
+                    <th rowspan="2" class="align-middle text-dark" style="width: 120px;">Persentase</th>
                 </tr>
                 <tr>
-                    <th class="text-success text-nowrap px-3 py-2"><i class="fa-solid fa-circle-check me-1"></i> Hadir</th>
-                    <th class="text-warning text-nowrap px-3 py-2"><i class="fa-solid fa-clock me-1"></i> Terlambat</th>
-                    <th class="text-info text-nowrap px-3 py-2"><i class="fa-solid fa-envelope-open me-1"></i> Izin</th>
-                    <th class="text-secondary text-nowrap px-3 py-2"><i class="fa-solid fa-notes-medical me-1"></i> Sakit</th>
-                    <th class="text-danger text-nowrap px-3 py-2"><i class="fa-solid fa-circle-xmark me-1"></i> Alpa</th>
+                    <th class="text-success" style="width: 80px;"><i class="fa-solid fa-circle-check me-1"></i> Hadir</th>
+                    <th class="text-warning" style="width: 80px;"><i class="fa-solid fa-clock me-1"></i> Terlambat</th>
+                    <th class="text-info" style="width: 80px;"><i class="fa-solid fa-envelope-open me-1"></i> Izin</th>
+                    <th class="text-secondary" style="width: 80px;"><i class="fa-solid fa-notes-medical me-1"></i> Sakit</th>
+                    <th class="text-danger" style="width: 80px;"><i class="fa-solid fa-circle-xmark me-1"></i> Alpa</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($bulananData as $idx => $row)
                 <tr>
-                    <td class="text-center">{{ $idx + 1 }}</td>
-                    <td class="fw-bold">{{ $row->siswa->nisn }}</td>
-                    <td class="fw-semibold text-dark">{{ $row->siswa->nama }}</td>
+                    <td class="text-center fw-bold">{{ $idx + 1 }}</td>
+                    <td class="text-center fw-bold text-dark">{{ $row->siswa->nisn }}</td>
+                    <td class="fw-bold text-dark">{{ $row->siswa->nama }}</td>
                     <td class="text-center">
-                        <span class="badge {{ $row->siswa->jenis_kelamin === 'L' ? 'bg-primary bg-opacity-10 text-primary border border-primary' : 'bg-danger bg-opacity-10 text-danger border border-danger' }} px-2">
-                            {{ $row->siswa->jenis_kelamin }}
-                        </span>
+                        <span class="badge bg-light text-secondary border px-2">{{ $row->siswa->jenis_kelamin }}</span>
                     </td>
                     <td class="text-center">
-                        <span class="badge bg-info bg-opacity-10 text-dark border border-info">
+                        <span class="badge bg-primary bg-opacity-10 text-primary border border-primary px-2 py-1 rounded-2">
                             Kelas {{ $row->siswa->kelas->nama_kelas ?? '-' }}
                         </span>
                     </td>
@@ -230,41 +231,39 @@
         </table>
     </div>
 
-    <!-- 3. MODE SEMESTER -->
+    <!-- 3. TAMPILAN TABEL MODE SEMESTER -->
     @elseif($mode === 'semester')
     <div class="table-responsive">
-        <table class="table table-bordered table-hover align-middle mb-0">
+        <table class="table table-bordered table-hover align-middle mb-0" style="font-size: 0.9rem;">
             <thead class="table-light text-center">
                 <tr>
-                    <th rowspan="2" style="width: 45px;" class="align-middle text-dark">No</th>
-                    <th rowspan="2" class="align-middle text-dark text-nowrap">NISN</th>
-                    <th rowspan="2" class="align-middle text-dark text-start text-nowrap">Nama Peserta Didik</th>
-                    <th rowspan="2" style="width: 55px;" class="align-middle text-dark">JK</th>
-                    <th rowspan="2" class="align-middle text-dark text-nowrap">Kelas</th>
-                    <th colspan="5" class="text-dark bg-light text-nowrap">Akumulasi Kehadiran Semester ({{ ucfirst($semester) }} {{ $tahun }})</th>
-                    <th rowspan="2" class="align-middle text-dark text-nowrap">Persentase Akhir (%)</th>
+                    <th rowspan="2" style="width: 50px;" class="align-middle text-dark">No</th>
+                    <th rowspan="2" class="align-middle text-dark" style="width: 120px;">NISN</th>
+                    <th rowspan="2" class="align-middle text-dark text-start">Nama Peserta Didik</th>
+                    <th rowspan="2" style="width: 50px;" class="align-middle text-dark">JK</th>
+                    <th rowspan="2" class="align-middle text-dark" style="width: 110px;">Kelas</th>
+                    <th colspan="5" class="text-dark bg-light">Akumulasi Kehadiran Semester ({{ ucfirst($semester) }} {{ $tahun }})</th>
+                    <th rowspan="2" class="align-middle text-dark" style="width: 120px;">Persentase</th>
                 </tr>
                 <tr>
-                    <th class="text-success text-nowrap px-3 py-2"><i class="fa-solid fa-circle-check me-1"></i> Hadir</th>
-                    <th class="text-warning text-nowrap px-3 py-2"><i class="fa-solid fa-clock me-1"></i> Terlambat</th>
-                    <th class="text-info text-nowrap px-3 py-2"><i class="fa-solid fa-envelope-open me-1"></i> Izin</th>
-                    <th class="text-secondary text-nowrap px-3 py-2"><i class="fa-solid fa-notes-medical me-1"></i> Sakit</th>
-                    <th class="text-danger text-nowrap px-3 py-2"><i class="fa-solid fa-circle-xmark me-1"></i> Alpa</th>
+                    <th class="text-success" style="width: 80px;"><i class="fa-solid fa-circle-check me-1"></i> Hadir</th>
+                    <th class="text-warning" style="width: 80px;"><i class="fa-solid fa-clock me-1"></i> Terlambat</th>
+                    <th class="text-info" style="width: 80px;"><i class="fa-solid fa-envelope-open me-1"></i> Izin</th>
+                    <th class="text-secondary" style="width: 80px;"><i class="fa-solid fa-notes-medical me-1"></i> Sakit</th>
+                    <th class="text-danger" style="width: 80px;"><i class="fa-solid fa-circle-xmark me-1"></i> Alpa</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($semesterData as $idx => $row)
                 <tr>
-                    <td class="text-center">{{ $idx + 1 }}</td>
-                    <td class="fw-bold">{{ $row->siswa->nisn }}</td>
-                    <td class="fw-semibold text-dark">{{ $row->siswa->nama }}</td>
+                    <td class="text-center fw-bold">{{ $idx + 1 }}</td>
+                    <td class="text-center fw-bold text-dark">{{ $row->siswa->nisn }}</td>
+                    <td class="fw-bold text-dark">{{ $row->siswa->nama }}</td>
                     <td class="text-center">
-                        <span class="badge {{ $row->siswa->jenis_kelamin === 'L' ? 'bg-primary bg-opacity-10 text-primary border border-primary' : 'bg-danger bg-opacity-10 text-danger border border-danger' }} px-2">
-                            {{ $row->siswa->jenis_kelamin }}
-                        </span>
+                        <span class="badge bg-light text-secondary border px-2">{{ $row->siswa->jenis_kelamin }}</span>
                     </td>
                     <td class="text-center">
-                        <span class="badge bg-info bg-opacity-10 text-dark border border-info">
+                        <span class="badge bg-primary bg-opacity-10 text-primary border border-primary px-2 py-1 rounded-2">
                             Kelas {{ $row->siswa->kelas->nama_kelas ?? '-' }}
                         </span>
                     </td>
@@ -321,7 +320,7 @@
                 </div>
                 <div class="modal-footer border-0 pt-0">
                     <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold">Simpan Perubahan</button>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm">Simpan Perubahan</button>
                 </div>
             </form>
         </div>
