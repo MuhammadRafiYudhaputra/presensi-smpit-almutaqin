@@ -27,8 +27,11 @@ if (!file_exists($targetDb)) {
     }
 }
 
-// 3. Fallback defaults for empty string environment variables to prevent Manager::createDriver() error
+// 3. Fallback defaults for environment variables
 $envDefaults = [
+    'APP_KEY' => 'base64:q77j0FQvZTtAtUyaa6ZQQggynU9ZvZ44wot+aWgpnGQ=',
+    'APP_ENV' => 'production',
+    'APP_DEBUG' => 'true',
     'APP_MAINTENANCE_DRIVER' => 'file',
     'APP_MAINTENANCE_STORE' => 'array',
     'SESSION_DRIVER' => 'cookie',
