@@ -17,7 +17,7 @@
 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background: linear-gradient(135deg, #1e40af 0%, #2563eb 50%, #1d4ed8 100%);
+            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 60%, #090d16 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
