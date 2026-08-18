@@ -27,18 +27,39 @@ if (!file_exists($targetDb)) {
     }
 }
 
-// 3. Set environment variable overrides for serverless
-putenv('VIEW_COMPILED_PATH=/tmp/storage/framework/views');
-putenv('APP_CONFIG_CACHE=/tmp/bootstrap/cache/config.php');
-putenv('APP_EVENTS_CACHE=/tmp/bootstrap/cache/events.php');
-putenv('APP_PACKAGES_CACHE=/tmp/bootstrap/cache/packages.php');
-putenv('APP_ROUTES_CACHE=/tmp/bootstrap/cache/routes.php');
-putenv('APP_SERVICES_CACHE=/tmp/bootstrap/cache/services.php');
+// 3. Fallback defaults for empty string environment variables to prevent Manager::createDriver() error
+$envDefaults = [
+    'SESSION_DRIVER' => 'cookie',
+    'CACHE_STORE' => 'array',
+    'CACHE_DRIVER' => 'array',
+    'QUEUE_CONNECTION' => 'sync',
+    'LOG_CHANNEL' => 'stderr',
+    'FILESYSTEM_DISK' => 'local',
+    'MAIL_MAILER' => 'log',
+    'VIEW_COMPILED_PATH' => '/tmp/storage/framework/views',
+    'APP_CONFIG_CACHE' => '/tmp/bootstrap/cache/config.php',
+    'APP_EVENTS_CACHE' => '/tmp/bootstrap/cache/events.php',
+    'APP_PACKAGES_CACHE' => '/tmp/bootstrap/cache/packages.php',
+    'APP_ROUTES_CACHE' => '/tmp/bootstrap/cache/routes.php',
+    'APP_SERVICES_CACHE' => '/tmp/bootstrap/cache/services.php',
+];
+
+foreach ($envDefaults as $key => $val) {
+    $currentVal = getenv($key);
+    if ($currentVal === false || $currentVal === '' || $currentVal === null) {
+        putenv("{$key}={$val}");
+        $_ENV[$key] = $val;
+        $_SERVER[$key] = $val;
+    }
+}
 
 $dbConn = getenv('DB_CONNECTION');
-if (!$dbConn || $dbConn === 'sqlite') {
+if (!$dbConn || $dbConn === '' || $dbConn === 'sqlite') {
+    putenv('DB_CONNECTION=sqlite');
     putenv("DB_DATABASE={$targetDb}");
+    $_ENV['DB_CONNECTION'] = 'sqlite';
     $_ENV['DB_DATABASE'] = $targetDb;
+    $_SERVER['DB_CONNECTION'] = 'sqlite';
     $_SERVER['DB_DATABASE'] = $targetDb;
 }
 
