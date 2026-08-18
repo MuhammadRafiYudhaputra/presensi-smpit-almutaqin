@@ -45,7 +45,9 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
     // Data Kelas & Kenaikan Kelas Otomatis
     Route::resource('/kelas', KelasController::class)->except(['create', 'edit']);
+    Route::get('/kenaikan-kelas', [KenaikanKelasController::class, 'index'])->name('kenaikan.index');
     Route::post('/kenaikan-kelas', [KenaikanKelasController::class, 'proses'])->name('kenaikan.proses');
+    Route::post('/kenaikan-kelas/pindah', [KenaikanKelasController::class, 'pindahRombel'])->name('kenaikan.pindah');
 
     // Data Orang Tua
     Route::resource('/orangtua', OrangTuaController::class)->except(['create', 'edit']);
