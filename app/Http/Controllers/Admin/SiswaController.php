@@ -18,12 +18,71 @@ class SiswaController extends Controller
         $this->qrCodeService = $qrCodeService;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $siswas = Siswa::with(['kelas', 'orangTua'])->latest()->paginate(15);
+        $status = $request->get('status', 'aktif');
+        $search = $request->get('search');
+        $kelasId = $request->get('kelas_id');
+        $sortBy = $request->get('sort_by', 'nama_asc');
+
+        $query = Siswa::with(['kelas', 'orangTua']);
+
+        // Filter Status Siswa (Aktif vs Alumni vs Semua)
+        if ($status === 'aktif') {
+            $query->where('status', '!=', 'alumni')->orWhereNull('status');
+        } elseif ($status === 'alumni') {
+            $query->where('status', 'alumni');
+        }
+
+        // Pencarian NISN, Nama, atau NIK/NIS
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('nisn', 'like', "%{$search}%")
+                  ->orWhere('nama', 'like', "%{$search}%")
+                  ->orWhere('nis', 'like', "%{$search}%");
+            });
+        }
+
+        // Filter Rombel / Kelas
+        if (!empty($kelasId)) {
+            $query->where('kelas_id', $kelasId);
+        }
+
+        // Sorting Multikriteria
+        switch ($sortBy) {
+            case 'nama_desc':
+                $query->orderBy('nama', 'desc');
+                break;
+            case 'nisn':
+                $query->orderBy('nisn', 'asc');
+                break;
+            case 'nama_asc':
+            default:
+                $query->orderBy('nama', 'asc');
+                break;
+        }
+
+        $siswas = $query->paginate(15)->withQueryString();
         $kelases = Kelas::all();
         $orangTuas = OrangTua::all();
-        return view('admin.siswa.index', compact('siswas', 'kelases', 'orangTuas'));
+
+        // Hitung statistik untuk badge status
+        $countAktif = Siswa::where('status', '!=', 'alumni')->orWhereNull('status')->count();
+        $countAlumni = Siswa::where('status', 'alumni')->count();
+        $countSemua = Siswa::count();
+
+        return view('admin.siswa.index', compact(
+            'siswas',
+            'kelases',
+            'orangTuas',
+            'status',
+            'search',
+            'kelasId',
+            'sortBy',
+            'countAktif',
+            'countAlumni',
+            'countSemua'
+        ));
     }
 
     public function store(Request $request)
@@ -47,6 +106,7 @@ class SiswaController extends Controller
             'kelas_id' => $request->kelas_id,
             'orang_tua_id' => $request->orang_tua_id,
             'qr_code_token' => $token,
+            'status' => 'aktif',
         ]);
 
         return redirect()->back()->with('success', 'Data siswa berhasil ditambahkan & QR Code di-generate!');
@@ -65,7 +125,14 @@ class SiswaController extends Controller
             'orang_tua_id' => 'required|exists:orang_tuas,id',
         ]);
 
-        $siswa->update($request->only(['nisn', 'nis', 'nama', 'jenis_kelamin', 'kelas_id', 'orang_tua_id']));
+        $siswa->update([
+            'nisn' => $request->nisn,
+            'nis' => $request->nis,
+            'nama' => $request->nama,
+            'jenis_kelamin' => $request->jenis_kelamin,
+            'kelas_id' => $request->kelas_id,
+            'orang_tua_id' => $request->orang_tua_id,
+        ]);
 
         return redirect()->back()->with('success', 'Data siswa berhasil diperbarui!');
     }
@@ -78,14 +145,9 @@ class SiswaController extends Controller
         return redirect()->back()->with('success', 'Data siswa berhasil dihapus!');
     }
 
-    /**
-     * Tampilan Cetak Kartu Pelajar dengan QR Code
-     */
     public function printCard($id)
     {
         $siswa = Siswa::with(['kelas', 'orangTua'])->findOrFail($id);
-        $qrSvg = $this->qrCodeService->renderSvg($siswa->qr_code_token, 180);
-
-        return view('admin.siswa.card', compact('siswa', 'qrSvg'));
+        return view('admin.siswa.card', compact('siswa'));
     }
 }
