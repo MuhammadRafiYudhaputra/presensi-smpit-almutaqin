@@ -1,339 +1,253 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Kios Tap Presensi - SMP IT Al-Mutaqin</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+@extends('layouts.app')
 
-    <style>
-        :root {
-            --primary-glow: #00E676;
-            --warning-glow: #FFD600;
-            --danger-glow: #FF1744;
-        }
+@section('content')
+<style>
+    .scanner-dark-card {
+        background: #0f172a;
+        border-radius: 24px;
+        padding: 2.5rem 2rem;
+        color: #ffffff;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.2);
+    }
 
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background: radial-gradient(circle at top center, #1E293B 0%, #0F172A 100%);
-            color: #fff;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1.5rem;
-            overflow: hidden;
-            user-select: none;
-        }
+    .digital-clock {
+        color: #facc15;
+        font-weight: 800;
+        font-size: 1.6rem;
+        letter-spacing: 1px;
+        position: absolute;
+        top: 1.75rem;
+        left: 2rem;
+    }
 
-        .kiosk-container {
-            width: 100%;
-            max-width: 900px;
-        }
+    .scanner-target-circle {
+        width: 200px;
+        height: 200px;
+        margin: 1.5rem auto 1rem;
+        border-radius: 50%;
+        border: 2px dashed #00e676;
+        background: radial-gradient(circle, rgba(0, 230, 118, 0.1) 0%, rgba(15, 23, 42, 0) 70%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        position: relative;
+        box-shadow: 0 0 25px rgba(0, 230, 118, 0.2);
+    }
 
-        .tap-card {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(20px);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 28px;
-            padding: 3rem 2rem;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
+    .scanner-target-circle::after {
+        content: '';
+        position: absolute;
+        top: 15%;
+        left: 10%;
+        right: 10%;
+        height: 2px;
+        background: #00e676;
+        box-shadow: 0 0 10px #00e676, 0 0 20px #00e676;
+        animation: scanBeam 2.2s infinite ease-in-out;
+    }
 
-        /* Pulsing Tap Zone Animation */
-        .tap-target-zone {
-            width: 240px;
-            height: 240px;
-            margin: 1.5rem auto;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(0, 230, 118, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
-            border: 3px dashed var(--primary-glow);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            animation: pulseGlow 2s infinite ease-in-out;
-            position: relative;
-        }
+    @keyframes scanBeam {
+        0%, 100% { top: 20%; opacity: 0.3; }
+        50% { top: 80%; opacity: 1; }
+    }
 
-        @keyframes pulseGlow {
-            0% {
-                box-shadow: 0 0 0 0 rgba(0, 230, 118, 0.4);
-                transform: scale(1);
-            }
-            50% {
-                box-shadow: 0 0 30px 12px rgba(0, 230, 118, 0.2);
-                transform: scale(1.03);
-            }
-            100% {
-                box-shadow: 0 0 0 0 rgba(0, 230, 118, 0.4);
-                transform: scale(1);
-            }
-        }
+    .scanner-input-group {
+        max-width: 650px;
+        margin: 1.5rem auto 1.5rem;
+    }
 
-        .laser-line {
-            width: 80%;
-            height: 3px;
-            background: #00E676;
-            box-shadow: 0 0 15px #00E676;
-            position: absolute;
-            animation: scanLaser 2s infinite alternate ease-in-out;
-        }
+    .scanner-input {
+        background: transparent;
+        border: 2px solid #00e676;
+        color: #ffffff;
+        border-radius: 14px 0 0 14px;
+        padding: 0.85rem 1.25rem;
+        font-size: 1.05rem;
+        letter-spacing: 1px;
+    }
 
-        @keyframes scanLaser {
-            0% { top: 20%; }
-            100% { top: 80%; }
-        }
+    .scanner-input:focus {
+        background: transparent;
+        border-color: #00e676;
+        color: #ffffff;
+        box-shadow: 0 0 15px rgba(0, 230, 118, 0.4);
+    }
 
-        .status-display {
-            border-radius: 20px;
-            padding: 1.5rem;
-            margin-top: 1.5rem;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+    .scanner-input::placeholder {
+        color: #64748b;
+        font-size: 0.95rem;
+    }
 
-        .status-idle {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
+    .scanner-btn {
+        background: #059669;
+        border: 2px solid #059669;
+        color: #ffffff;
+        font-weight: 700;
+        border-radius: 0 14px 14px 0;
+        padding: 0.85rem 1.75rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: background 0.2s ease;
+    }
 
-        .status-success {
-            background: rgba(0, 230, 118, 0.15);
-            border: 2px solid #00E676;
-            color: #69F0AE;
-            transform: scale(1.02);
-        }
+    .scanner-btn:hover {
+        background: #10b981;
+        border-color: #10b981;
+        color: #ffffff;
+    }
 
-        .status-warning {
-            background: rgba(255, 214, 0, 0.15);
-            border: 2px solid #FFD600;
-            color: #FFE57F;
-            transform: scale(1.02);
-        }
+    .result-display-card {
+        background: rgba(30, 41, 59, 0.7);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 18px;
+        padding: 2rem;
+        max-width: 650px;
+        margin: 0 auto;
+        text-align: center;
+        min-height: 120px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+</style>
 
-        .status-danger {
-            background: rgba(255, 23, 68, 0.15);
-            border: 2px solid #FF1744;
-            color: #FF8A80;
-            transform: scale(1.02);
-        }
+<div class="scanner-dark-card text-center">
+    <!-- Live Digital Clock -->
+    <div class="digital-clock" id="liveClock">--.--.--</div>
 
-        /* Hidden Input Field Always Focused */
-        .hardware-scanner-input {
-            position: absolute;
-            opacity: 0;
-            top: -1000px;
-            left: -1000px;
-        }
-
-        .avatar-circle {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1rem;
-            font-size: 2.5rem;
-        }
-    </style>
-</head>
-<body onclick="refocusScannerInput()">
-
-    <div class="kiosk-container">
-        <!-- Header -->
-        <div class="d-flex justify-content-between align-items-center mb-4 px-2">
-            <div class="d-flex align-items-center gap-3">
-                <div class="p-3 bg-primary bg-opacity-20 rounded-4 text-primary">
-                    <i class="fa-solid fa-school fs-2"></i>
-                </div>
-                <div>
-                    <h3 class="fw-extrabold m-0">SMP IT AL-MUTAQIN</h3>
-                    <p class="text-secondary mb-0">Kios Presensi Otomatis • Notifikasi WA Otomatis (Fonnte API)</p>
-                </div>
-            </div>
-            <div class="text-end">
-                <span class="badge bg-success bg-opacity-20 text-success px-3 py-2 rounded-pill mb-1 fs-7">
-                    <i class="fa-solid fa-circle me-1 fs-8"></i> Alat Scanner Active
-                </span>
-                <h2 class="fw-extrabold text-warning m-0" id="live_clock">--:--:--</h2>
-            </div>
-        </div>
-
-        <!-- Main Tap Card -->
-        <div class="tap-card">
-            <!-- HARDWARE SCANNER TAP ZONE -->
-            <div class="tap-target-zone">
-                <div class="laser-line"></div>
-                <i class="fa-solid fa-id-card fs-1 text-warning mb-2"></i>
-                <span class="fw-bold text-white fs-5">TEMPELKAN KARTU</span>
-                <small class="text-white-50 fs-7">Scan QR Code Siswa Pada Alat</small>
-            </div>
-            
-            <p class="text-secondary small mb-0">
-                <i class="fa-solid fa-barcode text-warning me-1"></i> 
-                Dekatkan Kartu Pelajar ke sensor alat scanner USB untuk melakukan presensi.
-            </p>
-
-            <!-- Hidden Input Field for Hardware USB HID Scanner -->
-            <input type="text" id="scanner_hidden_input" class="hardware-scanner-input" autofocus autocomplete="off">
-
-            <!-- RESULT STATUS FEEDBACK CARD -->
-            <div id="status_display" class="status-display status-idle mt-4">
-                <div id="idle_view">
-                    <div class="avatar-circle text-secondary">
-                        <i class="fa-solid fa-user-clock"></i>
-                    </div>
-                    <h5 class="fw-bold mb-1">Siap Menerima Presensi</h5>
-                    <p class="text-secondary mb-0">Silakan tap kartu QR Code siswa pada alat scanner.</p>
-                </div>
-
-                <div id="result_view" style="display: none;">
-                    <div class="avatar-circle" id="result_icon_bg">
-                        <i id="result_icon" class="fa-solid fa-user-check"></i>
-                    </div>
-                    <h3 class="fw-extrabold mb-1" id="result_title">PRESENSI BERHASIL</h3>
-                    <h4 class="fw-bold text-white mb-2" id="result_student_name">Nama Siswa</h4>
-                    <p class="fs-6 mb-2" id="result_message">Pesan status presensi</p>
-
-                    <div class="d-inline-flex align-items-center gap-2 bg-dark bg-opacity-50 px-3 py-2 rounded-pill mt-2">
-                        <i class="fa-brands fa-whatsapp text-success fs-5"></i>
-                        <small id="result_wa_status" class="text-white-50">Mengirim notifikasi WhatsApp ke Orang Tua...</small>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <!-- Center Target Circle -->
+    <div class="scanner-target-circle">
+        <i class="fa-solid fa-table-cells-large text-warning fs-3 mb-1"></i>
+        <span class="fw-bold text-white fs-6 d-block">SCAN KARTU QR</span>
+        <small class="text-secondary" style="font-size: 0.75rem;">Arahkan QR Code ke Scanner USB</small>
     </div>
 
-    <!-- Audio Effects -->
-    <audio id="sound_success" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
-    <audio id="sound_error" src="https://assets.mixkit.co/active_storage/sfx/2573/2573-preview.mp3" preload="auto"></audio>
+    <!-- Status Subtext -->
+    <div class="text-success small fw-semibold mb-3">
+        <i class="fa-solid fa-barcode me-1"></i> Sensor USB Scanner terhubung. Dekatkan QR Code siswa.
+    </div>
 
-    <script>
-        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-        const hiddenInput = document.getElementById('scanner_hidden_input');
-        const soundSuccess = document.getElementById('sound_success');
-        const soundError = document.getElementById('sound_error');
+    <!-- Input Scanner Form -->
+    <form id="formScan" onsubmit="event.preventDefault(); submitScan();" class="scanner-input-group">
+        <div class="input-group">
+            <input type="text" id="qrInput" class="form-control scanner-input" placeholder="Hasil scan USB akan tampil di sini..." autocomplete="off" autofocus>
+            <button type="submit" class="btn scanner-btn">
+                <i class="fa-solid fa-qrcode"></i> Scan
+            </button>
+        </div>
+    </form>
 
-        let isProcessing = false;
+    <!-- Result Display Card -->
+    <div class="result-display-card" id="resultContainer">
+        <div class="bg-secondary bg-opacity-25 p-3 rounded-circle text-white mb-3 d-inline-flex align-items-center justify-content-center" style="width: 55px; height: 55px;">
+            <i class="fa-solid fa-user-check fs-4"></i>
+        </div>
+        <h6 class="fw-semibold text-white mb-0">Silakan scan Kartu Presensi siswa pada alat USB scanner.</h6>
+    </div>
+</div>
 
-        // Auto Focus Engine for Hardware USB HID Scanner
-        function refocusScannerInput() {
-            if (document.activeElement !== hiddenInput) {
-                hiddenInput.focus();
-            }
+<script>
+    // 1. Live Digital Clock
+    function updateClock() {
+        const now = new Date();
+        const hrs = String(now.getHours()).padStart(2, '0');
+        const mins = String(now.getMinutes()).padStart(2, '0');
+        const secs = String(now.getSeconds()).padStart(2, '0');
+        document.getElementById('liveClock').innerText = `${hrs}.${mins}.${secs}`;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // 2. Auto Focus QR Input
+    const qrInput = document.getElementById('qrInput');
+    qrInput.focus();
+    document.addEventListener('click', () => qrInput.focus());
+
+    // 3. Fast submit on Enter / USB scan
+    let scanTimeout = null;
+    qrInput.addEventListener('input', function() {
+        if (scanTimeout) clearTimeout(scanTimeout);
+        if (this.value.length >= 6) {
+            scanTimeout = setTimeout(() => {
+                submitScan();
+            }, 250);
         }
+    });
 
-        window.onload = function() {
-            refocusScannerInput();
-            setInterval(refocusScannerInput, 1000);
-        };
+    // 4. AJAX Process Scan
+    function submitScan() {
+        const token = qrInput.value.trim();
+        if (!token) return;
 
-        // Live Clock Update
-        setInterval(() => {
-            const now = new Date();
-            document.getElementById('live_clock').innerText = now.toLocaleTimeString('id-ID');
-        }, 1000);
+        qrInput.disabled = true;
 
-        // Hardware Scanner Keypress Event (Hardware scanner inputs fast & hits Enter)
-        hiddenInput.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                const token = this.value.trim();
-                this.value = '';
-                if (token !== '') {
-                    processScanToken(token);
-                }
+        fetch("{{ route('presensi.scan.store') }}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({ qr_token: token })
+        })
+        .then(res => res.json())
+        .then(data => {
+            const container = document.getElementById('resultContainer');
+            if (data.success) {
+                const isPulang = (data.type === 'pulang');
+                const isTerlambat = (data.status === 'TERLAMBAT');
+                const statusBadge = isPulang 
+                    ? `<span class="badge bg-primary px-3 py-2 rounded-pill fs-6"><i class="fa-solid fa-door-open me-1"></i> PULANG SEKOLAH</span>`
+                    : (isTerlambat 
+                        ? `<span class="badge bg-warning text-dark px-3 py-2 rounded-pill fs-6"><i class="fa-solid fa-clock me-1"></i> TERLAMBAT</span>`
+                        : `<span class="badge bg-success px-3 py-2 rounded-pill fs-6"><i class="fa-solid fa-circle-check me-1"></i> HADIR TEPAT WAKTU</span>`);
+
+                container.innerHTML = `
+                    <div class="d-flex align-items-center justify-content-center gap-3 mb-2">
+                        <div class="bg-success bg-opacity-25 p-3 rounded-circle text-success" style="width: 55px; height: 55px; display:flex; align-items:center; justify-content:center;">
+                            <i class="fa-solid fa-check fs-3"></i>
+                        </div>
+                        <div class="text-start">
+                            <h5 class="fw-bold text-white mb-0">${data.siswa.nama}</h5>
+                            <small class="text-secondary">Kelas ${data.siswa.kelas ? data.siswa.kelas.nama_kelas : '-'} | NISN: ${data.siswa.nisn}</small>
+                        </div>
+                    </div>
+                    <div class="my-2">${statusBadge}</div>
+                    <small class="text-success mt-1"><i class="fa-brands fa-whatsapp me-1"></i> Notifikasi WhatsApp Terkirim ke Orang Tua (${data.waktu})</small>
+                `;
+            } else if (data.type === 'belum_pulang') {
+                container.innerHTML = `
+                    <div class="bg-warning bg-opacity-25 p-3 rounded-circle text-warning mb-2" style="width: 55px; height: 55px; display:flex; align-items:center; justify-content:center;">
+                        <i class="fa-solid fa-clock-rotate-left fs-3"></i>
+                    </div>
+                    <h6 class="fw-bold text-warning mb-1">BELUM WAKTUNYA PULANG!</h6>
+                    <small class="text-white">${data.message}</small>
+                `;
+            } else {
+                container.innerHTML = `
+                    <div class="bg-danger bg-opacity-25 p-3 rounded-circle text-danger mb-2" style="width: 55px; height: 55px; display:flex; align-items:center; justify-content:center;">
+                        <i class="fa-solid fa-xmark fs-3"></i>
+                    </div>
+                    <h6 class="fw-bold text-danger mb-1">Presensi Gagal!</h6>
+                    <small class="text-white">${data.message}</small>
+                `;
             }
+        })
+        .catch(err => {
+            document.getElementById('resultContainer').innerHTML = `
+                <div class="text-danger fw-bold"><i class="fa-solid fa-circle-exclamation me-1"></i> Terjadi kesalahan koneksi server.</div>
+            `;
+        })
+        .finally(() => {
+            qrInput.value = '';
+            qrInput.disabled = false;
+            qrInput.focus();
         });
-
-        // Main Process Scan Token Logic
-        function processScanToken(token) {
-            if (isProcessing) return;
-            isProcessing = true;
-
-            const statusDisplay = document.getElementById('status_display');
-            const idleView = document.getElementById('idle_view');
-            const resultView = document.getElementById('result_view');
-            const resultIconBg = document.getElementById('result_icon_bg');
-            const resultIcon = document.getElementById('result_icon');
-            const resultTitle = document.getElementById('result_title');
-            const resultStudentName = document.getElementById('result_student_name');
-            const resultMessage = document.getElementById('result_message');
-            const resultWaStatus = document.getElementById('result_wa_status');
-
-            idleView.style.display = 'none';
-            resultView.style.display = 'block';
-            statusDisplay.className = "status-display status-idle";
-            resultTitle.innerText = "MEMPROSES KARTU...";
-            resultStudentName.innerText = "Mengecek data siswa & mengirim WhatsApp...";
-            resultMessage.innerText = "";
-            resultWaStatus.innerText = "Koneksi ke Server Fonnte API...";
-
-            fetch("{{ route('presensi.scan.store') }}", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": csrfToken
-                },
-                body: JSON.stringify({ qr_code_token: token })
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    try { soundSuccess.play(); } catch(e){}
-
-                    if (data.status === 'TERLAMBAT') {
-                        statusDisplay.className = "status-display status-warning";
-                        resultIconBg.style.background = 'rgba(255, 214, 0, 0.2)';
-                        resultIcon.className = 'fa-solid fa-triangle-exclamation text-warning';
-                        resultTitle.innerText = "PRESENSI TERLAMBAT";
-                    } else {
-                        statusDisplay.className = "status-display status-success";
-                        resultIconBg.style.background = 'rgba(0, 230, 118, 0.2)';
-                        resultIcon.className = 'fa-solid fa-circle-check text-success';
-                        resultTitle.innerText = (data.type === 'masuk') ? "PRESENSI MASUK BERHASIL" : "PRESENSI PULANG BERHASIL";
-                    }
-
-                    resultStudentName.innerText = data.siswa ? `${data.siswa.nama} (${data.siswa.kelas ? data.siswa.kelas.nama_kelas : '-'})` : '';
-                    resultMessage.innerText = data.message;
-                    resultWaStatus.innerHTML = `<span class="text-success"><i class="fa-solid fa-check me-1"></i> Notifikasi WhatsApp Terkirim ke Orang Tua (${data.siswa.orang_tua ? data.siswa.orang_tua.no_wa : '-'})</span>`;
-                } else {
-                    try { soundError.play(); } catch(e){}
-
-                    statusDisplay.className = "status-display status-danger";
-                    resultIconBg.style.background = 'rgba(255, 23, 68, 0.2)';
-                    resultIcon.className = 'fa-solid fa-circle-xmark text-danger';
-                    resultTitle.innerText = "GAGAL PRESENSI";
-                    resultStudentName.innerText = data.siswa ? data.siswa.nama : 'Kartu Tidak Dikenali';
-                    resultMessage.innerText = data.message;
-                    resultWaStatus.innerText = "Notifikasi WA tidak dikirim.";
-                }
-            })
-            .catch(err => {
-                try { soundError.play(); } catch(e){}
-                statusDisplay.className = "status-display status-danger";
-                resultTitle.innerText = "ERR_NETWORK";
-                resultStudentName.innerText = "Koneksi Terputus";
-                resultMessage.innerText = err.message;
-            })
-            .finally(() => {
-                setTimeout(() => {
-                    idleView.style.display = 'block';
-                    resultView.style.display = 'none';
-                    statusDisplay.className = "status-display status-idle";
-                    isProcessing = false;
-                    refocusScannerInput();
-                }, 4000);
-            });
-        }
-    </script>
-</body>
-</html>
+    }
+</script>
+@endsection

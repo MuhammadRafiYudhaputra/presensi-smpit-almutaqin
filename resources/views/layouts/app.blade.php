@@ -225,7 +225,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('presensi.scan') }}" target="_blank" class="nav-link scanner-link">
+                    <a href="{{ route('presensi.scan') }}" class="nav-link {{ request()->routeIs('presensi.scan') ? 'active' : 'scanner-link' }}">
                         <i class="fa-solid fa-table-cells-large"></i> Scanner QR Code
                     </a>
                 </li>
