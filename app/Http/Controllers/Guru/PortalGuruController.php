@@ -26,7 +26,7 @@ class PortalGuruController extends Controller
         return $guru->kelas;
     }
 
-    private function calculateDefaultHariEfektif($mode, $bulan, $tahun, $semester)
+    private function calculateDefaultHariEfektif($mode, $bulan, $tahun, $semester, $kelasNama = null)
     {
         if ($mode === 'bulanan') {
             $startDate = Carbon::createFromDate($tahun, $bulan, 1);
@@ -41,6 +41,10 @@ class PortalGuruController extends Controller
             }
             return max(1, $weekdays);
         } elseif ($mode === 'semester') {
+            if ($kelasNama && str_contains(strtoupper($kelasNama), '9') && $semester === 'genap') {
+                return 90;
+            }
+
             $startMonth = ($semester === 'ganjil') ? 7 : 1;
             $endMonth = ($semester === 'ganjil') ? 12 : 6;
             $startDate = Carbon::createFromDate($tahun, $startMonth, 1);
@@ -87,7 +91,7 @@ class PortalGuruController extends Controller
         $semester = $request->get('semester', (date('n') >= 7 ? 'ganjil' : 'genap'));
         $sortBy = $request->get('sort_by', 'nama_asc');
 
-        $defaultHariEfektif = $this->calculateDefaultHariEfektif($mode, $bulan, $tahun, $semester);
+        $defaultHariEfektif = $this->calculateDefaultHariEfektif($mode, $bulan, $tahun, $semester, $kelas ? $kelas->nama_kelas : null);
         $hariEfektif = (int) $request->get('hari_efektif', $defaultHariEfektif);
         if ($hariEfektif <= 0) $hariEfektif = $defaultHariEfektif;
 
