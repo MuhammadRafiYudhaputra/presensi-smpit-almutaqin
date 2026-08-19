@@ -29,4 +29,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function guru()
+    {
+        return $this->hasOne(Guru::class, 'user_id');
+    }
 }

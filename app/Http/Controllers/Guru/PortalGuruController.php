@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Kehadiran;
 use App\Models\Siswa;
 use App\Models\Kelas;
+use App\Models\Guru;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -13,17 +14,33 @@ use Carbon\Carbon;
 class PortalGuruController extends Controller
 {
     /**
-     * Get the logged-in Guru's assigned Class
+     * Get the logged-in Guru's assigned Class (or selected class)
      */
-    private function getGuruKelas()
+    private function getGuruKelas(Request $request = null)
     {
         $user = Auth::user();
         if (!$user) return null;
 
-        $guru = $user->guru;
-        if (!$guru) return null;
+        $guru = $user->guru ?: Guru::where('user_id', $user->id)->first();
 
-        return $guru->kelas;
+        // 1. If explicit kelas_id requested in query
+        if ($request && $request->filled('kelas_id')) {
+            $requestedKelas = Kelas::find($request->get('kelas_id'));
+            if ($requestedKelas) {
+                return $requestedKelas;
+            }
+        }
+
+        // 2. Class where this guru is wali kelas
+        if ($guru) {
+            $assignedKelas = Kelas::where('guru_id', $guru->id)->first();
+            if ($assignedKelas) {
+                return $assignedKelas;
+            }
+        }
+
+        // 3. Fallback to first class in school if no specific class is assigned
+        return Kelas::first();
     }
 
     private function calculateDefaultHariEfektif($mode, $bulan, $tahun, $semester, $kelasNama = null)
@@ -64,10 +81,11 @@ class PortalGuruController extends Controller
 
     public function monitoring(Request $request)
     {
-        $kelas = $this->getGuruKelas();
+        $kelas = $this->getGuruKelas($request);
+        $allKelases = Kelas::all();
         $tanggal = $request->get('tanggal', date('Y-m-d'));
 
-        $query = Kehadiran::with(['siswa.kelas'])
+        $query = Kehadiran::with(['siswa.kelas', 'siswa.orangTua'])
             ->whereDate('tanggal', $tanggal);
 
         if ($kelas) {
@@ -78,12 +96,13 @@ class PortalGuruController extends Controller
 
         $kehadirans = $query->latest('jam_masuk')->paginate(20)->withQueryString();
 
-        return view('guru.monitoring', compact('kehadirans', 'tanggal', 'kelas'));
+        return view('guru.monitoring', compact('kehadirans', 'tanggal', 'kelas', 'allKelases'));
     }
 
     public function rekap(Request $request)
     {
-        $kelas = $this->getGuruKelas();
+        $kelas = $this->getGuruKelas($request);
+        $allKelases = Kelas::all();
         $mode = $request->get('mode', 'harian');
         $tanggal = $request->get('tanggal', date('Y-m-d'));
         $bulan = (int)$request->get('bulan', date('n'));
@@ -234,6 +253,7 @@ class PortalGuruController extends Controller
 
         return view('guru.rekap', compact(
             'kelas',
+            'allKelases',
             'mode',
             'tanggal',
             'bulan',
@@ -252,7 +272,8 @@ class PortalGuruController extends Controller
      */
     public function siswa(Request $request)
     {
-        $kelas = $this->getGuruKelas();
+        $kelas = $this->getGuruKelas($request);
+        $allKelases = Kelas::all();
         $search = $request->get('search');
         $sortBy = $request->get('sort_by', 'nama_asc');
 
@@ -299,7 +320,6 @@ class PortalGuruController extends Controller
         $totalL = Siswa::where('kelas_id', $kelasId)->where('jenis_kelamin', 'L')->count();
         $totalP = Siswa::where('kelas_id', $kelasId)->where('jenis_kelamin', 'P')->count();
 
-        return view('guru.siswa', compact('kelas', 'siswas', 'search', 'sortBy', 'totalSiswa', 'totalL', 'totalP'));
+        return view('guru.siswa', compact('kelas', 'allKelases', 'siswas', 'search', 'sortBy', 'totalSiswa', 'totalL', 'totalP'));
     }
 }
-
