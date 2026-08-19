@@ -40,6 +40,7 @@ Route::post('/scan/process', [ScanPresensiController::class, 'store'])->name('pr
 Route::middleware(['auth'])->prefix('guru')->name('guru.')->group(function () {
     Route::get('/monitoring', [PortalGuruController::class, 'monitoring'])->name('monitoring');
     Route::get('/rekap', [PortalGuruController::class, 'rekap'])->name('rekap');
+    Route::get('/siswa', [PortalGuruController::class, 'siswa'])->name('siswa.index');
 });
 
 // Admin Protected Routes Group (Wajib Login)

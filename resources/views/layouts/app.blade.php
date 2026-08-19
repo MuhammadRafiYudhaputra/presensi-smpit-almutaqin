@@ -310,7 +310,7 @@
 
             <ul class="sidebar-menu">
                 @if(Auth::check() && Auth::user()->role === 'guru')
-                    <!-- MENU WALI KELAS (HANYA 2 FITUR) -->
+                    <!-- MENU WALI KELAS -->
                     <div class="sidebar-heading">MENU WALI KELAS</div>
                     <li class="nav-item">
                         <a href="{{ route('guru.monitoring') }}" class="nav-link {{ request()->routeIs('guru.monitoring') ? 'active' : '' }}">
@@ -320,6 +320,11 @@
                     <li class="nav-item">
                         <a href="{{ route('guru.rekap') }}" class="nav-link {{ request()->routeIs('guru.rekap') ? 'active' : '' }}">
                             <i class="fa-solid fa-file-lines"></i> Rekap Kehadiran Siswa
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('guru.siswa.index') }}" class="nav-link {{ request()->routeIs('guru.siswa.*') ? 'active' : '' }}">
+                            <i class="fa-solid fa-address-book"></i> Biodata Siswa Binaan
                         </a>
                     </li>
                 @else

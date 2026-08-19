@@ -246,4 +246,60 @@ class PortalGuruController extends Controller
             'semesterData'
         ));
     }
+
+    /**
+     * Data Siswa Binaan Wali Kelas (Biodata, Kontak Orang Tua, Alamat)
+     */
+    public function siswa(Request $request)
+    {
+        $kelas = $this->getGuruKelas();
+        $search = $request->get('search');
+        $sortBy = $request->get('sort_by', 'nama_asc');
+
+        $query = Siswa::with(['kelas', 'orangTua'])
+            ->where(function ($q) {
+                $q->where('status', '!=', 'alumni')->orWhereNull('status');
+            });
+
+        if ($kelas) {
+            $query->where('kelas_id', $kelas->id);
+        }
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('nama', 'like', "%{$search}%")
+                  ->orWhere('nisn', 'like', "%{$search}%")
+                  ->orWhere('nis', 'like', "%{$search}%")
+                  ->orWhereHas('orangTua', function ($qOt) use ($search) {
+                      $qOt->where('nama_ayah', 'like', "%{$search}%")
+                          ->orWhere('nama_ibu', 'like', "%{$search}%")
+                          ->orWhere('no_wa', 'like', "%{$search}%")
+                          ->orWhere('alamat', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        switch ($sortBy) {
+            case 'nama_desc':
+                $query->orderBy('nama', 'desc');
+                break;
+            case 'nisn':
+                $query->orderBy('nisn', 'asc');
+                break;
+            case 'nama_asc':
+            default:
+                $query->orderBy('nama', 'asc');
+                break;
+        }
+
+        $siswas = $query->paginate(20)->withQueryString();
+
+        $kelasId = $kelas ? $kelas->id : null;
+        $totalSiswa = $siswas->total();
+        $totalL = Siswa::where('kelas_id', $kelasId)->where('jenis_kelamin', 'L')->count();
+        $totalP = Siswa::where('kelas_id', $kelasId)->where('jenis_kelamin', 'P')->count();
+
+        return view('guru.siswa', compact('kelas', 'siswas', 'search', 'sortBy', 'totalSiswa', 'totalL', 'totalP'));
+    }
 }
+
