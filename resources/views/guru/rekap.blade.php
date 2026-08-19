@@ -32,13 +32,13 @@
         <div class="d-flex flex-wrap gap-2 align-items-center">
             <!-- Mode Switcher Tabs -->
             <div class="btn-group p-1 bg-light rounded-pill border" role="group">
-                <a href="{{ route('guru.rekap', ['mode' => 'harian', 'tanggal' => $tanggal, 'kelas_id' => $kelas ? $kelas->id : null, 'sort_by' => $sortBy]) }}" class="btn btn-sm rounded-pill px-3 fw-semibold {{ $mode === 'harian' ? 'btn-primary shadow-sm' : 'btn-light text-muted' }}">
+                <a href="{{ route('guru.rekap', ['mode' => 'harian', 'tanggal' => $tanggal, 'sort_by' => $sortBy]) }}" class="btn btn-sm rounded-pill px-3 fw-semibold {{ $mode === 'harian' ? 'btn-primary shadow-sm' : 'btn-light text-muted' }}">
                     <i class="fa-solid fa-calendar-day me-1"></i> Harian
                 </a>
-                <a href="{{ route('guru.rekap', ['mode' => 'bulanan', 'bulan' => $bulan, 'tahun' => $tahun, 'kelas_id' => $kelas ? $kelas->id : null, 'hari_efektif' => $hariEfektif, 'sort_by' => $sortBy]) }}" class="btn btn-sm rounded-pill px-3 fw-semibold {{ $mode === 'bulanan' ? 'btn-primary shadow-sm' : 'btn-light text-muted' }}">
+                <a href="{{ route('guru.rekap', ['mode' => 'bulanan', 'bulan' => $bulan, 'tahun' => $tahun, 'hari_efektif' => $hariEfektif, 'sort_by' => $sortBy]) }}" class="btn btn-sm rounded-pill px-3 fw-semibold {{ $mode === 'bulanan' ? 'btn-primary shadow-sm' : 'btn-light text-muted' }}">
                     <i class="fa-solid fa-chart-simple me-1"></i> Bulanan
                 </a>
-                <a href="{{ route('guru.rekap', ['mode' => 'semester', 'semester' => $semester, 'tahun' => $tahun, 'kelas_id' => $kelas ? $kelas->id : null, 'hari_efektif' => $hariEfektif, 'sort_by' => $sortBy]) }}" class="btn btn-sm rounded-pill px-3 fw-semibold {{ $mode === 'semester' ? 'btn-primary shadow-sm' : 'btn-light text-muted' }}">
+                <a href="{{ route('guru.rekap', ['mode' => 'semester', 'semester' => $semester, 'tahun' => $tahun, 'hari_efektif' => $hariEfektif, 'sort_by' => $sortBy]) }}" class="btn btn-sm rounded-pill px-3 fw-semibold {{ $mode === 'semester' ? 'btn-primary shadow-sm' : 'btn-light text-muted' }}">
                     <i class="fa-solid fa-graduation-cap me-1"></i> Semester
                 </a>
             </div>
@@ -50,17 +50,17 @@
         </div>
     </div>
 
-    <!-- Filter & Parameter Form -->
+    <!-- Filter & Parameter Form (Tanpa Filter Kelas) -->
     <form action="{{ route('guru.rekap') }}" method="GET" class="row g-3 mb-4 align-items-end">
         <input type="hidden" name="mode" value="{{ $mode }}">
 
         @if($mode === 'harian')
-            <div class="col-md-3">
-                <label class="form-label fw-bold text-dark mb-1">Pilih Tanggal</label>
+            <div class="col-md-5">
+                <label class="form-label fw-bold text-dark mb-1">Pilih Tanggal Presensi</label>
                 <input type="date" name="tanggal" class="form-control shadow-sm" value="{{ $tanggal }}" onchange="this.form.submit()">
             </div>
         @elseif($mode === 'bulanan')
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <label class="form-label fw-bold text-dark mb-1">Pilih Bulan</label>
                 <select name="bulan" class="form-select shadow-sm" onchange="this.form.submit()">
                     @for($m=1; $m<=12; $m++)
@@ -78,15 +78,15 @@
                     @endfor
                 </select>
             </div>
-            <div class="col-md-2">
-                <label class="form-label fw-bold text-dark mb-1">Hari Efektif</label>
+            <div class="col-md-3">
+                <label class="form-label fw-bold text-dark mb-1">Hari Efektif (Masuk)</label>
                 <div class="input-group shadow-sm">
                     <input type="number" name="hari_efektif" class="form-control" value="{{ $hariEfektif }}" min="1" max="31" title="Jumlah hari efektif/masuk sekolah dalam bulan ini">
                     <span class="input-group-text bg-light text-muted small">Hari</span>
                 </div>
             </div>
         @elseif($mode === 'semester')
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <label class="form-label fw-bold text-dark mb-1">Pilih Semester</label>
                 <select name="semester" class="form-select shadow-sm" onchange="this.form.submit()">
                     <option value="ganjil" {{ $semester === 'ganjil' ? 'selected' : '' }}>Semester Ganjil (Jul - Des)</option>
@@ -101,7 +101,7 @@
                     @endfor
                 </select>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <label class="form-label fw-bold text-dark mb-1">Hari Efektif Semester</label>
                 <div class="input-group shadow-sm">
                     <input type="number" name="hari_efektif" class="form-control" value="{{ $hariEfektif }}" min="1" max="180" title="Jumlah hari efektif sekolah semester ini">
@@ -110,19 +110,8 @@
             </div>
         @endif
 
-        <div class="col-md-3">
-            <label class="form-label fw-bold text-dark mb-1">Pilih Kelas Binaan</label>
-            <select name="kelas_id" class="form-select shadow-sm" onchange="this.form.submit()">
-                @foreach($allKelases as $k)
-                    <option value="{{ $k->id }}" {{ ($kelas && $kelas->id == $k->id) ? 'selected' : '' }}>
-                        Kelas {{ $k->nama_kelas }} {{ ($k->waliKelas ? '('.$k->waliKelas->nama.')' : '') }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
-
-        <div class="col-md-3">
-            <label class="form-label fw-bold text-dark mb-1">Urutkan Data</label>
+        <div class="col-md-4">
+            <label class="form-label fw-bold text-dark mb-1">Urutkan Data (Sorting)</label>
             <select name="sort_by" class="form-select shadow-sm" onchange="this.form.submit()">
                 <option value="nama_asc" {{ ($sortBy ?? '') === 'nama_asc' ? 'selected' : '' }}>Nama Siswa (A-Z)</option>
                 <option value="nama_desc" {{ ($sortBy ?? '') === 'nama_desc' ? 'selected' : '' }}>Nama Siswa (Z-A)</option>
@@ -137,7 +126,7 @@
                 </button>
                 <small class="text-muted ms-2">
                     <i class="fa-solid fa-circle-info text-primary me-1"></i>
-                    Dasar persentase dihitung dari <strong>{{ $hariEfektif }} Hari Efektif</strong>. Keterlambatan dicatat terpisah untuk catatan BK.
+                    Dasar persentase kehadiran dihitung dari <strong>{{ $hariEfektif }} Hari Efektif</strong>. Keterlambatan dicatat terpisah untuk catatan BK.
                 </small>
             </div>
         @endif

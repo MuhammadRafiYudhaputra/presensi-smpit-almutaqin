@@ -98,9 +98,9 @@
         </div>
     </div>
 
-    <!-- Search & Filter Bar with Class Selector -->
+    <!-- Search & Sort Bar (Tanpa Filter Kelas) -->
     <form action="{{ route('guru.siswa.index') }}" method="GET" class="row g-3 mb-4 align-items-end">
-        <div class="col-md-5">
+        <div class="col-md-7">
             <label class="form-label fw-bold text-dark mb-1">Cari Data Siswa</label>
             <div class="input-group shadow-sm">
                 <span class="input-group-text bg-light text-muted border-end-0"><i class="fa-solid fa-magnifying-glass"></i></span>
@@ -108,21 +108,11 @@
             </div>
         </div>
         <div class="col-md-3">
-            <label class="form-label fw-bold text-dark mb-1">Pilih Kelas Binaan</label>
-            <select name="kelas_id" class="form-select shadow-sm" onchange="this.form.submit()">
-                @foreach($allKelases as $k)
-                    <option value="{{ $k->id }}" {{ ($kelas && $kelas->id == $k->id) ? 'selected' : '' }}>
-                        Kelas {{ $k->nama_kelas }} {{ ($k->waliKelas ? '('.$k->waliKelas->nama.')' : '') }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
-        <div class="col-md-2">
-            <label class="form-label fw-bold text-dark mb-1">Urutan</label>
+            <label class="form-label fw-bold text-dark mb-1">Urutkan Data</label>
             <select name="sort_by" class="form-select shadow-sm" onchange="this.form.submit()">
-                <option value="nama_asc" {{ ($sortBy ?? '') === 'nama_asc' ? 'selected' : '' }}>Nama (A-Z)</option>
-                <option value="nama_desc" {{ ($sortBy ?? '') === 'nama_desc' ? 'selected' : '' }}>Nama (Z-A)</option>
-                <option value="nisn" {{ ($sortBy ?? '') === 'nisn' ? 'selected' : '' }}>NISN</option>
+                <option value="nama_asc" {{ ($sortBy ?? '') === 'nama_asc' ? 'selected' : '' }}>Nama Siswa (A-Z)</option>
+                <option value="nama_desc" {{ ($sortBy ?? '') === 'nama_desc' ? 'selected' : '' }}>Nama Siswa (Z-A)</option>
+                <option value="nisn" {{ ($sortBy ?? '') === 'nisn' ? 'selected' : '' }}>NISN Siswa</option>
             </select>
         </div>
         <div class="col-md-2 d-grid">

@@ -15,21 +15,11 @@
         <small class="text-muted">Pantau aktivitas scan presensi siswa kelas binaan secara real-time</small>
     </div>
 
-    <!-- Filter Form -->
+    <!-- Filter Form (Hanya Pilih Tanggal) -->
     <form method="GET" action="{{ route('guru.monitoring') }}" class="row g-3 mb-4 align-items-end">
         <div class="col-md-4">
             <label class="form-label fw-bold text-dark mb-1">Pilih Tanggal Presensi</label>
             <input type="date" name="tanggal" value="{{ $tanggal }}" class="form-control shadow-sm" onchange="this.form.submit()">
-        </div>
-        <div class="col-md-4">
-            <label class="form-label fw-bold text-dark mb-1">Pilih Kelas Binaan</label>
-            <select name="kelas_id" class="form-select shadow-sm" onchange="this.form.submit()">
-                @foreach($allKelases as $k)
-                    <option value="{{ $k->id }}" {{ ($kelas && $kelas->id == $k->id) ? 'selected' : '' }}>
-                        Kelas {{ $k->nama_kelas }} {{ ($k->waliKelas ? '('.$k->waliKelas->nama.')' : '') }}
-                    </option>
-                @endforeach
-            </select>
         </div>
     </form>
 
