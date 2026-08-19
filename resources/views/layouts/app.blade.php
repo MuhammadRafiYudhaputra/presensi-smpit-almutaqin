@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SMP IT Al-Muttaqin - Presensi Siswa</title>
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
@@ -33,7 +33,6 @@
             min-height: 100vh;
             margin: 0;
             padding: 0;
-            overflow-x: hidden;
         }
 
         /* Sidebar Styling */
