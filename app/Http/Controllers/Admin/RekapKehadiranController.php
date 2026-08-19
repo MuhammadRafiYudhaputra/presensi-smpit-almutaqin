@@ -99,7 +99,7 @@ class RekapKehadiranController extends Controller
         if ($hariEfektif <= 0) $hariEfektif = $defaultHariEfektif;
 
         // Query Siswa Aktif
-        $siswasQuery = Siswa::with('kelas')
+        $siswasQuery = Siswa::with(['kelas', 'orangTua'])
             ->where(function ($q) {
                 $q->where('status', '!=', 'alumni')->orWhereNull('status');
             });
@@ -149,11 +149,13 @@ class RekapKehadiranController extends Controller
                     ->where('status', 'HADIR')
                     ->count();
 
-                $terlambat = Kehadiran::where('siswa_id', $siswa->id)
+                $lateQuery = Kehadiran::where('siswa_id', $siswa->id)
                     ->whereYear('tanggal', $tahun)
                     ->whereMonth('tanggal', $bulan)
                     ->where('status', 'TERLAMBAT')
-                    ->count();
+                    ->orderBy('tanggal', 'asc');
+                $terlambat = $lateQuery->count();
+                $riwayatTerlambat = $lateQuery->get(['tanggal', 'jam_masuk']);
 
                 $izin = Kehadiran::where('siswa_id', $siswa->id)
                     ->whereYear('tanggal', $tahun)
@@ -181,6 +183,7 @@ class RekapKehadiranController extends Controller
                     'siswa' => $siswa,
                     'hadir' => $totalHadir,
                     'terlambat' => $terlambat,
+                    'riwayat_terlambat' => $riwayatTerlambat,
                     'izin' => $izin,
                     'sakit' => $sakit,
                     'alpa' => $alpa,
@@ -202,11 +205,13 @@ class RekapKehadiranController extends Controller
                     ->where('status', 'HADIR')
                     ->count();
 
-                $terlambat = Kehadiran::where('siswa_id', $siswa->id)
+                $lateQuery = Kehadiran::where('siswa_id', $siswa->id)
                     ->whereYear('tanggal', $tahun)
                     ->whereBetween(\DB::raw('CAST(strftime("%m", tanggal) as integer)'), [$startMonth, $endMonth])
                     ->where('status', 'TERLAMBAT')
-                    ->count();
+                    ->orderBy('tanggal', 'asc');
+                $terlambat = $lateQuery->count();
+                $riwayatTerlambat = $lateQuery->get(['tanggal', 'jam_masuk']);
 
                 $izin = Kehadiran::where('siswa_id', $siswa->id)
                     ->whereYear('tanggal', $tahun)
@@ -234,6 +239,7 @@ class RekapKehadiranController extends Controller
                     'siswa' => $siswa,
                     'hadir' => $totalHadir,
                     'terlambat' => $terlambat,
+                    'riwayat_terlambat' => $riwayatTerlambat,
                     'izin' => $izin,
                     'sakit' => $sakit,
                     'alpa' => $alpa,

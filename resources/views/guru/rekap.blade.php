@@ -9,10 +9,18 @@
     .col-header-alpa { color: #b91c1c !important; font-weight: 700; }
 
     .val-hadir { color: #15803d; font-weight: 800; font-size: 1rem; }
-    .val-terlambat { color: #b45309; font-weight: 800; font-size: 1rem; }
+    .val-terlambat { color: #b45309; font-weight: 800; font-size: 1rem; cursor: pointer; }
     .val-izin { color: #0369a1; font-weight: 800; font-size: 1rem; }
     .val-sakit { color: #334155; font-weight: 800; font-size: 1rem; }
     .val-alpa { color: #b91c1c; font-weight: 800; font-size: 1rem; }
+
+    .bk-badge-btn {
+        cursor: pointer;
+        transition: transform 0.15s ease;
+    }
+    .bk-badge-btn:hover {
+        transform: scale(1.05);
+    }
 </style>
 
 <div class="card card-custom p-4 shadow-sm border-0 rounded-4">
@@ -224,14 +232,14 @@
                         Akumulasi Kehadiran (Bulan {{ $bulan }}/{{ $tahun }} &bull; Dasar: {{ $hariEfektif }} Hari Efektif)
                     </th>
                     <th rowspan="2" class="align-middle text-dark" style="width: 110px;">Persentase</th>
-                    <th rowspan="2" class="align-middle text-dark" style="width: 140px;">Catatan BK</th>
+                    <th rowspan="2" class="align-middle text-dark" style="width: 150px;">Catatan BK</th>
                 </tr>
                 <tr>
                     <th class="col-header-hadir text-center py-2" style="width: 85px;" title="Total siswa masuk sekolah">
                         <i class="fa-solid fa-circle-check d-block mb-1 fs-6"></i>
                         <span>Hadir</span>
                     </th>
-                    <th class="col-header-terlambat text-center py-2" style="width: 95px;" title="Dicatat terpisah untuk tindak lanjut BK">
+                    <th class="col-header-terlambat text-center py-2" style="width: 100px;" title="Klik untuk melihat tanggal & jam keterlambatan siswa">
                         <i class="fa-solid fa-clock d-block mb-1 fs-6"></i>
                         <span>Terlambat</span>
                     </th>
@@ -264,8 +272,8 @@
                         </span>
                     </td>
                     <td class="text-center val-hadir" title="{{ $row->hadir }} hari hadir">{{ $row->hadir }}</td>
-                    <td class="text-center val-terlambat">
-                        {{ $row->terlambat }}
+                    <td class="text-center val-terlambat" onclick="openRiwayatTerlambatModal('{{ addslashes($row->siswa->nama) }}', '{{ $row->siswa->nisn }}', '{{ $row->siswa->kelas->nama_kelas ?? '-' }}', {{ json_encode($row->riwayat_terlambat) }}, '{{ $row->siswa->orangTua->no_wa ?? '' }}')">
+                        <span class="text-decoration-underline" title="Klik untuk rincian tanggal">{{ $row->terlambat }}x</span>
                         @if($row->terlambat >= 3)
                             <span class="badge bg-warning bg-opacity-25 text-dark border border-warning ms-1" style="font-size: 0.7rem;" title="Perlu tindak lanjut BK">
                                 <i class="fa-solid fa-triangle-exclamation"></i> BK
@@ -282,13 +290,13 @@
                     </td>
                     <td class="text-center">
                         @if($row->terlambat >= 3)
-                            <span class="badge bg-danger bg-opacity-10 text-danger border border-danger px-2 py-1" style="font-size: 0.75rem;">
-                                <i class="fa-solid fa-user-shield me-1"></i> Perlu Tindak Lanjut
-                            </span>
+                            <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-2 py-1 bk-badge-btn" style="font-size: 0.75rem;" onclick="openRiwayatTerlambatModal('{{ addslashes($row->siswa->nama) }}', '{{ $row->siswa->nisn }}', '{{ $row->siswa->kelas->nama_kelas ?? '-' }}', {{ json_encode($row->riwayat_terlambat) }}, '{{ $row->siswa->orangTua->no_wa ?? '' }}')">
+                                <i class="fa-solid fa-user-shield me-1"></i> Perlu Tindak Lanjut BK
+                            </button>
                         @elseif($row->terlambat > 0)
-                            <span class="badge bg-warning bg-opacity-10 text-dark border border-warning px-2 py-1" style="font-size: 0.75rem; color: #92400e !important;">
-                                <i class="fa-regular fa-clock me-1"></i> Catatan ({{ $row->terlambat }}x)
-                            </span>
+                            <button type="button" class="btn btn-sm btn-outline-warning rounded-pill px-2 py-1 bk-badge-btn text-dark" style="font-size: 0.75rem;" onclick="openRiwayatTerlambatModal('{{ addslashes($row->siswa->nama) }}', '{{ $row->siswa->nisn }}', '{{ $row->siswa->kelas->nama_kelas ?? '-' }}', {{ json_encode($row->riwayat_terlambat) }}, '{{ $row->siswa->orangTua->no_wa ?? '' }}')">
+                                <i class="fa-regular fa-clock me-1 text-warning"></i> Catatan ({{ $row->terlambat }}x)
+                            </button>
                         @else
                             <span class="badge bg-success bg-opacity-10 text-success border border-success px-2 py-1" style="font-size: 0.75rem;">
                                 <i class="fa-solid fa-check me-1"></i> Tertib
@@ -320,14 +328,14 @@
                         Akumulasi Kehadiran (Semester {{ ucfirst($semester) }} {{ $tahun }} &bull; Dasar: {{ $hariEfektif }} Hari Efektif)
                     </th>
                     <th rowspan="2" class="align-middle text-dark" style="width: 110px;">Persentase</th>
-                    <th rowspan="2" class="align-middle text-dark" style="width: 140px;">Catatan BK</th>
+                    <th rowspan="2" class="align-middle text-dark" style="width: 150px;">Catatan BK</th>
                 </tr>
                 <tr>
                     <th class="col-header-hadir text-center py-2" style="width: 85px;" title="Total siswa masuk sekolah">
                         <i class="fa-solid fa-circle-check d-block mb-1 fs-6"></i>
                         <span>Hadir</span>
                     </th>
-                    <th class="col-header-terlambat text-center py-2" style="width: 95px;" title="Dicatat terpisah untuk tindak lanjut BK">
+                    <th class="col-header-terlambat text-center py-2" style="width: 100px;" title="Klik untuk melihat tanggal & jam keterlambatan siswa">
                         <i class="fa-solid fa-clock d-block mb-1 fs-6"></i>
                         <span>Terlambat</span>
                     </th>
@@ -360,8 +368,8 @@
                         </span>
                     </td>
                     <td class="text-center val-hadir" title="{{ $row->hadir }} hari hadir">{{ $row->hadir }}</td>
-                    <td class="text-center val-terlambat">
-                        {{ $row->terlambat }}
+                    <td class="text-center val-terlambat" onclick="openRiwayatTerlambatModal('{{ addslashes($row->siswa->nama) }}', '{{ $row->siswa->nisn }}', '{{ $row->siswa->kelas->nama_kelas ?? '-' }}', {{ json_encode($row->riwayat_terlambat) }}, '{{ $row->siswa->orangTua->no_wa ?? '' }}')">
+                        <span class="text-decoration-underline" title="Klik untuk rincian tanggal">{{ $row->terlambat }}x</span>
                         @if($row->terlambat >= 3)
                             <span class="badge bg-warning bg-opacity-25 text-dark border border-warning ms-1" style="font-size: 0.7rem;" title="Perlu tindak lanjut BK">
                                 <i class="fa-solid fa-triangle-exclamation"></i> BK
@@ -378,13 +386,13 @@
                     </td>
                     <td class="text-center">
                         @if($row->terlambat >= 3)
-                            <span class="badge bg-danger bg-opacity-10 text-danger border border-danger px-2 py-1" style="font-size: 0.75rem;">
-                                <i class="fa-solid fa-user-shield me-1"></i> Perlu Tindak Lanjut
-                            </span>
+                            <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-2 py-1 bk-badge-btn" style="font-size: 0.75rem;" onclick="openRiwayatTerlambatModal('{{ addslashes($row->siswa->nama) }}', '{{ $row->siswa->nisn }}', '{{ $row->siswa->kelas->nama_kelas ?? '-' }}', {{ json_encode($row->riwayat_terlambat) }}, '{{ $row->siswa->orangTua->no_wa ?? '' }}')">
+                                <i class="fa-solid fa-user-shield me-1"></i> Perlu Tindak Lanjut BK
+                            </button>
                         @elseif($row->terlambat > 0)
-                            <span class="badge bg-warning bg-opacity-10 text-dark border border-warning px-2 py-1" style="font-size: 0.75rem; color: #92400e !important;">
-                                <i class="fa-regular fa-clock me-1"></i> Catatan ({{ $row->terlambat }}x)
-                            </span>
+                            <button type="button" class="btn btn-sm btn-outline-warning rounded-pill px-2 py-1 bk-badge-btn text-dark" style="font-size: 0.75rem;" onclick="openRiwayatTerlambatModal('{{ addslashes($row->siswa->nama) }}', '{{ $row->siswa->nisn }}', '{{ $row->siswa->kelas->nama_kelas ?? '-' }}', {{ json_encode($row->riwayat_terlambat) }}, '{{ $row->siswa->orangTua->no_wa ?? '' }}')">
+                                <i class="fa-regular fa-clock me-1 text-warning"></i> Catatan ({{ $row->terlambat }}x)
+                            </button>
                         @else
                             <span class="badge bg-success bg-opacity-10 text-success border border-success px-2 py-1" style="font-size: 0.75rem;">
                                 <i class="fa-solid fa-check me-1"></i> Tertib
@@ -401,6 +409,49 @@
         </table>
     </div>
     @endif
+</div>
+
+<!-- Modal Riwayat Keterlambatan & Catatan BK -->
+<div class="modal fade" id="modalRiwayatTerlambat" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 border-0 shadow">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="fw-bold text-dark"><i class="fa-solid fa-clipboard-user me-2 text-warning"></i>Catatan Keterlambatan Siswa (BK)</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="p-3 bg-light rounded-3 mb-3 border">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <span class="fw-bold text-dark fs-6" id="bk_siswa_nama">-</span>
+                        <span class="badge bg-primary px-2 py-1" id="bk_siswa_kelas">Kelas -</span>
+                    </div>
+                    <small class="text-muted d-block">NISN: <span id="bk_siswa_nisn" class="fw-semibold text-dark">-</span></small>
+                </div>
+
+                <div id="bk_rekomendasi_box" class="p-3 rounded-3 mb-3"></div>
+
+                <h6 class="fw-bold text-dark mb-2"><i class="fa-solid fa-clock-rotate-left me-1 text-primary"></i> Rincian Tanggal & Jam Terlambat:</h6>
+                <div class="table-responsive border rounded-3 mb-3" style="max-height: 200px; overflow-y: auto;">
+                    <table class="table table-sm table-striped mb-0 text-center" style="font-size: 0.85rem;">
+                        <thead class="table-light">
+                            <tr>
+                                <th>No</th>
+                                <th>Tanggal</th>
+                                <th>Jam Datang</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bk_tabel_body">
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="bk_wa_container" class="text-center"></div>
+            </div>
+            <div class="modal-footer border-0 pt-0">
+                <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Modal Set Status Kehadiran Manual -->
@@ -447,6 +498,78 @@ function openSetStatusModal(siswaId, siswaNama, currentStatus) {
     document.getElementById('modal_siswa_nama').innerText = siswaNama;
     document.getElementById('modal_status').value = currentStatus || 'HADIR';
     const modal = new bootstrap.Modal(document.getElementById('modalSetStatus'));
+    modal.show();
+}
+
+function openRiwayatTerlambatModal(nama, nisn, kelas, riwayat, noWa) {
+    document.getElementById('bk_siswa_nama').innerText = nama;
+    document.getElementById('bk_siswa_nisn').innerText = nisn;
+    document.getElementById('bk_siswa_kelas').innerText = 'Kelas ' + kelas;
+
+    const tbody = document.getElementById('bk_tabel_body');
+    tbody.innerHTML = '';
+
+    const count = riwayat ? riwayat.length : 0;
+    const rekBox = document.getElementById('bk_rekomendasi_box');
+
+    if (count >= 3) {
+        rekBox.className = 'p-3 rounded-3 mb-3 bg-danger bg-opacity-10 border border-danger text-danger';
+        rekBox.innerHTML = `
+            <div class="d-flex align-items-center gap-2 mb-1">
+                <i class="fa-solid fa-triangle-exclamation fs-5"></i>
+                <strong class="fs-6">Perhatian: Perlu Tindak Lanjut Pihak BK</strong>
+            </div>
+            <small class="text-dark d-block">Siswa tercatat terlambat sebanyak <strong>${count} kali</strong> pada periode ini. Diperlukan koordinasi pemanggilan atau konseling kedisiplinan bersama pihak BK dan orang tua.</small>
+        `;
+    } else if (count > 0) {
+        rekBox.className = 'p-3 rounded-3 mb-3 bg-warning bg-opacity-10 border border-warning text-dark';
+        rekBox.innerHTML = `
+            <div class="d-flex align-items-center gap-2 mb-1">
+                <i class="fa-solid fa-clock fs-5 text-warning"></i>
+                <strong class="fs-6">Catatan Kedisiplinan: ${count} Kali Terlambat</strong>
+            </div>
+            <small class="text-muted d-block">Siswa memiliki catatan keterlambatan ringan. Tetap pantau kehadiran harian siswa.</small>
+        `;
+    } else {
+        rekBox.className = 'p-3 rounded-3 mb-3 bg-success bg-opacity-10 border border-success text-success';
+        rekBox.innerHTML = `
+            <div class="d-flex align-items-center gap-2 mb-1">
+                <i class="fa-solid fa-circle-check fs-5"></i>
+                <strong class="fs-6">Siswa Tertib</strong>
+            </div>
+            <small class="text-dark d-block">Tidak ada catatan keterlambatan untuk siswa ini pada periode terpilih.</small>
+        `;
+    }
+
+    if (count > 0) {
+        riwayat.forEach((item, index) => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td class="fw-bold">${index + 1}</td>
+                <td>${item.tanggal}</td>
+                <td><span class="badge bg-warning bg-opacity-10 text-dark border border-warning">${item.jam_masuk || '-'}</span></td>
+            `;
+            tbody.appendChild(tr);
+        });
+    } else {
+        tbody.innerHTML = '<tr><td colspan="3" class="text-muted py-3">Tidak ada riwayat keterlambatan</td></tr>';
+    }
+
+    const waContainer = document.getElementById('bk_wa_container');
+    if (noWa && count > 0) {
+        let cleanWa = noWa.replace(/[^0-9]/g, '');
+        if (cleanWa.startsWith('0')) cleanWa = '62' + cleanWa.substring(1);
+        const msg = encodeURIComponent(`Assalamu'alaikum Wr. Wb. Bapak/Ibu wali dari ananda ${nama} (Kelas ${kelas}). Kami ingin menginformasikan terkait catatan kehadiran ananda yang telah tercatat terlambat sebanyak ${count} kali...`);
+        waContainer.innerHTML = `
+            <a href="https://wa.me/${cleanWa}?text=${msg}" target="_blank" class="btn btn-success rounded-pill px-4 fw-bold shadow-sm">
+                <i class="fa-brands fa-whatsapp me-1"></i> Hubungi Orang Tua via WhatsApp
+            </a>
+        `;
+    } else {
+        waContainer.innerHTML = '';
+    }
+
+    const modal = new bootstrap.Modal(document.getElementById('modalRiwayatTerlambat'));
     modal.show();
 }
 </script>

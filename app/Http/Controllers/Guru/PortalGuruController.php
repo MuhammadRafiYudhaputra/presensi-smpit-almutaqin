@@ -97,7 +97,7 @@ class PortalGuruController extends Controller
         if ($hariEfektif <= 0) $hariEfektif = $defaultHariEfektif;
 
         // Query Siswa strictly for this class
-        $siswaQuery = Siswa::with('kelas')
+        $siswaQuery = Siswa::with(['kelas', 'orangTua'])
             ->where(function ($q) {
                 $q->where('status', '!=', 'alumni')->orWhereNull('status');
             });
@@ -146,11 +146,13 @@ class PortalGuruController extends Controller
                     ->where('status', 'HADIR')
                     ->count();
 
-                $terlambat = Kehadiran::where('siswa_id', $s->id)
+                $lateQuery = Kehadiran::where('siswa_id', $s->id)
                     ->whereYear('tanggal', $tahun)
                     ->whereMonth('tanggal', $bulan)
                     ->where('status', 'TERLAMBAT')
-                    ->count();
+                    ->orderBy('tanggal', 'asc');
+                $terlambat = $lateQuery->count();
+                $riwayatTerlambat = $lateQuery->get(['tanggal', 'jam_masuk']);
 
                 $izin = Kehadiran::where('siswa_id', $s->id)
                     ->whereYear('tanggal', $tahun)
@@ -177,6 +179,7 @@ class PortalGuruController extends Controller
                     'siswa' => $s,
                     'hadir' => $totalHadir,
                     'terlambat' => $terlambat,
+                    'riwayat_terlambat' => $riwayatTerlambat,
                     'izin' => $izin,
                     'sakit' => $sakit,
                     'alpa' => $alpa,
@@ -194,11 +197,13 @@ class PortalGuruController extends Controller
                     ->where('status', 'HADIR')
                     ->count();
 
-                $terlambat = Kehadiran::where('siswa_id', $s->id)
+                $lateQuery = Kehadiran::where('siswa_id', $s->id)
                     ->whereYear('tanggal', $tahun)
                     ->whereBetween(\DB::raw('CAST(strftime("%m", tanggal) AS INTEGER)'), [$startMonth, $endMonth])
                     ->where('status', 'TERLAMBAT')
-                    ->count();
+                    ->orderBy('tanggal', 'asc');
+                $terlambat = $lateQuery->count();
+                $riwayatTerlambat = $lateQuery->get(['tanggal', 'jam_masuk']);
 
                 $izin = Kehadiran::where('siswa_id', $s->id)
                     ->whereYear('tanggal', $tahun)
@@ -225,6 +230,7 @@ class PortalGuruController extends Controller
                     'siswa' => $s,
                     'hadir' => $totalHadir,
                     'terlambat' => $terlambat,
+                    'riwayat_terlambat' => $riwayatTerlambat,
                     'izin' => $izin,
                     'sakit' => $sakit,
                     'alpa' => $alpa,
