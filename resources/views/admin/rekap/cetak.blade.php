@@ -84,9 +84,16 @@
 </head>
 <body>
 
-    <!-- Control Toolbar -->
+    <!-- Control Toolbar (Opsi Custom Pejabat TTD & Tombol Cetak) -->
     <div class="control-bar">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3">
+            <div class="d-flex align-items-center gap-2">
+                <i class="fa-solid fa-file-pdf text-danger fs-3"></i>
+                <div>
+                    <h6 class="fw-bold mb-0 text-dark">Pengaturan Cetak Laporan Presensi</h6>
+                    <small class="text-muted">Dasar perhitungan: <strong>{{ $hariEfektif }} Hari Efektif</strong>. Keterlambatan dicatat terpisah untuk catatan BK.</small>
+                </div>
+            </div>
             <button onclick="window.print()" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm">
                 <i class="fa-solid fa-print me-1"></i> Cetak / Simpan PDF
             </button>
@@ -137,6 +144,9 @@
                     Periode: Bulan {{ $bulan ?? date('m') }} / {{ $tahun ?? date('Y') }}
                 @endif
                 | Kelas: {{ $kelas->nama_kelas ?? 'Semua Kelas' }}
+                @if(($mode ?? 'bulanan') !== 'harian')
+                    | Dasar Perhitungan: {{ $hariEfektif }} Hari Efektif
+                @endif
             </p>
         </div>
 
@@ -144,16 +154,16 @@
         <table class="table table-print table-bordered align-middle mb-4">
             <thead>
                 <tr class="text-center" style="background-color: #f8fafc;">
-                    <th style="width: 40px;">No</th>
-                    <th style="width: 110px;">NISN</th>
+                    <th style="width: 35px;">No</th>
+                    <th style="width: 100px;">NISN</th>
                     <th>Nama Peserta Didik</th>
-                    <th style="width: 100px;">Kelas</th>
-                    <th style="width: 70px;">Hadir</th>
-                    <th style="width: 80px;">Terlambat</th>
-                    <th style="width: 70px;">Izin</th>
-                    <th style="width: 70px;">Sakit</th>
-                    <th style="width: 70px;">Alpa</th>
-                    <th style="width: 90px;">Persentase</th>
+                    <th style="width: 85px;">Kelas</th>
+                    <th style="width: 65px;" title="Total Masuk Sekolah">Hadir</th>
+                    <th style="width: 80px;" title="Catatan Keterlambatan untuk Pihak BK">Terlambat (BK)</th>
+                    <th style="width: 60px;">Izin</th>
+                    <th style="width: 60px;">Sakit</th>
+                    <th style="width: 60px;">Alpa</th>
+                    <th style="width: 85px;">Persentase</th>
                 </tr>
             </thead>
             <tbody>
@@ -163,8 +173,13 @@
                     <td class="text-center">{{ $row->siswa->nisn }}</td>
                     <td>{{ $row->siswa->nama }}</td>
                     <td class="text-center">Kelas {{ $row->siswa->kelas->nama_kelas ?? '-' }}</td>
-                    <td class="text-center">{{ $row->hadir }}</td>
-                    <td class="text-center">{{ $row->terlambat }}</td>
+                    <td class="text-center fw-bold">{{ $row->hadir }}</td>
+                    <td class="text-center">
+                        {{ $row->terlambat }}
+                        @if($row->terlambat >= 3)
+                            <span style="font-size: 0.72rem; color: #b45309; font-weight: bold;">(BK)</span>
+                        @endif
+                    </td>
                     <td class="text-center">{{ $row->izin }}</td>
                     <td class="text-center">{{ $row->sakit }}</td>
                     <td class="text-center">{{ $row->alpa }}</td>

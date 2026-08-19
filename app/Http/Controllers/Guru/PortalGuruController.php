@@ -26,6 +26,38 @@ class PortalGuruController extends Controller
         return $guru->kelas;
     }
 
+    private function calculateDefaultHariEfektif($mode, $bulan, $tahun, $semester)
+    {
+        if ($mode === 'bulanan') {
+            $startDate = Carbon::createFromDate($tahun, $bulan, 1);
+            $endDate = $startDate->copy()->endOfMonth();
+            $weekdays = 0;
+            $current = $startDate->copy();
+            while ($current <= $endDate) {
+                if (!$current->isWeekend()) {
+                    $weekdays++;
+                }
+                $current->addDay();
+            }
+            return max(1, $weekdays);
+        } elseif ($mode === 'semester') {
+            $startMonth = ($semester === 'ganjil') ? 7 : 1;
+            $endMonth = ($semester === 'ganjil') ? 12 : 6;
+            $startDate = Carbon::createFromDate($tahun, $startMonth, 1);
+            $endDate = Carbon::createFromDate($tahun, $endMonth, 1)->endOfMonth();
+            $weekdays = 0;
+            $current = $startDate->copy();
+            while ($current <= $endDate) {
+                if (!$current->isWeekend()) {
+                    $weekdays++;
+                }
+                $current->addDay();
+            }
+            return max(1, $weekdays);
+        }
+        return 1;
+    }
+
     public function monitoring(Request $request)
     {
         $kelas = $this->getGuruKelas();
@@ -54,6 +86,10 @@ class PortalGuruController extends Controller
         $tahun = (int)$request->get('tahun', date('Y'));
         $semester = $request->get('semester', (date('n') >= 7 ? 'ganjil' : 'genap'));
         $sortBy = $request->get('sort_by', 'nama_asc');
+
+        $defaultHariEfektif = $this->calculateDefaultHariEfektif($mode, $bulan, $tahun, $semester);
+        $hariEfektif = (int) $request->get('hari_efektif', $defaultHariEfektif);
+        if ($hariEfektif <= 0) $hariEfektif = $defaultHariEfektif;
 
         // Query Siswa for this class
         $siswaQuery = Siswa::with('kelas')
@@ -98,30 +134,48 @@ class PortalGuruController extends Controller
                 ];
             }
         } elseif ($mode === 'bulanan') {
-            $daysInMonth = Carbon::createFromDate($tahun, $bulan, 1)->daysInMonth;
             foreach ($siswas as $s) {
-                $khs = Kehadiran::where('siswa_id', $s->id)
+                $tepatWaktu = Kehadiran::where('siswa_id', $s->id)
                     ->whereYear('tanggal', $tahun)
                     ->whereMonth('tanggal', $bulan)
-                    ->get();
+                    ->where('status', 'HADIR')
+                    ->count();
 
-                $hadir = $khs->where('status', 'HADIR')->count();
-                $terlambat = $khs->where('status', 'TERLAMBAT')->count();
-                $izin = $khs->where('status', 'IZIN')->count();
-                $sakit = $khs->where('status', 'SAKIT')->count();
-                $alpa = $khs->where('status', 'ALPA')->count();
+                $terlambat = Kehadiran::where('siswa_id', $s->id)
+                    ->whereYear('tanggal', $tahun)
+                    ->whereMonth('tanggal', $bulan)
+                    ->where('status', 'TERLAMBAT')
+                    ->count();
 
-                $effectiveDays = max(1, $hadir + $terlambat + $izin + $sakit + $alpa);
-                $persentase = round((($hadir + $terlambat) / $effectiveDays) * 100);
+                $izin = Kehadiran::where('siswa_id', $s->id)
+                    ->whereYear('tanggal', $tahun)
+                    ->whereMonth('tanggal', $bulan)
+                    ->where('status', 'IZIN')
+                    ->count();
+
+                $sakit = Kehadiran::where('siswa_id', $s->id)
+                    ->whereYear('tanggal', $tahun)
+                    ->whereMonth('tanggal', $bulan)
+                    ->where('status', 'SAKIT')
+                    ->count();
+
+                $alpa = Kehadiran::where('siswa_id', $s->id)
+                    ->whereYear('tanggal', $tahun)
+                    ->whereMonth('tanggal', $bulan)
+                    ->where('status', 'ALPA')
+                    ->count();
+
+                $totalHadir = $tepatWaktu + $terlambat;
+                $persentase = ($hariEfektif > 0) ? round(($totalHadir / $hariEfektif) * 100, 1) : 0;
 
                 $bulananData[] = (object)[
                     'siswa' => $s,
-                    'hadir' => $hadir,
+                    'hadir' => $totalHadir,
                     'terlambat' => $terlambat,
                     'izin' => $izin,
                     'sakit' => $sakit,
                     'alpa' => $alpa,
-                    'persentase' => $persentase,
+                    'persentase' => min(100, $persentase),
                 ];
             }
         } elseif ($mode === 'semester') {
@@ -129,28 +183,47 @@ class PortalGuruController extends Controller
             $endMonth = ($semester === 'ganjil') ? 12 : 6;
 
             foreach ($siswas as $s) {
-                $khs = Kehadiran::where('siswa_id', $s->id)
+                $tepatWaktu = Kehadiran::where('siswa_id', $s->id)
                     ->whereYear('tanggal', $tahun)
                     ->whereBetween(\DB::raw('CAST(strftime("%m", tanggal) AS INTEGER)'), [$startMonth, $endMonth])
-                    ->get();
+                    ->where('status', 'HADIR')
+                    ->count();
 
-                $hadir = $khs->where('status', 'HADIR')->count();
-                $terlambat = $khs->where('status', 'TERLAMBAT')->count();
-                $izin = $khs->where('status', 'IZIN')->count();
-                $sakit = $khs->where('status', 'SAKIT')->count();
-                $alpa = $khs->where('status', 'ALPA')->count();
+                $terlambat = Kehadiran::where('siswa_id', $s->id)
+                    ->whereYear('tanggal', $tahun)
+                    ->whereBetween(\DB::raw('CAST(strftime("%m", tanggal) AS INTEGER)'), [$startMonth, $endMonth])
+                    ->where('status', 'TERLAMBAT')
+                    ->count();
 
-                $effectiveDays = max(1, $hadir + $terlambat + $izin + $sakit + $alpa);
-                $persentase = round((($hadir + $terlambat) / $effectiveDays) * 100);
+                $izin = Kehadiran::where('siswa_id', $s->id)
+                    ->whereYear('tanggal', $tahun)
+                    ->whereBetween(\DB::raw('CAST(strftime("%m", tanggal) AS INTEGER)'), [$startMonth, $endMonth])
+                    ->where('status', 'IZIN')
+                    ->count();
+
+                $sakit = Kehadiran::where('siswa_id', $s->id)
+                    ->whereYear('tanggal', $tahun)
+                    ->whereBetween(\DB::raw('CAST(strftime("%m", tanggal) AS INTEGER)'), [$startMonth, $endMonth])
+                    ->where('status', 'SAKIT')
+                    ->count();
+
+                $alpa = Kehadiran::where('siswa_id', $s->id)
+                    ->whereYear('tanggal', $tahun)
+                    ->whereBetween(\DB::raw('CAST(strftime("%m", tanggal) AS INTEGER)'), [$startMonth, $endMonth])
+                    ->where('status', 'ALPA')
+                    ->count();
+
+                $totalHadir = $tepatWaktu + $terlambat;
+                $persentase = ($hariEfektif > 0) ? round(($totalHadir / $hariEfektif) * 100, 1) : 0;
 
                 $semesterData[] = (object)[
                     'siswa' => $s,
-                    'hadir' => $hadir,
+                    'hadir' => $totalHadir,
                     'terlambat' => $terlambat,
                     'izin' => $izin,
                     'sakit' => $sakit,
                     'alpa' => $alpa,
-                    'persentase' => $persentase,
+                    'persentase' => min(100, $persentase),
                 ];
             }
         }
@@ -163,6 +236,7 @@ class PortalGuruController extends Controller
             'tahun',
             'semester',
             'sortBy',
+            'hariEfektif',
             'harianData',
             'bulananData',
             'semesterData'

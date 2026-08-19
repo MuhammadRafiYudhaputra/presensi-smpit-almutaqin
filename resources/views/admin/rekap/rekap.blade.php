@@ -22,7 +22,7 @@
             <h5 class="fw-bold mb-1 text-dark d-flex align-items-center">
                 <i class="fa-solid fa-file-invoice text-primary me-2 fs-4"></i> Rekapitulasi Kehadiran Siswa
             </h5>
-            <small class="text-muted">Laporan presensi harian, rekapitulasi bulanan, dan semester</small>
+            <small class="text-muted">Laporan presensi harian, rekapitulasi bulanan, dan semester berbasis Hari Efektif Sekolah</small>
         </div>
         <div class="d-flex flex-wrap gap-2 align-items-center">
             <!-- Mode Switcher Tabs -->
@@ -30,16 +30,16 @@
                 <a href="{{ route('admin.rekap.index', ['mode' => 'harian', 'tanggal' => $tanggal, 'kelas_id' => $kelasId, 'sort_by' => $sortBy]) }}" class="btn btn-sm rounded-pill px-3 fw-semibold {{ $mode === 'harian' ? 'btn-primary shadow-sm' : 'btn-light text-muted' }}">
                     <i class="fa-solid fa-calendar-day me-1"></i> Harian
                 </a>
-                <a href="{{ route('admin.rekap.index', ['mode' => 'bulanan', 'bulan' => $bulan, 'tahun' => $tahun, 'kelas_id' => $kelasId, 'sort_by' => $sortBy]) }}" class="btn btn-sm rounded-pill px-3 fw-semibold {{ $mode === 'bulanan' ? 'btn-primary shadow-sm' : 'btn-light text-muted' }}">
+                <a href="{{ route('admin.rekap.index', ['mode' => 'bulanan', 'bulan' => $bulan, 'tahun' => $tahun, 'hari_efektif' => $hariEfektif, 'kelas_id' => $kelasId, 'sort_by' => $sortBy]) }}" class="btn btn-sm rounded-pill px-3 fw-semibold {{ $mode === 'bulanan' ? 'btn-primary shadow-sm' : 'btn-light text-muted' }}">
                     <i class="fa-solid fa-chart-simple me-1"></i> Bulanan
                 </a>
-                <a href="{{ route('admin.rekap.index', ['mode' => 'semester', 'semester' => $semester, 'tahun' => $tahun, 'kelas_id' => $kelasId, 'sort_by' => $sortBy]) }}" class="btn btn-sm rounded-pill px-3 fw-semibold {{ $mode === 'semester' ? 'btn-primary shadow-sm' : 'btn-light text-muted' }}">
+                <a href="{{ route('admin.rekap.index', ['mode' => 'semester', 'semester' => $semester, 'tahun' => $tahun, 'hari_efektif' => $hariEfektif, 'kelas_id' => $kelasId, 'sort_by' => $sortBy]) }}" class="btn btn-sm rounded-pill px-3 fw-semibold {{ $mode === 'semester' ? 'btn-primary shadow-sm' : 'btn-light text-muted' }}">
                     <i class="fa-solid fa-graduation-cap me-1"></i> Semester
                 </a>
             </div>
 
             <!-- Tombol Cetak Laporan -->
-            <a href="{{ route('admin.rekap.cetak', ['mode' => $mode, 'tanggal' => $tanggal, 'bulan' => $bulan, 'tahun' => $tahun, 'semester' => $semester, 'kelas_id' => $kelasId]) }}" target="_blank" class="btn btn-outline-primary rounded-pill px-3 fw-semibold shadow-sm">
+            <a href="{{ route('admin.rekap.cetak', ['mode' => $mode, 'tanggal' => $tanggal, 'bulan' => $bulan, 'tahun' => $tahun, 'semester' => $semester, 'kelas_id' => $kelasId, 'hari_efektif' => $hariEfektif]) }}" target="_blank" class="btn btn-outline-primary rounded-pill px-3 fw-semibold shadow-sm">
                 <i class="fa-solid fa-print me-1"></i> Cetak Laporan
             </a>
         </div>
@@ -73,6 +73,13 @@
                     @endfor
                 </select>
             </div>
+            <div class="col-md-2">
+                <label class="form-label fw-bold text-dark mb-1">Hari Efektif (Masuk)</label>
+                <div class="input-group shadow-sm">
+                    <input type="number" name="hari_efektif" class="form-control" value="{{ $hariEfektif }}" min="1" max="31" title="Jumlah hari efektif/masuk sekolah dalam bulan ini">
+                    <span class="input-group-text bg-light text-muted small">Hari</span>
+                </div>
+            </div>
         @elseif($mode === 'semester')
             <div class="col-md-2">
                 <label class="form-label fw-bold text-dark mb-1">Pilih Semester</label>
@@ -89,9 +96,16 @@
                     @endfor
                 </select>
             </div>
+            <div class="col-md-2">
+                <label class="form-label fw-bold text-dark mb-1">Hari Efektif Semester</label>
+                <div class="input-group shadow-sm">
+                    <input type="number" name="hari_efektif" class="form-control" value="{{ $hariEfektif }}" min="1" max="180" title="Jumlah hari efektif sekolah semester ini">
+                    <span class="input-group-text bg-light text-muted small">Hari</span>
+                </div>
+            </div>
         @endif
 
-        <div class="col-md-4">
+        <div class="col-md-3">
             <label class="form-label fw-bold text-dark mb-1">Filter Kelas</label>
             <select name="kelas_id" class="form-select shadow-sm" onchange="this.form.submit()">
                 <option value="">Semua Kelas</option>
@@ -101,7 +115,7 @@
             </select>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-3">
             <label class="form-label fw-bold text-dark mb-1">Urutkan Data (Sorting)</label>
             <select name="sort_by" class="form-select shadow-sm" onchange="this.form.submit()">
                 <option value="nama_asc" {{ ($sortBy ?? '') === 'nama_asc' ? 'selected' : '' }}>Nama Siswa (A-Z)</option>
@@ -109,6 +123,18 @@
                 <option value="nisn" {{ ($sortBy ?? '') === 'nisn' ? 'selected' : '' }}>NISN Siswa</option>
             </select>
         </div>
+
+        @if($mode !== 'harian')
+            <div class="col-12 mt-2">
+                <button type="submit" class="btn btn-sm btn-primary rounded-pill px-3 fw-bold">
+                    <i class="fa-solid fa-arrows-rotate me-1"></i> Terapkan Hari Efektif & Filter
+                </button>
+                <small class="text-muted ms-2">
+                    <i class="fa-solid fa-circle-info text-primary me-1"></i>
+                    Dasar persentase kehadiran dihitung dari <strong>{{ $hariEfektif }} Hari Efektif</strong>. Keterlambatan dicatat terpisah untuk catatan BK.
+                </small>
+            </div>
+        @endif
     </form>
 
     <!-- 1. TAMPILAN TABEL MODE HARIAN -->
@@ -200,15 +226,18 @@
                     <th rowspan="2" class="align-middle text-dark text-start">Nama Peserta Didik</th>
                     <th rowspan="2" style="width: 50px;" class="align-middle text-dark">JK</th>
                     <th rowspan="2" class="align-middle text-dark" style="width: 110px;">Kelas</th>
-                    <th colspan="5" class="text-dark bg-light">Akumulasi Kehadiran (Bulan {{ $bulan }}/{{ $tahun }})</th>
-                    <th rowspan="2" class="align-middle text-dark" style="width: 120px;">Persentase</th>
+                    <th colspan="5" class="text-dark bg-light">
+                        Akumulasi Kehadiran (Bulan {{ $bulan }}/{{ $tahun }} &bull; Dasar: {{ $hariEfektif }} Hari Efektif)
+                    </th>
+                    <th rowspan="2" class="align-middle text-dark" style="width: 110px;">Persentase</th>
+                    <th rowspan="2" class="align-middle text-dark" style="width: 140px;">Catatan BK</th>
                 </tr>
                 <tr>
-                    <th class="col-header-hadir text-center py-2" style="width: 85px;">
+                    <th class="col-header-hadir text-center py-2" style="width: 85px;" title="Total siswa masuk sekolah">
                         <i class="fa-solid fa-circle-check d-block mb-1 fs-6"></i>
                         <span>Hadir</span>
                     </th>
-                    <th class="col-header-terlambat text-center py-2" style="width: 85px;">
+                    <th class="col-header-terlambat text-center py-2" style="width: 95px;" title="Dicatat terpisah untuk tindak lanjut BK">
                         <i class="fa-solid fa-clock d-block mb-1 fs-6"></i>
                         <span>Terlambat</span>
                     </th>
@@ -240,8 +269,15 @@
                             Kelas {{ $row->siswa->kelas->nama_kelas ?? '-' }}
                         </span>
                     </td>
-                    <td class="text-center val-hadir">{{ $row->hadir }}</td>
-                    <td class="text-center val-terlambat">{{ $row->terlambat }}</td>
+                    <td class="text-center val-hadir" title="{{ $row->hadir }} hari hadir">{{ $row->hadir }}</td>
+                    <td class="text-center val-terlambat">
+                        {{ $row->terlambat }}
+                        @if($row->terlambat >= 3)
+                            <span class="badge bg-warning bg-opacity-25 text-dark border border-warning ms-1" style="font-size: 0.7rem;" title="Perlu tindak lanjut BK">
+                                <i class="fa-solid fa-triangle-exclamation"></i> BK
+                            </span>
+                        @endif
+                    </td>
                     <td class="text-center val-izin">{{ $row->izin }}</td>
                     <td class="text-center val-sakit">{{ $row->sakit }}</td>
                     <td class="text-center val-alpa">{{ $row->alpa }}</td>
@@ -250,10 +286,25 @@
                             {{ $row->persentase }}%
                         </span>
                     </td>
+                    <td class="text-center">
+                        @if($row->terlambat >= 3)
+                            <span class="badge bg-danger bg-opacity-10 text-danger border border-danger px-2 py-1" style="font-size: 0.75rem;">
+                                <i class="fa-solid fa-user-shield me-1"></i> Perlu Tindak Lanjut
+                            </span>
+                        @elseif($row->terlambat > 0)
+                            <span class="badge bg-warning bg-opacity-10 text-dark border border-warning px-2 py-1" style="font-size: 0.75rem; color: #92400e !important;">
+                                <i class="fa-regular fa-clock me-1"></i> Catatan ({{ $row->terlambat }}x)
+                            </span>
+                        @else
+                            <span class="badge bg-success bg-opacity-10 text-success border border-success px-2 py-1" style="font-size: 0.75rem;">
+                                <i class="fa-solid fa-check me-1"></i> Tertib
+                            </span>
+                        @endif
+                    </td>
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="11" class="text-center text-muted py-5">Tidak ada data rekapitulasi bulanan.</td>
+                    <td colspan="12" class="text-center text-muted py-5">Tidak ada data rekapitulasi bulanan.</td>
                 </tr>
                 @endforelse
             </tbody>
@@ -271,15 +322,18 @@
                     <th rowspan="2" class="align-middle text-dark text-start">Nama Peserta Didik</th>
                     <th rowspan="2" style="width: 50px;" class="align-middle text-dark">JK</th>
                     <th rowspan="2" class="align-middle text-dark" style="width: 110px;">Kelas</th>
-                    <th colspan="5" class="text-dark bg-light">Akumulasi Kehadiran Semester ({{ ucfirst($semester) }} {{ $tahun }})</th>
-                    <th rowspan="2" class="align-middle text-dark" style="width: 120px;">Persentase</th>
+                    <th colspan="5" class="text-dark bg-light">
+                        Akumulasi Kehadiran (Semester {{ ucfirst($semester) }} {{ $tahun }} &bull; Dasar: {{ $hariEfektif }} Hari Efektif)
+                    </th>
+                    <th rowspan="2" class="align-middle text-dark" style="width: 110px;">Persentase</th>
+                    <th rowspan="2" class="align-middle text-dark" style="width: 140px;">Catatan BK</th>
                 </tr>
                 <tr>
-                    <th class="col-header-hadir text-center py-2" style="width: 85px;">
+                    <th class="col-header-hadir text-center py-2" style="width: 85px;" title="Total siswa masuk sekolah">
                         <i class="fa-solid fa-circle-check d-block mb-1 fs-6"></i>
                         <span>Hadir</span>
                     </th>
-                    <th class="col-header-terlambat text-center py-2" style="width: 85px;">
+                    <th class="col-header-terlambat text-center py-2" style="width: 95px;" title="Dicatat terpisah untuk tindak lanjut BK">
                         <i class="fa-solid fa-clock d-block mb-1 fs-6"></i>
                         <span>Terlambat</span>
                     </th>
@@ -311,8 +365,15 @@
                             Kelas {{ $row->siswa->kelas->nama_kelas ?? '-' }}
                         </span>
                     </td>
-                    <td class="text-center val-hadir">{{ $row->hadir }}</td>
-                    <td class="text-center val-terlambat">{{ $row->terlambat }}</td>
+                    <td class="text-center val-hadir" title="{{ $row->hadir }} hari hadir">{{ $row->hadir }}</td>
+                    <td class="text-center val-terlambat">
+                        {{ $row->terlambat }}
+                        @if($row->terlambat >= 3)
+                            <span class="badge bg-warning bg-opacity-25 text-dark border border-warning ms-1" style="font-size: 0.7rem;" title="Perlu tindak lanjut BK">
+                                <i class="fa-solid fa-triangle-exclamation"></i> BK
+                            </span>
+                        @endif
+                    </td>
                     <td class="text-center val-izin">{{ $row->izin }}</td>
                     <td class="text-center val-sakit">{{ $row->sakit }}</td>
                     <td class="text-center val-alpa">{{ $row->alpa }}</td>
@@ -321,10 +382,25 @@
                             {{ $row->persentase }}%
                         </span>
                     </td>
+                    <td class="text-center">
+                        @if($row->terlambat >= 3)
+                            <span class="badge bg-danger bg-opacity-10 text-danger border border-danger px-2 py-1" style="font-size: 0.75rem;">
+                                <i class="fa-solid fa-user-shield me-1"></i> Perlu Tindak Lanjut
+                            </span>
+                        @elseif($row->terlambat > 0)
+                            <span class="badge bg-warning bg-opacity-10 text-dark border border-warning px-2 py-1" style="font-size: 0.75rem; color: #92400e !important;">
+                                <i class="fa-regular fa-clock me-1"></i> Catatan ({{ $row->terlambat }}x)
+                            </span>
+                        @else
+                            <span class="badge bg-success bg-opacity-10 text-success border border-success px-2 py-1" style="font-size: 0.75rem;">
+                                <i class="fa-solid fa-check me-1"></i> Tertib
+                            </span>
+                        @endif
+                    </td>
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="11" class="text-center text-muted py-5">Tidak ada data rekapitulasi semester.</td>
+                    <td colspan="12" class="text-center text-muted py-5">Tidak ada data rekapitulasi semester.</td>
                 </tr>
                 @endforelse
             </tbody>

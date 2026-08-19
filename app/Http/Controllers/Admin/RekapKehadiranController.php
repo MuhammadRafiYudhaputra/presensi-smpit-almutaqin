@@ -38,6 +38,41 @@ class RekapKehadiranController extends Controller
     }
 
     /**
+     * Helper untuk menghitung default hari efektif (Senin - Jumat)
+     */
+    private function calculateDefaultHariEfektif($mode, $bulan, $tahun, $semester)
+    {
+        if ($mode === 'bulanan') {
+            $startDate = Carbon::createFromDate($tahun, $bulan, 1);
+            $endDate = $startDate->copy()->endOfMonth();
+            $weekdays = 0;
+            $current = $startDate->copy();
+            while ($current <= $endDate) {
+                if (!$current->isWeekend()) {
+                    $weekdays++;
+                }
+                $current->addDay();
+            }
+            return max(1, $weekdays);
+        } elseif ($mode === 'semester') {
+            $startMonth = ($semester === 'ganjil') ? 7 : 1;
+            $endMonth = ($semester === 'ganjil') ? 12 : 6;
+            $startDate = Carbon::createFromDate($tahun, $startMonth, 1);
+            $endDate = Carbon::createFromDate($tahun, $endMonth, 1)->endOfMonth();
+            $weekdays = 0;
+            $current = $startDate->copy();
+            while ($current <= $endDate) {
+                if (!$current->isWeekend()) {
+                    $weekdays++;
+                }
+                $current->addDay();
+            }
+            return max(1, $weekdays);
+        }
+        return 1;
+    }
+
+    /**
      * Rekapitulasi Presensi 3 Mode (Harian, Bulanan, Semester)
      */
     public function rekap(Request $request)
@@ -49,6 +84,11 @@ class RekapKehadiranController extends Controller
         $semester = $request->get('semester', (Carbon::now('Asia/Jakarta')->month >= 7 ? 'ganjil' : 'genap'));
         $kelasId = $request->get('kelas_id');
         $sortBy = $request->get('sort_by', 'nama_asc');
+
+        // Hari Efektif (Bisa disesuaikan oleh Admin TU)
+        $defaultHariEfektif = $this->calculateDefaultHariEfektif($mode, $bulan, $tahun, $semester);
+        $hariEfektif = (int) $request->get('hari_efektif', $defaultHariEfektif);
+        if ($hariEfektif <= 0) $hariEfektif = $defaultHariEfektif;
 
         $kelases = Kelas::all();
 
@@ -87,7 +127,7 @@ class RekapKehadiranController extends Controller
                     'siswa' => $siswa,
                     'jam_masuk' => $kh ? $kh->jam_masuk : null,
                     'jam_pulang' => $kh ? $kh->jam_pulang : null,
-                    'status' => $kh ? $kh->status : 'ALPA',
+                    'status' => $kh ? $kh->status : 'BELUM ABSEN',
                     'kehadiran_id' => $kh ? $kh->id : null,
                 ];
             }
@@ -96,9 +136,8 @@ class RekapKehadiranController extends Controller
         // 2. Data Rekap Bulanan
         $bulananData = [];
         if ($mode === 'bulanan') {
-            $totalHariEfektif = 24; // Standar 24 hari sekolah per bulan
             foreach ($siswas as $siswa) {
-                $hadir = Kehadiran::where('siswa_id', $siswa->id)
+                $tepatWaktu = Kehadiran::where('siswa_id', $siswa->id)
                     ->whereYear('tanggal', $tahun)
                     ->whereMonth('tanggal', $bulan)
                     ->where('status', 'HADIR')
@@ -128,12 +167,13 @@ class RekapKehadiranController extends Controller
                     ->where('status', 'ALPA')
                     ->count();
 
-                $totalHadirFisik = $hadir + $terlambat;
-                $persentase = ($totalHariEfektif > 0) ? round(($totalHadirFisik / $totalHariEfektif) * 100, 1) : 0;
+                // Siswa yang hadir tepat waktu & terlambat KEDUANYA tetap dihitung hadir sekolah
+                $totalHadir = $tepatWaktu + $terlambat;
+                $persentase = ($hariEfektif > 0) ? round(($totalHadir / $hariEfektif) * 100, 1) : 0;
 
                 $bulananData[] = (object) [
                     'siswa' => $siswa,
-                    'hadir' => $hadir,
+                    'hadir' => $totalHadir,
                     'terlambat' => $terlambat,
                     'izin' => $izin,
                     'sakit' => $sakit,
@@ -148,10 +188,9 @@ class RekapKehadiranController extends Controller
         if ($mode === 'semester') {
             $startMonth = ($semester === 'ganjil') ? 7 : 1;
             $endMonth = ($semester === 'ganjil') ? 12 : 6;
-            $totalHariSemester = 120; // Standar 120 hari per semester
 
             foreach ($siswas as $siswa) {
-                $hadir = Kehadiran::where('siswa_id', $siswa->id)
+                $tepatWaktu = Kehadiran::where('siswa_id', $siswa->id)
                     ->whereYear('tanggal', $tahun)
                     ->whereBetween(\DB::raw('CAST(strftime("%m", tanggal) as integer)'), [$startMonth, $endMonth])
                     ->where('status', 'HADIR')
@@ -181,12 +220,13 @@ class RekapKehadiranController extends Controller
                     ->where('status', 'ALPA')
                     ->count();
 
-                $totalHadirFisik = $hadir + $terlambat;
-                $persentase = ($totalHariSemester > 0) ? round(($totalHadirFisik / $totalHariSemester) * 100, 1) : 0;
+                // Siswa yang hadir tepat waktu & terlambat KEDUANYA tetap dihitung hadir sekolah
+                $totalHadir = $tepatWaktu + $terlambat;
+                $persentase = ($hariEfektif > 0) ? round(($totalHadir / $hariEfektif) * 100, 1) : 0;
 
                 $semesterData[] = (object) [
                     'siswa' => $siswa,
-                    'hadir' => $hadir,
+                    'hadir' => $totalHadir,
                     'terlambat' => $terlambat,
                     'izin' => $izin,
                     'sakit' => $sakit,
@@ -204,6 +244,7 @@ class RekapKehadiranController extends Controller
             'semester',
             'kelasId',
             'sortBy',
+            'hariEfektif',
             'kelases',
             'harianData',
             'bulananData',
@@ -256,6 +297,10 @@ class RekapKehadiranController extends Controller
         $kelasId = $request->get('kelas_id');
         $tanggal = $request->get('tanggal', Carbon::today()->toDateString());
 
+        $defaultHariEfektif = $this->calculateDefaultHariEfektif($mode, $bulan, $tahun, $semester);
+        $hariEfektif = (int) $request->get('hari_efektif', $defaultHariEfektif);
+        if ($hariEfektif <= 0) $hariEfektif = $defaultHariEfektif;
+
         $kelas = $kelasId ? Kelas::with('waliKelas')->find($kelasId) : null;
 
         $siswasQuery = Siswa::with('kelas')->where('status', '!=', 'alumni')->orWhereNull('status');
@@ -266,43 +311,76 @@ class RekapKehadiranController extends Controller
 
         $dataLaporan = [];
         foreach ($siswas as $siswa) {
-            $hadir = Kehadiran::where('siswa_id', $siswa->id)
-                ->whereYear('tanggal', $tahun)
-                ->whereMonth('tanggal', $bulan)
-                ->where('status', 'HADIR')
-                ->count();
-            $terlambat = Kehadiran::where('siswa_id', $siswa->id)
-                ->whereYear('tanggal', $tahun)
-                ->whereMonth('tanggal', $bulan)
-                ->where('status', 'TERLAMBAT')
-                ->count();
-            $izin = Kehadiran::where('siswa_id', $siswa->id)
-                ->whereYear('tanggal', $tahun)
-                ->whereMonth('tanggal', $bulan)
-                ->where('status', 'IZIN')
-                ->count();
-            $sakit = Kehadiran::where('siswa_id', $siswa->id)
-                ->whereYear('tanggal', $tahun)
-                ->whereMonth('tanggal', $bulan)
-                ->where('status', 'SAKIT')
-                ->count();
-            $alpa = Kehadiran::where('siswa_id', $siswa->id)
-                ->whereYear('tanggal', $tahun)
-                ->whereMonth('tanggal', $bulan)
-                ->where('status', 'ALPA')
-                ->count();
+            if ($mode === 'semester') {
+                $startMonth = ($semester === 'ganjil') ? 7 : 1;
+                $endMonth = ($semester === 'ganjil') ? 12 : 6;
+                $tepatWaktu = Kehadiran::where('siswa_id', $siswa->id)
+                    ->whereYear('tanggal', $tahun)
+                    ->whereBetween(\DB::raw('CAST(strftime("%m", tanggal) as integer)'), [$startMonth, $endMonth])
+                    ->where('status', 'HADIR')
+                    ->count();
+                $terlambat = Kehadiran::where('siswa_id', $siswa->id)
+                    ->whereYear('tanggal', $tahun)
+                    ->whereBetween(\DB::raw('CAST(strftime("%m", tanggal) as integer)'), [$startMonth, $endMonth])
+                    ->where('status', 'TERLAMBAT')
+                    ->count();
+                $izin = Kehadiran::where('siswa_id', $siswa->id)
+                    ->whereYear('tanggal', $tahun)
+                    ->whereBetween(\DB::raw('CAST(strftime("%m", tanggal) as integer)'), [$startMonth, $endMonth])
+                    ->where('status', 'IZIN')
+                    ->count();
+                $sakit = Kehadiran::where('siswa_id', $siswa->id)
+                    ->whereYear('tanggal', $tahun)
+                    ->whereBetween(\DB::raw('CAST(strftime("%m", tanggal) as integer)'), [$startMonth, $endMonth])
+                    ->where('status', 'SAKIT')
+                    ->count();
+                $alpa = Kehadiran::where('siswa_id', $siswa->id)
+                    ->whereYear('tanggal', $tahun)
+                    ->whereBetween(\DB::raw('CAST(strftime("%m", tanggal) as integer)'), [$startMonth, $endMonth])
+                    ->where('status', 'ALPA')
+                    ->count();
+            } else {
+                $tepatWaktu = Kehadiran::where('siswa_id', $siswa->id)
+                    ->whereYear('tanggal', $tahun)
+                    ->whereMonth('tanggal', $bulan)
+                    ->where('status', 'HADIR')
+                    ->count();
+                $terlambat = Kehadiran::where('siswa_id', $siswa->id)
+                    ->whereYear('tanggal', $tahun)
+                    ->whereMonth('tanggal', $bulan)
+                    ->where('status', 'TERLAMBAT')
+                    ->count();
+                $izin = Kehadiran::where('siswa_id', $siswa->id)
+                    ->whereYear('tanggal', $tahun)
+                    ->whereMonth('tanggal', $bulan)
+                    ->where('status', 'IZIN')
+                    ->count();
+                $sakit = Kehadiran::where('siswa_id', $siswa->id)
+                    ->whereYear('tanggal', $tahun)
+                    ->whereMonth('tanggal', $bulan)
+                    ->where('status', 'SAKIT')
+                    ->count();
+                $alpa = Kehadiran::where('siswa_id', $siswa->id)
+                    ->whereYear('tanggal', $tahun)
+                    ->whereMonth('tanggal', $bulan)
+                    ->where('status', 'ALPA')
+                    ->count();
+            }
+
+            $totalHadir = $tepatWaktu + $terlambat;
+            $persentase = ($hariEfektif > 0) ? round(($totalHadir / $hariEfektif) * 100, 1) : 0;
 
             $dataLaporan[] = (object) [
                 'siswa' => $siswa,
-                'hadir' => $hadir,
+                'hadir' => $totalHadir,
                 'terlambat' => $terlambat,
                 'izin' => $izin,
                 'sakit' => $sakit,
                 'alpa' => $alpa,
-                'persentase' => round((($hadir + $terlambat) / 24) * 100, 1),
+                'persentase' => min(100, $persentase),
             ];
         }
 
-        return view('admin.rekap.cetak', compact('mode', 'bulan', 'tahun', 'semester', 'kelas', 'dataLaporan', 'tanggal'));
+        return view('admin.rekap.cetak', compact('mode', 'bulan', 'tahun', 'semester', 'kelas', 'dataLaporan', 'tanggal', 'hariEfektif'));
     }
 }
