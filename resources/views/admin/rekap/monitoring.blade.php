@@ -1,6 +1,47 @@
 @extends('layouts.app')
 
 @section('content')
+<style>
+    /* Styling Radio Pilihan Kehadiran Sesuai Gambar Referensi */
+    .status-radio-option {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 0.5rem 0.75rem;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.15s ease;
+    }
+    .status-radio-option:hover {
+        background: #f8fafc;
+    }
+    .status-radio-option input[type="radio"] {
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+    }
+    .radio-label-hadir { color: #16a34a; font-weight: 700; font-size: 0.95rem; }
+    .radio-label-terlambat { color: #d97706; font-weight: 700; font-size: 0.95rem; }
+    .radio-label-sakit { color: #475569; font-weight: 700; font-size: 0.95rem; }
+    .radio-label-izin { color: #0284c7; font-weight: 700; font-size: 0.95rem; }
+    .radio-label-alpa { color: #dc2626; font-weight: 700; font-size: 0.95rem; }
+
+    .btn-ubah-modal {
+        background: #00c0ef;
+        border: 1px solid #00c0ef;
+        color: #ffffff;
+        font-weight: 700;
+        border-radius: 8px;
+        padding: 0.5rem 1.5rem;
+        transition: all 0.2s ease;
+    }
+    .btn-ubah-modal:hover {
+        background: #0891b2;
+        border-color: #0891b2;
+        color: #ffffff;
+    }
+</style>
+
 <div class="card card-custom p-4 shadow-sm border-0 rounded-4">
     <!-- Header & Actions -->
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
@@ -98,7 +139,14 @@
                 <tr>
                     <td class="text-center fw-bold">{{ $idx + 1 }}</td>
                     <td class="text-center fw-bold text-dark">{{ $row->siswa->nisn }}</td>
-                    <td class="fw-bold text-dark">{{ $row->siswa->nama }}</td>
+                    <td class="fw-bold text-dark">
+                        {{ $row->siswa->nama }}
+                        @if($row->keterangan)
+                            <small class="d-block text-muted fw-normal" style="font-size: 0.78rem;">
+                                <i class="fa-solid fa-note-sticky text-warning me-1"></i>{{ $row->keterangan }}
+                            </small>
+                        @endif
+                    </td>
                     <td class="text-center">
                         <span class="badge {{ $row->siswa->jenis_kelamin === 'L' ? 'bg-primary bg-opacity-10 text-primary border border-primary' : 'bg-danger bg-opacity-10 text-danger border border-danger' }} px-2 fw-bold">{{ $row->siswa->jenis_kelamin }}</span>
                     </td>
@@ -131,7 +179,7 @@
                         @elseif($row->status === 'SAKIT')
                             <span class="badge bg-secondary bg-opacity-10 text-dark border border-secondary px-3 py-2 rounded-pill fw-bold"><i class="fa-solid fa-notes-medical me-1"></i> SAKIT</span>
                         @elseif($row->status === 'ALPA')
-                            <span class="badge bg-danger bg-opacity-10 text-danger border border-danger px-3 py-2 rounded-pill fw-bold"><i class="fa-solid fa-xmark me-1"></i> ALPA</span>
+                            <span class="badge bg-danger bg-opacity-10 text-danger border border-danger px-3 py-2 rounded-pill fw-bold"><i class="fa-solid fa-xmark me-1"></i> TANPA KETERANGAN</span>
                         @else
                             <span class="badge bg-light text-secondary border px-3 py-2 rounded-pill fw-semibold"><i class="fa-regular fa-circle me-1"></i> BELUM ABSEN</span>
                         @endif
@@ -146,7 +194,7 @@
                         @endif
                     </td>
                     <td class="text-center">
-                        <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3 py-1 fw-semibold shadow-sm" onclick="openSetStatusModal({{ $row->siswa->id }}, '{{ addslashes($row->siswa->nama) }}', '{{ $row->status }}')">
+                        <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3 py-1 fw-semibold shadow-sm" onclick="openSetStatusModal({{ $row->siswa->id }}, '{{ addslashes($row->siswa->nama) }}', '{{ $row->status }}', '{{ addslashes($row->keterangan ?? '') }}')">
                             <i class="fa-solid fa-pen-to-square me-1"></i> Set Status
                         </button>
                     </td>
@@ -164,38 +212,67 @@
     </div>
 </div>
 
-<!-- Modal Set Status Kehadiran Manual -->
+<!-- Modal Ubah Kehadiran (Sesuai Desain Gambar Referensi) -->
 <div class="modal fade" id="modalSetStatus" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content rounded-4 border-0 shadow">
-            <div class="modal-header border-0 pb-0">
-                <h5 class="fw-bold text-dark"><i class="fa-solid fa-user-pen me-2 text-primary"></i>Ubah Status Kehadiran Siswa</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <div class="modal-content rounded-4 border-0 shadow-lg" style="overflow: hidden;">
+            <div class="modal-header border-0 pb-0 pt-3 px-4 d-flex justify-content-between align-items-center">
+                <h5 class="fw-bold text-dark mb-0">Ubah kehadiran</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form action="{{ route('admin.rekap.updateStatus') }}" method="POST">
                 @csrf
                 <input type="hidden" name="siswa_id" id="modal_siswa_id">
                 <input type="hidden" name="tanggal" value="{{ $tanggal }}">
-                <div class="modal-body">
-                    <div class="p-3 bg-light rounded-3 mb-3 border">
-                        <small class="text-muted d-block">Nama Siswa:</small>
+                
+                <div class="modal-body px-4 py-3">
+                    <!-- Info Nama Siswa -->
+                    <div class="mb-3">
+                        <small class="text-muted d-block fw-semibold mb-1">Nama Siswa:</small>
                         <span class="fw-bold text-dark fs-6" id="modal_siswa_nama">-</span>
                     </div>
 
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold text-dark">Pilih Status Baru:</label>
-                        <select name="status" id="modal_status" class="form-select" required>
-                            <option value="HADIR">HADIR (Hadir Tepat Waktu)</option>
-                            <option value="TERLAMBAT">TERLAMBAT (Hadir Melebihi Jam Masuk)</option>
-                            <option value="IZIN">IZIN (Surat / Keterangan Izin)</option>
-                            <option value="SAKIT">SAKIT (Surat Dokter / Sakit)</option>
-                            <option value="ALPA">ALPA (Tanpa Keterangan)</option>
-                        </select>
+                    <hr class="my-2" style="opacity: 0.15;">
+
+                    <!-- Pilihan Kehadiran Radio List (Sesuai Gambar) -->
+                    <label class="form-label fw-bold text-muted small text-uppercase mb-2" style="letter-spacing: 0.5px;">Kehadiran</label>
+                    <div class="d-flex flex-column gap-1 mb-3">
+                        <label class="status-radio-option">
+                            <input type="radio" name="status" id="status_hadir" value="HADIR">
+                            <span class="radio-label-hadir">HADIR</span>
+                        </label>
+
+                        <label class="status-radio-option">
+                            <input type="radio" name="status" id="status_terlambat" value="TERLAMBAT">
+                            <span class="radio-label-terlambat">TERLAMBAT</span>
+                        </label>
+
+                        <label class="status-radio-option">
+                            <input type="radio" name="status" id="status_sakit" value="SAKIT">
+                            <span class="radio-label-sakit">SAKIT</span>
+                        </label>
+
+                        <label class="status-radio-option">
+                            <input type="radio" name="status" id="status_izin" value="IZIN">
+                            <span class="radio-label-izin">IZIN</span>
+                        </label>
+
+                        <label class="status-radio-option">
+                            <input type="radio" name="status" id="status_alpa" value="ALPA">
+                            <span class="radio-label-alpa">TANPA KETERANGAN</span>
+                        </label>
+                    </div>
+
+                    <!-- Keterangan (Sesuai Gambar) -->
+                    <div class="mb-2">
+                        <label class="form-label fw-bold text-muted small text-uppercase mb-1" style="letter-spacing: 0.5px;">Keterangan</label>
+                        <input type="text" name="keterangan" id="modal_keterangan" class="form-control rounded-3" placeholder="Contoh: Sakit demam, Izin acara keluarga, dll." style="padding: 0.6rem 0.85rem; border-color: #cbd5e1;">
                     </div>
                 </div>
-                <div class="modal-footer border-0 pt-0">
-                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm">Simpan Perubahan</button>
+
+                <div class="modal-footer border-0 pt-0 pb-3 px-4 d-flex justify-content-end gap-2">
+                    <button type="button" class="btn btn-light border px-4 rounded-3 text-secondary fw-semibold" data-bs-dismiss="modal">TUTUP</button>
+                    <button type="submit" class="btn btn-ubah-modal">UBAH</button>
                 </div>
             </form>
         </div>
@@ -203,10 +280,26 @@
 </div>
 
 <script>
-function openSetStatusModal(siswaId, siswaNama, currentStatus) {
+function openSetStatusModal(siswaId, siswaNama, currentStatus, keterangan) {
     document.getElementById('modal_siswa_id').value = siswaId;
     document.getElementById('modal_siswa_nama').innerText = siswaNama;
-    document.getElementById('modal_status').value = (currentStatus && currentStatus !== 'BELUM ABSEN') ? currentStatus : 'HADIR';
+    document.getElementById('modal_keterangan').value = keterangan || '';
+
+    const statusVal = (currentStatus && currentStatus !== 'BELUM ABSEN') ? currentStatus : 'HADIR';
+    
+    // Set checked radio button
+    const radioHadir = document.getElementById('status_hadir');
+    const radioTerlambat = document.getElementById('status_terlambat');
+    const radioSakit = document.getElementById('status_sakit');
+    const radioIzin = document.getElementById('status_izin');
+    const radioAlpa = document.getElementById('status_alpa');
+
+    if (radioHadir) radioHadir.checked = (statusVal === 'HADIR');
+    if (radioTerlambat) radioTerlambat.checked = (statusVal === 'TERLAMBAT');
+    if (radioSakit) radioSakit.checked = (statusVal === 'SAKIT');
+    if (radioIzin) radioIzin.checked = (statusVal === 'IZIN');
+    if (radioAlpa) radioAlpa.checked = (statusVal === 'ALPA');
+
     const modal = new bootstrap.Modal(document.getElementById('modalSetStatus'));
     modal.show();
 }

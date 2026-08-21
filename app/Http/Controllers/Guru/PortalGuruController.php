@@ -124,6 +124,7 @@ class PortalGuruController extends Controller
                 'jam_masuk' => $kh ? $kh->jam_masuk : null,
                 'jam_pulang' => $kh ? $kh->jam_pulang : null,
                 'status' => $status,
+                'keterangan' => $kh ? $kh->keterangan : null,
                 'wa_sent' => $kh ? $kh->wa_masuk_sent : false,
                 'kehadiran_id' => $kh ? $kh->id : null,
             ];

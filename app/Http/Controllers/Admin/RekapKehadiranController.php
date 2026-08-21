@@ -74,6 +74,7 @@ class RekapKehadiranController extends Controller
                 'jam_masuk' => $kh ? $kh->jam_masuk : null,
                 'jam_pulang' => $kh ? $kh->jam_pulang : null,
                 'status' => $status,
+                'keterangan' => $kh ? $kh->keterangan : null,
                 'wa_sent' => $kh ? $kh->wa_masuk_sent : false,
                 'kehadiran_id' => $kh ? $kh->id : null,
             ];
@@ -312,6 +313,7 @@ class RekapKehadiranController extends Controller
             'siswa_id' => 'required|exists:siswas,id',
             'tanggal' => 'required|date',
             'status' => 'required|in:HADIR,TERLAMBAT,IZIN,SAKIT,ALPA',
+            'keterangan' => 'nullable|string|max:255',
         ]);
 
         $kehadiran = Kehadiran::where('siswa_id', $request->siswa_id)
@@ -321,6 +323,7 @@ class RekapKehadiranController extends Controller
         if ($kehadiran) {
             $kehadiran->update([
                 'status' => $request->status,
+                'keterangan' => $request->keterangan,
                 'jam_masuk' => in_array($request->status, ['HADIR', 'TERLAMBAT']) ? ($kehadiran->jam_masuk ?? date('H:i:s')) : null,
             ]);
         } else {
@@ -329,6 +332,7 @@ class RekapKehadiranController extends Controller
                 'tanggal' => $request->tanggal,
                 'jam_masuk' => in_array($request->status, ['HADIR', 'TERLAMBAT']) ? date('H:i:s') : null,
                 'status' => $request->status,
+                'keterangan' => $request->keterangan,
                 'wa_masuk_sent' => false,
             ]);
         }
