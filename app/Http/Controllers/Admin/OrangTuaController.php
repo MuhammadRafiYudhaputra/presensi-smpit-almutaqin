@@ -19,6 +19,8 @@ class OrangTuaController extends Controller
             $query->where(function ($q) use ($search) {
                 $q->where('nama_ayah', 'like', "%{$search}%")
                   ->orWhere('nama_ibu', 'like', "%{$search}%")
+                  ->orWhere('nama_wali', 'like', "%{$search}%")
+                  ->orWhere('hubungan_wali', 'like', "%{$search}%")
                   ->orWhere('no_wa', 'like', "%{$search}%")
                   ->orWhere('alamat', 'like', "%{$search}%");
             });
@@ -30,6 +32,9 @@ class OrangTuaController extends Controller
                 break;
             case 'ibu_asc':
                 $query->orderBy('nama_ibu', 'asc');
+                break;
+            case 'wali_asc':
+                $query->orderBy('nama_wali', 'asc');
                 break;
             case 'no_wa':
                 $query->orderBy('no_wa', 'asc');
@@ -50,6 +55,8 @@ class OrangTuaController extends Controller
         $request->validate([
             'nama_ayah' => 'nullable|string|max:255',
             'nama_ibu' => 'nullable|string|max:255',
+            'nama_wali' => 'nullable|string|max:255',
+            'hubungan_wali' => 'nullable|string|max:255',
             'no_wa' => 'required|string|max:30',
             'alamat' => 'nullable|string',
         ]);
@@ -66,6 +73,8 @@ class OrangTuaController extends Controller
         $request->validate([
             'nama_ayah' => 'nullable|string|max:255',
             'nama_ibu' => 'nullable|string|max:255',
+            'nama_wali' => 'nullable|string|max:255',
+            'hubungan_wali' => 'nullable|string|max:255',
             'no_wa' => 'required|string|max:30',
             'alamat' => 'nullable|string',
         ]);

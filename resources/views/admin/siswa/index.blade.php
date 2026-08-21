@@ -157,7 +157,7 @@
                     <td>
                         @if($siswa->orangTua && $siswa->orangTua->no_wa)
                             <span class="text-dark fw-semibold d-block">{{ $siswa->orangTua->no_wa }}</span>
-                            <small class="text-muted">({{ $siswa->orangTua->nama_ayah ?? $siswa->orangTua->nama_ibu ?? 'Wali' }})</small>
+                            <small class="text-muted">({{ $siswa->orangTua->nama_ayah ?: ($siswa->orangTua->nama_ibu ?: ($siswa->orangTua->nama_wali ?: 'Wali')) }})</small>
                         @else
                             <span class="text-muted">-</span>
                         @endif
@@ -249,7 +249,7 @@
                             <select name="orang_tua_id" class="form-select" required>
                                 <option value="">-- Pilih Data Orang Tua --</option>
                                 @foreach($orangTuas as $ot)
-                                    <option value="{{ $ot->id }}">{{ $ot->nama_ayah ?? $ot->nama_ibu }} (WA: {{ $ot->no_wa }})</option>
+                                    <option value="{{ $ot->id }}">{{ $ot->nama_ayah ?: ($ot->nama_ibu ?: ($ot->nama_wali ? $ot->nama_wali . ' (Wali)' : 'Orang Tua')) }} (WA: {{ $ot->no_wa }})</option>
                                 @endforeach
                             </select>
                         </div>
@@ -310,7 +310,7 @@
                             <select name="orang_tua_id" id="edit_orang_tua_id" class="form-select" required>
                                 <option value="">-- Pilih Data Orang Tua --</option>
                                 @foreach($orangTuas as $ot)
-                                    <option value="{{ $ot->id }}">{{ $ot->nama_ayah ?? $ot->nama_ibu }} (WA: {{ $ot->no_wa }})</option>
+                                    <option value="{{ $ot->id }}">{{ $ot->nama_ayah ?: ($ot->nama_ibu ?: ($ot->nama_wali ? $ot->nama_wali . ' (Wali)' : 'Orang Tua')) }} (WA: {{ $ot->no_wa }})</option>
                                 @endforeach
                             </select>
                         </div>

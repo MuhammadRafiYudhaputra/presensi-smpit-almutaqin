@@ -160,8 +160,15 @@
                     <td>
                         @if($s->orangTua)
                             <div>
-                                <span class="d-block fw-semibold text-dark"><i class="fa-solid fa-user-tie text-muted me-1 small"></i>{{ $s->orangTua->nama_ayah ?: '-' }}</span>
-                                <span class="d-block text-muted small"><i class="fa-solid fa-person-dress text-muted me-1 small"></i>{{ $s->orangTua->nama_ibu ?: '-' }}</span>
+                                @if($s->orangTua->nama_ayah)
+                                    <span class="d-block fw-semibold text-dark"><i class="fa-solid fa-user-tie text-muted me-1 small"></i>{{ $s->orangTua->nama_ayah }} <small class="text-muted fw-normal">(Ayah)</small></span>
+                                @endif
+                                @if($s->orangTua->nama_ibu)
+                                    <span class="d-block text-dark small"><i class="fa-solid fa-person-dress text-muted me-1 small"></i>{{ $s->orangTua->nama_ibu }} <small class="text-muted fw-normal">(Ibu)</small></span>
+                                @endif
+                                @if($s->orangTua->nama_wali)
+                                    <span class="d-block text-dark small fw-semibold"><i class="fa-solid fa-hands-holding-child text-warning me-1 small"></i>{{ $s->orangTua->nama_wali }} <small class="badge bg-warning bg-opacity-10 text-dark px-1.5 py-0.5 rounded-pill">{{ $s->orangTua->hubungan_wali ?: 'Wali' }}</small></span>
+                                @endif
                             </div>
                         @else
                             <span class="text-muted fst-italic">- Belum terdata -</span>
