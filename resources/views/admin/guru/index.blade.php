@@ -81,20 +81,18 @@
                         @endif
                     </td>
                     <td class="text-center">
-                        <div class="d-flex flex-column align-items-center gap-1">
-                            <div class="d-flex gap-1 justify-content-center">
-                                <button type="button" class="btn btn-sm btn-info text-white rounded-circle p-1 shadow-sm d-flex align-items-center justify-content-center" style="width: 28px; height: 28px;" title="Reset Password Login" onclick="openResetPasswordModal({{ $guru->id }}, '{{ addslashes($guru->nama) }}')">
-                                    <i class="fa-solid fa-key" style="font-size: 0.75rem;"></i>
-                                </button>
-                                <button type="button" class="btn btn-sm btn-warning text-dark rounded-circle p-1 shadow-sm d-flex align-items-center justify-content-center" style="width: 28px; height: 28px;" title="Edit Data Wali Kelas" onclick="openEditGuruModal({{ json_encode($guru) }}, {{ $guru->kelas ? $guru->kelas->id : 'null' }})">
-                                    <i class="fa-solid fa-pen-to-square" style="font-size: 0.75rem;"></i>
-                                </button>
-                            </div>
+                        <div class="d-inline-flex gap-1 justify-content-center">
+                            <button type="button" class="btn btn-secondary btn-sm rounded-2 d-inline-flex align-items-center justify-content-center" style="width: 32px; height: 32px;" title="Reset Password Login" onclick="openResetPasswordModal({{ $guru->id }}, '{{ addslashes($guru->nama) }}')">
+                                <i class="fa-solid fa-key"></i>
+                            </button>
+                            <button type="button" class="btn btn-primary btn-sm rounded-2 d-inline-flex align-items-center justify-content-center" style="width: 32px; height: 32px;" title="Edit Data Wali Kelas" onclick="openEditGuruModal({{ json_encode($guru) }}, {{ $guru->kelas ? $guru->kelas->id : 'null' }})">
+                                <i class="fa-solid fa-pen"></i>
+                            </button>
                             <form action="{{ route('admin.guru.destroy', $guru->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data guru ini?')">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-outline-danger rounded-circle p-1 d-flex align-items-center justify-content-center" style="width: 28px; height: 28px;" title="Hapus Guru">
-                                    <i class="fa-solid fa-trash-can" style="font-size: 0.75rem;"></i>
+                                <button type="submit" class="btn btn-danger btn-sm rounded-2 d-inline-flex align-items-center justify-content-center" style="width: 32px; height: 32px;" title="Hapus Guru">
+                                    <i class="fa-solid fa-trash"></i>
                                 </button>
                             </form>
                         </div>

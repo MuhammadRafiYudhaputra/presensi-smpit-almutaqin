@@ -63,20 +63,20 @@
                         @endif
                     </td>
                     <td class="text-center">
-                        <span class="badge bg-info text-white px-3 py-2 rounded-3 shadow-sm">
+                        <span class="badge bg-primary bg-opacity-10 text-primary border border-primary px-3 py-2 rounded-pill fw-bold">
                             <i class="fa-solid fa-users me-1"></i> {{ $k->siswas ? $k->siswas->where('status', '!=', 'alumni')->count() : 0 }} Siswa Terdaftar
                         </span>
                     </td>
                     <td class="text-center">
-                        <div class="d-flex gap-1 justify-content-center">
-                            <button type="button" class="btn btn-sm btn-warning text-dark rounded-circle p-1 shadow-sm d-flex align-items-center justify-content-center" style="width: 28px; height: 28px;" title="Edit Data Kelas" onclick="openEditKelasModal({{ json_encode($k) }})">
-                                <i class="fa-solid fa-pen-to-square" style="font-size: 0.75rem;"></i>
+                        <div class="d-inline-flex gap-1 justify-content-center">
+                            <button type="button" class="btn btn-primary btn-sm rounded-2 d-inline-flex align-items-center justify-content-center" style="width: 32px; height: 32px;" title="Edit Data Kelas" onclick="openEditKelasModal({{ json_encode($k) }})">
+                                <i class="fa-solid fa-pen"></i>
                             </button>
                             <form action="{{ route('admin.kelas.destroy', $k->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data rombel kelas ini?')">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-outline-danger rounded-circle p-1 d-flex align-items-center justify-content-center" style="width: 28px; height: 28px;" title="Hapus Kelas">
-                                    <i class="fa-solid fa-trash-can" style="font-size: 0.75rem;"></i>
+                                <button type="submit" class="btn btn-danger btn-sm rounded-2 d-inline-flex align-items-center justify-content-center" style="width: 32px; height: 32px;" title="Hapus Kelas">
+                                    <i class="fa-solid fa-trash"></i>
                                 </button>
                             </form>
                         </div>
