@@ -2,52 +2,60 @@
 
 @section('content')
 <style>
-    .scanner-dark-card {
-        background: #0f172a;
-        border-radius: 24px;
-        padding: 2.5rem 2rem;
-        color: #ffffff;
+    .scanner-main-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        padding: 2.25rem 2rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
         position: relative;
         overflow: hidden;
-        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.2);
     }
 
-    .digital-clock {
-        color: #facc15;
+    .digital-clock-badge {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        color: #0284c7;
         font-weight: 800;
-        font-size: 1.6rem;
-        letter-spacing: 1px;
+        font-size: 1.25rem;
+        letter-spacing: 0.5px;
+        padding: 0.4rem 1.15rem;
+        border-radius: 50rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
         position: absolute;
-        top: 1.75rem;
-        left: 2rem;
+        top: 1.5rem;
+        left: 1.75rem;
     }
 
-    .scanner-target-circle {
-        width: 200px;
-        height: 200px;
-        margin: 1.5rem auto 1rem;
-        border-radius: 50%;
-        border: 2px dashed #00e676;
-        background: radial-gradient(circle, rgba(0, 230, 118, 0.1) 0%, rgba(15, 23, 42, 0) 70%);
+    .scanner-target-box {
+        width: 180px;
+        height: 180px;
+        margin: 1.5rem auto 1.25rem;
+        border-radius: 20px;
+        border: 2px dashed #00c0ef;
+        background: rgba(0, 192, 239, 0.04);
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         text-align: center;
         position: relative;
-        box-shadow: 0 0 25px rgba(0, 230, 118, 0.2);
+        box-shadow: 0 4px 15px rgba(0, 192, 239, 0.08);
     }
 
-    .scanner-target-circle::after {
+    .scanner-target-box::after {
         content: '';
         position: absolute;
         top: 15%;
         left: 10%;
         right: 10%;
         height: 2px;
-        background: #00e676;
-        box-shadow: 0 0 10px #00e676, 0 0 20px #00e676;
+        background: #00c0ef;
+        box-shadow: 0 0 10px #00c0ef, 0 0 20px #00c0ef;
         animation: scanBeam 2.2s infinite ease-in-out;
+        border-radius: 2px;
     }
 
     @keyframes scanBeam {
@@ -56,57 +64,58 @@
     }
 
     .scanner-input-group {
-        max-width: 650px;
-        margin: 1.5rem auto 1.5rem;
+        max-width: 620px;
+        margin: 1.25rem auto 1.25rem;
     }
 
     .scanner-input {
-        background: transparent;
-        border: 2px solid #00e676;
-        color: #ffffff;
-        border-radius: 14px 0 0 14px;
+        background: #ffffff;
+        border: 2px solid #00c0ef;
+        color: #0f172a;
+        border-radius: 12px 0 0 12px;
         padding: 0.85rem 1.25rem;
-        font-size: 1.05rem;
-        letter-spacing: 1px;
+        font-size: 1rem;
+        letter-spacing: 0.5px;
+        box-shadow: none;
     }
 
     .scanner-input:focus {
-        background: transparent;
-        border-color: #00e676;
-        color: #ffffff;
-        box-shadow: 0 0 15px rgba(0, 230, 118, 0.4);
+        background: #ffffff;
+        border-color: #00c0ef;
+        color: #0f172a;
+        box-shadow: 0 0 0 4px rgba(0, 192, 239, 0.15);
     }
 
     .scanner-input::placeholder {
-        color: #64748b;
+        color: #94a3b8;
         font-size: 0.95rem;
     }
 
     .scanner-btn {
-        background: #059669;
-        border: 2px solid #059669;
+        background: #00c0ef;
+        border: 2px solid #00c0ef;
         color: #ffffff;
         font-weight: 700;
-        border-radius: 0 14px 14px 0;
+        border-radius: 0 12px 12px 0;
         padding: 0.85rem 1.75rem;
         display: flex;
         align-items: center;
         gap: 8px;
-        transition: background 0.2s ease;
+        transition: all 0.2s ease;
     }
 
     .scanner-btn:hover {
-        background: #10b981;
-        border-color: #10b981;
+        background: #0891b2;
+        border-color: #0891b2;
         color: #ffffff;
     }
 
     .result-display-card {
-        background: rgba(30, 41, 59, 0.7);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 18px;
-        padding: 2rem;
-        max-width: 650px;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        padding: 1.75rem;
+        max-width: 620px;
         margin: 0 auto;
         text-align: center;
         min-height: 120px;
@@ -114,29 +123,33 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        transition: all 0.2s ease;
     }
 </style>
 
-<div class="scanner-dark-card text-center">
-    <!-- Live Digital Clock -->
-    <div class="digital-clock" id="liveClock">--.--.--</div>
+<div class="scanner-main-card text-center">
+    <!-- Live Digital Clock Badge -->
+    <div class="digital-clock-badge" id="liveClockBadge">
+        <i class="fa-regular fa-clock text-primary"></i>
+        <span id="liveClock">--.--.--</span>
+    </div>
 
-    <!-- Center Target Circle -->
-    <div class="scanner-target-circle">
-        <i class="fa-solid fa-table-cells-large text-warning fs-3 mb-1"></i>
-        <span class="fw-bold text-white fs-6 d-block">SCAN KARTU QR</span>
-        <small class="text-secondary" style="font-size: 0.75rem;">Arahkan QR Code ke Scanner USB</small>
+    <!-- Center Target QR Box -->
+    <div class="scanner-target-box">
+        <i class="fa-solid fa-qrcode fs-2 mb-1" style="color: #00c0ef;"></i>
+        <span class="fw-bold text-dark fs-6 d-block">SCAN KARTU QR</span>
+        <small class="text-muted" style="font-size: 0.75rem;">Dekatkan ke Scanner USB</small>
     </div>
 
     <!-- Status Subtext -->
-    <div class="text-success small fw-semibold mb-3">
-        <i class="fa-solid fa-barcode me-1"></i> Sensor USB Scanner terhubung. Dekatkan QR Code siswa.
+    <div class="d-inline-flex align-items-center gap-2 badge bg-success bg-opacity-10 text-success border border-success px-3 py-2 rounded-pill fw-semibold mb-2">
+        <i class="fa-solid fa-barcode"></i> Sensor USB Scanner Terhubung & Auto-Focus Aktif
     </div>
 
     <!-- Input Scanner Form -->
     <form id="formScan" onsubmit="event.preventDefault(); submitScan();" class="scanner-input-group">
         <div class="input-group">
-            <input type="text" id="qrInput" class="form-control scanner-input" placeholder="Hasil scan USB akan tampil di sini..." autocomplete="off" autofocus>
+            <input type="text" id="qrInput" class="form-control scanner-input" placeholder="Hasil scan USB akan tampil otomatis di sini..." autocomplete="off" autofocus>
             <button type="submit" class="btn scanner-btn">
                 <i class="fa-solid fa-qrcode"></i> Scan
             </button>
@@ -145,10 +158,11 @@
 
     <!-- Result Display Card -->
     <div class="result-display-card" id="resultContainer">
-        <div class="bg-secondary bg-opacity-25 p-3 rounded-circle text-white mb-3 d-inline-flex align-items-center justify-content-center" style="width: 55px; height: 55px;">
-            <i class="fa-solid fa-user-check fs-4"></i>
+        <div class="bg-primary bg-opacity-10 p-3 rounded-circle text-primary mb-2 d-inline-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+            <i class="fa-solid fa-id-card-clip fs-4"></i>
         </div>
-        <h6 class="fw-semibold text-white mb-0">Silakan scan Kartu Presensi siswa pada alat USB scanner.</h6>
+        <h6 class="fw-bold text-dark mb-1">Siap Menerima Presensi Siswa</h6>
+        <small class="text-muted">Silakan arahkan Kartu QR Siswa pada sensor USB scanner.</small>
     </div>
 </div>
 
@@ -202,39 +216,39 @@
                 const isPulang = (data.type === 'pulang');
                 const isTerlambat = (data.status === 'TERLAMBAT');
                 const statusBadge = isPulang 
-                    ? `<span class="badge bg-primary px-3 py-2 rounded-pill fs-6"><i class="fa-solid fa-door-open me-1"></i> PULANG SEKOLAH</span>`
+                    ? `<span class="badge bg-primary bg-opacity-10 text-primary border border-primary px-3 py-2 rounded-pill fs-6 fw-bold"><i class="fa-solid fa-door-open me-1"></i> PULANG SEKOLAH</span>`
                     : (isTerlambat 
-                        ? `<span class="badge bg-warning text-dark px-3 py-2 rounded-pill fs-6"><i class="fa-solid fa-clock me-1"></i> TERLAMBAT</span>`
-                        : `<span class="badge bg-success px-3 py-2 rounded-pill fs-6"><i class="fa-solid fa-circle-check me-1"></i> HADIR TEPAT WAKTU</span>`);
+                        ? `<span class="badge bg-warning bg-opacity-10 text-dark border border-warning px-3 py-2 rounded-pill fs-6 fw-bold" style="color: #92400e !important;"><i class="fa-solid fa-clock me-1 text-warning"></i> TERLAMBAT</span>`
+                        : `<span class="badge bg-success bg-opacity-10 text-success border border-success px-3 py-2 rounded-pill fs-6 fw-bold"><i class="fa-solid fa-circle-check me-1"></i> HADIR TEPAT WAKTU</span>`);
 
                 container.innerHTML = `
                     <div class="d-flex align-items-center justify-content-center gap-3 mb-2">
-                        <div class="bg-success bg-opacity-25 p-3 rounded-circle text-success" style="width: 55px; height: 55px; display:flex; align-items:center; justify-content:center;">
+                        <div class="bg-success bg-opacity-10 p-3 rounded-circle text-success border border-success" style="width: 52px; height: 52px; display:flex; align-items:center; justify-content:center;">
                             <i class="fa-solid fa-check fs-3"></i>
                         </div>
                         <div class="text-start">
-                            <h5 class="fw-bold text-white mb-0">${data.siswa.nama}</h5>
-                            <small class="text-secondary">Kelas ${data.siswa.kelas ? data.siswa.kelas.nama_kelas : '-'} | NISN: ${data.siswa.nisn}</small>
+                            <h5 class="fw-bold text-dark mb-0">${data.siswa.nama}</h5>
+                            <small class="text-muted">Kelas ${data.siswa.kelas ? data.siswa.kelas.nama_kelas : '-'} &bull; NISN: <strong>${data.siswa.nisn}</strong></small>
                         </div>
                     </div>
                     <div class="my-2">${statusBadge}</div>
-                    <small class="text-success mt-1"><i class="fa-brands fa-whatsapp me-1"></i> Notifikasi WhatsApp Terkirim ke Orang Tua (${data.waktu})</small>
+                    <small class="text-success fw-semibold mt-1"><i class="fa-brands fa-whatsapp me-1"></i> Notifikasi WhatsApp Terkirim ke Orang Tua (${data.waktu})</small>
                 `;
             } else if (data.type === 'belum_pulang') {
                 container.innerHTML = `
-                    <div class="bg-warning bg-opacity-25 p-3 rounded-circle text-warning mb-2" style="width: 55px; height: 55px; display:flex; align-items:center; justify-content:center;">
-                        <i class="fa-solid fa-clock-rotate-left fs-3"></i>
+                    <div class="bg-warning bg-opacity-10 p-3 rounded-circle text-warning border border-warning mb-2" style="width: 52px; height: 52px; display:flex; align-items:center; justify-content:center;">
+                        <i class="fa-solid fa-clock-rotate-left fs-3 text-warning"></i>
                     </div>
-                    <h6 class="fw-bold text-warning mb-1">BELUM WAKTUNYA PULANG!</h6>
-                    <small class="text-white">${data.message}</small>
+                    <h6 class="fw-bold text-dark mb-1">BELUM WAKTUNYA PULANG!</h6>
+                    <small class="text-muted">${data.message}</small>
                 `;
             } else {
                 container.innerHTML = `
-                    <div class="bg-danger bg-opacity-25 p-3 rounded-circle text-danger mb-2" style="width: 55px; height: 55px; display:flex; align-items:center; justify-content:center;">
-                        <i class="fa-solid fa-xmark fs-3"></i>
+                    <div class="bg-danger bg-opacity-10 p-3 rounded-circle text-danger border border-danger mb-2" style="width: 52px; height: 52px; display:flex; align-items:center; justify-content:center;">
+                        <i class="fa-solid fa-xmark fs-3 text-danger"></i>
                     </div>
                     <h6 class="fw-bold text-danger mb-1">Presensi Gagal!</h6>
-                    <small class="text-white">${data.message}</small>
+                    <small class="text-muted">${data.message}</small>
                 `;
             }
         })
