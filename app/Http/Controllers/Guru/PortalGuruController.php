@@ -63,29 +63,86 @@ class PortalGuruController extends Controller
         return 1;
     }
 
+    /**
+     * Absensi Siswa Harian Kelas Binaan
+     */
     public function monitoring(Request $request)
     {
         $kelas = $this->getGuruKelas();
         $tanggal = $request->get('tanggal', date('Y-m-d'));
+        $sortBy = $request->get('sort_by', 'nama_asc');
 
-        $query = Kehadiran::with(['siswa.kelas', 'siswa.orangTua'])
-            ->whereDate('tanggal', $tanggal);
+        $query = Siswa::with(['kelas', 'orangTua'])
+            ->where(function ($q) {
+                $q->where('status', '!=', 'alumni')->orWhereNull('status');
+            });
 
         if ($kelas) {
-            $query->whereHas('siswa', function ($q) use ($kelas) {
-                $q->where('kelas_id', $kelas->id);
-            });
+            $query->where('kelas_id', $kelas->id);
         }
 
-        $kehadirans = $query->latest('jam_masuk')->paginate(20)->withQueryString();
+        switch ($sortBy) {
+            case 'nama_desc':
+                $query->orderBy('nama', 'desc');
+                break;
+            case 'nisn':
+                $query->orderBy('nisn', 'asc');
+                break;
+            case 'nama_asc':
+            default:
+                $query->orderBy('nama', 'asc');
+                break;
+        }
 
-        return view('guru.monitoring', compact('kehadirans', 'tanggal', 'kelas'));
+        $siswas = $query->get();
+        $kehadiranMap = Kehadiran::where('tanggal', $tanggal)->get()->keyBy('siswa_id');
+
+        $harianData = [];
+        $summary = [
+            'total' => $siswas->count(),
+            'hadir' => 0,
+            'terlambat' => 0,
+            'izin' => 0,
+            'sakit' => 0,
+            'alpa' => 0,
+            'belum' => 0,
+        ];
+
+        foreach ($siswas as $s) {
+            $kh = $kehadiranMap->get($s->id);
+            $status = $kh ? $kh->status : 'BELUM ABSEN';
+
+            if ($status === 'HADIR') $summary['hadir']++;
+            elseif ($status === 'TERLAMBAT') $summary['terlambat']++;
+            elseif ($status === 'IZIN') $summary['izin']++;
+            elseif ($status === 'SAKIT') $summary['sakit']++;
+            elseif ($status === 'ALPA') $summary['alpa']++;
+            else $summary['belum']++;
+
+            $harianData[] = (object) [
+                'siswa' => $s,
+                'jam_masuk' => $kh ? $kh->jam_masuk : null,
+                'jam_pulang' => $kh ? $kh->jam_pulang : null,
+                'status' => $status,
+                'wa_sent' => $kh ? $kh->wa_masuk_sent : false,
+                'kehadiran_id' => $kh ? $kh->id : null,
+            ];
+        }
+
+        return view('guru.monitoring', compact('kelas', 'tanggal', 'sortBy', 'harianData', 'summary'));
     }
 
+    /**
+     * Rekapitulasi Presensi Berkala (Bulanan & Semester)
+     */
     public function rekap(Request $request)
     {
         $kelas = $this->getGuruKelas();
-        $mode = $request->get('mode', 'harian');
+        $mode = $request->get('mode', 'bulanan');
+        if (!in_array($mode, ['bulanan', 'semester'])) {
+            $mode = 'bulanan';
+        }
+
         $tanggal = $request->get('tanggal', date('Y-m-d'));
         $bulan = (int)$request->get('bulan', date('n'));
         $tahun = (int)$request->get('tahun', date('Y'));
@@ -121,24 +178,10 @@ class PortalGuruController extends Controller
 
         $siswas = $siswaQuery->get();
 
-        $harianData = [];
         $bulananData = [];
         $semesterData = [];
 
-        if ($mode === 'harian') {
-            foreach ($siswas as $s) {
-                $kh = Kehadiran::where('siswa_id', $s->id)
-                    ->whereDate('tanggal', $tanggal)
-                    ->first();
-
-                $harianData[] = (object)[
-                    'siswa' => $s,
-                    'jam_masuk' => $kh ? $kh->jam_masuk : null,
-                    'jam_pulang' => $kh ? $kh->jam_pulang : null,
-                    'status' => $kh ? $kh->status : 'BELUM ABSEN',
-                ];
-            }
-        } elseif ($mode === 'bulanan') {
+        if ($mode === 'bulanan') {
             foreach ($siswas as $s) {
                 $tepatWaktu = Kehadiran::where('siswa_id', $s->id)
                     ->whereYear('tanggal', $tahun)
@@ -248,7 +291,6 @@ class PortalGuruController extends Controller
             'semester',
             'sortBy',
             'hariEfektif',
-            'harianData',
             'bulananData',
             'semesterData'
         ));

@@ -12,29 +12,81 @@ use Carbon\Carbon;
 class RekapKehadiranController extends Controller
 {
     /**
-     * Live Monitoring Kehadiran Siswa
+     * Absensi Siswa Harian (Daftar Presensi Harian Siswa & Set Status)
      */
     public function monitoring(Request $request)
     {
         $tanggal = $request->get('tanggal', Carbon::today('Asia/Jakarta')->toDateString());
         $kelasId = $request->get('kelas_id');
+        $sortBy = $request->get('sort_by', 'nama_asc');
 
-        $query = Kehadiran::with(['siswa.kelas', 'siswa.orangTua'])
-            ->where('tanggal', $tanggal)
-            ->whereHas('siswa', function ($q) {
+        $kelases = Kelas::all();
+
+        $siswasQuery = Siswa::with(['kelas', 'orangTua'])
+            ->where(function ($q) {
                 $q->where('status', '!=', 'alumni')->orWhereNull('status');
             });
 
         if ($kelasId) {
-            $query->whereHas('siswa', function ($q) use ($kelasId) {
-                $q->where('kelas_id', $kelasId);
-            });
+            $siswasQuery->where('kelas_id', $kelasId);
         }
 
-        $kehadirans = $query->orderBy('updated_at', 'desc')->paginate(20)->withQueryString();
-        $kelases = Kelas::all();
+        switch ($sortBy) {
+            case 'nama_desc':
+                $siswasQuery->orderBy('nama', 'desc');
+                break;
+            case 'nisn':
+                $siswasQuery->orderBy('nisn', 'asc');
+                break;
+            case 'nama_asc':
+            default:
+                $siswasQuery->orderBy('nama', 'asc');
+                break;
+        }
 
-        return view('admin.rekap.monitoring', compact('kehadirans', 'kelases', 'tanggal', 'kelasId'));
+        $siswas = $siswasQuery->get();
+        $kehadiranMap = Kehadiran::where('tanggal', $tanggal)->get()->keyBy('siswa_id');
+
+        $harianData = [];
+        $summary = [
+            'total' => $siswas->count(),
+            'hadir' => 0,
+            'terlambat' => 0,
+            'izin' => 0,
+            'sakit' => 0,
+            'alpa' => 0,
+            'belum' => 0,
+        ];
+
+        foreach ($siswas as $siswa) {
+            $kh = $kehadiranMap->get($siswa->id);
+            $status = $kh ? $kh->status : 'BELUM ABSEN';
+
+            if ($status === 'HADIR') $summary['hadir']++;
+            elseif ($status === 'TERLAMBAT') $summary['terlambat']++;
+            elseif ($status === 'IZIN') $summary['izin']++;
+            elseif ($status === 'SAKIT') $summary['sakit']++;
+            elseif ($status === 'ALPA') $summary['alpa']++;
+            else $summary['belum']++;
+
+            $harianData[] = (object) [
+                'siswa' => $siswa,
+                'jam_masuk' => $kh ? $kh->jam_masuk : null,
+                'jam_pulang' => $kh ? $kh->jam_pulang : null,
+                'status' => $status,
+                'wa_sent' => $kh ? $kh->wa_masuk_sent : false,
+                'kehadiran_id' => $kh ? $kh->id : null,
+            ];
+        }
+
+        return view('admin.rekap.monitoring', compact(
+            'harianData',
+            'kelases',
+            'tanggal',
+            'kelasId',
+            'sortBy',
+            'summary'
+        ));
     }
 
     /**
@@ -78,11 +130,15 @@ class RekapKehadiranController extends Controller
     }
 
     /**
-     * Rekapitulasi Presensi 3 Mode (Harian, Bulanan, Semester)
+     * Rekapitulasi Presensi (Mode Bulanan & Mode Semester)
      */
     public function rekap(Request $request)
     {
-        $mode = $request->get('mode', 'harian');
+        $mode = $request->get('mode', 'bulanan');
+        if (!in_array($mode, ['bulanan', 'semester'])) {
+            $mode = 'bulanan';
+        }
+
         $tanggal = $request->get('tanggal', Carbon::today('Asia/Jakarta')->toDateString());
         $bulan = (int) $request->get('bulan', Carbon::now('Asia/Jakarta')->month);
         $tahun = (int) $request->get('tahun', Carbon::now('Asia/Jakarta')->year);
@@ -123,23 +179,7 @@ class RekapKehadiranController extends Controller
 
         $siswas = $siswasQuery->get();
 
-        // 1. Data Rekap Harian
-        $harianData = [];
-        if ($mode === 'harian') {
-            $kehadiranMap = Kehadiran::where('tanggal', $tanggal)->get()->keyBy('siswa_id');
-            foreach ($siswas as $siswa) {
-                $kh = $kehadiranMap->get($siswa->id);
-                $harianData[] = (object) [
-                    'siswa' => $siswa,
-                    'jam_masuk' => $kh ? $kh->jam_masuk : null,
-                    'jam_pulang' => $kh ? $kh->jam_pulang : null,
-                    'status' => $kh ? $kh->status : 'BELUM ABSEN',
-                    'kehadiran_id' => $kh ? $kh->id : null,
-                ];
-            }
-        }
-
-        // 2. Data Rekap Bulanan
+        // 1. Data Rekap Bulanan
         $bulananData = [];
         if ($mode === 'bulanan') {
             foreach ($siswas as $siswa) {
@@ -192,7 +232,7 @@ class RekapKehadiranController extends Controller
             }
         }
 
-        // 3. Data Rekap Semester
+        // 2. Data Rekap Semester
         $semesterData = [];
         if ($mode === 'semester') {
             $startMonth = ($semester === 'ganjil') ? 7 : 1;
@@ -258,7 +298,6 @@ class RekapKehadiranController extends Controller
             'sortBy',
             'hariEfektif',
             'kelases',
-            'harianData',
             'bulananData',
             'semesterData'
         ));
@@ -351,6 +390,14 @@ class RekapKehadiranController extends Controller
                     ->whereBetween(\DB::raw('CAST(strftime("%m", tanggal) as integer)'), [$startMonth, $endMonth])
                     ->where('status', 'ALPA')
                     ->count();
+            } elseif ($mode === 'harian') {
+                $kh = Kehadiran::where('siswa_id', $siswa->id)->where('tanggal', $tanggal)->first();
+                $status = $kh ? $kh->status : 'BELUM ABSEN';
+                $tepatWaktu = ($status === 'HADIR') ? 1 : 0;
+                $terlambat = ($status === 'TERLAMBAT') ? 1 : 0;
+                $izin = ($status === 'IZIN') ? 1 : 0;
+                $sakit = ($status === 'SAKIT') ? 1 : 0;
+                $alpa = ($status === 'ALPA') ? 1 : 0;
             } else {
                 $tepatWaktu = Kehadiran::where('siswa_id', $siswa->id)
                     ->whereYear('tanggal', $tahun)

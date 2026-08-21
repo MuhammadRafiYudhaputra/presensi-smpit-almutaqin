@@ -24,20 +24,17 @@
 </style>
 
 <div class="card card-custom p-4 shadow-sm border-0 rounded-4">
-    <!-- Header & Mode Tabs -->
+    <!-- Header & Mode Tabs (Bulanan & Semester Saja) -->
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
         <div>
             <h5 class="fw-bold mb-1 text-dark d-flex align-items-center">
-                <i class="fa-solid fa-file-invoice text-primary me-2 fs-4"></i> Rekapitulasi Kehadiran Siswa
+                <i class="fa-solid fa-chart-simple text-primary me-2 fs-4"></i> Rekapitulasi Presensi Siswa
             </h5>
-            <small class="text-muted">Laporan presensi harian, rekapitulasi bulanan, dan semester berbasis Hari Efektif Sekolah</small>
+            <small class="text-muted">Akumulasi kehadiran berkala (Bulanan & Semester) berbasis perhitungan Hari Efektif Sekolah</small>
         </div>
         <div class="d-flex flex-wrap gap-2 align-items-center">
-            <!-- Mode Switcher Tabs -->
+            <!-- Mode Switcher Tabs (Bulanan & Semester) -->
             <div class="btn-group p-1 bg-light rounded-pill border" role="group">
-                <a href="{{ route('admin.rekap.index', ['mode' => 'harian', 'tanggal' => $tanggal, 'kelas_id' => $kelasId, 'sort_by' => $sortBy]) }}" class="btn btn-sm rounded-pill px-3 fw-semibold {{ $mode === 'harian' ? 'btn-primary shadow-sm' : 'btn-light text-muted' }}">
-                    <i class="fa-solid fa-calendar-day me-1"></i> Harian
-                </a>
                 <a href="{{ route('admin.rekap.index', ['mode' => 'bulanan', 'bulan' => $bulan, 'tahun' => $tahun, 'hari_efektif' => $hariEfektif, 'kelas_id' => $kelasId, 'sort_by' => $sortBy]) }}" class="btn btn-sm rounded-pill px-3 fw-semibold {{ $mode === 'bulanan' ? 'btn-primary shadow-sm' : 'btn-light text-muted' }}">
                     <i class="fa-solid fa-chart-simple me-1"></i> Bulanan
                 </a>
@@ -47,7 +44,7 @@
             </div>
 
             <!-- Tombol Cetak Laporan -->
-            <a href="{{ route('admin.rekap.cetak', ['mode' => $mode, 'tanggal' => $tanggal, 'bulan' => $bulan, 'tahun' => $tahun, 'semester' => $semester, 'kelas_id' => $kelasId, 'hari_efektif' => $hariEfektif]) }}" target="_blank" class="btn btn-outline-primary rounded-pill px-3 fw-semibold shadow-sm">
+            <a href="{{ route('admin.rekap.cetak', ['mode' => $mode, 'bulan' => $bulan, 'tahun' => $tahun, 'semester' => $semester, 'kelas_id' => $kelasId, 'hari_efektif' => $hariEfektif]) }}" target="_blank" class="btn btn-outline-primary rounded-pill px-3 fw-semibold shadow-sm">
                 <i class="fa-solid fa-print me-1"></i> Cetak Laporan
             </a>
         </div>
@@ -57,12 +54,7 @@
     <form action="{{ route('admin.rekap.index') }}" method="GET" class="row g-3 mb-4 align-items-end">
         <input type="hidden" name="mode" value="{{ $mode }}">
 
-        @if($mode === 'harian')
-            <div class="col-md-4">
-                <label class="form-label fw-bold text-dark mb-1">Pilih Tanggal Presensi</label>
-                <input type="date" name="tanggal" class="form-control shadow-sm" value="{{ $tanggal }}" onchange="this.form.submit()">
-            </div>
-        @elseif($mode === 'bulanan')
+        @if($mode === 'bulanan')
             <div class="col-md-2">
                 <label class="form-label fw-bold text-dark mb-1">Pilih Bulan</label>
                 <select name="bulan" class="form-select shadow-sm" onchange="this.form.submit()">
@@ -132,99 +124,19 @@
             </select>
         </div>
 
-        @if($mode !== 'harian')
-            <div class="col-12 mt-2">
-                <button type="submit" class="btn btn-sm btn-primary rounded-pill px-3 fw-bold">
-                    <i class="fa-solid fa-arrows-rotate me-1"></i> Terapkan Hari Efektif & Filter
-                </button>
-                <small class="text-muted ms-2">
-                    <i class="fa-solid fa-circle-info text-primary me-1"></i>
-                    Dasar persentase kehadiran dihitung dari <strong>{{ $hariEfektif }} Hari Efektif</strong>. Keterlambatan dicatat terpisah untuk tindak lanjut BK.
-                </small>
-            </div>
-        @endif
+        <div class="col-12 mt-2">
+            <button type="submit" class="btn btn-sm btn-primary rounded-pill px-3 fw-bold">
+                <i class="fa-solid fa-arrows-rotate me-1"></i> Terapkan Hari Efektif & Filter
+            </button>
+            <small class="text-muted ms-2">
+                <i class="fa-solid fa-circle-info text-primary me-1"></i>
+                Dasar persentase kehadiran dihitung dari <strong>{{ $hariEfektif }} Hari Efektif</strong>. Keterlambatan dicatat terpisah untuk tindak lanjut BK.
+            </small>
+        </div>
     </form>
 
-    <!-- 1. TAMPILAN TABEL MODE HARIAN -->
-    @if($mode === 'harian')
-    <div class="table-responsive">
-        <table class="table table-bordered table-hover align-middle mb-0" style="font-size: 0.9rem;">
-            <thead class="table-light text-center">
-                <tr>
-                    <th style="width: 50px;" class="text-dark">No</th>
-                    <th class="text-dark" style="width: 120px;">NISN</th>
-                    <th class="text-dark text-start">Nama Peserta Didik</th>
-                    <th style="width: 50px;" class="text-dark">JK</th>
-                    <th class="text-dark" style="width: 110px;">Kelas</th>
-                    <th class="text-dark" style="width: 130px;">Jam Masuk (Pagi)</th>
-                    <th class="text-dark" style="width: 130px;">Jam Pulang (Sore)</th>
-                    <th class="text-dark" style="width: 180px;">Status Kehadiran Harian</th>
-                    <th class="text-center text-dark" style="width: 120px;">Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse($harianData as $idx => $row)
-                <tr>
-                    <td class="text-center fw-bold">{{ $idx + 1 }}</td>
-                    <td class="text-center fw-bold text-dark">{{ $row->siswa->nisn }}</td>
-                    <td class="fw-bold text-dark">{{ $row->siswa->nama }}</td>
-                    <td class="text-center">
-                        <span class="badge {{ $row->siswa->jenis_kelamin === 'L' ? 'bg-primary bg-opacity-10 text-primary border border-primary' : 'bg-danger bg-opacity-10 text-danger border border-danger' }} px-2 fw-bold">{{ $row->siswa->jenis_kelamin }}</span>
-                    </td>
-                    <td class="text-center">
-                        <span class="badge bg-primary bg-opacity-10 text-primary border border-primary px-2 py-1 rounded-2">
-                            Kelas {{ $row->siswa->kelas->nama_kelas ?? '-' }}
-                        </span>
-                    </td>
-                    <td class="text-center text-muted">
-                        @if($row->jam_masuk)
-                            <span class="badge bg-light text-dark border px-2 py-1"><i class="fa-regular fa-clock text-primary me-1"></i>{{ $row->jam_masuk }}</span>
-                        @else
-                            -
-                        @endif
-                    </td>
-                    <td class="text-center text-muted">
-                        @if($row->jam_pulang)
-                            <span class="badge bg-light text-dark border px-2 py-1"><i class="fa-solid fa-door-open text-success me-1"></i>{{ $row->jam_pulang }}</span>
-                        @else
-                            -
-                        @endif
-                    </td>
-                    <td class="text-center">
-                        @if($row->status === 'HADIR')
-                            <span class="badge bg-success bg-opacity-10 text-success border border-success px-3 py-2 rounded-pill fw-bold"><i class="fa-solid fa-circle-check me-1"></i> HADIR</span>
-                        @elseif($row->status === 'TERLAMBAT')
-                            <span class="badge bg-warning bg-opacity-10 text-dark border border-warning px-3 py-2 rounded-pill fw-bold" style="color: #92400e !important;"><i class="fa-solid fa-clock me-1 text-warning"></i> TERLAMBAT</span>
-                        @elseif($row->status === 'IZIN')
-                            <span class="badge bg-info bg-opacity-10 text-primary border border-info px-3 py-2 rounded-pill fw-bold"><i class="fa-solid fa-envelope-open-text me-1"></i> IZIN</span>
-                        @elseif($row->status === 'SAKIT')
-                            <span class="badge bg-secondary bg-opacity-10 text-dark border border-secondary px-3 py-2 rounded-pill fw-bold"><i class="fa-solid fa-notes-medical me-1"></i> SAKIT</span>
-                        @elseif($row->status === 'ALPA')
-                            <span class="badge bg-danger bg-opacity-10 text-danger border border-danger px-3 py-2 rounded-pill fw-bold"><i class="fa-solid fa-xmark me-1"></i> ALPA</span>
-                        @else
-                            <span class="badge bg-light text-secondary border px-3 py-2 rounded-pill fw-semibold"><i class="fa-regular fa-circle me-1"></i> BELUM ABSEN</span>
-                        @endif
-                    </td>
-                    <td class="text-center">
-                        <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3 py-1 fw-semibold shadow-sm" onclick="openSetStatusModal({{ $row->siswa->id }}, '{{ addslashes($row->siswa->nama) }}', '{{ $row->status }}')">
-                            <i class="fa-solid fa-pen-to-square me-1"></i> Set Status
-                        </button>
-                    </td>
-                </tr>
-                @empty
-                <tr>
-                    <td colspan="9" class="text-center text-muted py-5">
-                        <i class="fa-solid fa-folder-open fs-2 d-block mb-2 text-muted"></i>
-                        Tidak ada data peserta didik ditemukan.
-                    </td>
-                </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
-
-    <!-- 2. TAMPILAN TABEL MODE BULANAN -->
-    @elseif($mode === 'bulanan')
+    <!-- 1. TAMPILAN TABEL MODE BULANAN -->
+    @if($mode === 'bulanan')
     <div class="table-responsive">
         <table class="table table-bordered table-hover align-middle mb-0" style="font-size: 0.9rem;">
             <thead class="table-light text-center">
@@ -319,7 +231,7 @@
         </table>
     </div>
 
-    <!-- 3. TAMPILAN TABEL MODE SEMESTER -->
+    <!-- 2. TAMPILAN TABEL MODE SEMESTER -->
     @elseif($mode === 'semester')
     <div class="table-responsive">
         <table class="table table-bordered table-hover align-middle mb-0" style="font-size: 0.9rem;">
@@ -460,53 +372,7 @@
     </div>
 </div>
 
-<!-- Modal Set Status Kehadiran Manual -->
-<div class="modal fade" id="modalSetStatus" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content rounded-4 border-0 shadow">
-            <div class="modal-header border-0 pb-0">
-                <h5 class="fw-bold text-dark"><i class="fa-solid fa-user-pen me-2 text-primary"></i>Ubah Status Kehadiran Siswa</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <form action="{{ route('admin.rekap.updateStatus') }}" method="POST">
-                @csrf
-                <input type="hidden" name="siswa_id" id="modal_siswa_id">
-                <input type="hidden" name="tanggal" value="{{ $tanggal }}">
-                <div class="modal-body">
-                    <div class="p-3 bg-light rounded-3 mb-3 border">
-                        <small class="text-muted d-block">Nama Siswa:</small>
-                        <span class="fw-bold text-dark fs-6" id="modal_siswa_nama">-</span>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold text-dark">Pilih Status Baru:</label>
-                        <select name="status" id="modal_status" class="form-select" required>
-                            <option value="HADIR">HADIR (Hadir Tepat Waktu)</option>
-                            <option value="TERLAMBAT">TERLAMBAT (Hadir Melebihi Jam Masuk)</option>
-                            <option value="IZIN">IZIN (Surat / Keterangan Izin)</option>
-                            <option value="SAKIT">SAKIT (Surat Dokter / Sakit)</option>
-                            <option value="ALPA">ALPA (Tanpa Keterangan)</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="modal-footer border-0 pt-0">
-                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm">Simpan Perubahan</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
 <script>
-function openSetStatusModal(siswaId, siswaNama, currentStatus) {
-    document.getElementById('modal_siswa_id').value = siswaId;
-    document.getElementById('modal_siswa_nama').innerText = siswaNama;
-    document.getElementById('modal_status').value = currentStatus || 'HADIR';
-    const modal = new bootstrap.Modal(document.getElementById('modalSetStatus'));
-    modal.show();
-}
-
 function openRiwayatTerlambatModal(nama, nisn, kelas, riwayat, noWa) {
     document.getElementById('bk_siswa_nama').innerText = nama;
     document.getElementById('bk_siswa_nisn').innerText = nisn;
