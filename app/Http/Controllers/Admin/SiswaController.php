@@ -29,7 +29,9 @@ class SiswaController extends Controller
 
         // Filter Status Siswa (Aktif vs Alumni vs Semua)
         if ($status === 'aktif') {
-            $query->where('status', '!=', 'alumni')->orWhereNull('status');
+            $query->where(function ($q) {
+                $q->where('status', '!=', 'alumni')->orWhereNull('status');
+            });
         } elseif ($status === 'alumni') {
             $query->where('status', 'alumni');
         }
@@ -67,7 +69,9 @@ class SiswaController extends Controller
         $orangTuas = OrangTua::all();
 
         // Hitung statistik untuk badge status
-        $countAktif = Siswa::where('status', '!=', 'alumni')->orWhereNull('status')->count();
+        $countAktif = Siswa::where(function ($q) {
+            $q->where('status', '!=', 'alumni')->orWhereNull('status');
+        })->count();
         $countAlumni = Siswa::where('status', 'alumni')->count();
         $countSemua = Siswa::count();
 

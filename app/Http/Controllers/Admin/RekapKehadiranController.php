@@ -358,7 +358,9 @@ class RekapKehadiranController extends Controller
         $hariEfektif = (int) $request->get('hari_efektif', $defaultHariEfektif);
         if ($hariEfektif <= 0) $hariEfektif = $defaultHariEfektif;
 
-        $siswasQuery = Siswa::with('kelas')->where('status', '!=', 'alumni')->orWhereNull('status');
+        $siswasQuery = Siswa::with('kelas')->where(function ($q) {
+            $q->where('status', '!=', 'alumni')->orWhereNull('status');
+        });
         if ($kelasId) {
             $siswasQuery->where('kelas_id', $kelasId);
         }

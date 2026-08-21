@@ -31,8 +31,9 @@ class KelasController extends Controller
 
         // Ambil semua siswa aktif untuk pengecualian tinggal kelas di modal kenaikan
         $allActiveSiswa = Siswa::with('kelas')
-            ->where('status', '!=', 'alumni')
-            ->orWhereNull('status')
+            ->where(function ($q) {
+                $q->where('status', '!=', 'alumni')->orWhereNull('status');
+            })
             ->orderBy('nama', 'asc')
             ->get();
 
