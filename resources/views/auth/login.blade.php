@@ -322,18 +322,8 @@
             </div>
 
             <div class="brand-title">
-                Sistem Presensi &amp; Rekapitulasi Siswa
+                Sistem Monitoring Presensi Siswa
             </div>
-            
-            <p class="brand-desc">
-                Portal terpadu pencatatan presensi digital siswa, pemantauan wali kelas, dan notifikasi real-time orang tua.
-            </p>
-
-            <ul class="brand-features">
-                <li><i class="fa-solid fa-qrcode"></i> Presensi Cepat QR Scanner</li>
-                <li><i class="fa-brands fa-whatsapp"></i> Notifikasi WhatsApp Otomatis</li>
-                <li><i class="fa-solid fa-file-pdf"></i> Generate Laporan Bulanan &amp; Semester</li>
-            </ul>
         </div>
 
         <div class="brand-footer">
@@ -384,12 +374,6 @@
 
             <!-- Remember Me & Forgot Password Link -->
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="remember" id="remember" checked style="cursor: pointer;">
-                    <label class="form-check-label text-muted small" for="remember" style="cursor: pointer; font-size: 0.8rem;">
-                        Ingat Saya
-                    </label>
-                </div>
                 <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#modalForgotPassword" class="text-decoration-none small text-primary fw-bold" style="font-size: 0.8rem;">
                     <i class="fa-solid fa-key me-1"></i> Lupa Password?
                 </a>

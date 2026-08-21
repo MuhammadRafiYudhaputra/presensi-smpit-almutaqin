@@ -35,7 +35,7 @@
                     </span>
                 @endif
             </h5>
-            <small class="text-muted">Akumulasi kehadiran berkala (Bulanan & Semester) berbasis Hari Efektif Sekolah</small>
+            <small class="text-muted">Akumulasi kehadiran Sekolah</small>
         </div>
         <div class="d-flex gap-2 align-items-center flex-nowrap flex-shrink-0">
             <!-- Mode Switcher Tabs (Bulanan & Semester Saja) -->
@@ -79,7 +79,7 @@
                 </select>
             </div>
             <div class="col-md-3">
-                <label class="form-label fw-bold text-dark mb-1">Hari Efektif (Masuk)</label>
+                <label class="form-label fw-bold text-dark mb-1">Hari Efektif</label>
                 <div class="input-group shadow-sm">
                     <input type="number" name="hari_efektif" class="form-control" value="{{ $hariEfektif }}" min="1" max="31" title="Jumlah hari efektif/masuk sekolah dalam bulan ini">
                     <span class="input-group-text bg-light text-muted small">Hari</span>
@@ -111,7 +111,7 @@
         @endif
 
         <div class="col-md-4">
-            <label class="form-label fw-bold text-dark mb-1">Urutkan Data (Sorting)</label>
+            <label class="form-label fw-bold text-dark mb-1">Urutkan Data</label>
             <select name="sort_by" class="form-select shadow-sm" onchange="this.form.submit()">
                 <option value="nama_asc" {{ ($sortBy ?? '') === 'nama_asc' ? 'selected' : '' }}>Nama Siswa (A-Z)</option>
                 <option value="nama_desc" {{ ($sortBy ?? '') === 'nama_desc' ? 'selected' : '' }}>Nama Siswa (Z-A)</option>

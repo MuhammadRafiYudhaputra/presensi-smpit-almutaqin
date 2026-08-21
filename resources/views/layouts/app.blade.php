@@ -523,7 +523,7 @@
                 <div class="d-flex align-items-center gap-3">
                     <div class="user-role-badge">
                         <i class="fa-solid fa-circle-user text-danger"></i>
-                        <span>USER : {{ strtoupper(Auth::user()->role === 'guru' ? (Auth::user()->name) : 'SUPERADMIN') }}</span>
+                        <span>USER : {{ strtoupper(Auth::user()->role === 'guru' ? (Auth::user()->name) : 'ADMIN') }}</span>
                     </div>
                 </div>
             </div>
