@@ -74,7 +74,7 @@
                 </select>
             </div>
             <div class="col-md-2">
-                <label class="form-label fw-bold text-dark mb-1">Hari Efektif (Masuk)</label>
+                <label class="form-label fw-bold text-dark mb-1">Hari Efektif</label>
                 <div class="input-group shadow-sm">
                     <input type="number" name="hari_efektif" class="form-control" value="{{ $hariEfektif }}" min="1" max="31" title="Jumlah hari efektif/masuk sekolah dalam bulan ini">
                     <span class="input-group-text bg-light text-muted small">Hari</span>
@@ -116,7 +116,7 @@
         </div>
 
         <div class="col-md-3">
-            <label class="form-label fw-bold text-dark mb-1">Urutkan Data (Sorting)</label>
+            <label class="form-label fw-bold text-dark mb-1">Urutkan Data</label>
             <select name="sort_by" class="form-select shadow-sm" onchange="this.form.submit()">
                 <option value="nama_asc" {{ ($sortBy ?? '') === 'nama_asc' ? 'selected' : '' }}>Nama Siswa (A-Z)</option>
                 <option value="nama_desc" {{ ($sortBy ?? '') === 'nama_desc' ? 'selected' : '' }}>Nama Siswa (Z-A)</option>
@@ -128,10 +128,6 @@
             <button type="submit" class="btn btn-sm btn-primary rounded-pill px-3 fw-bold">
                 <i class="fa-solid fa-arrows-rotate me-1"></i> Terapkan Hari Efektif & Filter
             </button>
-            <small class="text-muted ms-2">
-                <i class="fa-solid fa-circle-info text-primary me-1"></i>
-                Dasar persentase kehadiran dihitung dari <strong>{{ $hariEfektif }} Hari Efektif</strong>. Keterlambatan dicatat terpisah untuk tindak lanjut BK.
-            </small>
         </div>
     </form>
 
@@ -146,7 +142,7 @@
                     <th rowspan="2" class="align-middle text-dark text-start" style="min-width: 200px;">Nama Peserta Didik</th>
                     <th rowspan="2" class="align-middle text-dark" style="width: 100px;">Kelas</th>
                     <th colspan="5" class="text-dark bg-light">
-                        Akumulasi Kehadiran (Bulan {{ $bulan }}/{{ $tahun }} &bull; Dasar: {{ $hariEfektif }} Hari Efektif)
+                        Kehadiran Bulan {{ \Carbon\Carbon::create()->month($bulan)->translatedFormat('F') }} {{ $tahun }}
                     </th>
                     <th rowspan="2" class="align-middle text-dark" style="width: 95px;">Persentase</th>
                     <th rowspan="2" class="align-middle text-dark" style="width: 140px;">Catatan BK</th>
@@ -238,7 +234,7 @@
                     <th rowspan="2" class="align-middle text-dark text-start" style="min-width: 200px;">Nama Peserta Didik</th>
                     <th rowspan="2" class="align-middle text-dark" style="width: 100px;">Kelas</th>
                     <th colspan="5" class="text-dark bg-light">
-                        Akumulasi Kehadiran (Semester {{ ucfirst($semester) }} {{ $tahun }} &bull; Dasar: {{ $hariEfektif }} Hari Efektif)
+                        Kehadiran Semester {{ ucfirst($semester) }} {{ $tahun }}/{{ $tahun + 1 }}
                     </th>
                     <th rowspan="2" class="align-middle text-dark" style="width: 95px;">Persentase</th>
                     <th rowspan="2" class="align-middle text-dark" style="width: 140px;">Catatan BK</th>

@@ -141,7 +141,7 @@
                     <th rowspan="2" class="align-middle text-dark text-start" style="min-width: 200px;">Nama Peserta Didik</th>
                     <th rowspan="2" class="align-middle text-dark" style="width: 100px;">Kelas</th>
                     <th colspan="5" class="text-dark bg-light">
-                        Akumulasi Kehadiran (Bulan {{ $bulan }}/{{ $tahun }} &bull; Dasar: {{ $hariEfektif }} Hari Efektif)
+                        Kehadiran Bulan {{ \Carbon\Carbon::create()->month($bulan)->translatedFormat('F') }} {{ $tahun }}
                     </th>
                     <th rowspan="2" class="align-middle text-dark" style="width: 95px;">Persentase</th>
                     <th rowspan="2" class="align-middle text-dark" style="width: 140px;">Catatan BK</th>
@@ -233,7 +233,7 @@
                     <th rowspan="2" class="align-middle text-dark text-start" style="min-width: 200px;">Nama Peserta Didik</th>
                     <th rowspan="2" class="align-middle text-dark" style="width: 100px;">Kelas</th>
                     <th colspan="5" class="text-dark bg-light">
-                        Akumulasi Kehadiran (Semester {{ ucfirst($semester) }} {{ $tahun }} &bull; Dasar: {{ $hariEfektif }} Hari Efektif)
+                        Kehadiran Semester {{ ucfirst($semester) }} {{ $tahun }}/{{ $tahun + 1 }}
                     </th>
                     <th rowspan="2" class="align-middle text-dark" style="width: 95px;">Persentase</th>
                     <th rowspan="2" class="align-middle text-dark" style="width: 140px;">Catatan BK</th>
