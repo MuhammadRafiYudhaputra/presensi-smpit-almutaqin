@@ -67,10 +67,16 @@
                     <td>
                         @if($ot->nama_ayah || $ot->nama_ibu)
                             @if($ot->nama_ayah)
-                                <div class="fw-bold text-dark"><i class="fa-solid fa-user-tie me-1.5 text-primary"></i>{{ $ot->nama_ayah }}</div>
+                                <div class="fw-bold text-dark d-flex align-items-center gap-2">
+                                    <i class="fa-solid fa-user-tie text-primary fs-6"></i>
+                                    <span>{{ $ot->nama_ayah }}</span>
+                                </div>
                             @endif
                             @if($ot->nama_ibu)
-                                <div class="fw-bold text-dark {{ $ot->nama_ayah ? 'mt-1' : '' }}"><i class="fa-solid fa-person-dress me-1.5 text-danger"></i>{{ $ot->nama_ibu }}</div>
+                                <div class="fw-bold text-dark d-flex align-items-center gap-2 {{ $ot->nama_ayah ? 'mt-1.5' : '' }}">
+                                    <i class="fa-solid fa-person-dress text-danger fs-6"></i>
+                                    <span>{{ $ot->nama_ibu }}</span>
+                                </div>
                             @endif
                         @else
                             <span class="text-muted fst-italic">- Data Orang Tua Kosong -</span>
@@ -78,8 +84,9 @@
                     </td>
                     <td>
                         @if($ot->nama_wali)
-                            <div class="fw-bold text-dark">
-                                <i class="fa-solid fa-hands-holding-child me-1 text-warning"></i>{{ $ot->nama_wali }}
+                            <div class="fw-bold text-dark d-flex align-items-center gap-2">
+                                <i class="fa-solid fa-hands-holding-child text-warning fs-6"></i>
+                                <span>{{ $ot->nama_wali }}</span>
                             </div>
                             <span class="badge bg-warning bg-opacity-10 text-dark border border-warning px-2 py-0.5 rounded-pill mt-1" style="font-size: 0.75rem;">
                                 {{ $ot->hubungan_wali ?: 'Wali Siswa' }}
@@ -90,7 +97,7 @@
                     </td>
                     <td class="text-center">
                         <span class="badge bg-success bg-opacity-10 text-success border border-success px-2.5 py-1.5 rounded-pill shadow-sm text-nowrap" style="font-size: 0.82rem;">
-                            <i class="fa-brands fa-whatsapp me-1"></i> {{ $ot->no_wa }}
+                            <i class="fa-brands fa-whatsapp me-1.5"></i> {{ $ot->no_wa }}
                         </span>
                     </td>
                     <td>
