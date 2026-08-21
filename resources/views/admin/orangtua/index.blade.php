@@ -11,11 +11,11 @@
             <small class="text-muted">Data orang tua, wali murid siswa, nomor WhatsApp notifikasi presensi otomatis, dan anak yang terhubung</small>
         </div>
         <div class="d-flex gap-2 flex-wrap align-items-center">
-            <button type="button" class="btn btn-outline-primary rounded-pill px-3 py-2 fw-semibold shadow-sm btn-sm d-inline-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#modalImportOrangTua">
+            <button type="button" class="btn btn-outline-primary rounded-pill px-3 py-1.5 fw-semibold shadow-sm btn-sm d-inline-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#modalImportOrangTua">
                 <i class="fa-solid fa-file-import me-1"></i> Import Orang Tua
             </button>
-            <button type="button" class="btn btn-primary rounded-pill px-3 py-2 fw-semibold shadow-sm btn-sm d-inline-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#modalAddOrangTua">
-                <i class="fa-solid fa-plus me-1"></i> Tambah Orang Tua / Wali
+            <button type="button" class="btn btn-primary rounded-pill px-3 py-1.5 fw-semibold shadow-sm btn-sm d-inline-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#modalAddOrangTua">
+                <i class="fa-solid fa-plus me-1"></i> Tambah Orang Tua
             </button>
         </div>
     </div>
@@ -52,8 +52,8 @@
             <thead class="table-light text-center">
                 <tr>
                     <th style="width: 50px;" class="text-dark">No</th>
-                    <th class="text-dark text-start" style="width: 200px;">Data Orang Tua (Ayah / Ibu)</th>
-                    <th class="text-dark text-start" style="width: 180px;">Wali Siswa (Pengganti)</th>
+                    <th class="text-dark text-start" style="width: 200px;">Data Orang Tua</th>
+                    <th class="text-dark text-start" style="width: 180px;">Wali Siswa</th>
                     <th class="text-dark" style="width: 170px;">No. WhatsApp Notifikasi</th>
                     <th class="text-dark text-start" style="width: 200px;">Peserta Didik (Anak)</th>
                     <th class="text-dark text-start">Alamat</th>
@@ -67,10 +67,10 @@
                     <td>
                         @if($ot->nama_ayah || $ot->nama_ibu)
                             @if($ot->nama_ayah)
-                                <div class="fw-bold text-dark"><i class="fa-solid fa-user-tie me-1 text-primary small"></i>{{ $ot->nama_ayah }} <small class="text-muted fw-normal">(Ayah)</small></div>
+                                <div class="fw-bold text-dark"><i class="fa-solid fa-user-tie me-1.5 text-primary"></i>{{ $ot->nama_ayah }}</div>
                             @endif
                             @if($ot->nama_ibu)
-                                <div class="fw-bold text-dark mt-1"><i class="fa-solid fa-person-dress me-1 text-danger small"></i>{{ $ot->nama_ibu }} <small class="text-muted fw-normal">(Ibu)</small></div>
+                                <div class="fw-bold text-dark {{ $ot->nama_ayah ? 'mt-1' : '' }}"><i class="fa-solid fa-person-dress me-1.5 text-danger"></i>{{ $ot->nama_ibu }}</div>
                             @endif
                         @else
                             <span class="text-muted fst-italic">- Data Orang Tua Kosong -</span>
@@ -97,7 +97,7 @@
                         @if($ot->siswas && count($ot->siswas) > 0)
                             @foreach($ot->siswas as $anak)
                                 <span class="badge bg-primary bg-opacity-10 text-primary border border-primary px-2 py-1 mb-1 d-inline-block rounded-2">
-                                    {{ $anak->nama }} (Kelas {{ $anak->kelas ? $anak->kelas->nama_kelas : '-' }})
+                                    {{ $anak->nama }}
                                 </span>
                             @endforeach
                         @else
