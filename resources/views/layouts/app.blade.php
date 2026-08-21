@@ -419,7 +419,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('admin.rekap.cetak') }}" target="_blank" class="nav-link">
+                        <a href="{{ route('admin.laporan.index') }}" class="nav-link {{ request()->routeIs('admin.laporan.*') ? 'active' : '' }}">
                             <i class="fa-solid fa-print"></i> Generate Laporan
                         </a>
                     </li>
@@ -474,6 +474,8 @@
                             Absensi Siswa
                         @elseif(request()->routeIs('admin.rekap.index') || request()->routeIs('guru.rekap'))
                             Rekapitulasi Kehadiran Siswa
+                        @elseif(request()->routeIs('admin.laporan.*'))
+                            Generate Laporan
                         @elseif(request()->routeIs('guru.siswa.*'))
                             Biodata Siswa Binaan
                         @elseif(request()->routeIs('presensi.scan'))

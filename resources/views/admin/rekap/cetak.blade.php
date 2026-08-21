@@ -84,6 +84,7 @@
 </head>
 <body>
 
+    @if(request()->get('format') !== 'doc')
     <!-- Control Toolbar (Opsi Custom Pejabat TTD & Tombol Cetak) -->
     <div class="control-bar">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3">
@@ -118,6 +119,7 @@
             </div>
         </div>
     </div>
+    @endif
 
     <!-- Lembar Dokumen Cetak Laporan -->
     <div class="paper-container">
@@ -221,6 +223,7 @@
         </div>
     </div>
 
+@if(request()->get('format') !== 'doc')
 <script>
     // Load stored values or defaults
     const defaultKota = "Garut, {{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}";
@@ -228,24 +231,27 @@
     const defaultNip = localStorage.getItem('smpit_kepsek_nip') || "197508122005011003";
     const defaultWali = "{{ $kelas->waliKelas->nama ?? 'Ustadz Ahmad, S.Pd' }}";
 
-    document.getElementById('inputKotaTgl').value = defaultKota;
-    document.getElementById('inputKepsek').value = defaultKepsek;
-    document.getElementById('inputNipKepsek').value = defaultNip;
-    document.getElementById('inputWali').value = defaultWali;
-
-    syncSignature();
+    if (document.getElementById('inputKotaTgl')) {
+        document.getElementById('inputKotaTgl').value = defaultKota;
+        document.getElementById('inputKepsek').value = defaultKepsek;
+        document.getElementById('inputNipKepsek').value = defaultNip;
+        document.getElementById('inputWali').value = defaultWali;
+        syncSignature();
+    }
 
     function syncSignature() {
-        const kota = document.getElementById('inputKotaTgl').value || defaultKota;
+        const inputKota = document.getElementById('inputKotaTgl');
+        if (!inputKota) return;
+        const kota = inputKota.value || defaultKota;
         const kepsek = document.getElementById('inputKepsek').value || '________________________';
         const nip = document.getElementById('inputNipKepsek').value || '-';
         const wali = document.getElementById('inputWali').value || '________________________';
 
-        document.getElementById('dispKotaKepsek').innerText = kota;
-        document.getElementById('dispKotaWali').innerText = kota;
-        document.getElementById('dispNamaKepsek').innerText = kepsek;
-        document.getElementById('dispNipKepsek').innerText = nip;
-        document.getElementById('dispNamaWali').innerText = wali;
+        if (document.getElementById('dispKotaKepsek')) document.getElementById('dispKotaKepsek').innerText = kota;
+        if (document.getElementById('dispKotaWali')) document.getElementById('dispKotaWali').innerText = kota;
+        if (document.getElementById('dispNamaKepsek')) document.getElementById('dispNamaKepsek').innerText = kepsek;
+        if (document.getElementById('dispNipKepsek')) document.getElementById('dispNipKepsek').innerText = nip;
+        if (document.getElementById('dispNamaWali')) document.getElementById('dispNamaWali').innerText = wali;
 
         // Save in localStorage for future prints
         localStorage.setItem('smpit_kepsek_nama', kepsek);
@@ -253,16 +259,23 @@
     }
 
     // Direct contentEditable sync to input fields
-    document.getElementById('dispNamaKepsek').addEventListener('input', function() {
-        document.getElementById('inputKepsek').value = this.innerText.trim();
-        localStorage.setItem('smpit_kepsek_nama', this.innerText.trim());
-    });
+    const dispNamaKepsek = document.getElementById('dispNamaKepsek');
+    if (dispNamaKepsek) {
+        dispNamaKepsek.addEventListener('input', function() {
+            if (document.getElementById('inputKepsek')) document.getElementById('inputKepsek').value = this.innerText.trim();
+            localStorage.setItem('smpit_kepsek_nama', this.innerText.trim());
+        });
+    }
 
-    document.getElementById('dispNipKepsek').addEventListener('input', function() {
-        document.getElementById('inputNipKepsek').value = this.innerText.trim();
-        localStorage.setItem('smpit_kepsek_nip', this.innerText.trim());
-    });
+    const dispNipKepsek = document.getElementById('dispNipKepsek');
+    if (dispNipKepsek) {
+        dispNipKepsek.addEventListener('input', function() {
+            if (document.getElementById('inputNipKepsek')) document.getElementById('inputNipKepsek').value = this.innerText.trim();
+            localStorage.setItem('smpit_kepsek_nip', this.innerText.trim());
+        });
+    }
 </script>
+@endif
 
 </body>
 </html>

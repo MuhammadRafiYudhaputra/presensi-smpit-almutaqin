@@ -444,6 +444,66 @@ class RekapKehadiranController extends Controller
             ];
         }
 
+        // Export ke format Microsoft Word (.doc) jika diminta
+        if ($request->get('format') === 'doc' || $request->has('export_doc')) {
+            $filename = "Laporan_Presensi_SMPIT_{$mode}_" . ($mode === 'semester' ? $semester : $bulan) . "_{$tahun}.doc";
+            return response()->view('admin.rekap.cetak', compact('mode', 'bulan', 'tahun', 'semester', 'kelas', 'dataLaporan', 'tanggal', 'hariEfektif'))
+                ->header('Content-Type', 'application/vnd.ms-word')
+                ->header('Content-Disposition', "attachment; filename=\"{$filename}\"")
+                ->header('Cache-Control', 'max-age=0');
+        }
+
+        // Export ke format CSV / Excel jika diminta
+        if ($request->get('format') === 'csv' || $request->has('export_csv')) {
+            $filename = "Laporan_Presensi_SMPIT_{$mode}_" . ($mode === 'semester' ? $semester : $bulan) . "_{$tahun}.csv";
+            $headers = [
+                'Content-Type' => 'text/csv; charset=utf-8',
+                'Content-Disposition' => "attachment; filename=\"{$filename}\"",
+            ];
+            $callback = function () use ($dataLaporan, $mode, $bulan, $tahun, $semester, $kelas, $hariEfektif) {
+                $file = fopen('php://output', 'w');
+                fputs($file, "\xEF\xBB\xBF");
+                fputcsv($file, ['LAPORAN REKAPITULASI PRESENSI SISWA']);
+                fputcsv($file, ['SMP ISLAM TERPADU AL-MUTTAQIN']);
+                fputcsv($file, ['Periode: ' . ($mode === 'semester' ? 'Semester ' . ucfirst($semester) . " {$tahun}/" . ($tahun + 1) : 'Bulan ' . $bulan . "/{$tahun}")]);
+                fputcsv($file, ['Kelas: ' . ($kelas ? $kelas->nama_kelas : 'Semua Kelas')]);
+                fputcsv($file, ['Dasar Hari Efektif: ' . $hariEfektif . ' Hari']);
+                fputcsv($file, []);
+                fputcsv($file, ['No', 'NISN', 'Nama Peserta Didik', 'Kelas', 'Hadir', 'Terlambat (BK)', 'Izin', 'Sakit', 'Alpa', 'Persentase Kehadiran']);
+
+                foreach ($dataLaporan as $index => $row) {
+                    fputcsv($file, [
+                        $index + 1,
+                        "'" . $row->siswa->nisn,
+                        $row->siswa->nama,
+                        'Kelas ' . ($row->siswa->kelas->nama_kelas ?? '-'),
+                        $row->hadir,
+                        $row->terlambat,
+                        $row->izin,
+                        $row->sakit,
+                        $row->alpa,
+                        $row->persentase . '%',
+                    ]);
+                }
+                fclose($file);
+            };
+            return response()->stream($callback, 200, $headers);
+        }
+
         return view('admin.rekap.cetak', compact('mode', 'bulan', 'tahun', 'semester', 'kelas', 'dataLaporan', 'tanggal', 'hariEfektif'));
+    }
+
+    /**
+     * Halaman Menu Generate Laporan Khusus Siswa
+     */
+    public function generateLaporanIndex()
+    {
+        $kelases = Kelas::withCount(['siswas' => function ($q) {
+            $q->where('status', '!=', 'alumni')->orWhereNull('status');
+        }])->get();
+
+        $totalSiswa = Siswa::where('status', '!=', 'alumni')->orWhereNull('status')->count();
+
+        return view('admin.laporan.index', compact('kelases', 'totalSiswa'));
     }
 }

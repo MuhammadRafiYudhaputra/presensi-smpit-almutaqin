@@ -73,9 +73,10 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::post('/fonnte', [FonnteSettingController::class, 'update'])->name('fonnte.update');
     Route::post('/fonnte/test', [FonnteSettingController::class, 'testSend'])->name('fonnte.test');
 
-    // Monitoring & Rekap Laporan 3 Mode
+    // Monitoring & Rekap Laporan
     Route::get('/monitoring', [RekapKehadiranController::class, 'monitoring'])->name('rekap.monitoring');
     Route::get('/rekap', [RekapKehadiranController::class, 'rekap'])->name('rekap.index');
     Route::post('/rekap/update-status', [RekapKehadiranController::class, 'updateStatus'])->name('rekap.updateStatus');
+    Route::get('/laporan', [RekapKehadiranController::class, 'generateLaporanIndex'])->name('laporan.index');
     Route::get('/rekap/cetak', [RekapKehadiranController::class, 'cetakLaporan'])->name('rekap.cetak');
 });
