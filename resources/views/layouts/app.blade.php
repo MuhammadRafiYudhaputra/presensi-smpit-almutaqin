@@ -45,7 +45,7 @@
             width: 100%;
         }
 
-        /* Sidebar Styling (Compact & Natural) */
+        /* Sidebar Styling (Fixed & Stay On Place When Scrolling) */
         .sidebar {
             width: 250px;
             min-width: 250px;
@@ -55,13 +55,32 @@
             flex-direction: column;
             padding-bottom: 1.5rem;
             z-index: 1040;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            height: 100vh;
+            overflow-y: auto;
+            scrollbar-width: thin;
             transition: transform 0.3s ease;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .sidebar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
         }
 
         /* Sidebar Brand Header (Sesuai Referensi Gambar) */
         .sidebar-brand {
             padding: 1.25rem 1rem 1rem;
             text-align: center;
+            position: sticky;
+            top: 0;
+            background: var(--sidebar-bg);
+            z-index: 10;
         }
 
         .sidebar-brand-title {
@@ -166,22 +185,29 @@
             color: #dc2626 !important;
         }
 
-        /* Main Content Container */
+        /* Main Content Container (Offset by Fixed Sidebar Width) */
         .main-content {
             flex: 1;
             min-width: 0;
-            padding: 1.15rem 1.5rem;
+            margin-left: 250px;
+            padding: 1.15rem 1.5rem 2rem;
             background-color: var(--body-bg);
+            min-height: 100vh;
         }
 
-        /* Top Minimalist Header / Navbar */
+        /* Top Minimalist Header / Navbar (Sticky & Stay On Top When Scrolling) */
         .top-header-card {
-            background: #ffffff;
+            position: sticky;
+            top: 1rem;
+            z-index: 1020;
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             border-radius: 10px;
             padding: 0.65rem 1.25rem;
             border: 1px solid #e2e8f0;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
-            margin-bottom: 1rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+            margin-bottom: 1.25rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -274,10 +300,15 @@
         /* Mobile Layout Handling */
         .mobile-navbar {
             display: none;
-            background: #ffffff;
+            position: sticky;
+            top: 0.5rem;
+            z-index: 1030;
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             padding: 0.75rem 1rem;
-            border-bottom: 1px solid #e2e8f0;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
             margin-bottom: 0.85rem;
             align-items: center;
             justify-content: space-between;
@@ -319,6 +350,7 @@
             }
 
             .main-content {
+                margin-left: 0;
                 padding: 0.85rem 0.75rem 1.5rem;
             }
 
