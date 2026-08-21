@@ -92,7 +92,7 @@
             </div>
             <div class="stat-footer">
                 <i class="fa-solid fa-check text-success"></i>
-                <span>Tenaga Pendidik & Wali</span>
+                <span>Wali Kelas</span>
             </div>
         </div>
     </div>
@@ -188,7 +188,7 @@
                         <i class="fa-solid fa-circle-info text-primary me-1"></i> Total hadir fisik: <strong>{{ $totalMasuk }} Siswa</strong>
                     </small>
                     <a href="{{ route('admin.rekap.monitoring') }}" class="btn btn-sm btn-outline-primary rounded-pill px-3 py-1 fw-bold" style="font-size: 0.78rem;">
-                        <i class="fa-solid fa-list-check me-1"></i> Buka Monitoring Live
+                        <i class="fa-solid fa-list-check me-1"></i> Buka Absensi Siswa
                     </a>
                 </div>
             </div>

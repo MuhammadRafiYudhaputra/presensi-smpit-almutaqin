@@ -462,7 +462,7 @@
                         @elseif(request()->routeIs('admin.guru.*'))
                             Data Guru & Wali Kelas
                         @elseif(request()->routeIs('admin.rekap.monitoring') || request()->routeIs('guru.monitoring'))
-                            Absensi Siswa (Monitoring Live)
+                            Absensi Siswa
                         @elseif(request()->routeIs('admin.rekap.index') || request()->routeIs('guru.rekap'))
                             Rekapitulasi Kehadiran Siswa
                         @elseif(request()->routeIs('guru.siswa.*'))

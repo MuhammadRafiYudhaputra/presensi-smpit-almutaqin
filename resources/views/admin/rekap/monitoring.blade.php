@@ -5,9 +5,9 @@
     <!-- Header -->
     <div class="mb-4">
         <h5 class="fw-bold mb-1 text-dark d-flex align-items-center">
-            <i class="fa-solid fa-rotate-left text-primary me-2 fs-4"></i> Live Monitoring Kehadiran
+            <i class="fa-solid fa-list-check text-primary me-2 fs-4"></i> Absensi Siswa
         </h5>
-        <small class="text-muted">Pantau aktivitas scan presensi siswa secara real-time</small>
+        <small class="text-muted">Pantau aktivitas catatan presensi dan scan siswa secara real-time</small>
     </div>
 
     <!-- Filter Form -->
