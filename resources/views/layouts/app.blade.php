@@ -441,7 +441,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('admin.setting-fonnte.index') }}" class="nav-link {{ request()->routeIs('admin.setting-fonnte.*') ? 'active' : '' }}">
+                        <a href="{{ route('admin.fonnte.index') }}" class="nav-link {{ request()->routeIs('admin.fonnte.*') ? 'active' : '' }}">
                             <i class="fa-solid fa-gear"></i> Pengaturan WA
                         </a>
                     </li>
@@ -496,7 +496,7 @@
                         Biodata Siswa Binaan
                     @elseif(request()->routeIs('presensi.scan'))
                         Scanner QR Code
-                    @elseif(request()->routeIs('admin.setting-fonnte.*'))
+                    @elseif(request()->routeIs('admin.fonnte.*'))
                         Pengaturan Gateway WhatsApp
                     @else
                         Sistem Presensi Siswa
