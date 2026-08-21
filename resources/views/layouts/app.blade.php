@@ -371,6 +371,9 @@
             <div>
                 <!-- Branding Header (Sesuai Role User) -->
                 <div class="sidebar-brand">
+                    <div class="d-flex justify-content-center mb-2">
+                        <img src="{{ asset('images/logo.png') }}" alt="Logo SMP IT Al-Muttaqin" style="width: 44px; height: 44px; object-fit: contain;">
+                    </div>
                     <div class="sidebar-brand-title">
                         @if(Auth::check() && Auth::user()->role === 'guru')
                             PORTAL<br>WALI KELAS
