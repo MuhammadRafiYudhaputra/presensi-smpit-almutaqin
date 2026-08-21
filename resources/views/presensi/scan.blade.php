@@ -34,15 +34,15 @@
         height: 180px;
         margin: 1.5rem auto 1.25rem;
         border-radius: 20px;
-        border: 2px dashed #00c0ef;
-        background: rgba(0, 192, 239, 0.04);
+        border: 2px dashed #2563eb;
+        background: rgba(37, 99, 235, 0.04);
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         text-align: center;
         position: relative;
-        box-shadow: 0 4px 15px rgba(0, 192, 239, 0.08);
+        box-shadow: 0 4px 15px rgba(37, 99, 235, 0.08);
     }
 
     .scanner-target-box::after {
@@ -52,8 +52,8 @@
         left: 10%;
         right: 10%;
         height: 2px;
-        background: #00c0ef;
-        box-shadow: 0 0 10px #00c0ef, 0 0 20px #00c0ef;
+        background: #2563eb;
+        box-shadow: 0 0 10px #2563eb, 0 0 20px #2563eb;
         animation: scanBeam 2.2s infinite ease-in-out;
         border-radius: 2px;
     }
@@ -70,7 +70,7 @@
 
     .scanner-input {
         background: #ffffff;
-        border: 2px solid #00c0ef;
+        border: 2px solid #2563eb;
         color: #0f172a;
         border-radius: 12px 0 0 12px;
         padding: 0.85rem 1.25rem;
@@ -81,9 +81,9 @@
 
     .scanner-input:focus {
         background: #ffffff;
-        border-color: #00c0ef;
+        border-color: #2563eb;
         color: #0f172a;
-        box-shadow: 0 0 0 4px rgba(0, 192, 239, 0.15);
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
     }
 
     .scanner-input::placeholder {
@@ -92,8 +92,8 @@
     }
 
     .scanner-btn {
-        background: #00c0ef;
-        border: 2px solid #00c0ef;
+        background: #2563eb;
+        border: 2px solid #2563eb;
         color: #ffffff;
         font-weight: 700;
         border-radius: 0 12px 12px 0;
@@ -105,8 +105,8 @@
     }
 
     .scanner-btn:hover {
-        background: #0891b2;
-        border-color: #0891b2;
+        background: #1d4ed8;
+        border-color: #1d4ed8;
         color: #ffffff;
     }
 
@@ -136,7 +136,7 @@
 
     <!-- Center Target QR Box -->
     <div class="scanner-target-box">
-        <i class="fa-solid fa-qrcode fs-2 mb-1" style="color: #00c0ef;"></i>
+        <i class="fa-solid fa-qrcode fs-2 mb-1 text-primary"></i>
         <span class="fw-bold text-dark fs-6 d-block">SCAN KARTU QR</span>
         <small class="text-muted" style="font-size: 0.75rem;">Dekatkan ke Scanner USB</small>
     </div>

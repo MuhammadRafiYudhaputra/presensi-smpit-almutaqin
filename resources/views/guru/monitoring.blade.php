@@ -27,10 +27,10 @@
         background-color: #f8fafc;
     }
 
-    /* Button Edit Aksi Selaras dengan Warna Cyan Website */
+    /* Button Edit Aksi Selaras dengan Warna Biru Cetak Absensi */
     .btn-edit-action {
-        background-color: #00c0ef;
-        border: 1px solid #00c0ef;
+        background-color: #2563eb;
+        border: 1px solid #2563eb;
         color: #ffffff;
         font-weight: 700;
         font-size: 0.8rem;
@@ -42,8 +42,8 @@
         transition: all 0.15s ease;
     }
     .btn-edit-action:hover {
-        background-color: #0891b2;
-        border-color: #0891b2;
+        background-color: #1d4ed8;
+        border-color: #1d4ed8;
         color: #ffffff;
     }
 
@@ -68,12 +68,12 @@
     .radio-label-hadir { color: #16a34a; font-weight: 700; font-size: 0.95rem; }
     .radio-label-terlambat { color: #d97706; font-weight: 700; font-size: 0.95rem; }
     .radio-label-sakit { color: #475569; font-weight: 700; font-size: 0.95rem; }
-    .radio-label-izin { color: #0284c7; font-weight: 700; font-size: 0.95rem; }
+    .radio-label-izin { color: #2563eb; font-weight: 700; font-size: 0.95rem; }
     .radio-label-alpa { color: #dc2626; font-weight: 700; font-size: 0.95rem; }
 
     .btn-ubah-modal {
-        background: #00c0ef;
-        border: 1px solid #00c0ef;
+        background: #2563eb;
+        border: 1px solid #2563eb;
         color: #ffffff;
         font-weight: 700;
         border-radius: 8px;
@@ -81,8 +81,8 @@
         transition: all 0.2s ease;
     }
     .btn-ubah-modal:hover {
-        background: #0891b2;
-        border-color: #0891b2;
+        background: #1d4ed8;
+        border-color: #1d4ed8;
         color: #ffffff;
     }
 </style>

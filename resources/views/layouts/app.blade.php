@@ -18,7 +18,8 @@
         :root {
             --sidebar-bg: #ffffff;
             --sidebar-border: #e2e8f0;
-            --primary-cyan: #00c0ef;
+            --primary-cyan: #2563eb;
+            --primary-blue: #2563eb;
             --body-bg: #f4f6f9;
             --text-main: #1e293b;
             --text-muted: #64748b;
@@ -120,18 +121,18 @@
         }
 
         .sidebar-menu .nav-link:hover {
-            color: #0f172a;
-            background: #f8fafc;
+            color: #2563eb;
+            background: #eff6ff;
         }
         .sidebar-menu .nav-link:hover i {
-            color: #00c0ef;
+            color: #2563eb;
         }
 
-        /* Active Menu Button (Cyan Flat Minimalist Sesuai Gambar) */
+        /* Active Menu Button (Biru Elegan Sesuai Button Cetak) */
         .sidebar-menu .nav-link.active {
             color: #ffffff !important;
-            background: #00c0ef;
-            box-shadow: 0 4px 10px rgba(0, 192, 239, 0.3);
+            background: #2563eb;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
             font-weight: 700;
         }
         .sidebar-menu .nav-link.active i {

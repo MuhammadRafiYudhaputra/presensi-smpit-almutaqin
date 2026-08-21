@@ -24,7 +24,7 @@
     }
 
     .panel-header-teal {
-        background: linear-gradient(135deg, #0891b2 0%, #0e7490 100%);
+        background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
         color: #ffffff;
         padding: 0.85rem 1.25rem;
         display: flex;
@@ -97,10 +97,10 @@
         </div>
     </div>
 
-    <!-- Card 3: Kelas Aktif (Cyan/Teal Badge) -->
+    <!-- Card 3: Kelas Aktif (Blue Badge) -->
     <div class="col-12 col-sm-6 col-xl-3">
         <div class="stat-card-floating">
-            <div class="stat-floating-icon" style="background: linear-gradient(135deg, #00c0ef 0%, #0891b2 100%);">
+            <div class="stat-floating-icon" style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);">
                 <i class="fa-solid fa-school"></i>
             </div>
             <div class="stat-content">
