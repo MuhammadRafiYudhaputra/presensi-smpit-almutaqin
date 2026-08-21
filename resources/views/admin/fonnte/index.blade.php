@@ -39,8 +39,9 @@
         <div class="mb-4 p-3 bg-light rounded-3 border">
             <div class="row align-items-center g-2">
                 <div class="col-md-3">
-                    <label class="form-label fw-bold text-dark mb-0 small d-flex align-items-center">
-                        <i class="fa-solid fa-key text-warning me-1.5"></i> Fonnte API Token:
+                    <label class="form-label fw-bold text-dark mb-0 small d-flex align-items-center gap-2">
+                        <i class="fa-solid fa-key text-warning fs-6"></i>
+                        <span>Fonnte API Token:</span>
                     </label>
                 </div>
                 <div class="col-md-9">
@@ -54,12 +55,10 @@
 
         <!-- Section Title: Kustomisasi Template -->
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h6 class="fw-bold text-primary mb-0 d-flex align-items-center small">
-                <i class="fa-solid fa-comments me-1.5"></i> Kustomisasi Format Pesan Notifikasi WhatsApp
+            <h6 class="fw-bold text-primary mb-0 d-flex align-items-center small gap-2">
+                <i class="fa-solid fa-comments fs-6"></i>
+                <span>Kustomisasi Format Pesan Notifikasi WhatsApp</span>
             </h6>
-            <small class="text-muted" style="font-size: 0.75rem;">
-                Variabel tersedia: <code>{nama}</code>, <code>{nisn}</code>, <code>{kelas}</code>, <code>{tanggal}</code>, <code>{waktu}</code>, <code>{status}</code>
-            </small>
         </div>
 
         <!-- 3 Template Columns Side-by-Side (Compact & Tidy) -->
@@ -67,9 +66,9 @@
             <!-- Template 1: Masuk (Tepat Waktu) -->
             <div class="col-lg-4">
                 <div class="card h-100 border rounded-3 p-3 bg-light bg-opacity-30 shadow-none">
-                    <label class="form-label fw-bold text-dark d-flex align-items-center mb-2 small">
-                        <span class="badge bg-success me-1.5 px-2 py-0.5 rounded-pill" style="font-size: 0.7rem;">1</span>
-                        Presensi MASUK
+                    <label class="form-label fw-bold text-dark d-flex align-items-center mb-2 small gap-2">
+                        <span class="badge bg-success px-2.5 py-1 rounded-pill" style="font-size: 0.75rem;">1</span>
+                        <span>Presensi MASUK</span>
                     </label>
                     <textarea name="template_masuk" class="form-control form-control-sm template-textarea shadow-sm mb-2" rows="6" required>{{ old('template_masuk', $setting->template_masuk ?? "Assalamu'alaikum Warahmatullahi Wabarakatuh.\n\nPemberitahuan Presensi MASUK SMP IT Al-Muttaqin:\nNama: {nama}\nNISN: {nisn}\nKelas: {kelas}\nStatus: {status}\n\nTelah melakukan presensi MASUK pada tanggal {tanggal} pukul {waktu}.\n\nTerima kasih.") }}</textarea>
                     <small class="text-muted d-block" style="font-size: 0.72rem;">Dikirim saat siswa melakukan scan masuk sekolah.</small>
@@ -79,9 +78,9 @@
             <!-- Template 2: Terlambat -->
             <div class="col-lg-4">
                 <div class="card h-100 border rounded-3 p-3 bg-light bg-opacity-30 shadow-none">
-                    <label class="form-label fw-bold text-dark d-flex align-items-center mb-2 small">
-                        <span class="badge bg-warning text-dark me-1.5 px-2 py-0.5 rounded-pill" style="font-size: 0.7rem;">2</span>
-                        Presensi TERLAMBAT
+                    <label class="form-label fw-bold text-dark d-flex align-items-center mb-2 small gap-2">
+                        <span class="badge bg-warning text-dark px-2.5 py-1 rounded-pill" style="font-size: 0.75rem;">2</span>
+                        <span>Presensi TERLAMBAT</span>
                     </label>
                     <textarea name="template_terlambat" class="form-control form-control-sm template-textarea shadow-sm mb-2" rows="6" required>{{ old('template_terlambat', $setting->template_terlambat ?? "Assalamu'alaikum Warahmatullahi Wabarakatuh.\n\nPemberitahuan Presensi TERLAMBAT SMP IT Al-Muttaqin:\nNama: {nama}\nNISN: {nisn}\nKelas: {kelas}\nStatus: {status}\n\nTelah melakukan presensi MASUK TERLAMBAT pada tanggal {tanggal} pukul {waktu}. Mohon perhatian dari Bapak/Ibu Wali Murid.\n\nTerima kasih.") }}</textarea>
                     <small class="text-muted d-block" style="font-size: 0.72rem;">Dikirim saat siswa scan masuk melebihi batas jam masuk.</small>
@@ -91,9 +90,9 @@
             <!-- Template 3: Pulang -->
             <div class="col-lg-4">
                 <div class="card h-100 border rounded-3 p-3 bg-light bg-opacity-30 shadow-none">
-                    <label class="form-label fw-bold text-dark d-flex align-items-center mb-2 small">
-                        <span class="badge bg-primary me-1.5 px-2 py-0.5 rounded-pill" style="font-size: 0.7rem;">3</span>
-                        Presensi PULANG
+                    <label class="form-label fw-bold text-dark d-flex align-items-center mb-2 small gap-2">
+                        <span class="badge bg-primary px-2.5 py-1 rounded-pill" style="font-size: 0.75rem;">3</span>
+                        <span>Presensi PULANG</span>
                     </label>
                     <textarea name="template_pulang" class="form-control form-control-sm template-textarea shadow-sm mb-2" rows="6" required>{{ old('template_pulang', $setting->template_pulang ?? "Assalamu'alaikum Warahmatullahi Wabarakatuh.\n\nPemberitahuan Presensi PULANG SMP IT Al-Muttaqin:\nNama: {nama}\nNISN: {nisn}\nKelas: {kelas}\n\nTelah menyelesaikan kegiatan belajar dan melakukan presensi PULANG pada tanggal {tanggal} pukul {waktu}.\n\nTerima kasih.") }}</textarea>
                     <small class="text-muted d-block" style="font-size: 0.72rem;">Dikirim saat siswa melakukan scan kepulangan sekolah.</small>
