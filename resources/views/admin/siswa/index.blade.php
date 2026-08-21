@@ -52,12 +52,12 @@
             </h5>
             <small class="text-muted">Kelola data seluruh siswa, kelas, kontak orang tua, dan cetak kartu QR presensi</small>
         </div>
-        <div class="d-flex gap-2 flex-wrap">
-            <button type="button" class="btn btn-primary px-3 py-2 fw-semibold shadow-sm rounded-3 d-inline-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#modalAddSiswa">
-                <i class="fa-solid fa-plus"></i> TAMBAH DATA SISWA
+        <div class="d-flex gap-2 flex-wrap align-items-center">
+            <button type="button" class="btn btn-outline-primary rounded-pill px-3 py-2 fw-semibold shadow-sm btn-sm d-inline-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#modalImportDapodik">
+                <i class="fa-solid fa-file-import me-1"></i> Import CSV / Excel
             </button>
-            <button type="button" class="btn btn-outline-primary px-3 py-2 fw-semibold shadow-sm rounded-3 d-inline-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#modalImportDapodik">
-                <i class="fa-solid fa-file-import"></i> IMPORT CSV / EXCEL
+            <button type="button" class="btn btn-primary rounded-pill px-3 py-2 fw-semibold shadow-sm btn-sm d-inline-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#modalAddSiswa">
+                <i class="fa-solid fa-plus me-1"></i> Tambah Data Siswa
             </button>
         </div>
     </div>

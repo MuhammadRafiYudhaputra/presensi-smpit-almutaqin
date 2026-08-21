@@ -10,12 +10,12 @@
             </h5>
             <small class="text-muted">Data Tenaga Pendidik, Penugasan Kelas, & Akun Login Portal Guru</small>
         </div>
-        <div class="d-flex gap-2 flex-wrap">
-            <button type="button" class="btn btn-outline-success rounded-pill px-3 fw-semibold shadow-sm" data-bs-toggle="modal" data-bs-target="#modalImportGuru">
-                <i class="fa-solid fa-file-import me-1"></i> Import Data Wali Kelas
+        <div class="d-flex gap-2 flex-wrap align-items-center">
+            <button type="button" class="btn btn-outline-primary rounded-pill px-3 py-2 fw-semibold shadow-sm btn-sm d-inline-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#modalImportGuru">
+                <i class="fa-solid fa-file-import me-1"></i> Import Wali Kelas
             </button>
-            <button type="button" class="btn btn-primary rounded-pill px-4 fw-semibold shadow-sm" data-bs-toggle="modal" data-bs-target="#modalAddGuru">
-                <i class="fa-solid fa-plus me-1"></i> Tambah Wali Kelas Baru
+            <button type="button" class="btn btn-primary rounded-pill px-3 py-2 fw-semibold shadow-sm btn-sm d-inline-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#modalAddGuru">
+                <i class="fa-solid fa-plus me-1"></i> Tambah Wali Kelas
             </button>
         </div>
     </div>

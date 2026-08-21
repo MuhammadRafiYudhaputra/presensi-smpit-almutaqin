@@ -10,12 +10,12 @@
             </h5>
             <small class="text-muted">Daftar kelas, penugasan Wali Kelas, dan kenaikan kelas otomatis di tahun ajaran baru</small>
         </div>
-        <div class="d-flex gap-2 flex-wrap">
-            <button type="button" class="btn btn-outline-success rounded-pill px-3 fw-semibold shadow-sm" data-bs-toggle="modal" data-bs-target="#modalKenaikanKelas">
-                <i class="fa-solid fa-graduation-cap me-1"></i> Kenaikan Kelas (Tahun Ajaran Baru)
+        <div class="d-flex gap-2 flex-wrap align-items-center">
+            <button type="button" class="btn btn-outline-primary rounded-pill px-3 py-2 fw-semibold shadow-sm btn-sm d-inline-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#modalKenaikanKelas">
+                <i class="fa-solid fa-graduation-cap me-1"></i> Kenaikan Kelas
             </button>
-            <button type="button" class="btn btn-primary rounded-pill px-4 fw-semibold shadow-sm" data-bs-toggle="modal" data-bs-target="#modalAddKelas">
-                <i class="fa-solid fa-plus me-1"></i> Tambah Kelas Baru
+            <button type="button" class="btn btn-primary rounded-pill px-3 py-2 fw-semibold shadow-sm btn-sm d-inline-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#modalAddKelas">
+                <i class="fa-solid fa-plus me-1"></i> Tambah Kelas
             </button>
         </div>
     </div>
