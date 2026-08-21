@@ -465,7 +465,7 @@
             <div class="sidebar-footer mt-auto pt-2 pb-3 px-3 border-top">
                 <form action="{{ route('logout') }}" method="POST" class="m-0">
                     @csrf
-                    <button type="submit" class="logout-btn-link w-100">
+                    <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill w-100 fw-bold py-2 d-flex align-items-center justify-content-center gap-2 shadow-none border-0 bg-danger bg-opacity-10 text-danger">
                         <i class="fa-solid fa-arrow-right-from-bracket"></i> Keluar / Logout
                     </button>
                 </form>

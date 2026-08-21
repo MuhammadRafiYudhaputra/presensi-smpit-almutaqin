@@ -379,9 +379,9 @@
                 </a>
             </div>
 
-            <!-- Submit Button -->
-            <button type="submit" class="btn-submit">
-                <i class="fa-solid fa-right-to-bracket me-1"></i> Masuk ke Sistem
+            <!-- Submit Button (Sesuai Gaya Desain Website) -->
+            <button type="submit" class="btn btn-primary text-uppercase fw-bold rounded-pill py-2.5 w-100 shadow-sm d-flex align-items-center justify-content-center gap-2 mb-3">
+                <i class="fa-solid fa-right-to-bracket fs-6"></i> Masuk ke Sistem
             </button>
 
             <!-- Quick Demo Login -->
@@ -390,17 +390,17 @@
                     <i class="fa-solid fa-wand-magic-sparkles text-primary"></i> Akses Demo Cepat:
                 </div>
                 <div class="d-flex gap-2">
-                    <button type="button" class="btn-demo btn-demo-admin" onclick="fillCreds('admin@almutaqin.sch.id', 'admin123')">
-                        <span class="demo-badge-title">
+                    <button type="button" class="btn btn-primary bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded-3 p-2.5 flex-fill text-start shadow-none" onclick="fillCreds('admin@almutaqin.sch.id', 'admin123')">
+                        <div class="fw-bold small d-flex align-items-center gap-1.5 mb-0.5">
                             <i class="fa-solid fa-user-shield"></i> Admin TU
-                        </span>
-                        <span class="demo-badge-sub">admin@almutaqin.sch.id</span>
+                        </div>
+                        <small class="text-muted d-block" style="font-size: 0.72rem;">admin@almutaqin.sch.id</small>
                     </button>
-                    <button type="button" class="btn-demo btn-demo-guru" onclick="fillCreds('guru@almutaqin.sch.id', '12345678')">
-                        <span class="demo-badge-title">
+                    <button type="button" class="btn btn-success bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded-3 p-2.5 flex-fill text-start shadow-none" onclick="fillCreds('guru@almutaqin.sch.id', '12345678')">
+                        <div class="fw-bold small d-flex align-items-center gap-1.5 mb-0.5">
                             <i class="fa-solid fa-chalkboard-user"></i> Wali Kelas
-                        </span>
-                        <span class="demo-badge-sub">guru@almutaqin.sch.id</span>
+                        </div>
+                        <small class="text-muted d-block" style="font-size: 0.72rem;">guru@almutaqin.sch.id</small>
                     </button>
                 </div>
             </div>
