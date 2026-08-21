@@ -37,7 +37,7 @@
             </h5>
             <small class="text-muted">Akumulasi kehadiran berkala (Bulanan & Semester) berbasis Hari Efektif Sekolah</small>
         </div>
-        <div class="d-flex flex-wrap gap-2 align-items-center">
+        <div class="d-flex gap-2 align-items-center flex-nowrap flex-shrink-0">
             <!-- Mode Switcher Tabs (Bulanan & Semester Saja) -->
             <div class="btn-group p-1 bg-light rounded-pill border" role="group">
                 <a href="{{ route('guru.rekap', ['mode' => 'bulanan', 'bulan' => $bulan, 'tahun' => $tahun, 'hari_efektif' => $hariEfektif, 'sort_by' => $sortBy]) }}" class="btn btn-sm rounded-pill px-3 fw-semibold {{ $mode === 'bulanan' ? 'btn-primary shadow-sm' : 'btn-light text-muted' }}">
@@ -49,7 +49,7 @@
             </div>
 
             <!-- Tombol Cetak Laporan -->
-            <a href="{{ route('admin.rekap.cetak', ['mode' => $mode, 'bulan' => $bulan, 'tahun' => $tahun, 'semester' => $semester, 'kelas_id' => $kelas ? $kelas->id : null, 'hari_efektif' => $hariEfektif]) }}" target="_blank" class="btn btn-outline-primary rounded-pill px-3 fw-semibold shadow-sm">
+            <a href="{{ route('admin.rekap.cetak', ['mode' => $mode, 'bulan' => $bulan, 'tahun' => $tahun, 'semester' => $semester, 'kelas_id' => $kelas ? $kelas->id : null, 'hari_efektif' => $hariEfektif]) }}" target="_blank" class="btn btn-outline-primary rounded-pill px-3 py-1.5 fw-semibold shadow-sm btn-sm text-nowrap d-inline-flex align-items-center gap-1">
                 <i class="fa-solid fa-print me-1"></i> Cetak Laporan
             </a>
         </div>
@@ -136,35 +136,34 @@
         <table class="table table-bordered table-hover align-middle mb-0" style="font-size: 0.9rem;">
             <thead class="table-light text-center">
                 <tr>
-                    <th rowspan="2" style="width: 50px;" class="align-middle text-dark">No</th>
-                    <th rowspan="2" class="align-middle text-dark" style="width: 120px;">NISN</th>
-                    <th rowspan="2" class="align-middle text-dark text-start">Nama Peserta Didik</th>
-                    <th rowspan="2" style="width: 50px;" class="align-middle text-dark">JK</th>
-                    <th rowspan="2" class="align-middle text-dark" style="width: 110px;">Kelas</th>
+                    <th rowspan="2" style="width: 45px;" class="align-middle text-dark">No</th>
+                    <th rowspan="2" class="align-middle text-dark" style="width: 110px;">NISN</th>
+                    <th rowspan="2" class="align-middle text-dark text-start" style="min-width: 200px;">Nama Peserta Didik</th>
+                    <th rowspan="2" class="align-middle text-dark" style="width: 100px;">Kelas</th>
                     <th colspan="5" class="text-dark bg-light">
                         Akumulasi Kehadiran (Bulan {{ $bulan }}/{{ $tahun }} &bull; Dasar: {{ $hariEfektif }} Hari Efektif)
                     </th>
-                    <th rowspan="2" class="align-middle text-dark" style="width: 110px;">Persentase</th>
-                    <th rowspan="2" class="align-middle text-dark" style="width: 150px;">Catatan BK</th>
+                    <th rowspan="2" class="align-middle text-dark" style="width: 95px;">Persentase</th>
+                    <th rowspan="2" class="align-middle text-dark" style="width: 140px;">Catatan BK</th>
                 </tr>
                 <tr>
-                    <th class="col-header-hadir text-center py-2" style="width: 85px;" title="Total siswa masuk sekolah">
+                    <th class="col-header-hadir text-center py-2" style="width: 80px;" title="Total siswa masuk sekolah">
                         <i class="fa-solid fa-circle-check d-block mb-1 fs-6"></i>
                         <span>Hadir</span>
                     </th>
-                    <th class="col-header-terlambat text-center py-2" style="width: 100px;" title="Klik untuk melihat tanggal & jam keterlambatan siswa">
+                    <th class="col-header-terlambat text-center py-2" style="width: 95px;" title="Klik untuk melihat tanggal & jam keterlambatan siswa">
                         <i class="fa-solid fa-clock d-block mb-1 fs-6"></i>
                         <span>Terlambat</span>
                     </th>
-                    <th class="col-header-izin text-center py-2" style="width: 85px;">
+                    <th class="col-header-izin text-center py-2" style="width: 80px;">
                         <i class="fa-solid fa-envelope-open d-block mb-1 fs-6"></i>
                         <span>Izin</span>
                     </th>
-                    <th class="col-header-sakit text-center py-2" style="width: 85px;">
+                    <th class="col-header-sakit text-center py-2" style="width: 80px;">
                         <i class="fa-solid fa-notes-medical d-block mb-1 fs-6"></i>
                         <span>Sakit</span>
                     </th>
-                    <th class="col-header-alpa text-center py-2" style="width: 85px;">
+                    <th class="col-header-alpa text-center py-2" style="width: 80px;">
                         <i class="fa-solid fa-circle-xmark d-block mb-1 fs-6"></i>
                         <span>Alpa</span>
                     </th>
@@ -173,12 +172,9 @@
             <tbody>
                 @forelse($bulananData as $idx => $row)
                 <tr>
-                    <td class="text-center fw-bold">{{ $idx + 1 }}</td>
+                    <td class="text-center fw-bold text-muted">{{ $idx + 1 }}</td>
                     <td class="text-center fw-bold text-dark">{{ $row->siswa->nisn }}</td>
-                    <td class="fw-bold text-dark">{{ $row->siswa->nama }}</td>
-                    <td class="text-center">
-                        <span class="badge {{ $row->siswa->jenis_kelamin === 'L' ? 'bg-primary bg-opacity-10 text-primary border border-primary' : 'bg-danger bg-opacity-10 text-danger border border-danger' }} px-2 fw-bold">{{ $row->siswa->jenis_kelamin }}</span>
-                    </td>
+                    <td class="fw-bold text-dark text-nowrap">{{ $row->siswa->nama }}</td>
                     <td class="text-center">
                         <span class="badge bg-primary bg-opacity-10 text-primary border border-primary px-2 py-1 rounded-2">
                             Kelas {{ $row->siswa->kelas->nama_kelas ?? '-' }}
@@ -219,7 +215,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="12" class="text-center text-muted py-5">Tidak ada data rekapitulasi bulanan untuk kelas ini.</td>
+                    <td colspan="11" class="text-center text-muted py-5">Tidak ada data rekapitulasi bulanan.</td>
                 </tr>
                 @endforelse
             </tbody>
@@ -232,35 +228,34 @@
         <table class="table table-bordered table-hover align-middle mb-0" style="font-size: 0.9rem;">
             <thead class="table-light text-center">
                 <tr>
-                    <th rowspan="2" style="width: 50px;" class="align-middle text-dark">No</th>
-                    <th rowspan="2" class="align-middle text-dark" style="width: 120px;">NISN</th>
-                    <th rowspan="2" class="align-middle text-dark text-start">Nama Peserta Didik</th>
-                    <th rowspan="2" style="width: 50px;" class="align-middle text-dark">JK</th>
-                    <th rowspan="2" class="align-middle text-dark" style="width: 110px;">Kelas</th>
+                    <th rowspan="2" style="width: 45px;" class="align-middle text-dark">No</th>
+                    <th rowspan="2" class="align-middle text-dark" style="width: 110px;">NISN</th>
+                    <th rowspan="2" class="align-middle text-dark text-start" style="min-width: 200px;">Nama Peserta Didik</th>
+                    <th rowspan="2" class="align-middle text-dark" style="width: 100px;">Kelas</th>
                     <th colspan="5" class="text-dark bg-light">
                         Akumulasi Kehadiran (Semester {{ ucfirst($semester) }} {{ $tahun }} &bull; Dasar: {{ $hariEfektif }} Hari Efektif)
                     </th>
-                    <th rowspan="2" class="align-middle text-dark" style="width: 110px;">Persentase</th>
-                    <th rowspan="2" class="align-middle text-dark" style="width: 150px;">Catatan BK</th>
+                    <th rowspan="2" class="align-middle text-dark" style="width: 95px;">Persentase</th>
+                    <th rowspan="2" class="align-middle text-dark" style="width: 140px;">Catatan BK</th>
                 </tr>
                 <tr>
-                    <th class="col-header-hadir text-center py-2" style="width: 85px;" title="Total siswa masuk sekolah">
+                    <th class="col-header-hadir text-center py-2" style="width: 80px;" title="Total siswa masuk sekolah">
                         <i class="fa-solid fa-circle-check d-block mb-1 fs-6"></i>
                         <span>Hadir</span>
                     </th>
-                    <th class="col-header-terlambat text-center py-2" style="width: 100px;" title="Klik untuk melihat tanggal & jam keterlambatan siswa">
+                    <th class="col-header-terlambat text-center py-2" style="width: 95px;" title="Klik untuk melihat tanggal & jam keterlambatan siswa">
                         <i class="fa-solid fa-clock d-block mb-1 fs-6"></i>
                         <span>Terlambat</span>
                     </th>
-                    <th class="col-header-izin text-center py-2" style="width: 85px;">
+                    <th class="col-header-izin text-center py-2" style="width: 80px;">
                         <i class="fa-solid fa-envelope-open d-block mb-1 fs-6"></i>
                         <span>Izin</span>
                     </th>
-                    <th class="col-header-sakit text-center py-2" style="width: 85px;">
+                    <th class="col-header-sakit text-center py-2" style="width: 80px;">
                         <i class="fa-solid fa-notes-medical d-block mb-1 fs-6"></i>
                         <span>Sakit</span>
                     </th>
-                    <th class="col-header-alpa text-center py-2" style="width: 85px;">
+                    <th class="col-header-alpa text-center py-2" style="width: 80px;">
                         <i class="fa-solid fa-circle-xmark d-block mb-1 fs-6"></i>
                         <span>Alpa</span>
                     </th>
@@ -269,12 +264,9 @@
             <tbody>
                 @forelse($semesterData as $idx => $row)
                 <tr>
-                    <td class="text-center fw-bold">{{ $idx + 1 }}</td>
+                    <td class="text-center fw-bold text-muted">{{ $idx + 1 }}</td>
                     <td class="text-center fw-bold text-dark">{{ $row->siswa->nisn }}</td>
-                    <td class="fw-bold text-dark">{{ $row->siswa->nama }}</td>
-                    <td class="text-center">
-                        <span class="badge {{ $row->siswa->jenis_kelamin === 'L' ? 'bg-primary bg-opacity-10 text-primary border border-primary' : 'bg-danger bg-opacity-10 text-danger border border-danger' }} px-2 fw-bold">{{ $row->siswa->jenis_kelamin }}</span>
-                    </td>
+                    <td class="fw-bold text-dark text-nowrap">{{ $row->siswa->nama }}</td>
                     <td class="text-center">
                         <span class="badge bg-primary bg-opacity-10 text-primary border border-primary px-2 py-1 rounded-2">
                             Kelas {{ $row->siswa->kelas->nama_kelas ?? '-' }}
@@ -315,7 +307,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="12" class="text-center text-muted py-5">Tidak ada data rekapitulasi semester untuk kelas ini.</td>
+                    <td colspan="11" class="text-center text-muted py-5">Tidak ada data rekapitulasi semester.</td>
                 </tr>
                 @endforelse
             </tbody>

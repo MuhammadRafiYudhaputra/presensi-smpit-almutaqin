@@ -55,7 +55,7 @@
                     <th class="text-dark text-start" style="width: 170px;">Data Orang Tua</th>
                     <th class="text-dark text-start" style="width: 140px;">Wali Siswa</th>
                     <th class="text-dark text-center" style="width: 135px;">No. WhatsApp</th>
-                    <th class="text-dark text-start" style="width: 160px;">Peserta Didik (Anak)</th>
+                    <th class="text-dark text-start" style="width: 160px;">Peserta Didik</th>
                     <th class="text-dark text-start">Alamat Domisili</th>
                     <th class="text-center text-dark" style="width: 90px;">Aksi</th>
                 </tr>
@@ -162,7 +162,7 @@
                             <input type="text" name="nama_ibu" class="form-control" placeholder="Contoh: Rahmawati">
                         </div>
                         <div class="col-md-7">
-                            <label class="form-label fw-semibold text-dark">Nama Lengkap Wali Siswa <small class="text-muted">(Jika Siswa Tinggal Bersama Wali)</small></label>
+                            <label class="form-label fw-semibold text-dark">Nama Lengkap Wali Siswa</label>
                             <input type="text" name="nama_wali" class="form-control" placeholder="Contoh: H. Ahmad Subardjo">
                         </div>
                         <div class="col-md-5">
@@ -211,7 +211,7 @@
                             <input type="text" name="nama_ibu" id="edit_nama_ibu" class="form-control">
                         </div>
                         <div class="col-md-7">
-                            <label class="form-label fw-semibold text-dark">Nama Lengkap Wali Siswa <small class="text-muted">(Jika Siswa Tinggal Bersama Wali)</small></label>
+                            <label class="form-label fw-semibold text-dark">Nama Lengkap Wali Siswa</label>
                             <input type="text" name="nama_wali" id="edit_nama_wali" class="form-control">
                         </div>
                         <div class="col-md-5">
