@@ -5,49 +5,49 @@
     /* Gradient Header Widgets */
     .panel-widget {
         background: #ffffff;
-        border-radius: 16px;
+        border-radius: 12px;
         border: 1px solid #e2e8f0;
-        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.02);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
         overflow: hidden;
-        margin-bottom: 1.5rem;
+        margin-bottom: 0.85rem;
     }
 
     .panel-header-purple {
         background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
         color: #ffffff;
-        padding: 1.15rem 1.5rem;
+        padding: 0.85rem 1.25rem;
         display: flex;
         justify-content: space-between;
         align-items: center;
         flex-wrap: wrap;
-        gap: 10px;
+        gap: 8px;
     }
 
     .panel-header-teal {
         background: linear-gradient(135deg, #0891b2 0%, #0e7490 100%);
         color: #ffffff;
-        padding: 1.15rem 1.5rem;
+        padding: 0.85rem 1.25rem;
         display: flex;
         justify-content: space-between;
         align-items: center;
         flex-wrap: wrap;
-        gap: 10px;
+        gap: 8px;
     }
 
     .stat-metric-box {
         text-align: center;
-        padding: 1rem 0.5rem;
+        padding: 0.65rem 0.35rem;
     }
 
     .stat-metric-label {
-        font-size: 0.85rem;
+        font-size: 0.8rem;
         font-weight: 700;
-        margin-bottom: 6px;
+        margin-bottom: 4px;
         display: block;
     }
 
     .stat-metric-val {
-        font-size: 1.75rem;
+        font-size: 1.55rem;
         font-weight: 800;
         line-height: 1;
         margin: 0;
@@ -62,7 +62,7 @@
 </style>
 
 <!-- 1. Top 4 Metric Cards (Floating Badge Style from Reference UI) -->
-<div class="row g-4 mb-4">
+<div class="row g-3 mb-3">
     <!-- Card 1: Jumlah Siswa (Purple Badge) -->
     <div class="col-12 col-sm-6 col-xl-3">
         <div class="stat-card-floating">
@@ -133,18 +133,18 @@
 </div>
 
 <!-- 2. Middle Row: Widget Absensi Siswa Hari Ini & Grafik 7 Hari Terakhir -->
-<div class="row g-4 mb-4">
+<div class="row g-3 mb-2">
     <!-- Absensi Siswa Hari Ini Panel -->
     <div class="col-12 col-lg-6">
         <div class="panel-widget h-100">
             <div class="panel-header-purple">
                 <div>
-                    <h6 class="fw-bold mb-0 text-white">Absensi Siswa Hari Ini</h6>
-                    <small class="text-white-50">{{ \Carbon\Carbon::now('Asia/Jakarta')->translatedFormat('d F Y') }}</small>
+                    <h6 class="fw-bold mb-0 text-white" style="font-size: 0.95rem;">Absensi Siswa Hari Ini</h6>
+                    <small class="text-white-50" style="font-size: 0.75rem;">{{ \Carbon\Carbon::now('Asia/Jakarta')->translatedFormat('d F Y') }}</small>
                 </div>
                 <!-- Filter Dropdown Kelas -->
                 <form action="{{ route('admin.dashboard') }}" method="GET" class="m-0">
-                    <select name="kelas_id" class="form-select form-select-sm shadow-sm" style="min-width: 190px; border-radius: 8px;" onchange="this.form.submit()">
+                    <select name="kelas_id" class="form-select form-select-sm shadow-sm" style="min-width: 175px; border-radius: 6px; font-size: 0.78rem;" onchange="this.form.submit()">
                         <option value="">-- Semua Kelas ({{ $totalSiswa }} siswa) --</option>
                         @foreach($kelases as $k)
                             <option value="{{ $k->id }}" {{ $selectedKelasId == $k->id ? 'selected' : '' }}>
@@ -156,7 +156,7 @@
             </div>
 
             <div class="p-3">
-                <div class="row g-2 justify-content-around">
+                <div class="row g-1 justify-content-around">
                     <div class="col-4 col-sm-2 stat-metric-box">
                         <span class="stat-metric-label text-hadir">Hadir</span>
                         <h4 class="stat-metric-val text-hadir">{{ $totalHadir }}</h4>
@@ -183,11 +183,11 @@
                     </div>
                 </div>
 
-                <div class="border-top pt-3 mt-2 px-2 d-flex justify-content-between align-items-center flex-wrap gap-2">
-                    <small class="text-muted">
-                        <i class="fa-solid fa-circle-info text-primary me-1"></i> Total kehadiran fisik: <strong>{{ $totalMasuk }} Siswa</strong>
+                <div class="border-top pt-2 mt-2 px-1 d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <small class="text-muted" style="font-size: 0.78rem;">
+                        <i class="fa-solid fa-circle-info text-primary me-1"></i> Total hadir fisik: <strong>{{ $totalMasuk }} Siswa</strong>
                     </small>
-                    <a href="{{ route('admin.rekap.monitoring') }}" class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold">
+                    <a href="{{ route('admin.rekap.monitoring') }}" class="btn btn-sm btn-outline-primary rounded-pill px-3 py-1 fw-bold" style="font-size: 0.78rem;">
                         <i class="fa-solid fa-list-check me-1"></i> Buka Monitoring Live
                     </a>
                 </div>
@@ -200,19 +200,19 @@
         <div class="panel-widget h-100">
             <div class="panel-header-teal">
                 <div>
-                    <h6 class="fw-bold mb-0 text-white">Tingkat Kehadiran Siswa</h6>
-                    <small class="text-white-50">Statistik kehadiran 7 hari terakhir | {{ \Carbon\Carbon::now('Asia/Jakarta')->translatedFormat('d F Y') }}</small>
+                    <h6 class="fw-bold mb-0 text-white" style="font-size: 0.95rem;">Tingkat Kehadiran Siswa</h6>
+                    <small class="text-white-50" style="font-size: 0.75rem;">Statistik kehadiran 7 hari terakhir | {{ \Carbon\Carbon::now('Asia/Jakarta')->translatedFormat('d F Y') }}</small>
                 </div>
             </div>
 
             <div class="p-3">
-                <div style="height: 220px; position: relative;">
+                <div style="height: 165px; position: relative;">
                     <canvas id="chartKehadiran"></canvas>
                 </div>
 
-                <div class="border-top pt-3 mt-2 px-2 d-flex justify-content-between align-items-center flex-wrap gap-2">
-                    <small class="text-muted">Data dihitung otomatis dari presensi aktif</small>
-                    <a href="{{ route('admin.rekap.index') }}" class="text-decoration-none fw-bold small text-primary">
+                <div class="border-top pt-2 mt-2 px-1 d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <small class="text-muted" style="font-size: 0.78rem;">Data sinkron otomatis</small>
+                    <a href="{{ route('admin.rekap.index') }}" class="text-decoration-none fw-bold text-primary" style="font-size: 0.78rem;">
                         <i class="fa-solid fa-chart-column me-1"></i> Lihat Rekapitulasi Lengkap &rarr;
                     </a>
                 </div>
@@ -220,8 +220,6 @@
         </div>
     </div>
 </div>
-
-
 
 <!-- Chart.js Initialization -->
 <script>
@@ -237,32 +235,32 @@
                             label: 'Hadir',
                             data: {!! json_encode($chartHadir) !!},
                             backgroundColor: '#22c55e',
-                            borderRadius: 4,
-                            barPercentage: 0.8,
+                            borderRadius: 3,
+                            barPercentage: 0.7,
                             categoryPercentage: 0.7
                         },
                         {
                             label: 'Sakit',
                             data: {!! json_encode($chartSakit) !!},
                             backgroundColor: '#f59e0b',
-                            borderRadius: 4,
-                            barPercentage: 0.8,
+                            borderRadius: 3,
+                            barPercentage: 0.7,
                             categoryPercentage: 0.7
                         },
                         {
                             label: 'Izin',
                             data: {!! json_encode($chartIzin) !!},
                             backgroundColor: '#06b6d4',
-                            borderRadius: 4,
-                            barPercentage: 0.8,
+                            borderRadius: 3,
+                            barPercentage: 0.7,
                             categoryPercentage: 0.7
                         },
                         {
                             label: 'Alfa',
                             data: {!! json_encode($chartAlfa) !!},
                             backgroundColor: '#ef4444',
-                            borderRadius: 4,
-                            barPercentage: 0.8,
+                            borderRadius: 3,
+                            barPercentage: 0.7,
                             categoryPercentage: 0.7
                         }
                     ]
@@ -274,23 +272,25 @@
                         legend: {
                             position: 'bottom',
                             labels: {
-                                boxWidth: 12,
+                                boxWidth: 10,
                                 font: {
-                                    size: 11,
+                                    size: 10,
                                     weight: '600'
-                                }
+                                },
+                                padding: 8
                             }
                         },
                         tooltip: {
-                            padding: 10,
-                            cornerRadius: 8
+                            padding: 8,
+                            cornerRadius: 6
                         }
                     },
                     scales: {
                         y: {
                             beginAtZero: true,
                             ticks: {
-                                precision: 0
+                                precision: 0,
+                                font: { size: 10 }
                             },
                             grid: {
                                 color: '#f1f5f9'
@@ -299,6 +299,9 @@
                         x: {
                             grid: {
                                 display: false
+                            },
+                            ticks: {
+                                font: { size: 10 }
                             }
                         }
                     }
