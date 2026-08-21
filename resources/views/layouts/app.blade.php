@@ -6,7 +6,7 @@
     <title>SMP IT Al-Muttaqin - Presensi Siswa</title>
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
-    <!-- Google Fonts: Plus Jakarta Sans & Inter -->
+    <!-- Google Fonts: Plus Jakarta Sans -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -17,10 +17,7 @@
         :root {
             --sidebar-bg: #ffffff;
             --sidebar-border: #e2e8f0;
-            --sidebar-hover: #f1f5f9;
-            --primary-accent: #00c0ef;
-            --primary-accent-dark: #0891b2;
-            --primary-color: #0284c7;
+            --primary-cyan: #00c0ef;
             --body-bg: #f4f6f9;
             --text-main: #1e293b;
             --text-muted: #64748b;
@@ -39,49 +36,40 @@
             padding: 0;
         }
 
-        /* Sidebar Minimalist Styling */
+        /* Layout Container Tanpa Scroll-Lock */
+        .app-wrapper {
+            display: flex;
+            min-height: 100vh;
+            width: 100%;
+        }
+
+        /* Sidebar Styling Tanpa Scroll Lock */
         .sidebar {
-            width: 260px;
+            width: 250px;
+            min-width: 250px;
             background-color: var(--sidebar-bg);
-            position: fixed;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            z-index: 1050;
+            border-right: 1px solid var(--sidebar-border);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            overflow-y: auto;
-            border-right: 1px solid var(--sidebar-border);
-            box-shadow: 2px 0 12px rgba(0, 0, 0, 0.02);
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            min-height: 100vh;
+            z-index: 1040;
+            transition: transform 0.3s ease;
         }
 
+        /* Sidebar Brand Header (Sesuai Referensi Gambar) */
         .sidebar-brand {
-            padding: 1.5rem 1.25rem 1.25rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            padding: 1.5rem 1rem 1.25rem;
             text-align: center;
-            border-bottom: 1px solid var(--sidebar-border);
-            position: relative;
-        }
-
-        .sidebar-brand-top {
-            font-size: 0.85rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: #0f172a;
-            margin-bottom: 2px;
         }
 
         .sidebar-brand-title {
-            font-size: 0.95rem;
+            font-size: 0.92rem;
             font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 0.8px;
-            color: #0284c7;
+            letter-spacing: 0.5px;
+            color: #1e293b;
+            line-height: 1.3;
             margin-bottom: 4px;
         }
 
@@ -91,20 +79,18 @@
             color: #64748b;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            display: block;
         }
 
-        .sidebar-heading {
-            font-size: 0.68rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #94a3b8;
-            padding: 1.25rem 1.25rem 0.4rem;
+        .sidebar-divider {
+            border-top: 1px solid #e2e8f0;
+            margin: 0 1rem 0.75rem;
+            opacity: 0.8;
         }
 
         .sidebar-menu {
             list-style: none;
-            padding: 0.75rem 0.85rem;
+            padding: 0 0.85rem;
             margin: 0;
         }
 
@@ -113,43 +99,43 @@
         }
 
         .sidebar-menu .nav-link {
-            color: #475569;
+            color: #334155;
             font-weight: 600;
-            font-size: 0.88rem;
-            padding: 0.7rem 1rem;
-            border-radius: 10px;
+            font-size: 0.86rem;
+            padding: 0.65rem 0.95rem;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             gap: 12px;
-            transition: all 0.2s ease;
+            transition: all 0.15s ease;
             text-decoration: none;
         }
 
         .sidebar-menu .nav-link i {
-            font-size: 1.05rem;
-            width: 22px;
+            font-size: 1rem;
+            width: 20px;
             text-align: center;
-            color: #64748b;
-            transition: color 0.2s ease;
+            color: #8c9ba5;
+            transition: color 0.15s ease;
         }
 
         .sidebar-menu .nav-link:hover {
             color: #0f172a;
-            background: var(--sidebar-hover);
+            background: #f8fafc;
         }
         .sidebar-menu .nav-link:hover i {
-            color: var(--primary-accent-dark);
+            color: #00c0ef;
         }
 
-        /* Active Menu Button (Minimalist Vibrant Accent) */
+        /* Active Menu Button (Cyan Flat Minimalist Sesuai Gambar) */
         .sidebar-menu .nav-link.active {
-            color: #ffffff;
-            background: linear-gradient(135deg, #00c0ef 0%, #0891b2 100%);
-            box-shadow: 0 4px 14px rgba(0, 192, 239, 0.35);
+            color: #ffffff !important;
+            background: #00c0ef;
+            box-shadow: 0 4px 12px rgba(0, 192, 239, 0.35);
             font-weight: 700;
         }
         .sidebar-menu .nav-link.active i {
-            color: #ffffff;
+            color: #ffffff !important;
         }
 
         .sidebar-footer {
@@ -160,14 +146,14 @@
         .sidebar-footer .logout-btn {
             color: #ef4444;
             font-weight: 600;
-            font-size: 0.88rem;
+            font-size: 0.86rem;
             display: flex;
             align-items: center;
             gap: 10px;
-            padding: 0.65rem 0.9rem;
+            padding: 0.65rem 0.95rem;
             text-decoration: none;
-            border-radius: 10px;
-            transition: background 0.2s ease;
+            border-radius: 8px;
+            transition: background 0.15s ease;
             width: 100%;
             background: transparent;
             border: none;
@@ -176,21 +162,22 @@
             background: rgba(239, 68, 68, 0.08);
         }
 
-        /* Main Content Container */
+        /* Main Content Container (Mengikuti scroll halaman alami tanpa terkunci) */
         .main-content {
-            margin-left: 260px;
+            flex: 1;
+            min-width: 0;
             padding: 1.5rem 2rem;
+            background-color: var(--body-bg);
             min-height: 100vh;
-            transition: all 0.3s ease;
         }
 
         /* Top Minimalist Header / Navbar */
         .top-header-card {
             background: #ffffff;
-            border-radius: 16px;
-            padding: 1rem 1.75rem;
+            border-radius: 12px;
+            padding: 0.85rem 1.5rem;
             border: 1px solid #e2e8f0;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
             margin-bottom: 1.5rem;
             display: flex;
             justify-content: space-between;
@@ -201,76 +188,62 @@
 
         .top-header-title {
             font-weight: 800;
-            font-size: 1.25rem;
+            font-size: 1.2rem;
             color: #0f172a;
             margin: 0;
             letter-spacing: -0.3px;
         }
 
         .user-role-badge {
-            background: #f1f5f9;
+            background: #ffffff;
             color: #0f172a;
             font-weight: 700;
             font-size: 0.82rem;
-            padding: 0.45rem 1rem;
-            border-radius: 50rem;
+            padding: 0.4rem 0.9rem;
+            border-radius: 6px;
             border: 1px solid #e2e8f0;
             display: inline-flex;
             align-items: center;
             gap: 6px;
         }
 
-        .date-badge {
-            background: #f8fafc;
-            color: #64748b;
-            font-weight: 600;
-            font-size: 0.82rem;
-            padding: 0.45rem 0.9rem;
-            border-radius: 50rem;
-            border: 1px solid #e2e8f0;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        /* Floating Accent Badge Stat Cards (from reference UI) */
+        /* Floating Accent Badge Stat Cards */
         .stat-card-floating {
             background: #ffffff;
-            border-radius: 16px;
-            padding: 1.5rem 1.25rem 1.25rem;
+            border-radius: 12px;
+            padding: 1.5rem 1.25rem 1.15rem;
             border: 1px solid #e2e8f0;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.03);
             position: relative;
-            margin-top: 20px;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            margin-top: 18px;
+            transition: transform 0.2s ease;
         }
         .stat-card-floating:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+            transform: translateY(-2px);
         }
 
         .stat-floating-icon {
             position: absolute;
-            top: -18px;
-            left: 20px;
-            width: 58px;
-            height: 58px;
-            border-radius: 14px;
+            top: -16px;
+            left: 18px;
+            width: 54px;
+            height: 54px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #ffffff;
-            font-size: 1.5rem;
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+            font-size: 1.4rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
         }
 
         .stat-card-floating .stat-content {
             text-align: right;
-            margin-bottom: 0.75rem;
+            margin-bottom: 0.65rem;
         }
 
         .stat-card-floating .stat-label {
-            font-size: 0.82rem;
+            font-size: 0.8rem;
             font-weight: 600;
             color: #64748b;
             margin-bottom: 2px;
@@ -278,7 +251,7 @@
         }
 
         .stat-card-floating .stat-value {
-            font-size: 1.85rem;
+            font-size: 1.8rem;
             font-weight: 800;
             color: #0f172a;
             line-height: 1.2;
@@ -287,8 +260,8 @@
 
         .stat-card-floating .stat-footer {
             border-top: 1px solid #f1f5f9;
-            padding-top: 0.65rem;
-            font-size: 0.78rem;
+            padding-top: 0.6rem;
+            font-size: 0.76rem;
             color: #64748b;
             display: flex;
             align-items: center;
@@ -301,7 +274,7 @@
             background: #ffffff;
             padding: 0.85rem 1.25rem;
             border-bottom: 1px solid #e2e8f0;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
             margin-bottom: 1rem;
             align-items: center;
             justify-content: space-between;
@@ -316,13 +289,21 @@
             bottom: 0;
             background: rgba(15, 23, 42, 0.5);
             backdrop-filter: blur(3px);
-            z-index: 1040;
+            z-index: 1030;
         }
 
         @media (max-width: 991.98px) {
+            .app-wrapper {
+                flex-direction: column;
+            }
+
             .sidebar {
+                position: fixed;
+                top: 0;
+                bottom: 0;
+                left: 0;
                 transform: translateX(-100%);
-                width: 280px;
+                width: 260px;
                 box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
             }
 
@@ -335,20 +316,11 @@
             }
 
             .main-content {
-                margin-left: 0;
                 padding: 1rem 0.85rem 2rem;
             }
 
             .mobile-navbar {
                 display: flex;
-            }
-
-            .top-header-card {
-                padding: 1rem 1.25rem;
-            }
-
-            .top-header-title {
-                font-size: 1.15rem;
             }
         }
     </style>
@@ -358,199 +330,191 @@
     <!-- Mobile Overlay Backdrop -->
     <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="toggleSidebar()"></div>
 
-    <!-- Sidebar Drawer -->
-    <div class="sidebar" id="sidebarDrawer">
-        <div>
-            <!-- Branding Header (Matching Reference UI) -->
-            <div class="sidebar-brand">
-                <img src="{{ asset('images/logo.png') }}" alt="Logo SMP IT" style="width: 44px; height: 44px; object-fit: contain; margin-bottom: 8px;">
-                <span class="sidebar-brand-top">OPERATOR PETUGAS ABSENSI</span>
-                <span class="sidebar-brand-title">SMP IT AL-MUTTAQIN</span>
-                <span class="sidebar-brand-sub">TAROGONG KALER - GARUT</span>
-                <!-- Close Button on Mobile -->
-                <button type="button" class="btn btn-sm text-secondary d-lg-none p-1 position-absolute top-0 end-0 m-2" onclick="toggleSidebar()" aria-label="Tutup Menu">
-                    <i class="fa-solid fa-xmark fs-4"></i>
-                </button>
-            </div>
-
-            <ul class="sidebar-menu">
-                @if(Auth::check() && Auth::user()->role === 'guru')
-                    <!-- MENU WALI KELAS -->
-                    <div class="sidebar-heading">MENU WALI KELAS</div>
-                    <li class="nav-item">
-                        <a href="{{ route('guru.monitoring') }}" class="nav-link {{ request()->routeIs('guru.monitoring') ? 'active' : '' }}">
-                            <i class="fa-solid fa-rotate-left"></i> Monitoring Kehadiran
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('guru.rekap') }}" class="nav-link {{ request()->routeIs('guru.rekap') ? 'active' : '' }}">
-                            <i class="fa-solid fa-file-lines"></i> Rekap Kehadiran Siswa
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('guru.siswa.index') }}" class="nav-link {{ request()->routeIs('guru.siswa.*') ? 'active' : '' }}">
-                            <i class="fa-solid fa-address-book"></i> Biodata Siswa Binaan
-                        </a>
-                    </li>
-                @else
-                    <!-- MENU OPERATOR / ADMIN TU -->
-                    <li class="nav-item">
-                        <a href="{{ route('admin.dashboard') }}" class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
-                            <i class="fa-solid fa-table-columns"></i> Dashboard
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('presensi.scan') }}" class="nav-link {{ request()->routeIs('presensi.scan') ? 'active' : '' }}">
-                            <i class="fa-solid fa-qrcode"></i> Scanner QR Code
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('admin.rekap.monitoring') }}" class="nav-link {{ request()->routeIs('admin.rekap.monitoring') ? 'active' : '' }}">
-                            <i class="fa-solid fa-list-check"></i> Absensi Siswa (Live)
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('admin.rekap.index') }}" class="nav-link {{ request()->routeIs('admin.rekap.index') ? 'active' : '' }}">
-                            <i class="fa-solid fa-chart-simple"></i> Rekap Kehadiran Siswa
-                        </a>
-                    </li>
-
-                    <!-- MASTER DATA -->
-                    <div class="sidebar-heading">DATA MASTER</div>
-                    <li class="nav-item">
-                        <a href="{{ route('admin.siswa.index') }}" class="nav-link {{ request()->routeIs('admin.siswa.*') ? 'active' : '' }}">
-                            <i class="fa-solid fa-user-graduate"></i> Data Siswa
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('admin.kelas.index') }}" class="nav-link {{ request()->routeIs('admin.kelas.*') ? 'active' : '' }}">
-                            <i class="fa-solid fa-school"></i> Data Kelas
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('admin.guru.index') }}" class="nav-link {{ request()->routeIs('admin.guru.*') ? 'active' : '' }}">
-                            <i class="fa-solid fa-chalkboard-user"></i> Data Guru & Wali
-                        </a>
-                    </li>
-
-                    <!-- LAPORAN & PENGATURAN -->
-                    <div class="sidebar-heading">LAPORAN & SISTEM</div>
-                    <li class="nav-item">
-                        <a href="{{ route('admin.rekap.cetak') }}" target="_blank" class="nav-link">
-                            <i class="fa-solid fa-print"></i> Generate Laporan
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('admin.fonnte.index') }}" class="nav-link {{ request()->routeIs('admin.fonnte.*') ? 'active' : '' }}">
-                            <i class="fa-solid fa-gear"></i> Pengaturan WA
-                        </a>
-                    </li>
-                @endif
-            </ul>
-        </div>
-
-        <!-- Sidebar Footer / Direct Instant Logout -->
-        <div class="sidebar-footer">
-            <form action="{{ route('logout') }}" method="POST" id="logoutFormSidebar" class="m-0">
-                @csrf
-                <button type="submit" class="logout-btn">
-                    <i class="fa-solid fa-arrow-right-from-bracket"></i> Keluar / Logout
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Main Content Area -->
-    <div class="main-content">
-        <!-- Mobile Top Navbar -->
-        <div class="mobile-navbar rounded-3">
-            <button class="btn btn-light border p-2 rounded-3 text-dark" onclick="toggleSidebar()" aria-label="Buka Menu Sidebar">
-                <i class="fa-solid fa-bars-staggered fs-5"></i>
-            </button>
-            <div class="d-flex align-items-center gap-2">
-                <img src="{{ asset('images/logo.png') }}" alt="Logo" style="width: 28px; height: 28px; object-fit: contain;">
-                <span class="fw-bold text-dark fs-6">SMP IT Al-Muttaqin</span>
-            </div>
-            <div class="user-role-badge py-1 px-2" style="font-size: 0.72rem;">
-                {{ Auth::user()->role === 'guru' ? 'GURU' : 'ADMIN' }}
-            </div>
-        </div>
-
-        <!-- Desktop Top Header Navbar (Minimalist Style) -->
-        <div class="top-header-card d-none d-lg-flex">
+    <div class="app-wrapper">
+        <!-- Sidebar Navigation (Natural Flow, Tanpa Scroll Lock) -->
+        <div class="sidebar" id="sidebarDrawer">
             <div>
-                <h5 class="top-header-title">
-                    @if(request()->routeIs('admin.dashboard'))
-                        Dashboard
-                    @elseif(request()->routeIs('admin.siswa.*'))
-                        Data Siswa
-                    @elseif(request()->routeIs('admin.kelas.*'))
-                        Data Kelas
-                    @elseif(request()->routeIs('admin.guru.*'))
-                        Data Guru & Wali Kelas
-                    @elseif(request()->routeIs('admin.rekap.monitoring') || request()->routeIs('guru.monitoring'))
-                        Absensi Siswa (Monitoring Live)
-                    @elseif(request()->routeIs('admin.rekap.index') || request()->routeIs('guru.rekap'))
-                        Rekapitulasi Kehadiran Siswa
-                    @elseif(request()->routeIs('guru.siswa.*'))
-                        Biodata Siswa Binaan
-                    @elseif(request()->routeIs('presensi.scan'))
-                        Scanner QR Code
-                    @elseif(request()->routeIs('admin.fonnte.*'))
-                        Pengaturan Gateway WhatsApp
+                <!-- Branding Header (Sesuai Referensi Gambar) -->
+                <div class="sidebar-brand">
+                    <div class="sidebar-brand-title">
+                        OPERATOR<br>PETUGAS ABSENSI
+                    </div>
+                    <span class="sidebar-brand-sub">SMP IT AL-MUTTAQIN</span>
+                    <!-- Close Button on Mobile -->
+                    <button type="button" class="btn btn-sm text-secondary d-lg-none p-1 position-absolute top-0 end-0 m-2" onclick="toggleSidebar()" aria-label="Tutup Menu">
+                        <i class="fa-solid fa-xmark fs-4"></i>
+                    </button>
+                </div>
+
+                <div class="sidebar-divider"></div>
+
+                <ul class="sidebar-menu">
+                    @if(Auth::check() && Auth::user()->role === 'guru')
+                        <!-- MENU WALI KELAS -->
+                        <li class="nav-item">
+                            <a href="{{ route('guru.monitoring') }}" class="nav-link {{ request()->routeIs('guru.monitoring') ? 'active' : '' }}">
+                                <i class="fa-solid fa-rotate-left"></i> Monitoring Kehadiran
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('guru.rekap') }}" class="nav-link {{ request()->routeIs('guru.rekap') ? 'active' : '' }}">
+                                <i class="fa-solid fa-file-lines"></i> Rekap Kehadiran
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('guru.siswa.index') }}" class="nav-link {{ request()->routeIs('guru.siswa.*') ? 'active' : '' }}">
+                                <i class="fa-solid fa-address-book"></i> Biodata Siswa Binaan
+                            </a>
+                        </li>
                     @else
-                        Sistem Presensi Siswa
+                        <!-- MENU OPERATOR / ADMIN TU (Sesuai Struktur Gambar) -->
+                        <li class="nav-item">
+                            <a href="{{ route('admin.dashboard') }}" class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                                <i class="fa-solid fa-table-cells-large"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('presensi.scan') }}" class="nav-link {{ request()->routeIs('presensi.scan') ? 'active' : '' }}">
+                                <i class="fa-solid fa-qrcode"></i> Scan Presensi QR
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.rekap.monitoring') }}" class="nav-link {{ request()->routeIs('admin.rekap.monitoring') ? 'active' : '' }}">
+                                <i class="fa-solid fa-list-check"></i> Absensi Siswa
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.siswa.index') }}" class="nav-link {{ request()->routeIs('admin.siswa.*') ? 'active' : '' }}">
+                                <i class="fa-solid fa-user"></i> Data Siswa
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.kelas.index') }}" class="nav-link {{ request()->routeIs('admin.kelas.*') ? 'active' : '' }}">
+                                <i class="fa-solid fa-graduation-cap"></i> Data Kelas
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.guru.index') }}" class="nav-link {{ request()->routeIs('admin.guru.*') ? 'active' : '' }}">
+                                <i class="fa-solid fa-chalkboard-user"></i> Data Guru
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.rekap.index') }}" class="nav-link {{ request()->routeIs('admin.rekap.index') ? 'active' : '' }}">
+                                <i class="fa-solid fa-chart-simple"></i> Rekapitulasi Presensi
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.rekap.cetak') }}" target="_blank" class="nav-link">
+                                <i class="fa-solid fa-print"></i> Generate Laporan
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.fonnte.index') }}" class="nav-link {{ request()->routeIs('admin.fonnte.*') ? 'active' : '' }}">
+                                <i class="fa-solid fa-gear"></i> Pengaturan WA
+                            </a>
+                        </li>
                     @endif
-                </h5>
+                </ul>
             </div>
 
-            <div class="d-flex align-items-center gap-3">
-                <div class="date-badge">
-                    <i class="fa-regular fa-calendar text-muted"></i>
-                    <span>{{ \Carbon\Carbon::now('Asia/Jakarta')->translatedFormat('d F Y') }}</span>
-                </div>
-
-                <div class="user-role-badge">
-                    <i class="fa-solid fa-circle-user text-danger"></i>
-                    <span>USER : {{ strtoupper(Auth::user()->role === 'guru' ? (Auth::user()->name) : 'SUPERADMIN (ADMIN TU)') }}</span>
-                </div>
+            <!-- Sidebar Footer / Direct Instant Logout -->
+            <div class="sidebar-footer">
+                <form action="{{ route('logout') }}" method="POST" id="logoutFormSidebar" class="m-0">
+                    @csrf
+                    <button type="submit" class="logout-btn">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i> Keluar / Logout
+                    </button>
+                </form>
             </div>
         </div>
 
-        <!-- Alert Notifications -->
-        @if(session('success'))
-            <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm rounded-4 mb-4 d-flex align-items-center gap-2" role="alert">
-                <i class="fa-solid fa-circle-check fs-5 text-success"></i>
-                <div class="fw-semibold">{{ session('success') }}</div>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
-
-        @if(session('error'))
-            <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm rounded-4 mb-4 d-flex align-items-center gap-2" role="alert">
-                <i class="fa-solid fa-triangle-exclamation fs-5 text-danger"></i>
-                <div class="fw-semibold">{{ session('error') }}</div>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
-
-        @if($errors->any())
-            <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm rounded-4 mb-4" role="alert">
-                <div class="d-flex align-items-center gap-2 mb-1">
-                    <i class="fa-solid fa-circle-xmark fs-5 text-danger"></i>
-                    <strong class="fw-bold">Perhatian:</strong>
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <!-- Mobile Top Navbar -->
+            <div class="mobile-navbar rounded-3">
+                <button class="btn btn-light border p-2 rounded-3 text-dark" onclick="toggleSidebar()" aria-label="Buka Menu Sidebar">
+                    <i class="fa-solid fa-bars-staggered fs-5"></i>
+                </button>
+                <div class="d-flex align-items-center gap-2">
+                    <img src="{{ asset('images/logo.png') }}" alt="Logo" style="width: 28px; height: 28px; object-fit: contain;">
+                    <span class="fw-bold text-dark fs-6">SMP IT Al-Muttaqin</span>
                 </div>
-                <ul class="mb-0 ps-3 small">
-                    @foreach($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <div class="user-role-badge py-1 px-2" style="font-size: 0.72rem;">
+                    {{ Auth::user()->role === 'guru' ? 'GURU' : 'ADMIN' }}
+                </div>
             </div>
-        @endif
 
-        <!-- Main Page Content Slot -->
-        @yield('content')
+            <!-- Desktop Top Header Navbar (Minimalist Style Sesuai Gambar) -->
+            <div class="top-header-card d-none d-lg-flex">
+                <div>
+                    <h5 class="top-header-title">
+                        @if(request()->routeIs('admin.dashboard'))
+                            Dashboard
+                        @elseif(request()->routeIs('admin.siswa.*'))
+                            Data Siswa
+                        @elseif(request()->routeIs('admin.kelas.*'))
+                            Data Kelas
+                        @elseif(request()->routeIs('admin.guru.*'))
+                            Data Guru & Wali Kelas
+                        @elseif(request()->routeIs('admin.rekap.monitoring') || request()->routeIs('guru.monitoring'))
+                            Absensi Siswa (Monitoring Live)
+                        @elseif(request()->routeIs('admin.rekap.index') || request()->routeIs('guru.rekap'))
+                            Rekapitulasi Kehadiran Siswa
+                        @elseif(request()->routeIs('guru.siswa.*'))
+                            Biodata Siswa Binaan
+                        @elseif(request()->routeIs('presensi.scan'))
+                            Scanner QR Code
+                        @elseif(request()->routeIs('admin.fonnte.*'))
+                            Pengaturan Gateway WhatsApp
+                        @else
+                            Sistem Presensi Siswa
+                        @endif
+                    </h5>
+                </div>
+
+                <div class="d-flex align-items-center gap-3">
+                    <div class="user-role-badge">
+                        <i class="fa-solid fa-circle-user text-danger"></i>
+                        <span>USER : {{ strtoupper(Auth::user()->role === 'guru' ? (Auth::user()->name) : 'SUPERADMIN') }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Alert Notifications -->
+            @if(session('success'))
+                <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm rounded-3 mb-4 d-flex align-items-center gap-2" role="alert">
+                    <i class="fa-solid fa-circle-check fs-5 text-success"></i>
+                    <div class="fw-semibold">{{ session('success') }}</div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
+            @if(session('error'))
+                <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm rounded-3 mb-4 d-flex align-items-center gap-2" role="alert">
+                    <i class="fa-solid fa-triangle-exclamation fs-5 text-danger"></i>
+                    <div class="fw-semibold">{{ session('error') }}</div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
+            @if($errors->any())
+                <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm rounded-3 mb-4" role="alert">
+                    <div class="d-flex align-items-center gap-2 mb-1">
+                        <i class="fa-solid fa-circle-xmark fs-5 text-danger"></i>
+                        <strong class="fw-bold">Perhatian:</strong>
+                    </div>
+                    <ul class="mb-0 ps-3 small">
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
+            <!-- Main Page Content Slot -->
+            @yield('content')
+        </div>
     </div>
 
     <!-- Bootstrap 5 JS -->
