@@ -405,7 +405,7 @@
                     </li>
                     <li class="nav-item">
                         <a href="{{ route('admin.guru.index') }}" class="nav-link {{ request()->routeIs('admin.guru.*') ? 'active' : '' }}">
-                            <i class="fa-solid fa-chalkboard-user"></i> Data Guru
+                            <i class="fa-solid fa-chalkboard-user"></i> Data Wali Kelas
                         </a>
                     </li>
                     <li class="nav-item">
@@ -462,7 +462,7 @@
                         @elseif(request()->routeIs('admin.kelas.*'))
                             Data Kelas
                         @elseif(request()->routeIs('admin.guru.*'))
-                            Data Guru & Wali Kelas
+                            Data Wali Kelas
                         @elseif(request()->routeIs('admin.rekap.monitoring') || request()->routeIs('guru.monitoring'))
                             Absensi Siswa
                         @elseif(request()->routeIs('admin.rekap.index') || request()->routeIs('guru.rekap'))
