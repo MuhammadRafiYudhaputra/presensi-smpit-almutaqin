@@ -366,110 +366,110 @@
     <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="toggleSidebar()"></div>
 
     <div class="app-wrapper">
-        <!-- Sidebar Navigation (Natural Flow, Seluruh Menu & Logout Terlihat Langsung) -->
-        <div class="sidebar" id="sidebarDrawer">
-            <!-- Branding Header (Sesuai Referensi Gambar) -->
-            <div class="sidebar-brand">
-                <div class="sidebar-brand-title">
-                    OPERATOR<br>PETUGAS ABSENSI
+        <!-- Sidebar Navigation (Fixed & Stay On Place When Scrolling) -->
+        <div class="sidebar d-flex flex-column justify-content-between" id="sidebarDrawer">
+            <div>
+                <!-- Branding Header (Sesuai Role User) -->
+                <div class="sidebar-brand">
+                    <div class="sidebar-brand-title">
+                        @if(Auth::check() && Auth::user()->role === 'guru')
+                            PORTAL<br>WALI KELAS
+                        @else
+                            OPERATOR<br>PETUGAS ABSENSI
+                        @endif
+                    </div>
+                    <span class="sidebar-brand-sub">SMP IT AL-MUTTAQIN</span>
+                    <!-- Close Button on Mobile -->
+                    <button type="button" class="btn btn-sm text-secondary d-lg-none p-1 position-absolute top-0 end-0 m-2" onclick="toggleSidebar()" aria-label="Tutup Menu">
+                        <i class="fa-solid fa-xmark fs-4"></i>
+                    </button>
                 </div>
-                <span class="sidebar-brand-sub">SMP IT AL-MUTTAQIN</span>
-                <!-- Close Button on Mobile -->
-                <button type="button" class="btn btn-sm text-secondary d-lg-none p-1 position-absolute top-0 end-0 m-2" onclick="toggleSidebar()" aria-label="Tutup Menu">
-                    <i class="fa-solid fa-xmark fs-4"></i>
-                </button>
+
+                <div class="sidebar-divider"></div>
+
+                <ul class="sidebar-menu">
+                    @if(Auth::check() && Auth::user()->role === 'guru')
+                        <!-- MENU WALI KELAS -->
+                        <li class="nav-item">
+                            <a href="{{ route('guru.monitoring') }}" class="nav-link {{ request()->routeIs('guru.monitoring') ? 'active' : '' }}">
+                                <i class="fa-solid fa-rotate-left"></i> Monitoring Kehadiran
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('guru.rekap') }}" class="nav-link {{ request()->routeIs('guru.rekap') ? 'active' : '' }}">
+                                <i class="fa-solid fa-file-lines"></i> Rekap Kehadiran
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('guru.siswa.index') }}" class="nav-link {{ request()->routeIs('guru.siswa.*') ? 'active' : '' }}">
+                                <i class="fa-solid fa-address-book"></i> Biodata Siswa Binaan
+                            </a>
+                        </li>
+                    @else
+                        <!-- MENU OPERATOR / ADMIN TU (Sesuai Struktur Gambar) -->
+                        <li class="nav-item">
+                            <a href="{{ route('admin.dashboard') }}" class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                                <i class="fa-solid fa-table-cells-large"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('presensi.scan') }}" class="nav-link {{ request()->routeIs('presensi.scan') ? 'active' : '' }}">
+                                <i class="fa-solid fa-qrcode"></i> Scan Presensi QR
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.rekap.monitoring') }}" class="nav-link {{ request()->routeIs('admin.rekap.monitoring') ? 'active' : '' }}">
+                                <i class="fa-solid fa-list-check"></i> Absensi Siswa
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.siswa.index') }}" class="nav-link {{ request()->routeIs('admin.siswa.*') ? 'active' : '' }}">
+                                <i class="fa-solid fa-user"></i> Data Siswa
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.kelas.index') }}" class="nav-link {{ request()->routeIs('admin.kelas.*') ? 'active' : '' }}">
+                                <i class="fa-solid fa-graduation-cap"></i> Data Kelas
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.guru.index') }}" class="nav-link {{ request()->routeIs('admin.guru.*') ? 'active' : '' }}">
+                                <i class="fa-solid fa-chalkboard-user"></i> Data Wali Kelas
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.orangtua.index') }}" class="nav-link {{ request()->routeIs('admin.orangtua.*') ? 'active' : '' }}">
+                                <i class="fa-solid fa-user-group"></i> Data Orang Tua
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.rekap.index') }}" class="nav-link {{ request()->routeIs('admin.rekap.index') ? 'active' : '' }}">
+                                <i class="fa-solid fa-chart-simple"></i> Rekapitulasi Presensi
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.laporan.index') }}" class="nav-link {{ request()->routeIs('admin.laporan.*') ? 'active' : '' }}">
+                                <i class="fa-solid fa-print"></i> Generate Laporan
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.fonnte.index') }}" class="nav-link {{ request()->routeIs('admin.fonnte.*') ? 'active' : '' }}">
+                                <i class="fa-solid fa-gear"></i> Pengaturan WA
+                            </a>
+                        </li>
+                    @endif
+                </ul>
             </div>
 
-            <div class="sidebar-divider"></div>
-
-            <ul class="sidebar-menu">
-                @if(Auth::check() && Auth::user()->role === 'guru')
-                    <!-- MENU WALI KELAS -->
-                    <li class="nav-item">
-                        <a href="{{ route('guru.monitoring') }}" class="nav-link {{ request()->routeIs('guru.monitoring') ? 'active' : '' }}">
-                            <i class="fa-solid fa-rotate-left"></i> Monitoring Kehadiran
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('guru.rekap') }}" class="nav-link {{ request()->routeIs('guru.rekap') ? 'active' : '' }}">
-                            <i class="fa-solid fa-file-lines"></i> Rekap Kehadiran
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('guru.siswa.index') }}" class="nav-link {{ request()->routeIs('guru.siswa.*') ? 'active' : '' }}">
-                            <i class="fa-solid fa-address-book"></i> Biodata Siswa Binaan
-                        </a>
-                    </li>
-                    <li class="nav-item mt-2 pt-2 border-top">
-                        <form action="{{ route('logout') }}" method="POST" class="m-0">
-                            @csrf
-                            <button type="submit" class="logout-btn-link">
-                                <i class="fa-solid fa-arrow-right-from-bracket"></i> Keluar / Logout
-                            </button>
-                        </form>
-                    </li>
-                @else
-                    <!-- MENU OPERATOR / ADMIN TU (Sesuai Struktur Gambar) -->
-                    <li class="nav-item">
-                        <a href="{{ route('admin.dashboard') }}" class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
-                            <i class="fa-solid fa-table-cells-large"></i> Dashboard
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('presensi.scan') }}" class="nav-link {{ request()->routeIs('presensi.scan') ? 'active' : '' }}">
-                            <i class="fa-solid fa-qrcode"></i> Scan Presensi QR
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('admin.rekap.monitoring') }}" class="nav-link {{ request()->routeIs('admin.rekap.monitoring') ? 'active' : '' }}">
-                            <i class="fa-solid fa-list-check"></i> Absensi Siswa
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('admin.siswa.index') }}" class="nav-link {{ request()->routeIs('admin.siswa.*') ? 'active' : '' }}">
-                            <i class="fa-solid fa-user"></i> Data Siswa
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('admin.kelas.index') }}" class="nav-link {{ request()->routeIs('admin.kelas.*') ? 'active' : '' }}">
-                            <i class="fa-solid fa-graduation-cap"></i> Data Kelas
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('admin.guru.index') }}" class="nav-link {{ request()->routeIs('admin.guru.*') ? 'active' : '' }}">
-                            <i class="fa-solid fa-chalkboard-user"></i> Data Wali Kelas
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('admin.orangtua.index') }}" class="nav-link {{ request()->routeIs('admin.orangtua.*') ? 'active' : '' }}">
-                            <i class="fa-solid fa-user-group"></i> Data Orang Tua
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('admin.rekap.index') }}" class="nav-link {{ request()->routeIs('admin.rekap.index') ? 'active' : '' }}">
-                            <i class="fa-solid fa-chart-simple"></i> Rekapitulasi Presensi
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('admin.laporan.index') }}" class="nav-link {{ request()->routeIs('admin.laporan.*') ? 'active' : '' }}">
-                            <i class="fa-solid fa-print"></i> Generate Laporan
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('admin.fonnte.index') }}" class="nav-link {{ request()->routeIs('admin.fonnte.*') ? 'active' : '' }}">
-                            <i class="fa-solid fa-gear"></i> Pengaturan WA
-                        </a>
-                    </li>
-                    <li class="nav-item mt-2 pt-2 border-top">
-                        <form action="{{ route('logout') }}" method="POST" class="m-0">
-                            @csrf
-                            <button type="submit" class="logout-btn-link">
-                                <i class="fa-solid fa-arrow-right-from-bracket"></i> Keluar / Logout
-                            </button>
-                        </form>
-                    </li>
-                @endif
-            </ul>
+            <!-- Sidebar Bottom Footer (Logout Button Pinned at Bottom) -->
+            <div class="sidebar-footer mt-auto pt-2 pb-3 px-3 border-top">
+                <form action="{{ route('logout') }}" method="POST" class="m-0">
+                    @csrf
+                    <button type="submit" class="logout-btn-link w-100">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i> Keluar / Logout
+                    </button>
+                </form>
+            </div>
         </div>
 
         <!-- Main Content Area -->
