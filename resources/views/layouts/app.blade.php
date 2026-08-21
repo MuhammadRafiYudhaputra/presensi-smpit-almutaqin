@@ -537,6 +537,23 @@
                 backdrop.classList.toggle('show');
             }
         }
+
+        // Auto-dismiss alert notifications secara halus setelah 3.5 detik
+        document.addEventListener("DOMContentLoaded", function() {
+            const alerts = document.querySelectorAll('.alert.alert-dismissible');
+            alerts.forEach(function(alert) {
+                setTimeout(function() {
+                    alert.style.transition = "opacity 0.4s ease, transform 0.4s ease, margin 0.4s ease, max-height 0.4s ease";
+                    alert.style.opacity = "0";
+                    alert.style.transform = "translateY(-10px)";
+                    setTimeout(function() {
+                        if (alert && alert.parentNode) {
+                            alert.parentNode.removeChild(alert);
+                        }
+                    }, 400);
+                }, 3500);
+            });
+        });
     </script>
 </body>
 </html>

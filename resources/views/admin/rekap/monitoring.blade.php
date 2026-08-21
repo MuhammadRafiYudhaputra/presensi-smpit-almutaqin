@@ -2,55 +2,39 @@
 
 @section('content')
 <style>
-    /* Table Styling Sesuai Gambar Referensi */
+    /* Table Styling Selaras dengan Tema Website */
     .table-presensi-minimal {
         border-collapse: separate;
         border-spacing: 0;
         width: 100%;
     }
     .table-presensi-minimal thead th {
-        color: #7e22ce;
+        color: #334155;
         font-weight: 700;
-        font-size: 0.92rem;
-        border-bottom: 2px solid #f1f5f9;
-        padding: 0.85rem 1rem;
-        background: #ffffff;
+        font-size: 0.88rem;
+        border-bottom: 2px solid #e2e8f0;
+        padding: 0.9rem 1rem;
+        background: #f8fafc;
+        letter-spacing: 0.3px;
     }
     .table-presensi-minimal tbody td {
         padding: 0.85rem 1rem;
         vertical-align: middle;
-        border-bottom: 1px solid #f8fafc;
+        border-bottom: 1px solid #f1f5f9;
         font-size: 0.88rem;
     }
     .table-presensi-minimal tbody tr:hover {
         background-color: #f8fafc;
     }
 
-    /* Solid Status Badges Sesuai Gambar Referensi */
-    .badge-status-solid {
-        padding: 0.4rem 1rem;
-        border-radius: 6px;
-        font-weight: 700;
-        font-size: 0.82rem;
-        display: inline-block;
-        min-width: 80px;
-        text-align: center;
-    }
-    .badge-hadir-solid { background-color: #22c55e; color: #ffffff; }
-    .badge-terlambat-solid { background-color: #f59e0b; color: #ffffff; }
-    .badge-sakit-solid { background-color: #64748b; color: #ffffff; }
-    .badge-izin-solid { background-color: #00c0ef; color: #ffffff; }
-    .badge-alpa-solid { background-color: #ef4444; color: #ffffff; }
-    .badge-belum-solid { background-color: #e2e8f0; color: #64748b; }
-
-    /* Button Edit Aksi Cyan Sesuai Gambar */
+    /* Button Edit Aksi Selaras dengan Warna Cyan Website */
     .btn-edit-action {
         background-color: #00c0ef;
         border: 1px solid #00c0ef;
         color: #ffffff;
         font-weight: 700;
-        font-size: 0.82rem;
-        padding: 0.35rem 0.9rem;
+        font-size: 0.8rem;
+        padding: 0.35rem 0.85rem;
         border-radius: 6px;
         display: inline-flex;
         align-items: center;
@@ -178,7 +162,7 @@
         </div>
     </div>
 
-    <!-- Table Absensi Harian (Format Bersih Sesuai Contoh Gambar) -->
+    <!-- Table Absensi Harian (Format Bersih Sesuai Tema Website) -->
     <div class="table-responsive">
         <table class="table-presensi-minimal align-middle mb-0">
             <thead>
@@ -201,17 +185,29 @@
                     <td class="fw-bold text-dark">{{ $row->siswa->nama }}</td>
                     <td class="text-center">
                         @if($row->status === 'HADIR')
-                            <span class="badge-status-solid badge-hadir-solid">Hadir</span>
+                            <span class="badge bg-success bg-opacity-10 text-success border border-success px-3 py-1 rounded-pill fw-bold">
+                                <i class="fa-solid fa-circle-check me-1"></i> Hadir
+                            </span>
                         @elseif($row->status === 'TERLAMBAT')
-                            <span class="badge-status-solid badge-terlambat-solid">Terlambat</span>
+                            <span class="badge bg-warning bg-opacity-10 text-dark border border-warning px-3 py-1 rounded-pill fw-bold" style="color: #92400e !important;">
+                                <i class="fa-solid fa-clock me-1 text-warning"></i> Terlambat
+                            </span>
                         @elseif($row->status === 'IZIN')
-                            <span class="badge-status-solid badge-izin-solid">Izin</span>
+                            <span class="badge bg-info bg-opacity-10 text-primary border border-info px-3 py-1 rounded-pill fw-bold">
+                                <i class="fa-solid fa-envelope-open me-1"></i> Izin
+                            </span>
                         @elseif($row->status === 'SAKIT')
-                            <span class="badge-status-solid badge-sakit-solid">Sakit</span>
+                            <span class="badge bg-secondary bg-opacity-10 text-dark border border-secondary px-3 py-1 rounded-pill fw-bold">
+                                <i class="fa-solid fa-notes-medical me-1"></i> Sakit
+                            </span>
                         @elseif($row->status === 'ALPA')
-                            <span class="badge-status-solid badge-alpa-solid">Alpa</span>
+                            <span class="badge bg-danger bg-opacity-10 text-danger border border-danger px-3 py-1 rounded-pill fw-bold">
+                                <i class="fa-solid fa-xmark me-1"></i> Alpa
+                            </span>
                         @else
-                            <span class="badge-status-solid badge-belum-solid">Belum</span>
+                            <span class="badge bg-light text-secondary border px-3 py-1 rounded-pill fw-semibold">
+                                <i class="fa-regular fa-circle me-1"></i> Belum
+                            </span>
                         @endif
                     </td>
                     <td class="text-center text-muted font-monospace">{{ $row->jam_masuk ?? '-' }}</td>
@@ -236,7 +232,7 @@
     </div>
 </div>
 
-<!-- Modal Ubah Kehadiran (Sesuai Desain Gambar Referensi) -->
+<!-- Modal Ubah Kehadiran -->
 <div class="modal fade" id="modalSetStatus" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content rounded-4 border-0 shadow-lg" style="overflow: hidden;">
@@ -258,7 +254,7 @@
 
                     <hr class="my-2" style="opacity: 0.15;">
 
-                    <!-- Pilihan Kehadiran Radio List (Sesuai Gambar) -->
+                    <!-- Pilihan Kehadiran Radio List -->
                     <label class="form-label fw-bold text-muted small text-uppercase mb-2" style="letter-spacing: 0.5px;">Kehadiran</label>
                     <div class="d-flex flex-column gap-1 mb-3">
                         <label class="status-radio-option">
@@ -287,7 +283,7 @@
                         </label>
                     </div>
 
-                    <!-- Keterangan (Sesuai Gambar) -->
+                    <!-- Keterangan -->
                     <div class="mb-2">
                         <label class="form-label fw-bold text-muted small text-uppercase mb-1" style="letter-spacing: 0.5px;">Keterangan</label>
                         <input type="text" name="keterangan" id="modal_keterangan" class="form-control rounded-3" placeholder="Contoh: Sakit demam, Izin acara keluarga, dll." style="padding: 0.6rem 0.85rem; border-color: #cbd5e1;">
@@ -311,7 +307,6 @@ function openSetStatusModal(siswaId, siswaNama, currentStatus, keterangan) {
 
     const statusVal = (currentStatus && currentStatus !== 'BELUM ABSEN') ? currentStatus : 'HADIR';
     
-    // Set checked radio button
     const radioHadir = document.getElementById('status_hadir');
     const radioTerlambat = document.getElementById('status_terlambat');
     const radioSakit = document.getElementById('status_sakit');
