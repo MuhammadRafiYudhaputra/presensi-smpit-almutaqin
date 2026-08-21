@@ -128,9 +128,8 @@
             <thead class="table-light text-center">
                 <tr>
                     <th style="width: 50px;" class="text-dark">No</th>
-                    <th style="width: 120px;" class="text-dark">NISN / NIS</th>
+                    <th style="width: 130px;" class="text-dark">NISN / NIS</th>
                     <th class="text-dark text-start">Nama Peserta Didik</th>
-                    <th style="width: 50px;" class="text-dark">JK</th>
                     <th class="text-dark text-start" style="width: 200px;">Nama Orang Tua</th>
                     <th class="text-dark text-center" style="width: 180px;">Kontak WhatsApp</th>
                     <th class="text-dark text-start">Alamat Domisili</th>
@@ -157,11 +156,6 @@
                                 <small class="text-muted">Kelas {{ $s->kelas->nama_kelas ?? '-' }}</small>
                             </div>
                         </div>
-                    </td>
-                    <td class="text-center">
-                        <span class="badge {{ $s->jenis_kelamin === 'L' ? 'bg-primary bg-opacity-10 text-primary border border-primary' : 'bg-danger bg-opacity-10 text-danger border border-danger' }} px-2 fw-bold">
-                            {{ $s->jenis_kelamin }}
-                        </span>
                     </td>
                     <td>
                         @if($s->orangTua)

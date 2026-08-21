@@ -1,21 +1,63 @@
 @extends('layouts.app')
 
 @section('content')
+<style>
+    .table-siswa-minimal {
+        border-collapse: separate;
+        border-spacing: 0;
+        width: 100%;
+    }
+    .table-siswa-minimal thead th {
+        color: #334155;
+        font-weight: 700;
+        font-size: 0.88rem;
+        border-bottom: 2px solid #e2e8f0;
+        padding: 0.9rem 1rem;
+        background: #f8fafc;
+        letter-spacing: 0.3px;
+    }
+    .table-siswa-minimal tbody td {
+        padding: 0.85rem 1rem;
+        vertical-align: middle;
+        border-bottom: 1px solid #f1f5f9;
+        font-size: 0.88rem;
+    }
+    .table-siswa-minimal tbody tr:hover {
+        background-color: #f8fafc;
+    }
+
+    /* Action buttons square/rounded */
+    .btn-action-icon {
+        width: 32px;
+        height: 32px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 6px;
+        font-size: 0.82rem;
+        transition: transform 0.15s ease, opacity 0.15s ease;
+    }
+    .btn-action-icon:hover {
+        transform: translateY(-1px);
+        opacity: 0.9;
+    }
+</style>
+
 <div class="card card-custom p-4 shadow-sm border-0 rounded-4">
-    <!-- Header & Action Buttons -->
+    <!-- Header & Action Buttons (Sesuai Referensi Gambar) -->
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
         <div>
             <h5 class="fw-bold mb-1 text-dark d-flex align-items-center">
-                <i class="fa-solid fa-graduation-cap text-primary me-2 fs-4"></i> Kelola Data Siswa
+                <i class="fa-solid fa-users text-primary me-2 fs-4"></i> Data Siswa
             </h5>
-            <small class="text-muted">Total siswa terdaftar, impor data Dapodik, dan pembuatan token QR Code</small>
+            <small class="text-muted">Kelola data seluruh siswa, kelas, kontak orang tua, dan cetak kartu QR presensi</small>
         </div>
         <div class="d-flex gap-2 flex-wrap">
-            <button type="button" class="btn btn-outline-success rounded-pill px-3 fw-semibold shadow-sm" data-bs-toggle="modal" data-bs-target="#modalImportDapodik">
-                <i class="fa-solid fa-file-import me-1"></i> Import Data Dapodik
+            <button type="button" class="btn btn-primary px-3 py-2 fw-semibold shadow-sm rounded-3 d-inline-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#modalAddSiswa">
+                <i class="fa-solid fa-plus"></i> TAMBAH DATA SISWA
             </button>
-            <button type="button" class="btn btn-primary rounded-pill px-4 fw-semibold shadow-sm" data-bs-toggle="modal" data-bs-target="#modalAddSiswa">
-                <i class="fa-solid fa-plus me-1"></i> Tambah Siswa Baru
+            <button type="button" class="btn btn-outline-primary px-3 py-2 fw-semibold shadow-sm rounded-3 d-inline-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#modalImportDapodik">
+                <i class="fa-solid fa-file-import"></i> IMPORT CSV / EXCEL
             </button>
         </div>
     </div>
@@ -24,11 +66,11 @@
     <div class="d-flex align-items-center mb-4 flex-wrap gap-2">
         <div class="btn-group p-1 bg-light rounded-pill border" role="group">
             <a href="{{ route('admin.siswa.index', ['status' => 'aktif', 'search' => $search, 'kelas_id' => $kelasId, 'sort_by' => $sortBy]) }}" class="btn btn-sm rounded-pill {{ ($status ?? 'aktif') === 'aktif' ? 'btn-primary shadow-sm' : 'btn-light text-muted' }}">
-                <i class="fa-solid fa-user me-1"></i> Siswa Aktif (Kelas 7, 8, 9)
+                <i class="fa-solid fa-user me-1"></i> Siswa Aktif
                 <span class="badge {{ ($status ?? 'aktif') === 'aktif' ? 'bg-white text-primary' : 'bg-secondary text-white' }} rounded-circle ms-1">{{ $countAktif }}</span>
             </a>
             <a href="{{ route('admin.siswa.index', ['status' => 'alumni', 'search' => $search, 'kelas_id' => $kelasId, 'sort_by' => $sortBy]) }}" class="btn btn-sm rounded-pill {{ ($status ?? '') === 'alumni' ? 'btn-primary shadow-sm' : 'btn-light text-muted' }}">
-                <i class="fa-solid fa-graduation-cap text-warning me-1"></i> Arsip Alumni / Siswa Lulus
+                <i class="fa-solid fa-graduation-cap text-warning me-1"></i> Arsip Alumni
                 <span class="badge bg-light text-dark rounded-circle ms-1">{{ $countAlumni }}</span>
             </a>
             <a href="{{ route('admin.siswa.index', ['status' => 'semua', 'search' => $search, 'kelas_id' => $kelasId, 'sort_by' => $sortBy]) }}" class="btn btn-sm rounded-pill {{ ($status ?? '') === 'semua' ? 'btn-primary shadow-sm' : 'btn-light text-muted' }}">
@@ -46,7 +88,7 @@
         <div class="col-md-5">
             <div class="input-group">
                 <span class="input-group-text bg-white border-end-0 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
-                <input type="text" name="search" class="form-control border-start-0" placeholder="Cari NISN, Nama Siswa, atau NIK..." value="{{ $search ?? '' }}">
+                <input type="text" name="search" class="form-control border-start-0" placeholder="Cari NISN, Nama Siswa, atau Kontak WA..." value="{{ $search ?? '' }}">
                 <button type="submit" class="btn btn-primary px-4 fw-semibold">Cari</button>
             </div>
         </div>
@@ -77,40 +119,31 @@
         </div>
     </form>
 
-    <!-- Tabel Data Siswa -->
+    <!-- Tabel Data Siswa (Format Bersih Sesuai Referensi) -->
     <div class="table-responsive">
-        <table class="table table-bordered table-hover align-middle mb-0" style="font-size: 0.9rem;">
-            <thead class="table-light text-center">
+        <table class="table-siswa-minimal align-middle mb-0">
+            <thead>
                 <tr>
-                    <th style="width: 45px;" class="text-dark">No</th>
-                    <th style="width: 110px;" class="text-dark">NISN</th>
-                    <th class="text-dark text-start">Nama Peserta Didik</th>
-                    <th style="width: 45px;" class="text-dark">JK</th>
-                    <th class="text-dark text-start" style="width: 140px;">Tempat, Tanggal Lahir & NIK</th>
-                    <th class="text-dark" style="width: 100px;">Kelas / Status</th>
-                    <th class="text-dark text-start" style="width: 140px;">Orang Tua & WA</th>
-                    <th class="text-dark text-start" style="width: 170px;">Alamat (Dusun/Kel/Kec)</th>
-                    <th class="text-dark" style="width: 160px;">QR Code Token</th>
-                    <th class="text-center text-dark" style="width: 140px;">Aksi</th>
+                    <th style="width: 50px;">No</th>
+                    <th style="width: 130px;">NIS</th>
+                    <th>Nama Siswa</th>
+                    <th style="width: 140px;">Kelas</th>
+                    <th style="width: 180px;">No HP</th>
+                    <th style="width: 130px; text-align: center;">Aksi</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($siswas as $idx => $siswa)
                 <tr>
-                    <td class="text-center fw-bold">{{ $siswas->firstItem() + $idx }}</td>
-                    <td class="text-center fw-bold text-dark">{{ $siswa->nisn }}</td>
+                    <td class="text-muted fw-semibold">{{ $siswas->firstItem() + $idx }}</td>
+                    <td class="text-dark fw-bold">{{ $siswa->nisn }}</td>
                     <td>
                         <span class="fw-bold text-dark d-block">{{ $siswa->nama }}</span>
-                        <small class="text-muted"><i class="fa-regular fa-id-card me-1"></i>NIK: {{ $siswa->nik ?? '320504' . substr($siswa->nisn, -6) . '0001' }}</small>
-                    </td>
-                    <td class="text-center">
-                        <span class="badge {{ $siswa->jenis_kelamin === 'L' ? 'bg-primary bg-opacity-10 text-primary border border-primary' : 'bg-danger bg-opacity-10 text-danger border border-danger' }} px-2 fw-bold">{{ $siswa->jenis_kelamin }}</span>
+                        @if($siswa->nis)
+                            <small class="text-muted">NIS: {{ $siswa->nis }}</small>
+                        @endif
                     </td>
                     <td>
-                        <div class="small text-dark"><i class="fa-solid fa-location-dot text-danger me-1"></i>{{ $siswa->tempat_lahir ?? 'Garut' }}</div>
-                        <div class="small text-muted"><i class="fa-regular fa-calendar me-1"></i>{{ $siswa->tanggal_lahir ?? '2011-05-14' }}</div>
-                    </td>
-                    <td class="text-center">
                         @if(($siswa->status ?? '') === 'alumni')
                             <span class="badge bg-warning bg-opacity-10 text-dark border border-warning px-2 py-1">
                                 <i class="fa-solid fa-graduation-cap me-1"></i> Alumni
@@ -122,40 +155,39 @@
                         @endif
                     </td>
                     <td>
-                        <span class="fw-semibold text-dark d-block">{{ $siswa->orangTua->nama_ayah ?? $siswa->orangTua->nama_ibu ?? '-' }}</span>
-                        <small class="text-success"><i class="fa-brands fa-whatsapp me-1"></i>{{ $siswa->orangTua->no_wa ?? '-' }}</small>
-                    </td>
-                    <td>
-                        <span class="d-block small text-dark">{{ $siswa->alamat ?? $siswa->orangTua->alamat ?? 'Kp. Sirah Cijugul' }}</span>
-                        <small class="text-muted d-block">RT 02/RW 04</small>
-                        <small class="text-muted d-block">Panjiwangi, Tarogong Kaler</small>
-                    </td>
-                    <td class="text-center">
-                        <code class="text-danger fw-semibold" style="font-size: 0.8rem;">{{ $siswa->qr_code_token }}</code>
+                        @if($siswa->orangTua && $siswa->orangTua->no_wa)
+                            <span class="text-dark fw-semibold d-block">{{ $siswa->orangTua->no_wa }}</span>
+                            <small class="text-muted">({{ $siswa->orangTua->nama_ayah ?? $siswa->orangTua->nama_ibu ?? 'Wali' }})</small>
+                        @else
+                            <span class="text-muted">-</span>
+                        @endif
                     </td>
                     <td class="text-center">
-                        <div class="d-flex flex-column align-items-center gap-1">
-                            <a href="{{ route('admin.siswa.card', $siswa->id) }}" target="_blank" class="btn btn-sm btn-success rounded-pill px-3 py-1 fw-semibold shadow-sm w-100" style="font-size: 0.78rem;">
-                                <i class="fa-solid fa-id-card me-1"></i> Cetak QR
-                            </a>
-                            <div class="d-flex gap-1">
-                                <button type="button" class="btn btn-sm btn-warning rounded-circle p-1 text-dark" style="width: 28px; height: 28px;" title="Edit Data Siswa" onclick="openEditSiswaModal({{ json_encode($siswa) }})">
-                                    <i class="fa-solid fa-pen-to-square" style="font-size: 0.75rem;"></i>
+                        <div class="d-inline-flex align-items-center gap-1">
+                            <!-- Tombol Edit Siswa -->
+                            <button type="button" class="btn btn-primary btn-action-icon" title="Edit Data Siswa" onclick="openEditSiswaModal({{ json_encode($siswa) }})">
+                                <i class="fa-solid fa-pen"></i>
+                            </button>
+                            
+                            <!-- Tombol Hapus Siswa -->
+                            <form action="{{ route('admin.siswa.destroy', $siswa->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data siswa ini?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-action-icon" title="Hapus Siswa">
+                                    <i class="fa-solid fa-trash"></i>
                                 </button>
-                                <form action="{{ route('admin.siswa.destroy', $siswa->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data siswa ini?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-outline-danger rounded-circle p-1" style="width: 28px; height: 28px;" title="Hapus Siswa">
-                                        <i class="fa-solid fa-trash-can" style="font-size: 0.75rem;"></i>
-                                    </button>
-                                </form>
-                            </div>
+                            </form>
+
+                            <!-- Tombol Cetak Kartu QR -->
+                            <a href="{{ route('admin.siswa.card', $siswa->id) }}" target="_blank" class="btn btn-success btn-action-icon" title="Cetak Kartu QR Siswa">
+                                <i class="fa-solid fa-qrcode"></i>
+                            </a>
                         </div>
                     </td>
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="10" class="text-center text-muted py-5">
+                    <td colspan="6" class="text-center text-muted py-5">
                         <i class="fa-solid fa-user-slash fs-2 d-block mb-2 text-muted"></i>
                         Tidak ada data siswa yang sesuai dengan filter pencarian.
                     </td>
@@ -194,7 +226,7 @@
                         </div>
                         <div class="col-md-8">
                             <label class="form-label fw-semibold text-dark">Nama Lengkap Siswa <span class="text-danger">*</span></label>
-                            <input type="text" name="nama" class="form-control" placeholder="Nama Lengkap Sesuai Akta" required>
+                            <input type="text" name="nama" class="form-control" placeholder="Nama Lengkap Siswa" required>
                         </div>
                         <div class="col-md-4">
                             <label class="form-label fw-semibold text-dark">Jenis Kelamin <span class="text-danger">*</span></label>
@@ -237,7 +269,7 @@
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content rounded-4 border-0 shadow">
             <div class="modal-header border-0 pb-0">
-                <h5 class="fw-bold text-dark"><i class="fa-solid fa-user-pen me-2 text-warning"></i>Edit Data Siswa</h5>
+                <h5 class="fw-bold text-dark"><i class="fa-solid fa-user-pen me-2 text-primary"></i>Edit Data Siswa</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <form id="formEditSiswa" method="POST">
@@ -286,7 +318,7 @@
                 </div>
                 <div class="modal-footer border-0 pt-0">
                     <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-warning rounded-pill px-4 fw-bold text-dark shadow-sm">Simpan Perubahan</button>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm">Simpan Perubahan</button>
                 </div>
             </form>
         </div>
@@ -298,7 +330,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content rounded-4 border-0 shadow">
             <div class="modal-header border-0 pb-0">
-                <h5 class="fw-bold text-dark"><i class="fa-solid fa-file-import me-2 text-success"></i>Import Data Siswa dari Dapodik</h5>
+                <h5 class="fw-bold text-dark"><i class="fa-solid fa-file-import me-2 text-primary"></i>Import Data Siswa dari Dapodik</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <form action="{{ route('admin.siswa.store') }}" method="POST" enctype="multipart/form-data">
@@ -314,7 +346,7 @@
                 </div>
                 <div class="modal-footer border-0 pt-0">
                     <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-success rounded-pill px-4 fw-bold shadow-sm">Unggah & Import</button>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm">Unggah & Import</button>
                 </div>
             </form>
         </div>
