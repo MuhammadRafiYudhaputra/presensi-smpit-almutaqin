@@ -409,6 +409,11 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a href="{{ route('admin.orangtua.index') }}" class="nav-link {{ request()->routeIs('admin.orangtua.*') ? 'active' : '' }}">
+                            <i class="fa-solid fa-user-group"></i> Data Orang Tua
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a href="{{ route('admin.rekap.index') }}" class="nav-link {{ request()->routeIs('admin.rekap.index') ? 'active' : '' }}">
                             <i class="fa-solid fa-chart-simple"></i> Rekapitulasi Presensi
                         </a>
@@ -463,6 +468,8 @@
                             Data Kelas
                         @elseif(request()->routeIs('admin.guru.*'))
                             Data Wali Kelas
+                        @elseif(request()->routeIs('admin.orangtua.*'))
+                            Data Orang Tua
                         @elseif(request()->routeIs('admin.rekap.monitoring') || request()->routeIs('guru.monitoring'))
                             Absensi Siswa
                         @elseif(request()->routeIs('admin.rekap.index') || request()->routeIs('guru.rekap'))
