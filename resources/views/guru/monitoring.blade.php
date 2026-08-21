@@ -2,7 +2,68 @@
 
 @section('content')
 <style>
-    /* Styling Radio Pilihan Kehadiran Sesuai Gambar Referensi */
+    /* Table Styling Sesuai Gambar Referensi */
+    .table-presensi-minimal {
+        border-collapse: separate;
+        border-spacing: 0;
+        width: 100%;
+    }
+    .table-presensi-minimal thead th {
+        color: #7e22ce;
+        font-weight: 700;
+        font-size: 0.92rem;
+        border-bottom: 2px solid #f1f5f9;
+        padding: 0.85rem 1rem;
+        background: #ffffff;
+    }
+    .table-presensi-minimal tbody td {
+        padding: 0.85rem 1rem;
+        vertical-align: middle;
+        border-bottom: 1px solid #f8fafc;
+        font-size: 0.88rem;
+    }
+    .table-presensi-minimal tbody tr:hover {
+        background-color: #f8fafc;
+    }
+
+    /* Solid Status Badges Sesuai Gambar Referensi */
+    .badge-status-solid {
+        padding: 0.4rem 1rem;
+        border-radius: 6px;
+        font-weight: 700;
+        font-size: 0.82rem;
+        display: inline-block;
+        min-width: 80px;
+        text-align: center;
+    }
+    .badge-hadir-solid { background-color: #22c55e; color: #ffffff; }
+    .badge-terlambat-solid { background-color: #f59e0b; color: #ffffff; }
+    .badge-sakit-solid { background-color: #64748b; color: #ffffff; }
+    .badge-izin-solid { background-color: #00c0ef; color: #ffffff; }
+    .badge-alpa-solid { background-color: #ef4444; color: #ffffff; }
+    .badge-belum-solid { background-color: #e2e8f0; color: #64748b; }
+
+    /* Button Edit Aksi Cyan Sesuai Gambar */
+    .btn-edit-action {
+        background-color: #00c0ef;
+        border: 1px solid #00c0ef;
+        color: #ffffff;
+        font-weight: 700;
+        font-size: 0.82rem;
+        padding: 0.35rem 0.9rem;
+        border-radius: 6px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: all 0.15s ease;
+    }
+    .btn-edit-action:hover {
+        background-color: #0891b2;
+        border-color: #0891b2;
+        color: #ffffff;
+    }
+
+    /* Radio Ubah Kehadiran */
     .status-radio-option {
         display: flex;
         align-items: center;
@@ -47,7 +108,7 @@
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
         <div>
             <h5 class="fw-bold mb-1 text-dark d-flex align-items-center flex-wrap">
-                <i class="fa-solid fa-list-check text-primary me-2 fs-4"></i> Absensi Siswa (Harian)
+                <i class="fa-solid fa-list-check text-primary me-2 fs-4"></i> Absensi Siswa
                 @if($kelas)
                     <span class="badge bg-primary bg-opacity-10 text-primary border border-primary px-3 py-1 rounded-pill fs-6 ms-2">
                         <i class="fa-solid fa-chalkboard-user me-1"></i> Kelas {{ $kelas->nama_kelas }}
@@ -111,91 +172,54 @@
         </div>
     </div>
 
-    <!-- Table -->
+    <!-- Table Absensi Harian (Format Bersih Sesuai Contoh Gambar) -->
     <div class="table-responsive">
-        <table class="table table-bordered table-hover align-middle mb-0" style="font-size: 0.9rem;">
-            <thead class="table-light text-center">
+        <table class="table-presensi-minimal align-middle mb-0">
+            <thead>
                 <tr>
-                    <th style="width: 50px;" class="text-dark">No</th>
-                    <th class="text-dark" style="width: 120px;">NISN</th>
-                    <th class="text-dark text-start">Nama Peserta Didik</th>
-                    <th style="width: 50px;" class="text-dark">JK</th>
-                    <th class="text-dark" style="width: 110px;">Kelas</th>
-                    <th class="text-dark" style="width: 130px;">Jam Masuk (Pagi)</th>
-                    <th class="text-dark" style="width: 130px;">Jam Pulang (Sore)</th>
-                    <th class="text-dark" style="width: 180px;">Status Kehadiran</th>
-                    <th class="text-dark" style="width: 150px;">Notifikasi WA</th>
-                    <th class="text-center text-dark" style="width: 120px;">Aksi</th>
+                    <th style="width: 50px;">No.</th>
+                    <th style="width: 130px;">NIS</th>
+                    <th>Nama Siswa</th>
+                    <th style="width: 140px; text-align: center;">Kehadiran</th>
+                    <th style="width: 130px; text-align: center;">Jam masuk</th>
+                    <th style="width: 130px; text-align: center;">Jam pulang</th>
+                    <th>Keterangan</th>
+                    <th style="width: 100px; text-align: center;">Aksi</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($harianData as $idx => $row)
                 <tr>
-                    <td class="text-center fw-bold">{{ $idx + 1 }}</td>
-                    <td class="text-center fw-bold text-dark">{{ $row->siswa->nisn }}</td>
-                    <td class="fw-bold text-dark">
-                        {{ $row->siswa->nama }}
-                        @if($row->keterangan)
-                            <small class="d-block text-muted fw-normal" style="font-size: 0.78rem;">
-                                <i class="fa-solid fa-note-sticky text-warning me-1"></i>{{ $row->keterangan }}
-                            </small>
-                        @endif
-                    </td>
-                    <td class="text-center">
-                        <span class="badge {{ $row->siswa->jenis_kelamin === 'L' ? 'bg-primary bg-opacity-10 text-primary border border-primary' : 'bg-danger bg-opacity-10 text-danger border border-danger' }} px-2 fw-bold">{{ $row->siswa->jenis_kelamin }}</span>
-                    </td>
-                    <td class="text-center">
-                        <span class="badge bg-primary bg-opacity-10 text-primary border border-primary px-2 py-1 rounded-2">
-                            Kelas {{ $row->siswa->kelas->nama_kelas ?? '-' }}
-                        </span>
-                    </td>
-                    <td class="text-center text-muted">
-                        @if($row->jam_masuk)
-                            <span class="badge bg-light text-dark border px-2 py-1"><i class="fa-regular fa-clock text-primary me-1"></i>{{ $row->jam_masuk }}</span>
-                        @else
-                            -
-                        @endif
-                    </td>
-                    <td class="text-center text-muted">
-                        @if($row->jam_pulang)
-                            <span class="badge bg-light text-dark border px-2 py-1"><i class="fa-solid fa-door-open text-success me-1"></i>{{ $row->jam_pulang }}</span>
-                        @else
-                            -
-                        @endif
-                    </td>
+                    <td class="text-muted fw-semibold">{{ $idx + 1 }}</td>
+                    <td class="text-dark fw-bold">{{ $row->siswa->nisn }}</td>
+                    <td class="fw-bold text-dark">{{ $row->siswa->nama }}</td>
                     <td class="text-center">
                         @if($row->status === 'HADIR')
-                            <span class="badge bg-success bg-opacity-10 text-success border border-success px-3 py-2 rounded-pill fw-bold"><i class="fa-solid fa-circle-check me-1"></i> HADIR</span>
+                            <span class="badge-status-solid badge-hadir-solid">Hadir</span>
                         @elseif($row->status === 'TERLAMBAT')
-                            <span class="badge bg-warning bg-opacity-10 text-dark border border-warning px-3 py-2 rounded-pill fw-bold" style="color: #92400e !important;"><i class="fa-solid fa-clock me-1 text-warning"></i> TERLAMBAT</span>
+                            <span class="badge-status-solid badge-terlambat-solid">Terlambat</span>
                         @elseif($row->status === 'IZIN')
-                            <span class="badge bg-info bg-opacity-10 text-primary border border-info px-3 py-2 rounded-pill fw-bold"><i class="fa-solid fa-envelope-open-text me-1"></i> IZIN</span>
+                            <span class="badge-status-solid badge-izin-solid">Izin</span>
                         @elseif($row->status === 'SAKIT')
-                            <span class="badge bg-secondary bg-opacity-10 text-dark border border-secondary px-3 py-2 rounded-pill fw-bold"><i class="fa-solid fa-notes-medical me-1"></i> SAKIT</span>
+                            <span class="badge-status-solid badge-sakit-solid">Sakit</span>
                         @elseif($row->status === 'ALPA')
-                            <span class="badge bg-danger bg-opacity-10 text-danger border border-danger px-3 py-2 rounded-pill fw-bold"><i class="fa-solid fa-xmark me-1"></i> TANPA KETERANGAN</span>
+                            <span class="badge-status-solid badge-alpa-solid">Alpa</span>
                         @else
-                            <span class="badge bg-light text-secondary border px-3 py-2 rounded-pill fw-semibold"><i class="fa-regular fa-circle me-1"></i> BELUM ABSEN</span>
+                            <span class="badge-status-solid badge-belum-solid">Belum</span>
                         @endif
                     </td>
+                    <td class="text-center text-muted font-monospace">{{ $row->jam_masuk ?? '-' }}</td>
+                    <td class="text-center text-muted font-monospace">{{ $row->jam_pulang ?? '-' }}</td>
+                    <td class="text-muted">{{ $row->keterangan ?? '-' }}</td>
                     <td class="text-center">
-                        @if($row->wa_sent)
-                            <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1"><i class="fa-brands fa-whatsapp me-1"></i> Terkirim</span>
-                        @elseif(in_array($row->status, ['HADIR', 'TERLAMBAT']))
-                            <span class="badge bg-light text-muted border px-2 py-1"><i class="fa-solid fa-hourglass-half me-1"></i> Antrian</span>
-                        @else
-                            <span class="text-muted small">-</span>
-                        @endif
-                    </td>
-                    <td class="text-center">
-                        <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3 py-1 fw-semibold shadow-sm" onclick="openSetStatusModal({{ $row->siswa->id }}, '{{ addslashes($row->siswa->nama) }}', '{{ $row->status }}', '{{ addslashes($row->keterangan ?? '') }}')">
-                            <i class="fa-solid fa-pen-to-square me-1"></i> Set Status
+                        <button type="button" class="btn-edit-action shadow-sm" onclick="openSetStatusModal({{ $row->siswa->id }}, '{{ addslashes($row->siswa->nama) }}', '{{ $row->status }}', '{{ addslashes($row->keterangan ?? '') }}')">
+                            <i class="fa-solid fa-pen"></i> EDIT
                         </button>
                     </td>
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="10" class="text-center text-muted py-5">
+                    <td colspan="8" class="text-center text-muted py-5">
                         <i class="fa-solid fa-folder-open fs-2 d-block mb-2 text-muted"></i>
                         Tidak ada data siswa ditemukan untuk kelas ini.
                     </td>
