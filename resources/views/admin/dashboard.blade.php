@@ -1,123 +1,282 @@
 @extends('layouts.app')
 
 @section('content')
-<!-- Metric Cards Row (4 Cards) -->
-<div class="row g-3 mb-4">
-    <!-- Siswa Aktif -->
+<style>
+    /* Gradient Header Widgets */
+    .panel-widget {
+        background: #ffffff;
+        border-radius: 16px;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.02);
+        overflow: hidden;
+        margin-bottom: 1.5rem;
+    }
+
+    .panel-header-purple {
+        background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+        color: #ffffff;
+        padding: 1.15rem 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .panel-header-teal {
+        background: linear-gradient(135deg, #0891b2 0%, #0e7490 100%);
+        color: #ffffff;
+        padding: 1.15rem 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .stat-metric-box {
+        text-align: center;
+        padding: 1rem 0.5rem;
+    }
+
+    .stat-metric-label {
+        font-size: 0.85rem;
+        font-weight: 700;
+        margin-bottom: 6px;
+        display: block;
+    }
+
+    .stat-metric-val {
+        font-size: 1.75rem;
+        font-weight: 800;
+        line-height: 1;
+        margin: 0;
+    }
+
+    .text-hadir { color: #16a34a; }
+    .text-terlambat { color: #d97706; }
+    .text-sakit { color: #475569; }
+    .text-izin { color: #0284c7; }
+    .text-alpa { color: #dc2626; }
+    .text-total { color: #7c3aed; }
+</style>
+
+<!-- 1. Top 4 Metric Cards (Floating Badge Style from Reference UI) -->
+<div class="row g-4 mb-4">
+    <!-- Card 1: Jumlah Siswa (Purple Badge) -->
     <div class="col-12 col-sm-6 col-xl-3">
-        <div class="card card-custom p-3 border-start border-4 border-primary rounded-4 shadow-sm h-100">
-            <div class="d-flex justify-content-between align-items-center">
+        <div class="stat-card-floating">
+            <div class="stat-floating-icon" style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);">
+                <i class="fa-solid fa-user-graduate"></i>
+            </div>
+            <div class="stat-content">
+                <span class="stat-label">Jumlah Siswa</span>
+                <h3 class="stat-value">{{ $totalSiswa }}</h3>
+            </div>
+            <div class="stat-footer">
+                <i class="fa-solid fa-check text-success"></i>
+                <span>Terdaftar (Kelas 7, 8, 9)</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card 2: Jumlah Guru (Green Badge) -->
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="stat-card-floating">
+            <div class="stat-floating-icon" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                <i class="fa-solid fa-chalkboard-user"></i>
+            </div>
+            <div class="stat-content">
+                <span class="stat-label">Jumlah Guru</span>
+                <h3 class="stat-value">{{ $totalGuru }}</h3>
+            </div>
+            <div class="stat-footer">
+                <i class="fa-solid fa-check text-success"></i>
+                <span>Tenaga Pendidik & Wali</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card 3: Kelas Aktif (Cyan/Teal Badge) -->
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="stat-card-floating">
+            <div class="stat-floating-icon" style="background: linear-gradient(135deg, #00c0ef 0%, #0891b2 100%);">
+                <i class="fa-solid fa-school"></i>
+            </div>
+            <div class="stat-content">
+                <span class="stat-label">Kelas / Rombel</span>
+                <h3 class="stat-value">{{ $totalKelas }} <span class="fs-6 text-muted fw-normal">/ 3 Tingkat</span></h3>
+            </div>
+            <div class="stat-footer">
+                <i class="fa-solid fa-building-columns text-primary"></i>
+                <span>SMP IT Al-Muttaqin</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card 4: Petugas Admin (Red Badge) -->
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="stat-card-floating">
+            <div class="stat-floating-icon" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);">
+                <i class="fa-solid fa-user-gear"></i>
+            </div>
+            <div class="stat-content">
+                <span class="stat-label">Jumlah Petugas</span>
+                <h3 class="stat-value">1</h3>
+            </div>
+            <div class="stat-footer">
+                <i class="fa-solid fa-shield text-danger"></i>
+                <span>Petugas dan Administrator</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 2. Middle Row: Widget Absensi Siswa Hari Ini & Grafik 7 Hari Terakhir -->
+<div class="row g-4 mb-4">
+    <!-- Absensi Siswa Hari Ini Panel -->
+    <div class="col-12 col-lg-6">
+        <div class="panel-widget h-100">
+            <div class="panel-header-purple">
                 <div>
-                    <span class="text-muted small fw-semibold d-block mb-1">Siswa Aktif (7, 8, 9)</span>
-                    <h2 class="fw-bold mb-1 text-primary">{{ $totalSiswa }}</h2>
-                    <small class="text-muted"><i class="fa-solid fa-graduation-cap me-1"></i>Arsip Alumni: {{ $totalAlumni ?? 0 }}</small>
+                    <h6 class="fw-bold mb-0 text-white">Absensi Siswa Hari Ini</h6>
+                    <small class="text-white-50">{{ \Carbon\Carbon::now('Asia/Jakarta')->translatedFormat('d F Y') }}</small>
                 </div>
-                <div class="bg-primary bg-opacity-10 p-3 rounded-circle text-primary d-flex align-items-center justify-content-center" style="width: 54px; height: 54px;">
-                    <i class="fa-solid fa-user-graduate fs-4"></i>
+                <!-- Filter Dropdown Kelas -->
+                <form action="{{ route('admin.dashboard') }}" method="GET" class="m-0">
+                    <select name="kelas_id" class="form-select form-select-sm shadow-sm" style="min-width: 190px; border-radius: 8px;" onchange="this.form.submit()">
+                        <option value="">-- Semua Kelas ({{ $totalSiswa }} siswa) --</option>
+                        @foreach($kelases as $k)
+                            <option value="{{ $k->id }}" {{ $selectedKelasId == $k->id ? 'selected' : '' }}>
+                                Kelas {{ $k->nama_kelas }} ({{ $k->siswas_count }} siswa)
+                            </option>
+                        @endforeach
+                    </select>
+                </form>
+            </div>
+
+            <div class="p-3">
+                <div class="row g-2 justify-content-around">
+                    <div class="col-4 col-sm-2 stat-metric-box">
+                        <span class="stat-metric-label text-hadir">Hadir</span>
+                        <h4 class="stat-metric-val text-hadir">{{ $totalHadir }}</h4>
+                    </div>
+                    <div class="col-4 col-sm-2 stat-metric-box">
+                        <span class="stat-metric-label text-terlambat">Terlambat</span>
+                        <h4 class="stat-metric-val text-terlambat">{{ $totalTerlambat }}</h4>
+                    </div>
+                    <div class="col-4 col-sm-2 stat-metric-box">
+                        <span class="stat-metric-label text-sakit">Sakit</span>
+                        <h4 class="stat-metric-val text-sakit">{{ $totalSakit }}</h4>
+                    </div>
+                    <div class="col-4 col-sm-2 stat-metric-box">
+                        <span class="stat-metric-label text-izin">Izin</span>
+                        <h4 class="stat-metric-val text-izin">{{ $totalIzin }}</h4>
+                    </div>
+                    <div class="col-4 col-sm-2 stat-metric-box">
+                        <span class="stat-metric-label text-alpa">Alfa</span>
+                        <h4 class="stat-metric-val text-alpa">{{ $totalAlpa }}</h4>
+                    </div>
+                    <div class="col-4 col-sm-2 stat-metric-box">
+                        <span class="stat-metric-label text-total">Total</span>
+                        <h4 class="stat-metric-val text-total">{{ $totalSiswaFiltered }}</h4>
+                    </div>
+                </div>
+
+                <div class="border-top pt-3 mt-2 px-2 d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <small class="text-muted">
+                        <i class="fa-solid fa-circle-info text-primary me-1"></i> Total kehadiran fisik: <strong>{{ $totalMasuk }} Siswa</strong>
+                    </small>
+                    <a href="{{ route('admin.rekap.monitoring') }}" class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold">
+                        <i class="fa-solid fa-list-check me-1"></i> Buka Monitoring Live
+                    </a>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Hadir Hari Ini -->
-    <div class="col-12 col-sm-6 col-xl-3">
-        <div class="card card-custom p-3 border-start border-4 border-success rounded-4 shadow-sm h-100">
-            <div class="d-flex justify-content-between align-items-center">
+    <!-- Tingkat Kehadiran Siswa (Grafik 7 Hari Terakhir) -->
+    <div class="col-12 col-lg-6">
+        <div class="panel-widget h-100">
+            <div class="panel-header-teal">
                 <div>
-                    <span class="text-muted small fw-semibold d-block mb-1">Hadir Hari Ini</span>
-                    <h2 class="fw-bold mb-1 text-success">{{ $totalHadir }}</h2>
-                </div>
-                <div class="bg-success bg-opacity-10 p-3 rounded-circle text-success d-flex align-items-center justify-content-center" style="width: 54px; height: 54px;">
-                    <i class="fa-solid fa-user-check fs-4"></i>
+                    <h6 class="fw-bold mb-0 text-white">Tingkat Kehadiran Siswa</h6>
+                    <small class="text-white-50">Statistik kehadiran 7 hari terakhir | {{ \Carbon\Carbon::now('Asia/Jakarta')->translatedFormat('d F Y') }}</small>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <!-- Terlambat Hari Ini -->
-    <div class="col-12 col-sm-6 col-xl-3">
-        <div class="card card-custom p-3 border-start border-4 border-warning rounded-4 shadow-sm h-100">
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <span class="text-muted small fw-semibold d-block mb-1">Terlambat Hari Ini</span>
-                    <h2 class="fw-bold mb-1 text-warning">{{ $totalTerlambat }}</h2>
+            <div class="p-3">
+                <div style="height: 220px; position: relative;">
+                    <canvas id="chartKehadiran"></canvas>
                 </div>
-                <div class="bg-warning bg-opacity-10 p-3 rounded-circle text-warning d-flex align-items-center justify-content-center" style="width: 54px; height: 54px;">
-                    <i class="fa-solid fa-user-clock fs-4"></i>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <!-- Belum Presensi (Alpa) -->
-    <div class="col-12 col-sm-6 col-xl-3">
-        <div class="card card-custom p-3 border-start border-4 border-danger rounded-4 shadow-sm h-100">
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <span class="text-muted small fw-semibold d-block mb-1">Belum Presensi (Alpa)</span>
-                    <h2 class="fw-bold mb-1 text-danger">{{ $totalAlpa }}</h2>
-                </div>
-                <div class="bg-danger bg-opacity-10 p-3 rounded-circle text-danger d-flex align-items-center justify-content-center" style="width: 54px; height: 54px;">
-                    <i class="fa-solid fa-user-xmark fs-4"></i>
+                <div class="border-top pt-3 mt-2 px-2 d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <small class="text-muted">Data dihitung otomatis dari presensi aktif</small>
+                    <a href="{{ route('admin.rekap.index') }}" class="text-decoration-none fw-bold small text-primary">
+                        <i class="fa-solid fa-chart-column me-1"></i> Lihat Rekapitulasi Lengkap &rarr;
+                    </a>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Table Card: Aktivitas Presensi Terakhir Hari Ini -->
-<div class="card card-custom p-4 shadow-sm border-0 rounded-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
+<!-- 3. Aktivitas Presensi Terakhir Hari Ini -->
+<div class="panel-widget">
+    <div class="p-3 border-bottom d-flex justify-content-between align-items-center flex-wrap gap-2">
         <h6 class="fw-bold mb-0 text-dark d-flex align-items-center">
-            <i class="fa-solid fa-bars-staggered text-primary me-2"></i> Aktivitas Presensi Terakhir Hari Ini
+            <i class="fa-solid fa-clock-rotate-left text-primary me-2"></i> Aktivitas Presensi Terakhir Hari Ini
         </h6>
         <a href="{{ route('admin.rekap.monitoring') }}" class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-semibold">
-            Lihat Semua
+            Lihat Semua Aktivitas
         </a>
     </div>
 
     <div class="table-responsive">
-        <table class="table table-hover align-middle mb-0">
+        <table class="table table-hover align-middle mb-0" style="font-size: 0.9rem;">
             <thead class="table-light">
                 <tr>
-                    <th class="text-dark fw-bold">Siswa</th>
-                    <th class="text-dark fw-bold">Kelas</th>
-                    <th class="text-dark fw-bold">Jam Absensi</th>
-                    <th class="text-dark fw-bold">Status</th>
-                    <th class="text-dark fw-bold">Notifikasi WA</th>
+                    <th class="text-dark fw-bold" style="width: 120px;">Waktu Scan</th>
+                    <th class="text-dark fw-bold">Nama Peserta Didik</th>
+                    <th class="text-dark fw-bold" style="width: 120px;">Kelas</th>
+                    <th class="text-dark fw-bold" style="width: 130px;">Jam Absensi</th>
+                    <th class="text-dark fw-bold" style="width: 150px;">Status Presensi</th>
+                    <th class="text-dark fw-bold" style="width: 160px;">Notifikasi WhatsApp</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($recentPresensi as $p)
                 <tr>
-                    <td class="fw-semibold text-dark">{{ $p->siswa->nama ?? '-' }}</td>
+                    <td class="text-muted"><i class="fa-regular fa-clock me-1 text-primary"></i>{{ $p->created_at ? $p->created_at->format('H:i:s') : '-' }}</td>
+                    <td class="fw-bold text-dark">{{ $p->siswa->nama ?? '-' }}</td>
                     <td><span class="badge bg-light text-dark border">Kelas {{ $p->siswa->kelas->nama_kelas ?? '-' }}</span></td>
-                    <td><span class="badge bg-light text-dark border"><i class="fa-regular fa-clock text-primary me-1"></i>{{ $p->jam_masuk ?? '-' }}</span></td>
+                    <td><span class="badge bg-light text-dark border">{{ $p->jam_masuk ?? '-' }}</span></td>
                     <td>
                         @if($p->status === 'HADIR')
-                            <span class="badge bg-success bg-opacity-10 text-success border border-success px-3 py-1 rounded-pill">HADIR</span>
+                            <span class="badge bg-success bg-opacity-10 text-success border border-success px-3 py-1 rounded-pill fw-bold">HADIR</span>
                         @elseif($p->status === 'TERLAMBAT')
-                            <span class="badge bg-warning bg-opacity-10 text-dark border border-warning px-3 py-1 rounded-pill">TERLAMBAT</span>
+                            <span class="badge bg-warning bg-opacity-10 text-dark border border-warning px-3 py-1 rounded-pill fw-bold" style="color: #92400e !important;">TERLAMBAT</span>
                         @elseif($p->status === 'IZIN')
-                            <span class="badge bg-info bg-opacity-10 text-dark border border-info px-3 py-1 rounded-pill">IZIN</span>
+                            <span class="badge bg-info bg-opacity-10 text-primary border border-info px-3 py-1 rounded-pill fw-bold">IZIN</span>
                         @elseif($p->status === 'SAKIT')
-                            <span class="badge bg-secondary bg-opacity-10 text-dark border border-secondary px-3 py-1 rounded-pill">SAKIT</span>
+                            <span class="badge bg-secondary bg-opacity-10 text-dark border border-secondary px-3 py-1 rounded-pill fw-bold">SAKIT</span>
                         @else
-                            <span class="badge bg-danger bg-opacity-10 text-danger border border-danger px-3 py-1 rounded-pill">ALPA</span>
+                            <span class="badge bg-danger bg-opacity-10 text-danger border border-danger px-3 py-1 rounded-pill fw-bold">ALPA</span>
                         @endif
                     </td>
                     <td>
                         @if($p->wa_masuk_sent)
-                            <span class="badge bg-success-subtle text-success"><i class="fa-brands fa-whatsapp me-1"></i> Terkirim</span>
+                            <span class="badge bg-success-subtle text-success border border-success-subtle"><i class="fa-brands fa-whatsapp me-1"></i> Terkirim</span>
                         @else
-                            <span class="badge bg-light text-muted">Antrian</span>
+                            <span class="badge bg-light text-muted border"><i class="fa-solid fa-hourglass-half me-1"></i> Antrian</span>
                         @endif
                     </td>
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="5" class="text-center text-muted py-5">
-                        Belum ada aktivitas presensi hari ini.
+                    <td colspan="6" class="text-center text-muted py-5">
+                        <i class="fa-solid fa-inbox fs-3 d-block mb-2 text-muted"></i>
+                        Belum ada aktivitas presensi siswa hari ini.
                     </td>
                 </tr>
                 @endforelse
@@ -125,4 +284,89 @@
         </table>
     </div>
 </div>
+
+<!-- Chart.js Initialization -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const ctx = document.getElementById('chartKehadiran');
+        if (ctx) {
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: {!! json_encode($chartLabels) !!},
+                    datasets: [
+                        {
+                            label: 'Hadir',
+                            data: {!! json_encode($chartHadir) !!},
+                            backgroundColor: '#22c55e',
+                            borderRadius: 4,
+                            barPercentage: 0.8,
+                            categoryPercentage: 0.7
+                        },
+                        {
+                            label: 'Sakit',
+                            data: {!! json_encode($chartSakit) !!},
+                            backgroundColor: '#f59e0b',
+                            borderRadius: 4,
+                            barPercentage: 0.8,
+                            categoryPercentage: 0.7
+                        },
+                        {
+                            label: 'Izin',
+                            data: {!! json_encode($chartIzin) !!},
+                            backgroundColor: '#06b6d4',
+                            borderRadius: 4,
+                            barPercentage: 0.8,
+                            categoryPercentage: 0.7
+                        },
+                        {
+                            label: 'Alfa',
+                            data: {!! json_encode($chartAlfa) !!},
+                            backgroundColor: '#ef4444',
+                            borderRadius: 4,
+                            barPercentage: 0.8,
+                            categoryPercentage: 0.7
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                boxWidth: 12,
+                                font: {
+                                    size: 11,
+                                    weight: '600'
+                                }
+                            }
+                        },
+                        tooltip: {
+                            padding: 10,
+                            cornerRadius: 8
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0
+                            },
+                            grid: {
+                                color: '#f1f5f9'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    });
+</script>
 @endsection

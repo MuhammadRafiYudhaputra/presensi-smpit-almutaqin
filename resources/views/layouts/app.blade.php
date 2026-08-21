@@ -6,7 +6,7 @@
     <title>SMP IT Al-Muttaqin - Presensi Siswa</title>
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
-    <!-- Google Fonts: Plus Jakarta Sans -->
+    <!-- Google Fonts: Plus Jakarta Sans & Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -15,11 +15,15 @@
 
     <style>
         :root {
-            --sidebar-bg: #0b1329;
-            --sidebar-hover: rgba(255, 255, 255, 0.06);
-            --sidebar-active: #1d4ed8;
-            --primary-color: #1a56db;
-            --body-bg: #f3f6fa;
+            --sidebar-bg: #ffffff;
+            --sidebar-border: #e2e8f0;
+            --sidebar-hover: #f1f5f9;
+            --primary-accent: #00c0ef;
+            --primary-accent-dark: #0891b2;
+            --primary-color: #0284c7;
+            --body-bg: #f4f6f9;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
         }
 
         * {
@@ -27,15 +31,15 @@
         }
 
         body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background-color: var(--body-bg);
-            color: #1e293b;
+            color: var(--text-main);
             min-height: 100vh;
             margin: 0;
             padding: 0;
         }
 
-        /* Sidebar Styling */
+        /* Sidebar Minimalist Styling */
         .sidebar {
             width: 260px;
             background-color: var(--sidebar-bg);
@@ -48,34 +52,45 @@
             flex-direction: column;
             justify-content: space-between;
             overflow-y: auto;
+            border-right: 1px solid var(--sidebar-border);
+            box-shadow: 2px 0 12px rgba(0, 0, 0, 0.02);
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .sidebar-brand {
             padding: 1.5rem 1.25rem 1.25rem;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: space-between;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            text-align: center;
+            border-bottom: 1px solid var(--sidebar-border);
+            position: relative;
         }
 
-        .sidebar-brand-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .sidebar-brand-icon {
-            color: #facc15;
-            font-size: 1.5rem;
-        }
-
-        .sidebar-brand-text {
-            color: #ffffff;
+        .sidebar-brand-top {
+            font-size: 0.85rem;
             font-weight: 800;
-            font-size: 1.15rem;
-            margin: 0;
-            letter-spacing: -0.3px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #0f172a;
+            margin-bottom: 2px;
+        }
+
+        .sidebar-brand-title {
+            font-size: 0.95rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #0284c7;
+            margin-bottom: 4px;
+        }
+
+        .sidebar-brand-sub {
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .sidebar-heading {
@@ -83,13 +98,13 @@
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 1px;
-            color: #64748b;
-            padding: 1.25rem 1.25rem 0.5rem;
+            color: #94a3b8;
+            padding: 1.25rem 1.25rem 0.4rem;
         }
 
         .sidebar-menu {
             list-style: none;
-            padding: 0.5rem 0.75rem;
+            padding: 0.75rem 0.85rem;
             margin: 0;
         }
 
@@ -98,11 +113,11 @@
         }
 
         .sidebar-menu .nav-link {
-            color: #94a3b8;
+            color: #475569;
             font-weight: 600;
             font-size: 0.88rem;
-            padding: 0.65rem 0.9rem;
-            border-radius: 12px;
+            padding: 0.7rem 1rem;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             gap: 12px;
@@ -111,36 +126,39 @@
         }
 
         .sidebar-menu .nav-link i {
-            font-size: 1rem;
-            width: 20px;
+            font-size: 1.05rem;
+            width: 22px;
             text-align: center;
+            color: #64748b;
+            transition: color 0.2s ease;
         }
 
         .sidebar-menu .nav-link:hover {
-            color: #ffffff;
+            color: #0f172a;
             background: var(--sidebar-hover);
         }
+        .sidebar-menu .nav-link:hover i {
+            color: var(--primary-accent-dark);
+        }
 
+        /* Active Menu Button (Minimalist Vibrant Accent) */
         .sidebar-menu .nav-link.active {
             color: #ffffff;
-            background: var(--primary-color);
-            box-shadow: 0 4px 12px rgba(26, 86, 219, 0.35);
+            background: linear-gradient(135deg, #00c0ef 0%, #0891b2 100%);
+            box-shadow: 0 4px 14px rgba(0, 192, 239, 0.35);
+            font-weight: 700;
         }
-
-        .sidebar-menu .nav-link.scanner-link {
-            color: #facc15;
-        }
-        .sidebar-menu .nav-link.scanner-link:hover {
-            background: rgba(250, 204, 21, 0.1);
+        .sidebar-menu .nav-link.active i {
+            color: #ffffff;
         }
 
         .sidebar-footer {
             padding: 1rem 0.85rem 1.5rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            border-top: 1px solid var(--sidebar-border);
         }
 
         .sidebar-footer .logout-btn {
-            color: #f87171;
+            color: #ef4444;
             font-weight: 600;
             font-size: 0.88rem;
             display: flex;
@@ -148,11 +166,14 @@
             gap: 10px;
             padding: 0.65rem 0.9rem;
             text-decoration: none;
-            border-radius: 12px;
+            border-radius: 10px;
             transition: background 0.2s ease;
+            width: 100%;
+            background: transparent;
+            border: none;
         }
         .sidebar-footer .logout-btn:hover {
-            background: rgba(248, 113, 113, 0.1);
+            background: rgba(239, 68, 68, 0.08);
         }
 
         /* Main Content Container */
@@ -163,11 +184,13 @@
             transition: all 0.3s ease;
         }
 
+        /* Top Minimalist Header / Navbar */
         .top-header-card {
             background: #ffffff;
-            border-radius: 18px;
-            padding: 1.25rem 1.75rem;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
+            border-radius: 16px;
+            padding: 1rem 1.75rem;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
             margin-bottom: 1.5rem;
             display: flex;
             justify-content: space-between;
@@ -180,22 +203,18 @@
             font-weight: 800;
             font-size: 1.25rem;
             color: #0f172a;
-            margin-bottom: 2px;
-        }
-
-        .top-header-subtitle {
-            font-size: 0.85rem;
-            color: #64748b;
             margin: 0;
+            letter-spacing: -0.3px;
         }
 
         .user-role-badge {
-            background: #eff6ff;
-            color: #1d4ed8;
-            border-radius: 50rem;
-            padding: 0.45rem 1rem;
+            background: #f1f5f9;
+            color: #0f172a;
             font-weight: 700;
             font-size: 0.82rem;
+            padding: 0.45rem 1rem;
+            border-radius: 50rem;
+            border: 1px solid #e2e8f0;
             display: inline-flex;
             align-items: center;
             gap: 6px;
@@ -203,25 +222,91 @@
 
         .date-badge {
             background: #f8fafc;
-            color: #475569;
-            border: 1px solid #e2e8f0;
-            border-radius: 50rem;
-            padding: 0.45rem 1rem;
+            color: #64748b;
             font-weight: 600;
             font-size: 0.82rem;
+            padding: 0.45rem 0.9rem;
+            border-radius: 50rem;
+            border: 1px solid #e2e8f0;
             display: inline-flex;
             align-items: center;
             gap: 6px;
         }
 
-        .card-custom {
+        /* Floating Accent Badge Stat Cards (from reference UI) */
+        .stat-card-floating {
             background: #ffffff;
-            border-radius: 18px;
-            border: none;
-            box-shadow: 0 2px 14px rgba(0, 0, 0, 0.03);
+            border-radius: 16px;
+            padding: 1.5rem 1.25rem 1.25rem;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+            position: relative;
+            margin-top: 20px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .stat-card-floating:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
         }
 
-        /* Mobile Overlay Backdrop */
+        .stat-floating-icon {
+            position: absolute;
+            top: -18px;
+            left: 20px;
+            width: 58px;
+            height: 58px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 1.5rem;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+        }
+
+        .stat-card-floating .stat-content {
+            text-align: right;
+            margin-bottom: 0.75rem;
+        }
+
+        .stat-card-floating .stat-label {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #64748b;
+            margin-bottom: 2px;
+            display: block;
+        }
+
+        .stat-card-floating .stat-value {
+            font-size: 1.85rem;
+            font-weight: 800;
+            color: #0f172a;
+            line-height: 1.2;
+            margin: 0;
+        }
+
+        .stat-card-floating .stat-footer {
+            border-top: 1px solid #f1f5f9;
+            padding-top: 0.65rem;
+            font-size: 0.78rem;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Mobile Layout Handling */
+        .mobile-navbar {
+            display: none;
+            background: #ffffff;
+            padding: 0.85rem 1.25rem;
+            border-bottom: 1px solid #e2e8f0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+            margin-bottom: 1rem;
+            align-items: center;
+            justify-content: space-between;
+        }
+
         .sidebar-backdrop {
             display: none;
             position: fixed;
@@ -229,40 +314,24 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(15, 23, 42, 0.65);
-            backdrop-filter: blur(4px);
+            background: rgba(15, 23, 42, 0.5);
+            backdrop-filter: blur(3px);
             z-index: 1040;
-            opacity: 0;
-            transition: opacity 0.3s ease;
         }
 
-        .sidebar-backdrop.show {
-            display: block;
-            opacity: 1;
-        }
-
-        /* Mobile Header Bar */
-        .mobile-navbar {
-            display: none;
-            background: #ffffff;
-            border-radius: 16px;
-            padding: 0.85rem 1.25rem;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
-            margin-bottom: 1rem;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        /* Responsive Breakpoints for Mobile / Tablets */
         @media (max-width: 991.98px) {
             .sidebar {
                 transform: translateX(-100%);
                 width: 280px;
-                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
             }
 
             .sidebar.show {
                 transform: translateX(0);
+            }
+
+            .sidebar-backdrop.show {
+                display: block;
             }
 
             .main-content {
@@ -281,11 +350,6 @@
             .top-header-title {
                 font-size: 1.15rem;
             }
-
-            .user-role-badge, .date-badge {
-                font-size: 0.75rem;
-                padding: 0.35rem 0.75rem;
-            }
         }
     </style>
 </head>
@@ -297,13 +361,14 @@
     <!-- Sidebar Drawer -->
     <div class="sidebar" id="sidebarDrawer">
         <div>
+            <!-- Branding Header (Matching Reference UI) -->
             <div class="sidebar-brand">
-                <div class="sidebar-brand-left">
-                    <img src="{{ asset('images/logo.png') }}" alt="Logo SMP IT Al-Muttaqin" style="width: 32px; height: 32px; object-fit: contain;">
-                    <h5 class="sidebar-brand-text">SMP IT Al-Muttaqin</h5>
-                </div>
+                <img src="{{ asset('images/logo.png') }}" alt="Logo SMP IT" style="width: 44px; height: 44px; object-fit: contain; margin-bottom: 8px;">
+                <span class="sidebar-brand-top">OPERATOR PETUGAS ABSENSI</span>
+                <span class="sidebar-brand-title">SMP IT AL-MUTTAQIN</span>
+                <span class="sidebar-brand-sub">TAROGONG KALER - GARUT</span>
                 <!-- Close Button on Mobile -->
-                <button type="button" class="btn btn-sm text-white-50 d-lg-none p-1" onclick="toggleSidebar()" aria-label="Tutup Menu">
+                <button type="button" class="btn btn-sm text-secondary d-lg-none p-1 position-absolute top-0 end-0 m-2" onclick="toggleSidebar()" aria-label="Tutup Menu">
                     <i class="fa-solid fa-xmark fs-4"></i>
                 </button>
             </div>
@@ -328,28 +393,33 @@
                         </a>
                     </li>
                 @else
-                    <!-- MENU ADMIN TU -->
+                    <!-- MENU OPERATOR / ADMIN TU -->
                     <li class="nav-item">
                         <a href="{{ route('admin.dashboard') }}" class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
-                            <i class="fa-solid fa-chart-pie"></i> Dashboard Admin
+                            <i class="fa-solid fa-table-columns"></i> Dashboard
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('presensi.scan') }}" class="nav-link {{ request()->routeIs('presensi.scan') ? 'active' : 'scanner-link' }}">
-                            <i class="fa-solid fa-table-cells-large"></i> Scanner QR Code
+                        <a href="{{ route('presensi.scan') }}" class="nav-link {{ request()->routeIs('presensi.scan') ? 'active' : '' }}">
+                            <i class="fa-solid fa-qrcode"></i> Scanner QR Code
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('admin.rekap.monitoring') }}" class="nav-link {{ request()->routeIs('admin.rekap.monitoring') ? 'active' : '' }}">
+                            <i class="fa-solid fa-list-check"></i> Absensi Siswa (Live)
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('admin.rekap.index') }}" class="nav-link {{ request()->routeIs('admin.rekap.index') ? 'active' : '' }}">
+                            <i class="fa-solid fa-chart-simple"></i> Rekap Kehadiran Siswa
                         </a>
                     </li>
 
                     <!-- MASTER DATA -->
-                    <div class="sidebar-heading">MASTER DATA</div>
+                    <div class="sidebar-heading">DATA MASTER</div>
                     <li class="nav-item">
                         <a href="{{ route('admin.siswa.index') }}" class="nav-link {{ request()->routeIs('admin.siswa.*') ? 'active' : '' }}">
-                            <i class="fa-solid fa-user-graduate"></i> Data Siswa & QR
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('admin.guru.index') }}" class="nav-link {{ request()->routeIs('admin.guru.*') ? 'active' : '' }}">
-                            <i class="fa-solid fa-user-plus"></i> Data Wali Kelas
+                            <i class="fa-solid fa-user-graduate"></i> Data Siswa
                         </a>
                     </li>
                     <li class="nav-item">
@@ -358,98 +428,136 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('admin.orangtua.index') }}" class="nav-link {{ request()->routeIs('admin.orangtua.*') ? 'active' : '' }}">
-                            <i class="fa-solid fa-users"></i> Data Orang Tua
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('admin.jampresensi.index') }}" class="nav-link {{ request()->routeIs('admin.jampresensi.*') ? 'active' : '' }}">
-                            <i class="fa-solid fa-clock text-warning"></i> Jam Presensi
+                        <a href="{{ route('admin.guru.index') }}" class="nav-link {{ request()->routeIs('admin.guru.*') ? 'active' : '' }}">
+                            <i class="fa-solid fa-chalkboard-user"></i> Data Guru & Wali
                         </a>
                     </li>
 
-                    <!-- MONITORING & WA -->
-                    <div class="sidebar-heading">MONITORING & WA</div>
+                    <!-- LAPORAN & PENGATURAN -->
+                    <div class="sidebar-heading">LAPORAN & SISTEM</div>
                     <li class="nav-item">
-                        <a href="{{ route('admin.rekap.monitoring') }}" class="nav-link {{ request()->routeIs('admin.rekap.monitoring') ? 'active' : '' }}">
-                            <i class="fa-solid fa-rotate-left"></i> Live Monitoring
+                        <a href="{{ route('admin.rekap.cetak') }}" target="_blank" class="nav-link">
+                            <i class="fa-solid fa-print"></i> Generate Laporan
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('admin.rekap.index') }}" class="nav-link {{ request()->routeIs('admin.rekap.index') ? 'active' : '' }}">
-                            <i class="fa-solid fa-file-lines"></i> Rekap Kehadiran
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('admin.fonnte.index') }}" class="nav-link {{ request()->routeIs('admin.fonnte.*') ? 'active' : '' }}">
-                            <i class="fa-brands fa-whatsapp text-success"></i> Fonnte WA API
+                        <a href="{{ route('admin.setting-fonnte.index') }}" class="nav-link {{ request()->routeIs('admin.setting-fonnte.*') ? 'active' : '' }}">
+                            <i class="fa-solid fa-gear"></i> Pengaturan WA
                         </a>
                     </li>
                 @endif
             </ul>
         </div>
 
+        <!-- Sidebar Footer / Direct Instant Logout -->
         <div class="sidebar-footer">
-            <form id="logoutForm" action="{{ route('logout') }}" method="POST" class="d-none">
+            <form action="{{ route('logout') }}" method="POST" id="logoutFormSidebar" class="m-0">
                 @csrf
+                <button type="submit" class="logout-btn">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i> Keluar / Logout
+                </button>
             </form>
-            <a href="javascript:void(0)" class="logout-btn" onclick="document.getElementById('logoutForm').submit();">
-                <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout / Keluar
-            </a>
         </div>
     </div>
 
-    <!-- Main Content -->
+    <!-- Main Content Area -->
     <div class="main-content">
-        <!-- Mobile Navbar (Only Visible on Mobile & Tablet) -->
-        <div class="mobile-navbar">
-            <button type="button" class="btn btn-light border rounded-pill px-3 py-2 shadow-sm d-flex align-items-center gap-2" onclick="toggleSidebar()">
-                <i class="fa-solid fa-bars text-primary fs-5"></i>
-                <span class="fw-bold small text-dark">Menu Navigasi</span>
+        <!-- Mobile Top Navbar -->
+        <div class="mobile-navbar rounded-3">
+            <button class="btn btn-light border p-2 rounded-3 text-dark" onclick="toggleSidebar()" aria-label="Buka Menu Sidebar">
+                <i class="fa-solid fa-bars-staggered fs-5"></i>
             </button>
             <div class="d-flex align-items-center gap-2">
-                <span class="user-role-badge">
-                    <i class="fa-solid fa-user"></i> {{ Auth::user()->name ?? 'User' }}
-                </span>
+                <img src="{{ asset('images/logo.png') }}" alt="Logo" style="width: 28px; height: 28px; object-fit: contain;">
+                <span class="fw-bold text-dark fs-6">SMP IT Al-Muttaqin</span>
+            </div>
+            <div class="user-role-badge py-1 px-2" style="font-size: 0.72rem;">
+                {{ Auth::user()->role === 'guru' ? 'GURU' : 'ADMIN' }}
             </div>
         </div>
 
-        <!-- Top Header Card -->
-        <div class="top-header-card">
+        <!-- Desktop Top Header Navbar (Minimalist Style) -->
+        <div class="top-header-card d-none d-lg-flex">
             <div>
-                <h4 class="top-header-title">Sistem Presensi Siswa</h4>
-                <p class="top-header-subtitle">SMP IT Al-Muttaqin Tarogong Kaler</p>
+                <h5 class="top-header-title">
+                    @if(request()->routeIs('admin.dashboard'))
+                        Dashboard
+                    @elseif(request()->routeIs('admin.siswa.*'))
+                        Data Siswa
+                    @elseif(request()->routeIs('admin.kelas.*'))
+                        Data Kelas
+                    @elseif(request()->routeIs('admin.guru.*'))
+                        Data Guru & Wali Kelas
+                    @elseif(request()->routeIs('admin.rekap.monitoring') || request()->routeIs('guru.monitoring'))
+                        Absensi Siswa (Monitoring Live)
+                    @elseif(request()->routeIs('admin.rekap.index') || request()->routeIs('guru.rekap'))
+                        Rekapitulasi Kehadiran Siswa
+                    @elseif(request()->routeIs('guru.siswa.*'))
+                        Biodata Siswa Binaan
+                    @elseif(request()->routeIs('presensi.scan'))
+                        Scanner QR Code
+                    @elseif(request()->routeIs('admin.setting-fonnte.*'))
+                        Pengaturan Gateway WhatsApp
+                    @else
+                        Sistem Presensi Siswa
+                    @endif
+                </h5>
             </div>
-            <div class="d-flex align-items-center flex-wrap gap-2">
-                <span class="date-badge">
-                    <i class="fa-regular fa-calendar text-primary"></i> {{ date('d M Y') }}
-                </span>
-                <span class="user-role-badge">
-                    <i class="fa-solid fa-user"></i> {{ Auth::user()->name ?? 'Admin TU SMP IT Al-Muttaqin' }} ({{ strtoupper(Auth::user()->role ?? 'ADMIN TU') }})
-                </span>
+
+            <div class="d-flex align-items-center gap-3">
+                <div class="date-badge">
+                    <i class="fa-regular fa-calendar text-muted"></i>
+                    <span>{{ \Carbon\Carbon::now('Asia/Jakarta')->translatedFormat('d F Y') }}</span>
+                </div>
+
+                <div class="user-role-badge">
+                    <i class="fa-solid fa-circle-user text-danger"></i>
+                    <span>USER : {{ strtoupper(Auth::user()->role === 'guru' ? (Auth::user()->name) : 'SUPERADMIN (ADMIN TU)') }}</span>
+                </div>
             </div>
         </div>
 
-        <!-- Flash Alert Messages -->
+        <!-- Alert Notifications -->
         @if(session('success'))
-            <div class="alert alert-success alert-dismissible fade show rounded-4 border-0 shadow-sm auto-dismiss-alert mb-4" role="alert">
-                <i class="fa-solid fa-circle-check me-2"></i> {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm rounded-4 mb-4 d-flex align-items-center gap-2" role="alert">
+                <i class="fa-solid fa-circle-check fs-5 text-success"></i>
+                <div class="fw-semibold">{{ session('success') }}</div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
 
         @if(session('error'))
-            <div class="alert alert-danger alert-dismissible fade show rounded-4 border-0 shadow-sm auto-dismiss-alert mb-4" role="alert">
-                <i class="fa-solid fa-triangle-exclamation me-2"></i> {{ session('error') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm rounded-4 mb-4 d-flex align-items-center gap-2" role="alert">
+                <i class="fa-solid fa-triangle-exclamation fs-5 text-danger"></i>
+                <div class="fw-semibold">{{ session('error') }}</div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
 
+        @if($errors->any())
+            <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm rounded-4 mb-4" role="alert">
+                <div class="d-flex align-items-center gap-2 mb-1">
+                    <i class="fa-solid fa-circle-xmark fs-5 text-danger"></i>
+                    <strong class="fw-bold">Perhatian:</strong>
+                </div>
+                <ul class="mb-0 ps-3 small">
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
+        <!-- Main Page Content Slot -->
         @yield('content')
     </div>
 
-    <!-- Scripts -->
+    <!-- Bootstrap 5 JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Chart.js for Minimalist Analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script>
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebarDrawer');
@@ -459,16 +567,6 @@
                 backdrop.classList.toggle('show');
             }
         }
-
-        // Auto dismiss flash alerts
-        setTimeout(function() {
-            const alerts = document.querySelectorAll('.auto-dismiss-alert');
-            alerts.forEach(alert => {
-                const bsAlert = new bootstrap.Alert(alert);
-                bsAlert.close();
-            });
-        }, 4000);
     </script>
-    @yield('scripts')
 </body>
 </html>
