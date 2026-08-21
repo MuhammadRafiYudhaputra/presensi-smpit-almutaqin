@@ -221,69 +221,7 @@
     </div>
 </div>
 
-<!-- 3. Aktivitas Presensi Terakhir Hari Ini -->
-<div class="panel-widget">
-    <div class="p-3 border-bottom d-flex justify-content-between align-items-center flex-wrap gap-2">
-        <h6 class="fw-bold mb-0 text-dark d-flex align-items-center">
-            <i class="fa-solid fa-clock-rotate-left text-primary me-2"></i> Aktivitas Presensi Terakhir Hari Ini
-        </h6>
-        <a href="{{ route('admin.rekap.monitoring') }}" class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-semibold">
-            Lihat Semua Aktivitas
-        </a>
-    </div>
 
-    <div class="table-responsive">
-        <table class="table table-hover align-middle mb-0" style="font-size: 0.9rem;">
-            <thead class="table-light">
-                <tr>
-                    <th class="text-dark fw-bold" style="width: 120px;">Waktu Scan</th>
-                    <th class="text-dark fw-bold">Nama Peserta Didik</th>
-                    <th class="text-dark fw-bold" style="width: 120px;">Kelas</th>
-                    <th class="text-dark fw-bold" style="width: 130px;">Jam Absensi</th>
-                    <th class="text-dark fw-bold" style="width: 150px;">Status Presensi</th>
-                    <th class="text-dark fw-bold" style="width: 160px;">Notifikasi WhatsApp</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse($recentPresensi as $p)
-                <tr>
-                    <td class="text-muted"><i class="fa-regular fa-clock me-1 text-primary"></i>{{ $p->created_at ? $p->created_at->format('H:i:s') : '-' }}</td>
-                    <td class="fw-bold text-dark">{{ $p->siswa->nama ?? '-' }}</td>
-                    <td><span class="badge bg-light text-dark border">Kelas {{ $p->siswa->kelas->nama_kelas ?? '-' }}</span></td>
-                    <td><span class="badge bg-light text-dark border">{{ $p->jam_masuk ?? '-' }}</span></td>
-                    <td>
-                        @if($p->status === 'HADIR')
-                            <span class="badge bg-success bg-opacity-10 text-success border border-success px-3 py-1 rounded-pill fw-bold">HADIR</span>
-                        @elseif($p->status === 'TERLAMBAT')
-                            <span class="badge bg-warning bg-opacity-10 text-dark border border-warning px-3 py-1 rounded-pill fw-bold" style="color: #92400e !important;">TERLAMBAT</span>
-                        @elseif($p->status === 'IZIN')
-                            <span class="badge bg-info bg-opacity-10 text-primary border border-info px-3 py-1 rounded-pill fw-bold">IZIN</span>
-                        @elseif($p->status === 'SAKIT')
-                            <span class="badge bg-secondary bg-opacity-10 text-dark border border-secondary px-3 py-1 rounded-pill fw-bold">SAKIT</span>
-                        @else
-                            <span class="badge bg-danger bg-opacity-10 text-danger border border-danger px-3 py-1 rounded-pill fw-bold">ALPA</span>
-                        @endif
-                    </td>
-                    <td>
-                        @if($p->wa_masuk_sent)
-                            <span class="badge bg-success-subtle text-success border border-success-subtle"><i class="fa-brands fa-whatsapp me-1"></i> Terkirim</span>
-                        @else
-                            <span class="badge bg-light text-muted border"><i class="fa-solid fa-hourglass-half me-1"></i> Antrian</span>
-                        @endif
-                    </td>
-                </tr>
-                @empty
-                <tr>
-                    <td colspan="6" class="text-center text-muted py-5">
-                        <i class="fa-solid fa-inbox fs-3 d-block mb-2 text-muted"></i>
-                        Belum ada aktivitas presensi siswa hari ini.
-                    </td>
-                </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
-</div>
 
 <!-- Chart.js Initialization -->
 <script>
