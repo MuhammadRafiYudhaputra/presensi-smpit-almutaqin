@@ -10,11 +10,11 @@
             </h5>
             <small class="text-muted">Data orang tua, wali murid siswa, nomor WhatsApp notifikasi presensi otomatis, dan anak yang terhubung</small>
         </div>
-        <div class="d-flex gap-2 flex-wrap align-items-center">
-            <button type="button" class="btn btn-outline-primary rounded-pill px-3 py-1.5 fw-semibold shadow-sm btn-sm d-inline-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#modalImportOrangTua">
+        <div class="d-flex gap-2 align-items-center flex-nowrap flex-shrink-0">
+            <button type="button" class="btn btn-outline-primary rounded-pill px-3 py-1.5 fw-semibold shadow-sm btn-sm text-nowrap d-inline-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#modalImportOrangTua">
                 <i class="fa-solid fa-file-import me-1"></i> Import Orang Tua
             </button>
-            <button type="button" class="btn btn-primary rounded-pill px-3 py-1.5 fw-semibold shadow-sm btn-sm d-inline-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#modalAddOrangTua">
+            <button type="button" class="btn btn-primary rounded-pill px-3 py-1.5 fw-semibold shadow-sm btn-sm text-nowrap d-inline-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#modalAddOrangTua">
                 <i class="fa-solid fa-plus me-1"></i> Tambah Orang Tua
             </button>
         </div>
@@ -51,13 +51,13 @@
         <table class="table table-bordered table-hover align-middle mb-0" style="font-size: 0.9rem;">
             <thead class="table-light text-center">
                 <tr>
-                    <th style="width: 50px;" class="text-dark">No</th>
-                    <th class="text-dark text-start" style="width: 200px;">Data Orang Tua</th>
-                    <th class="text-dark text-start" style="width: 180px;">Wali Siswa</th>
-                    <th class="text-dark" style="width: 170px;">No. WhatsApp Notifikasi</th>
-                    <th class="text-dark text-start" style="width: 200px;">Peserta Didik (Anak)</th>
-                    <th class="text-dark text-start">Alamat</th>
-                    <th class="text-center text-dark" style="width: 110px;">Aksi</th>
+                    <th style="width: 45px;" class="text-dark">No</th>
+                    <th class="text-dark text-start" style="width: 170px;">Data Orang Tua</th>
+                    <th class="text-dark text-start" style="width: 140px;">Wali Siswa</th>
+                    <th class="text-dark text-center" style="width: 135px;">No. WhatsApp</th>
+                    <th class="text-dark text-start" style="width: 160px;">Peserta Didik (Anak)</th>
+                    <th class="text-dark text-start">Alamat Domisili</th>
+                    <th class="text-center text-dark" style="width: 90px;">Aksi</th>
                 </tr>
             </thead>
             <tbody>
@@ -89,7 +89,7 @@
                         @endif
                     </td>
                     <td class="text-center">
-                        <span class="badge bg-success bg-opacity-10 text-success border border-success px-3 py-2 rounded-pill shadow-sm" style="font-size: 0.85rem;">
+                        <span class="badge bg-success bg-opacity-10 text-success border border-success px-2.5 py-1.5 rounded-pill shadow-sm text-nowrap" style="font-size: 0.82rem;">
                             <i class="fa-brands fa-whatsapp me-1"></i> {{ $ot->no_wa }}
                         </span>
                     </td>
