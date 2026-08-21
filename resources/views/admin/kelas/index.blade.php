@@ -140,7 +140,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content rounded-4 border-0 shadow">
             <div class="modal-header border-0 pb-0">
-                <h5 class="fw-bold text-dark"><i class="fa-solid fa-pen-to-square me-2 text-warning"></i>Edit Data Kelas</h5>
+                <h5 class="fw-bold text-dark"><i class="fa-solid fa-pen-to-square me-2 text-primary"></i>Edit Data Kelas</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <form id="formEditKelas" method="POST">
@@ -155,6 +155,7 @@
                         <label class="form-label fw-semibold text-dark">Wali Kelas Penanggung Jawab</label>
                         <select name="guru_id" id="edit_guru_id" class="form-select">
                             <option value="">-- Belum Ditentukan --</option>
+                            <option value="">-- Belum Ditentukan --</option>
                             @foreach($gurus as $g)
                                 <option value="{{ $g->id }}">{{ $g->nama }} (NIP: {{ $g->nip ?? '-' }})</option>
                             @endforeach
@@ -163,7 +164,7 @@
                 </div>
                 <div class="modal-footer border-0 pt-0">
                     <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-warning rounded-pill px-4 fw-bold text-dark shadow-sm">Simpan Perubahan</button>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm">Simpan Perubahan</button>
                 </div>
             </form>
         </div>

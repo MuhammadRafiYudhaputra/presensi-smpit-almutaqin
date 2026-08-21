@@ -179,7 +179,7 @@
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content rounded-4 border-0 shadow">
             <div class="modal-header border-0 pb-0">
-                <h5 class="fw-bold text-dark"><i class="fa-solid fa-user-pen me-2 text-warning"></i>Edit Data Wali Kelas</h5>
+                <h5 class="fw-bold text-dark"><i class="fa-solid fa-user-pen me-2 text-primary"></i>Edit Data Wali Kelas</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <form id="formEditGuru" method="POST">
@@ -220,7 +220,7 @@
                 </div>
                 <div class="modal-footer border-0 pt-0">
                     <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-warning rounded-pill px-4 fw-bold text-dark shadow-sm">Simpan Perubahan</button>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm">Simpan Perubahan</button>
                 </div>
             </form>
         </div>
@@ -232,7 +232,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content rounded-4 border-0 shadow">
             <div class="modal-header border-0 pb-0">
-                <h5 class="fw-bold text-dark"><i class="fa-solid fa-key me-2 text-info"></i>Reset Password Akun Guru</h5>
+                <h5 class="fw-bold text-dark"><i class="fa-solid fa-key me-2 text-warning"></i>Reset Password Akun Guru</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <form id="formResetPassword" method="POST">
@@ -247,7 +247,7 @@
                 </div>
                 <div class="modal-footer border-0 pt-0">
                     <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-info text-white rounded-pill px-4 fw-bold shadow-sm">Reset Sekarang</button>
+                    <button type="submit" class="btn btn-warning text-dark rounded-pill px-4 fw-bold shadow-sm">Reset Sekarang</button>
                 </div>
             </form>
         </div>
