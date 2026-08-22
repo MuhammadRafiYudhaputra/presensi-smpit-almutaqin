@@ -25,7 +25,17 @@ class SettingAkademikController extends Controller
             'is_active' => true,
         ]);
 
+        $baseYear = (int) substr($request->tahun_ajaran, 0, 4);
         $semesterLabel = ucfirst($request->semester);
+
+        if (str_contains(url()->previous(), 'rekap')) {
+            return redirect()->route('admin.rekap.index', [
+                'mode' => 'semester',
+                'semester' => $request->semester,
+                'tahun' => $baseYear,
+            ])->with('success', "Periode Akademik Aktif berhasil diubah menjadi: Semester {$semesterLabel} Tahun Ajaran {$request->tahun_ajaran}!");
+        }
+
         return redirect()->back()->with('success', "Periode Akademik Aktif berhasil diubah menjadi: Semester {$semesterLabel} Tahun Ajaran {$request->tahun_ajaran}!");
     }
 
@@ -41,7 +51,17 @@ class SettingAkademikController extends Controller
             'semester' => $newSemester,
         ]);
 
+        $baseYear = (int) substr($setting->tahun_ajaran, 0, 4);
         $semesterLabel = ucfirst($newSemester);
+
+        if (str_contains(url()->previous(), 'rekap')) {
+            return redirect()->route('admin.rekap.index', [
+                'mode' => 'semester',
+                'semester' => $newSemester,
+                'tahun' => $baseYear,
+            ])->with('success', "Semester aktif berhasil dialihkan ke: Semester {$semesterLabel} ({$setting->tahun_ajaran})!");
+        }
+
         return redirect()->back()->with('success', "Semester aktif berhasil dialihkan ke: Semester {$semesterLabel} ({$setting->tahun_ajaran})!");
     }
 }

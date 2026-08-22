@@ -137,6 +137,7 @@ class RekapKehadiranController extends Controller
     public function rekap(Request $request)
     {
         $settingAkademik = \App\Models\SettingAkademik::getActive();
+        $activeBaseYear = $settingAkademik ? (int) substr($settingAkademik->tahun_ajaran, 0, 4) : Carbon::now('Asia/Jakarta')->year;
 
         $mode = $request->get('mode', 'bulanan');
         if (!in_array($mode, ['bulanan', 'semester'])) {
@@ -145,8 +146,16 @@ class RekapKehadiranController extends Controller
 
         $tanggal = $request->get('tanggal', Carbon::today('Asia/Jakarta')->toDateString());
         $bulan = (int) $request->get('bulan', Carbon::now('Asia/Jakarta')->month);
-        $tahun = (int) $request->get('tahun', Carbon::now('Asia/Jakarta')->year);
-        $semester = $request->get('semester', $settingAkademik->semester ?? (Carbon::now('Asia/Jakarta')->month >= 7 ? 'ganjil' : 'genap'));
+
+        if ($mode === 'semester') {
+            $tahun = (int) $request->get('tahun', $activeBaseYear);
+            $semester = $request->get('semester', $settingAkademik->semester ?? (Carbon::now('Asia/Jakarta')->month >= 7 ? 'ganjil' : 'genap'));
+        } else {
+            $defaultBulanYear = ($settingAkademik && $settingAkademik->semester === 'genap') ? ($activeBaseYear + 1) : $activeBaseYear;
+            $tahun = (int) $request->get('tahun', $defaultBulanYear);
+            $semester = $request->get('semester', $settingAkademik->semester ?? (Carbon::now('Asia/Jakarta')->month >= 7 ? 'ganjil' : 'genap'));
+        }
+
         $kelasId = $request->get('kelas_id');
         $sortBy = $request->get('sort_by', 'nama_asc');
 
