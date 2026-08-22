@@ -104,7 +104,7 @@
                 <i class="fa-solid fa-school"></i>
             </div>
             <div class="stat-content">
-                <span class="stat-label">Kelas / Rombel</span>
+                <span class="stat-label">Total Kelas</span>
                 <h3 class="stat-value">{{ $totalKelas }} <span class="fs-6 text-muted fw-normal">/ 3 Tingkat</span></h3>
             </div>
             <div class="stat-footer">

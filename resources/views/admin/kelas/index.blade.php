@@ -72,7 +72,7 @@
                             <button type="button" class="btn btn-primary btn-sm rounded-2 d-inline-flex align-items-center justify-content-center" style="width: 32px; height: 32px;" title="Edit Data Kelas" onclick="openEditKelasModal({{ json_encode($k) }})">
                                 <i class="fa-solid fa-pen"></i>
                             </button>
-                            <form action="{{ route('admin.kelas.destroy', $k->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data rombel kelas ini?')">
+                            <form action="{{ route('admin.kelas.destroy', $k->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data kelas ini?')">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-sm rounded-2 d-inline-flex align-items-center justify-content-center" style="width: 32px; height: 32px;" title="Hapus Kelas">
@@ -86,7 +86,7 @@
                 <tr>
                     <td colspan="5" class="text-center text-muted py-5">
                         <i class="fa-solid fa-school fs-2 d-block mb-2 text-muted"></i>
-                        Belum ada data rombel kelas terdaftar.
+                        Belum ada data kelas terdaftar.
                     </td>
                 </tr>
                 @endforelse
@@ -94,9 +94,9 @@
         </table>
     </div>
 
-    <!-- Pagination -->
-    <div class="mt-4 d-flex justify-content-between align-items-center flex-wrap gap-2">
-        <small class="text-muted">Menampilkan {{ $kelases->firstItem() ?? 0 }} - {{ $kelases->lastItem() ?? 0 }} dari total {{ $kelases->total() }} rombel kelas</small>
+    @if($kelases->hasPages())
+    <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap gap-2">
+        <small class="text-muted">Menampilkan {{ $kelases->firstItem() ?? 0 }} - {{ $kelases->lastItem() ?? 0 }} dari total {{ $kelases->total() }} kelas</small>
         {{ $kelases->links() }}
     </div>
 </div>
@@ -148,7 +148,7 @@
                 @method('PUT')
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label class="form-label fw-semibold text-dark">Nama Kelas / Rombel <span class="text-danger">*</span></label>
+                        <label class="form-label fw-semibold text-dark">Nama Kelas <span class="text-danger">*</span></label>
                         <input type="text" name="nama_kelas" id="edit_nama_kelas" class="form-control" required>
                     </div>
                     <div class="mb-3">
@@ -179,7 +179,7 @@
                 <h5 class="fw-bold text-dark mb-0"><i class="fa-solid fa-graduation-cap me-2 text-success"></i>Proses Kenaikan Kelas (Tahun Ajaran Baru)</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form action="{{ route('admin.kenaikan.proses') }}" method="POST" onsubmit="return confirm('PERHATIAN: Tindakan ini akan memproses kenaikan rombel seluruh siswa aktif secara otomatis (Kelas 7 -> 8, Kelas 8 -> 9, dan Kelas 9 -> Alumni/Lulus). Siswa yang dicentang di bawah akan DIKECUALIKAN (Tinggal Kelas). Lanjutkan?')">
+            <form action="{{ route('admin.kenaikan.proses') }}" method="POST" onsubmit="return confirm('PERHATIAN: Tindakan ini akan memproses kenaikan kelas seluruh siswa aktif secara otomatis (Kelas 7 -> 8, Kelas 8 -> 9, dan Kelas 9 -> Alumni/Lulus). Siswa yang dicentang di bawah akan DIKECUALIKAN (Tinggal Kelas). Lanjutkan?')">
                 @csrf
                 <div class="modal-body">
                     <div class="alert alert-info border-info d-flex align-items-center mb-3 py-2">
@@ -193,7 +193,7 @@
                     </div>
 
                     <h6 class="fw-bold text-danger mb-2"><i class="fa-solid fa-user-xmark me-1"></i> Pengecualian Siswa (Tinggal Kelas):</h6>
-                    <p class="small text-muted mb-2">Centang nama siswa di bawah jika siswa tersebut <strong>TIDAK NAIK KELAS</strong> agar tetap dipertahankan pada rombel saat ini:</p>
+                    <p class="small text-muted mb-2">Centang nama siswa di bawah jika siswa tersebut <strong>TIDAK NAIK KELAS</strong> agar tetap dipertahankan pada kelas saat ini:</p>
 
                     <!-- Live Filter Search Box di dalam Modal -->
                     <div class="mb-3">

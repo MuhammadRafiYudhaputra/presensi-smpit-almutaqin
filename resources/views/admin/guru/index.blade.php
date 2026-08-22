@@ -199,7 +199,7 @@
                             <input type="email" name="email" id="edit_guru_email" class="form-control" required>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold text-dark">Penugasan Kelas (Rombel)</label>
+                            <label class="form-label fw-semibold text-dark">Penugasan Kelas Binaan</label>
                             <select name="kelas_id" id="edit_guru_kelas_id" class="form-select">
                                 <option value="">-- Belum Ditugaskan --</option>
                                 @foreach($kelases as $k)

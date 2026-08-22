@@ -236,7 +236,7 @@
                             </select>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold text-dark">Kelas / Rombel <span class="text-danger">*</span></label>
+                            <label class="form-label fw-semibold text-dark">Kelas <span class="text-danger">*</span></label>
                             <select name="kelas_id" class="form-select" required>
                                 <option value="">-- Pilih Kelas --</option>
                                 @foreach($kelases as $k)
@@ -297,7 +297,7 @@
                             </select>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold text-dark">Kelas / Rombel <span class="text-danger">*</span></label>
+                            <label class="form-label fw-semibold text-dark">Kelas <span class="text-danger">*</span></label>
                             <select name="kelas_id" id="edit_kelas_id" class="form-select" required>
                                 <option value="">-- Pilih Kelas --</option>
                                 @foreach($kelases as $k)
