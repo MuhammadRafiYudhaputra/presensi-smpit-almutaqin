@@ -1,24 +1,21 @@
-#!/bin/bash
+#!/bin/sh
 set -e
 
-PORT="${PORT:-80}"
-echo "Booting Laravel Application on Port: $PORT ..."
+PORT="${PORT:-8080}"
+echo "=========================================="
+echo "Starting SMP IT Al-Muttaqin Laravel Server"
+echo "Listening on Host: 0.0.0.0 Port: $PORT"
+echo "=========================================="
 
-# Clear all cached configs
 php artisan config:clear || true
 php artisan view:clear || true
 php artisan route:clear || true
 
-# Run database migrations and seeders automatically
-echo "Migrating database..."
+echo "Running migrations..."
 php artisan migrate --force || true
-echo "Seeding database..."
+
+echo "Running seeders..."
 php artisan db:seed --force || true
 
-# Dynamically set Apache port
-sed -i "s/Listen .*/Listen $PORT/g" /etc/apache2/ports.conf
-sed -i "s/<VirtualHost \*:[0-9]*>/<VirtualHost \*:$PORT>/g" /etc/apache2/sites-available/000-default.conf
-sed -i "s/<VirtualHost \*:[0-9]*>/<VirtualHost \*:$PORT>/g" /etc/apache2/sites-available/*.conf
-
-echo "Starting Apache on port $PORT..."
-exec apache2-foreground
+echo "Serving Laravel Application on 0.0.0.0:$PORT..."
+exec php artisan serve --host=0.0.0.0 --port="$PORT"
