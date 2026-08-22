@@ -125,18 +125,20 @@
             </div>
 
             <div class="row g-2 pt-2 border-top">
-                <div class="col-12 col-md-4">
+                <div class="col-12 {{ $kelas ? 'col-md-4' : 'col-md-6' }}">
                     <label class="form-label small fw-bold text-dark mb-0.5" style="font-size: 0.75rem;">Nama Kepala Sekolah:</label>
                     <input type="text" id="inputKepsek" class="form-control form-control-sm rounded-2" style="font-size: 0.78rem;" placeholder="Nama Lengkap &amp; Gelar" oninput="syncSignature()">
                 </div>
-                <div class="col-12 col-md-4">
+                <div class="col-12 {{ $kelas ? 'col-md-4' : 'col-md-6' }}">
                     <label class="form-label small fw-bold text-dark mb-0.5" style="font-size: 0.75rem;">NIP Kepala Sekolah:</label>
                     <input type="text" id="inputNipKepsek" class="form-control form-control-sm rounded-2" style="font-size: 0.78rem;" placeholder="NIP (atau -)" oninput="syncSignature()">
                 </div>
+                @if($kelas)
                 <div class="col-12 col-md-4">
-                    <label class="form-label small fw-bold text-dark mb-0.5" style="font-size: 0.75rem;">Nama Wali Kelas (Opsional):</label>
+                    <label class="form-label small fw-bold text-dark mb-0.5" style="font-size: 0.75rem;">Nama Wali Kelas (Kelas {{ $kelas->nama_kelas }}):</label>
                     <input type="text" id="inputWali" class="form-control form-control-sm rounded-2" style="font-size: 0.78rem;" placeholder="Nama Wali Kelas" oninput="syncSignature()">
                 </div>
+                @endif
             </div>
         </div>
     </div>
@@ -216,9 +218,10 @@
             </tbody>
         </table>
 
-        <!-- Kolom Tanda Tangan Pejabat (Kepala Sekolah & Wali Kelas) -->
+        <!-- Kolom Tanda Tangan Pejabat (Kepala Sekolah & Wali Kelas jika per kelas) -->
         <div class="row mt-4 pt-2" style="font-size: 0.88rem;">
-            <!-- Tanda Tangan Wali Kelas (Jika Ada) -->
+            @if($kelas)
+            <!-- Tanda Tangan Wali Kelas (Hanya Muncul Jika Memilih Kelas Tertentu) -->
             <div class="col-6 text-center" id="colWaliKelas">
                 <p class="mb-1">Garut, {{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}</p>
                 <p class="mb-1">Mengetahui,</p>
@@ -229,9 +232,10 @@
                 </p>
                 <small>NIP. <span class="editable-field" id="dispNipWali" contenteditable="true" style="min-width: 80px;">{{ $kelas->waliKelas->nip ?? '-' }}</span></small>
             </div>
+            @endif
 
-            <!-- Tanda Tangan Kepala Sekolah -->
-            <div class="col-6 text-center ms-auto" id="colKepsek">
+            <!-- Tanda Tangan Kepala Sekolah (Jika Semua Kelas ditarik ke kanan/ms-auto) -->
+            <div class="{{ $kelas ? 'col-6' : 'col-6 ms-auto' }} text-center" id="colKepsek">
                 <p class="mb-1">Garut, {{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}</p>
                 <p class="mb-1">Mengetahui,</p>
                 <p class="fw-bold mb-4">Kepala Sekolah SMP IT Al-Muttaqin</p>
