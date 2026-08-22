@@ -40,25 +40,27 @@
         <div class="d-flex gap-2 align-items-center flex-wrap flex-md-nowrap flex-shrink-0">
             <!-- Mode Switcher Tabs (Bulanan & Semester Saja) -->
             <div class="btn-group p-1 bg-light rounded-pill border" role="group">
-                <a href="{{ route('guru.rekap', ['mode' => 'bulanan', 'bulan' => $bulan, 'tahun' => $tahun, 'hari_efektif' => $hariEfektif, 'sort_by' => $sortBy]) }}" class="btn btn-sm rounded-pill px-3 fw-semibold {{ $mode === 'bulanan' ? 'btn-primary shadow-sm' : 'btn-light text-muted' }}">
-                    <i class="fa-solid fa-chart-simple me-1"></i> Bulanan
+                <a href="{{ route('guru.rekap', ['mode' => 'bulanan', 'bulan' => $bulan, 'tahun' => $tahun, 'hari_efektif' => $hariEfektif, 'sort_by' => $sortBy]) }}" class="btn btn-sm rounded-pill px-3 fw-semibold d-inline-flex align-items-center gap-2 {{ $mode === 'bulanan' ? 'btn-primary shadow-sm' : 'btn-light text-muted' }}">
+                    <i class="fa-solid fa-chart-simple"></i>
+                    <span>Bulanan</span>
                 </a>
-                <a href="{{ route('guru.rekap', ['mode' => 'semester', 'semester' => $semester, 'tahun' => $tahun, 'hari_efektif' => $hariEfektif, 'sort_by' => $sortBy]) }}" class="btn btn-sm rounded-pill px-3 fw-semibold {{ $mode === 'semester' ? 'btn-primary shadow-sm' : 'btn-light text-muted' }}">
-                    <i class="fa-solid fa-graduation-cap me-1"></i> Semester
+                <a href="{{ route('guru.rekap', ['mode' => 'semester', 'semester' => $semester, 'tahun' => $tahun, 'hari_efektif' => $hariEfektif, 'sort_by' => $sortBy]) }}" class="btn btn-sm rounded-pill px-3 fw-semibold d-inline-flex align-items-center gap-2 {{ $mode === 'semester' ? 'btn-primary shadow-sm' : 'btn-light text-muted' }}">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                    <span>Semester</span>
                 </a>
             </div>
 
             <!-- Indikator Semester Aktif -->
             @if(isset($settingAkademik))
-            <a href="{{ route('guru.rekap', ['mode' => 'semester', 'semester' => $settingAkademik->semester, 'tahun' => (int)substr($settingAkademik->tahun_ajaran, 0, 4)]) }}" class="btn btn-sm btn-outline-success rounded-pill px-3 py-1.5 fw-semibold shadow-xs text-nowrap d-inline-flex align-items-center" title="Semester & Tahun Ajaran resmi aktif">
-                <i class="fa-solid fa-calendar-check text-success me-1.5"></i>
+            <a href="{{ route('guru.rekap', ['mode' => 'semester', 'semester' => $settingAkademik->semester, 'tahun' => (int)substr($settingAkademik->tahun_ajaran, 0, 4)]) }}" class="btn btn-sm btn-outline-success rounded-pill px-3 py-1.5 fw-semibold shadow-xs text-nowrap d-inline-flex align-items-center gap-2" title="Semester & Tahun Ajaran resmi aktif">
+                <i class="fa-solid fa-calendar-check text-success"></i>
                 <span>Semester Aktif: {{ ucfirst($settingAkademik->semester) }} ({{ $settingAkademik->tahun_ajaran }})</span>
             </a>
             @endif
 
             <!-- Tombol Cetak Laporan -->
-            <a href="{{ route('admin.rekap.cetak', ['mode' => $mode, 'bulan' => $bulan, 'tahun' => $tahun, 'semester' => $semester, 'kelas_id' => $kelas ? $kelas->id : null, 'hari_efektif' => $hariEfektif]) }}" target="_blank" class="btn btn-outline-primary rounded-pill px-3 py-1.5 fw-semibold shadow-sm btn-sm text-nowrap d-inline-flex align-items-center">
-                <i class="fa-solid fa-print me-1.5"></i>
+            <a href="{{ route('admin.rekap.cetak', ['mode' => $mode, 'bulan' => $bulan, 'tahun' => $tahun, 'semester' => $semester, 'kelas_id' => $kelas ? $kelas->id : null, 'hari_efektif' => $hariEfektif]) }}" target="_blank" class="btn btn-outline-primary rounded-pill px-3 py-1.5 fw-semibold shadow-sm btn-sm text-nowrap d-inline-flex align-items-center gap-2">
+                <i class="fa-solid fa-print"></i>
                 <span>Cetak Laporan</span>
             </a>
         </div>
@@ -129,8 +131,8 @@
         </div>
 
         <div class="col-12 mt-2">
-            <button type="submit" class="btn btn-sm btn-primary rounded-pill px-4 fw-bold shadow-sm d-inline-flex align-items-center">
-                <i class="fa-solid fa-arrows-rotate me-1.5"></i>
+            <button type="submit" class="btn btn-sm btn-primary rounded-pill px-4 py-2 fw-bold shadow-sm d-inline-flex align-items-center gap-2">
+                <i class="fa-solid fa-arrows-rotate"></i>
                 <span>Terapkan Hari Efektif & Filter</span>
             </button>
         </div>
