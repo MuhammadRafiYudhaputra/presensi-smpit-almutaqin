@@ -115,7 +115,7 @@
                     <i class="fa-solid fa-file-pdf text-danger fs-4"></i>
                     <div>
                         <h6 class="fw-bold mb-0 text-dark" style="font-size: 0.9rem;">Pengaturan Cetak Laporan Presensi</h6>
-                        <small class="text-muted" style="font-size: 0.75rem;">Dasar perhitungan: <strong>{{ $hariEfektif }} Hari Efektif</strong>. Keterlambatan dicatat terpisah untuk catatan BK.</small>
+                        <small class="text-muted" style="font-size: 0.75rem;">Dasar perhitungan: <strong>{{ $hariEfektif }} Hari Efektif</strong>.</small>
                     </div>
                 </div>
                 <button onclick="window.print()" class="btn btn-primary rounded-pill px-4 py-2 fw-bold shadow-sm d-inline-flex align-items-center gap-2" style="font-size: 0.85rem;">
@@ -158,16 +158,29 @@
         </div>
 
         <!-- Judul Laporan -->
+        @php
+            $thnInt = (int)($tahun ?? date('Y'));
+            $blnInt = (int)($bulan ?? date('m'));
+            if (($mode ?? 'bulanan') === 'semester') {
+                $thnAjaran = (($semester ?? 'ganjil') === 'ganjil') ? ($thnInt . '/' . ($thnInt + 1)) : (($thnInt - 1) . '/' . $thnInt);
+            } elseif (($mode ?? 'bulanan') === 'harian') {
+                $dt = \Carbon\Carbon::parse($tanggal ?? date('Y-m-d'));
+                $thnAjaran = ($dt->month >= 7) ? ($dt->year . '/' . ($dt->year + 1)) : (($dt->year - 1) . '/' . $dt->year);
+            } else {
+                $thnAjaran = ($blnInt >= 7) ? ($thnInt . '/' . ($thnInt + 1)) : (($thnInt - 1) . '/' . $thnInt);
+            }
+        @endphp
         <div class="text-center mb-3">
             <h5 class="fw-bold text-uppercase text-decoration-underline mb-1" style="font-size: 1.05rem;">LAPORAN REKAPITULASI KEHADIRAN SISWA</h5>
             <p class="m-0 text-dark" style="font-size: 0.82rem;">
                 @if(($mode ?? 'bulanan') === 'semester')
-                    Periode: Semester {{ ucfirst($semester ?? 'Ganjil') }} / {{ $tahun ?? date('Y') }}
+                    Periode: Semester {{ ucfirst($semester ?? 'Ganjil') }}
                 @elseif(($mode ?? 'bulanan') === 'harian')
-                    Periode: Tanggal {{ $tanggal ?? date('Y-m-d') }}
+                    Periode: {{ \Carbon\Carbon::parse($tanggal ?? date('Y-m-d'))->translatedFormat('d F Y') }}
                 @else
-                    Periode: Bulan {{ $bulan ?? date('m') }} / {{ $tahun ?? date('Y') }}
+                    Periode: Bulan {{ \Carbon\Carbon::create()->month($blnInt)->translatedFormat('F') }} {{ $thnInt }}
                 @endif
+                | Tahun Ajaran: {{ $thnAjaran }}
                 | Kelas: {{ $kelas->nama_kelas ?? 'Semua Kelas' }}
                 @if(($mode ?? 'bulanan') !== 'harian')
                     | Dasar Perhitungan: {{ $hariEfektif }} Hari Efektif
@@ -184,7 +197,7 @@
                     <th>Nama Peserta Didik</th>
                     <th style="width: 80px;">Kelas</th>
                     <th style="width: 60px;" title="Total Masuk Sekolah">Hadir</th>
-                    <th style="width: 75px;" title="Catatan Keterlambatan untuk Pihak BK">Terlambat (BK)</th>
+                    <th style="width: 70px;">Terlambat</th>
                     <th style="width: 55px;">Izin</th>
                     <th style="width: 55px;">Sakit</th>
                     <th style="width: 55px;">Alpa</th>
@@ -199,12 +212,7 @@
                     <td>{{ $row->siswa->nama }}</td>
                     <td class="text-center">Kelas {{ $row->siswa->kelas->nama_kelas ?? '-' }}</td>
                     <td class="text-center fw-bold">{{ $row->hadir }}</td>
-                    <td class="text-center">
-                        {{ $row->terlambat }}
-                        @if($row->terlambat >= 3)
-                            <span style="font-size: 0.72rem; color: #b45309; font-weight: bold;">(BK)</span>
-                        @endif
-                    </td>
+                    <td class="text-center">{{ $row->terlambat }}</td>
                     <td class="text-center">{{ $row->izin }}</td>
                     <td class="text-center">{{ $row->sakit }}</td>
                     <td class="text-center">{{ $row->alpa }}</td>
