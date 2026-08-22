@@ -29,8 +29,10 @@ RUN chmod -R 777 storage bootstrap/cache
 # Install Composer dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction --ignore-platform-reqs
 
+# Prepare start script
+RUN chmod +x /var/www/html/start.sh && sed -i -e 's/\r$//' /var/www/html/start.sh
+
 ENV PORT=80
 EXPOSE 80
 
-# Start Laravel application directly with artisan serve
-CMD sh -c "php artisan config:clear && php artisan view:clear && php artisan route:clear && php artisan migrate --force && php artisan db:seed --force && php artisan serve --host=0.0.0.0 --port=\${PORT:-80}"
+CMD ["/bin/sh", "/var/www/html/start.sh"]
