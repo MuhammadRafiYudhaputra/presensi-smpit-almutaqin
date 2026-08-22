@@ -405,7 +405,7 @@
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('guru.siswa.index') }}" class="nav-link {{ request()->routeIs('guru.siswa.*') ? 'active' : '' }}">
-                                <i class="fa-solid fa-address-book"></i> Biodata Siswa Binaan
+                                <i class="fa-solid fa-user-group"></i> Data Orang Tua
                             </a>
                         </li>
                     @else

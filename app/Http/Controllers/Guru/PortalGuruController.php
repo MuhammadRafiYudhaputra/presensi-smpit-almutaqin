@@ -7,6 +7,7 @@ use App\Models\Kehadiran;
 use App\Models\Siswa;
 use App\Models\Kelas;
 use App\Models\Guru;
+use App\Models\OrangTua;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -298,57 +299,69 @@ class PortalGuruController extends Controller
     }
 
     /**
-     * Data Siswa Binaan Wali Kelas (Biodata, Kontak Orang Tua, Alamat)
+     * Data Orang Tua / Wali Siswa Binaan Wali Kelas
      */
     public function siswa(Request $request)
     {
         $kelas = $this->getGuruKelas();
         $search = $request->get('search');
-        $sortBy = $request->get('sort_by', 'nama_asc');
+        $sortBy = $request->get('sort_by', 'ayah_asc');
 
-        $query = Siswa::with(['kelas', 'orangTua'])
-            ->where(function ($q) {
-                $q->where('status', '!=', 'alumni')->orWhereNull('status');
+        $query = OrangTua::with(['siswas' => function($q) use ($kelas) {
+            $q->where(function($sq) {
+                $sq->where('status', '!=', 'alumni')->orWhereNull('status');
             });
+            if ($kelas) {
+                $q->where('kelas_id', $kelas->id);
+            }
+        }, 'siswas.kelas']);
 
         if ($kelas) {
-            $query->where('kelas_id', $kelas->id);
+            $query->whereHas('siswas', function ($q) use ($kelas) {
+                $q->where('kelas_id', $kelas->id)
+                  ->where(function($sq) {
+                      $sq->where('status', '!=', 'alumni')->orWhereNull('status');
+                  });
+            });
         }
 
-        if ($search) {
+        if (!empty($search)) {
             $query->where(function ($q) use ($search) {
-                $q->where('nama', 'like', "%{$search}%")
-                  ->orWhere('nisn', 'like', "%{$search}%")
-                  ->orWhere('nis', 'like', "%{$search}%")
-                  ->orWhereHas('orangTua', function ($qOt) use ($search) {
-                      $qOt->where('nama_ayah', 'like', "%{$search}%")
-                          ->orWhere('nama_ibu', 'like', "%{$search}%")
-                          ->orWhere('no_wa', 'like', "%{$search}%")
-                          ->orWhere('alamat', 'like', "%{$search}%");
+                $q->where('nama_ayah', 'like', "%{$search}%")
+                  ->orWhere('nama_ibu', 'like', "%{$search}%")
+                  ->orWhere('nama_wali', 'like', "%{$search}%")
+                  ->orWhere('hubungan_wali', 'like', "%{$search}%")
+                  ->orWhere('no_wa', 'like', "%{$search}%")
+                  ->orWhere('alamat', 'like', "%{$search}%")
+                  ->orWhereHas('siswas', function ($qs) use ($search) {
+                      $qs->where('nama', 'like', "%{$search}%")
+                         ->orWhere('nisn', 'like', "%{$search}%")
+                         ->orWhere('nis', 'like', "%{$search}%");
                   });
             });
         }
 
         switch ($sortBy) {
-            case 'nama_desc':
-                $query->orderBy('nama', 'desc');
+            case 'ayah_desc':
+                $query->orderBy('nama_ayah', 'desc');
                 break;
-            case 'nisn':
-                $query->orderBy('nisn', 'asc');
+            case 'ibu_asc':
+                $query->orderBy('nama_ibu', 'asc');
                 break;
-            case 'nama_asc':
+            case 'wali_asc':
+                $query->orderBy('nama_wali', 'asc');
+                break;
+            case 'no_wa':
+                $query->orderBy('no_wa', 'asc');
+                break;
+            case 'ayah_asc':
             default:
-                $query->orderBy('nama', 'asc');
+                $query->orderBy('nama_ayah', 'asc');
                 break;
         }
 
-        $siswas = $query->paginate(20)->withQueryString();
+        $orangTuas = $query->paginate(15)->withQueryString();
 
-        $kelasId = $kelas ? $kelas->id : null;
-        $totalSiswa = $siswas->total();
-        $totalL = Siswa::where('kelas_id', $kelasId)->where('jenis_kelamin', 'L')->count();
-        $totalP = Siswa::where('kelas_id', $kelasId)->where('jenis_kelamin', 'P')->count();
-
-        return view('guru.siswa', compact('kelas', 'siswas', 'search', 'sortBy', 'totalSiswa', 'totalL', 'totalP'));
+        return view('guru.siswa', compact('kelas', 'orangTuas', 'search', 'sortBy'));
     }
 }
