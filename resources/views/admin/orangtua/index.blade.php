@@ -8,7 +8,7 @@
             <h5 class="fw-bold mb-1 text-dark d-flex align-items-center">
                 <i class="fa-solid fa-user-group text-primary me-2 fs-4"></i> Kelola Data Orang Tua / Wali
             </h5>
-            <small class="text-muted">Data orang tua, wali murid siswa, nomor WhatsApp notifikasi presensi otomatis, dan anak yang terhubung</small>
+            <small class="text-muted">Data orang tua, wali murid siswa, nomor WhatsApp, dan anak yang terhubung</small>
         </div>
         <div class="d-flex gap-2 align-items-center flex-nowrap flex-shrink-0">
             <button type="button" class="btn btn-outline-primary rounded-pill px-3 py-1.5 fw-semibold shadow-sm btn-sm text-nowrap d-inline-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#modalImportOrangTua">
@@ -162,28 +162,28 @@
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label class="form-label fw-semibold text-dark">Nama Lengkap Ayah</label>
-                            <input type="text" name="nama_ayah" class="form-control" placeholder="Contoh: Budi Santoso">
+                            <input type="text" name="nama_ayah" class="form-control" placeholder="">
                         </div>
                         <div class="col-md-6">
                             <label class="form-label fw-semibold text-dark">Nama Lengkap Ibu</label>
-                            <input type="text" name="nama_ibu" class="form-control" placeholder="Contoh: Rahmawati">
+                            <input type="text" name="nama_ibu" class="form-control" placeholder="">
                         </div>
                         <div class="col-md-7">
                             <label class="form-label fw-semibold text-dark">Nama Lengkap Wali Siswa</label>
-                            <input type="text" name="nama_wali" class="form-control" placeholder="Contoh: H. Ahmad Subardjo">
+                            <input type="text" name="nama_wali" class="form-control" placeholder="">
                         </div>
                         <div class="col-md-5">
                             <label class="form-label fw-semibold text-dark">Hubungan Wali</label>
-                            <input type="text" name="hubungan_wali" class="form-control" placeholder="Contoh: Kakek / Paman / Wali Asuh">
+                            <input type="text" name="hubungan_wali" class="form-control" placeholder="">
                         </div>
                         <div class="col-md-12">
-                            <label class="form-label fw-semibold text-dark">No. WhatsApp Notifikasi <span class="text-danger">*</span></label>
-                            <input type="text" name="no_wa" class="form-control" placeholder="082317087527" required>
+                            <label class="form-label fw-semibold text-dark">No. WhatsApp</label>
+                            <input type="text" name="no_wa" class="form-control" placeholder="" required>
                             <small class="text-muted">Nomor ini akan menerima notifikasi otomatis WhatsApp setiap kali anak melakukan presensi scan QR.</small>
                         </div>
                         <div class="col-12">
                             <label class="form-label fw-semibold text-dark">Alamat Tempat Tinggal</label>
-                            <textarea name="alamat" class="form-control" rows="2" placeholder="Contoh: Kp. Sirah Cijugul RT 02/RW 04, Panjiwangi, Tarogong Kaler"></textarea>
+                            <textarea name="alamat" class="form-control" rows="2" placeholder=""></textarea>
                         </div>
                     </div>
                 </div>

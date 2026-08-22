@@ -113,8 +113,8 @@
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label class="form-label fw-semibold text-dark">Nama Kelas / Rombel <span class="text-danger">*</span></label>
-                        <input type="text" name="nama_kelas" class="form-control" placeholder="Contoh: 7, 8, 9, 9A, 9B" required>
+                        <label class="form-label fw-semibold text-dark">Nama Kelas<span class="text-danger">*</span></label>
+                        <input type="text" name="nama_kelas" class="form-control" placeholder="" required>
                     </div>
                     <div class="mb-3">
                         <label class="form-label fw-semibold text-dark">Wali Kelas Penanggung Jawab</label>

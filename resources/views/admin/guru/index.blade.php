@@ -130,24 +130,23 @@
                 <div class="modal-body">
                     <div class="row g-3">
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold text-dark">NIP Pegawai (Opsional)</label>
-                            <input type="text" name="nip" class="form-control" placeholder="Nomor Induk Pegawai">
+                            <label class="form-label fw-semibold text-dark">Nomor Induk Pegawai</label>
+                            <input type="text" name="nip" class="form-control" placeholder="">
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold text-dark">Nama Lengkap & Gelar <span class="text-danger">*</span></label>
-                            <input type="text" name="nama" class="form-control" placeholder="Contoh: Ustadz Ahmad, S.Pd" required>
+                            <label class="form-label fw-semibold text-dark">Nama Lengkap & Gelar</label>
+                            <input type="text" name="nama" class="form-control" placeholder="" required>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold text-dark">Email Login Portal <span class="text-danger">*</span></label>
-                            <input type="email" name="email" class="form-control" placeholder="guru@almutaqin.sch.id" required>
+                            <label class="form-label fw-semibold text-dark">Email Login Portal</label>
+                            <input type="email" name="email" class="form-control" placeholder="" required>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold text-dark">Password Login <span class="text-danger">*</span></label>
-                            <input type="password" name="password" class="form-control" value="12345678" required>
-                            <small class="text-muted">Default: <code>12345678</code></small>
+                            <label class="form-label fw-semibold text-dark">Password Login</label>
+                            <input type="password" name="password" class="form-control" value="" required>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold text-dark">Penugasan Kelas (Rombel Binaan)</label>
+                            <label class="form-label fw-semibold text-dark">Penugasan Kelas Binaan</label>
                             <select name="kelas_id" class="form-select">
                                 <option value="">-- Belum Ditugaskan --</option>
                                 @foreach($kelases as $k)
@@ -157,11 +156,11 @@
                         </div>
                         <div class="col-md-6">
                             <label class="form-label fw-semibold text-dark">No. HP / WhatsApp</label>
-                            <input type="text" name="no_hp" class="form-control" placeholder="081234567890">
+                            <input type="text" name="no_hp" class="form-control" placeholder="">
                         </div>
                         <div class="col-12">
                             <label class="form-label fw-semibold text-dark">Alamat / Asal Kota</label>
-                            <textarea name="alamat" class="form-control" rows="2" placeholder="Contoh: Tasikmalaya / Garut"></textarea>
+                            <textarea name="alamat" class="form-control" rows="2" placeholder=""></textarea>
                         </div>
                     </div>
                 </div>

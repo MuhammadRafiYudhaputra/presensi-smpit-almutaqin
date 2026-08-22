@@ -2,17 +2,17 @@
 
 @section('content')
 <style>
-    .col-header-hadir { color: #15803d !important; font-weight: 700; }
-    .col-header-terlambat { color: #b45309 !important; font-weight: 700; }
-    .col-header-izin { color: #0369a1 !important; font-weight: 700; }
-    .col-header-sakit { color: #334155 !important; font-weight: 700; }
-    .col-header-alpa { color: #b91c1c !important; font-weight: 700; }
+    .col-header-hadir { color: #16a34a !important; font-weight: 700; }
+    .col-header-terlambat { color: #d97706 !important; font-weight: 700; }
+    .col-header-sakit { color: #475569 !important; font-weight: 700; }
+    .col-header-izin { color: #0284c7 !important; font-weight: 700; }
+    .col-header-alpa { color: #dc2626 !important; font-weight: 700; }
 
-    .val-hadir { color: #15803d; font-weight: 800; font-size: 1rem; }
-    .val-terlambat { color: #b45309; font-weight: 800; font-size: 1rem; cursor: pointer; }
-    .val-izin { color: #0369a1; font-weight: 800; font-size: 1rem; }
-    .val-sakit { color: #334155; font-weight: 800; font-size: 1rem; }
-    .val-alpa { color: #b91c1c; font-weight: 800; font-size: 1rem; }
+    .val-hadir { color: #16a34a; font-weight: 800; font-size: 1rem; }
+    .val-terlambat { color: #d97706; font-weight: 800; font-size: 1rem; cursor: pointer; }
+    .val-sakit { color: #475569; font-weight: 800; font-size: 1rem; }
+    .val-izin { color: #0284c7; font-weight: 800; font-size: 1rem; }
+    .val-alpa { color: #dc2626; font-weight: 800; font-size: 1rem; }
 
     .bk-badge-btn {
         cursor: pointer;
