@@ -23,7 +23,8 @@
     ],
     "env": {
         "APP_ENV": "production",
-        "APP_DEBUG": "true",
+        "APP_DEBUG": "false",
+        "APP_KEY": "base64:q77j0FQvZTtAtUyaa6ZQQggynU9ZvZ44wot+aWgpnGQ=",
         "APP_CONFIG_CACHE": "/tmp/config.php",
         "APP_EVENTS_CACHE": "/tmp/events.php",
         "APP_PACKAGES_CACHE": "/tmp/packages.php",
@@ -33,6 +34,8 @@
         "CACHE_STORE": "array",
         "LOG_CHANNEL": "stderr",
         "SESSION_DRIVER": "cookie",
+        "SESSION_SECURE_COOKIE": "true",
+        "SESSION_SAME_SITE": "lax",
         "QUEUE_CONNECTION": "sync"
     }
 }
