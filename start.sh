@@ -1,19 +1,21 @@
 #!/bin/sh
 
+PORT="${PORT:-80}"
+
 echo "=========================================="
-echo "Starting SMP IT Al-Muttaqin Laravel Server"
-echo "Target Port: ${PORT:-80}"
+echo "Starting SMP IT Al-Muttaqin Laravel"
+echo "Port: $PORT"
 echo "=========================================="
 
-php artisan config:clear
-php artisan view:clear
-php artisan route:clear
+php artisan config:clear || true
+php artisan view:clear || true
+php artisan route:clear || true
 
-echo "Running migrations..."
+echo "Migrating database..."
 php artisan migrate --force || true
 
-echo "Running seeders..."
+echo "Seeding database..."
 php artisan db:seed --force || true
 
-echo "Starting php artisan serve on port ${PORT:-80}..."
-exec php artisan serve --host=0.0.0.0 --port="${PORT:-80}"
+echo "PHP server running on 0.0.0.0:$PORT..."
+exec php -S 0.0.0.0:$PORT -t public
