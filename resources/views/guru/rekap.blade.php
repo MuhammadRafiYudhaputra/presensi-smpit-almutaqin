@@ -37,7 +37,7 @@
             </h5>
             <small class="text-muted">Akumulasi kehadiran Sekolah</small>
         </div>
-        <div class="d-flex gap-2 align-items-center flex-nowrap flex-shrink-0">
+        <div class="d-flex gap-2 align-items-center flex-wrap flex-md-nowrap flex-shrink-0">
             <!-- Mode Switcher Tabs (Bulanan & Semester Saja) -->
             <div class="btn-group p-1 bg-light rounded-pill border" role="group">
                 <a href="{{ route('guru.rekap', ['mode' => 'bulanan', 'bulan' => $bulan, 'tahun' => $tahun, 'hari_efektif' => $hariEfektif, 'sort_by' => $sortBy]) }}" class="btn btn-sm rounded-pill px-3 fw-semibold {{ $mode === 'bulanan' ? 'btn-primary shadow-sm' : 'btn-light text-muted' }}">
@@ -48,37 +48,20 @@
                 </a>
             </div>
 
+            <!-- Indikator Semester Aktif -->
+            @if(isset($settingAkademik))
+            <a href="{{ route('guru.rekap', ['mode' => 'semester', 'semester' => $settingAkademik->semester, 'tahun' => (int)substr($settingAkademik->tahun_ajaran, 0, 4)]) }}" class="btn btn-sm btn-outline-success rounded-pill px-3 py-1.5 fw-semibold shadow-xs text-nowrap d-inline-flex align-items-center gap-1.5" title="Semester & Tahun Ajaran resmi aktif">
+                <i class="fa-solid fa-calendar-check text-success"></i>
+                <span>Semester Aktif: {{ ucfirst($settingAkademik->semester) }} ({{ $settingAkademik->tahun_ajaran }})</span>
+            </a>
+            @endif
+
             <!-- Tombol Cetak Laporan -->
             <a href="{{ route('admin.rekap.cetak', ['mode' => $mode, 'bulan' => $bulan, 'tahun' => $tahun, 'semester' => $semester, 'kelas_id' => $kelas ? $kelas->id : null, 'hari_efektif' => $hariEfektif]) }}" target="_blank" class="btn btn-outline-primary rounded-pill px-3 py-1.5 fw-semibold shadow-sm btn-sm text-nowrap d-inline-flex align-items-center gap-1">
                 <i class="fa-solid fa-print me-1"></i> Cetak Laporan
             </a>
         </div>
     </div>
-
-    <!-- Banner Indikator Semester Aktif -->
-    @if(isset($settingAkademik))
-    <div class="p-3 mb-4 rounded-4 border bg-white shadow-xs d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3" style="border-left: 4px solid #16a34a !important; background: linear-gradient(to right, #f8fafc, #ffffff);">
-        <div class="d-flex align-items-center gap-3">
-            <div class="rounded-3 bg-success bg-opacity-10 text-success d-flex align-items-center justify-content-center flex-shrink-0" style="width: 46px; height: 46px;">
-                <i class="fa-solid fa-calendar-check fs-4"></i>
-            </div>
-            <div>
-                <div class="d-flex align-items-center gap-2 flex-wrap mb-1">
-                    <span class="badge bg-success bg-opacity-15 text-success border border-success border-opacity-25 px-2.5 py-1 rounded-pill fw-bold" style="font-size: 0.75rem;">
-                        <i class="fa-solid fa-circle text-success me-1" style="font-size: 0.45rem;"></i> Periode Aktif
-                    </span>
-                    <strong class="text-dark fs-6">Semester {{ ucfirst($settingAkademik->semester) }} T.A. {{ $settingAkademik->tahun_ajaran }}</strong>
-                </div>
-                <div class="text-muted small" style="font-size: 0.8rem;">Data presensi dan perhitungan kehadiran mengacu pada semester resmi sekolah.</div>
-            </div>
-        </div>
-
-        <a href="{{ route('guru.rekap', ['mode' => 'semester', 'semester' => $settingAkademik->semester, 'tahun' => (int)substr($settingAkademik->tahun_ajaran, 0, 4)]) }}" class="btn btn-sm btn-outline-success rounded-pill px-3 py-1.5 fw-semibold shadow-xs text-nowrap d-inline-flex align-items-center gap-1.5 flex-shrink-0">
-            <i class="fa-solid fa-bolt text-success"></i>
-            <span>Buka Semester Aktif</span>
-        </a>
-    </div>
-    @endif
 
     <!-- Filter & Parameter Form -->
     <form action="{{ route('guru.rekap') }}" method="GET" class="row g-3 mb-4 align-items-end">
@@ -118,7 +101,7 @@
                     <option value="genap" {{ $semester === 'genap' ? 'selected' : '' }}>Semester Genap (Jan - Jun)</option>
                 </select>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <label class="form-label fw-bold text-dark mb-1">Tahun Ajaran</label>
                 <select name="tahun" class="form-select shadow-sm" onchange="this.form.submit()">
                     @for($y=date('Y')-2; $y<=date('Y')+1; $y++)
@@ -126,8 +109,8 @@
                     @endfor
                 </select>
             </div>
-            <div class="col-md-3">
-                <label class="form-label fw-bold text-dark mb-1">Hari Efektif Semester</label>
+            <div class="col-md-2">
+                <label class="form-label fw-bold text-dark mb-1">Hari Efektif</label>
                 <div class="input-group shadow-sm">
                     <input type="number" name="hari_efektif" class="form-control" value="{{ $hariEfektif }}" min="1" max="180" title="Jumlah hari efektif sekolah semester ini">
                     <span class="input-group-text bg-light text-muted small">Hari</span>
@@ -144,10 +127,15 @@
             </select>
         </div>
 
-        <div class="col-12 mt-2">
-            <button type="submit" class="btn btn-sm btn-primary rounded-pill px-3 fw-bold">
-                <i class="fa-solid fa-arrows-rotate me-1"></i> Terapkan Hari Efektif
+        <div class="col-12 mt-2 d-flex align-items-center gap-2 flex-wrap">
+            <button type="submit" class="btn btn-sm btn-primary rounded-pill px-3 fw-bold shadow-sm">
+                <i class="fa-solid fa-arrows-rotate me-1"></i> Terapkan Hari Efektif & Filter
             </button>
+            @if(isset($settingAkademik))
+            <a href="{{ route('guru.rekap', ['mode' => 'semester', 'semester' => $settingAkademik->semester, 'tahun' => (int)substr($settingAkademik->tahun_ajaran, 0, 4)]) }}" class="btn btn-sm btn-outline-secondary rounded-pill px-3 fw-semibold shadow-xs" title="Reset filter ke semester aktif saat ini">
+                <i class="fa-solid fa-bolt text-warning me-1"></i> Reset ke Semester Aktif ({{ ucfirst($settingAkademik->semester) }})
+            </a>
+            @endif
         </div>
     </form>
 
