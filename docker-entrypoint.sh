@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-PORT="${PORT:-8080}"
+PORT="${PORT:-80}"
 echo "=========================================="
 echo "Starting SMP IT Al-Muttaqin Laravel Server"
 echo "Listening on Host: 0.0.0.0 Port: $PORT"
@@ -17,5 +17,5 @@ php artisan migrate --force || true
 echo "Running seeders..."
 php artisan db:seed --force || true
 
-echo "Serving Laravel Application on 0.0.0.0:$PORT..."
+echo "Serving Laravel on 0.0.0.0:$PORT..."
 exec php artisan serve --host=0.0.0.0 --port="$PORT"

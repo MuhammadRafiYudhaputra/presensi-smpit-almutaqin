@@ -34,7 +34,7 @@ COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh \
     && sed -i -e 's/\r$//' /usr/local/bin/docker-entrypoint.sh
 
-ENV PORT=8080
-EXPOSE 8080
+ENV PORT=80
+EXPOSE 80
 
 ENTRYPOINT ["docker-entrypoint.sh"]
