@@ -79,4 +79,11 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::post('/rekap/update-status', [RekapKehadiranController::class, 'updateStatus'])->name('rekap.updateStatus');
     Route::get('/laporan', [RekapKehadiranController::class, 'generateLaporanIndex'])->name('laporan.index');
     Route::get('/rekap/cetak', [RekapKehadiranController::class, 'cetakLaporan'])->name('rekap.cetak');
+
+    // Backup & Restore Database & Storage Asset
+    Route::get('/backup', [App\Http\Controllers\Admin\BackupController::class, 'index'])->name('backup.index');
+    Route::get('/backup/database', [App\Http\Controllers\Admin\BackupController::class, 'backupDatabase'])->name('backup.database');
+    Route::post('/backup/database/restore', [App\Http\Controllers\Admin\BackupController::class, 'restoreDatabase'])->name('backup.database.restore');
+    Route::get('/backup/storage', [App\Http\Controllers\Admin\BackupController::class, 'backupStorage'])->name('backup.storage');
+    Route::post('/backup/storage/restore', [App\Http\Controllers\Admin\BackupController::class, 'restoreStorage'])->name('backup.storage.restore');
 });
