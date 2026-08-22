@@ -99,6 +99,7 @@
         <small class="text-muted">Menampilkan {{ $kelases->firstItem() ?? 0 }} - {{ $kelases->lastItem() ?? 0 }} dari total {{ $kelases->total() }} kelas</small>
         {{ $kelases->links() }}
     </div>
+    @endif
 </div>
 
 <!-- Modal Tambah Kelas Baru -->

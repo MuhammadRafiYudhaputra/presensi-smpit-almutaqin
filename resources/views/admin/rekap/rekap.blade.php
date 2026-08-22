@@ -30,7 +30,7 @@
             <h5 class="fw-bold mb-1 text-dark d-flex align-items-center">
                 <i class="fa-solid fa-chart-simple text-primary me-2 fs-4"></i> Rekapitulasi Presensi Siswa
             </h5>
-            <small class="text-muted">Akumulasi kehadiran berkala (Bulanan & Semester) berbasis perhitungan Hari Efektif Sekolah</small>
+            <small class="text-muted">Akumulasi kehadiran berkala (Bulanan & Semester)</small>
         </div>
         <div class="d-flex gap-2 align-items-center flex-wrap flex-md-nowrap flex-shrink-0">
             <!-- Mode Switcher Tabs (Bulanan & Semester) -->
