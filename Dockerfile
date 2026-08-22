@@ -29,10 +29,7 @@ RUN chmod -R 777 storage bootstrap/cache
 # Install Composer dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction --ignore-platform-reqs
 
-# Prepare start script
-RUN chmod +x /var/www/html/start.sh && sed -i -e 's/\r$//' /var/www/html/start.sh
-
 ENV PORT=80
 EXPOSE 80
 
-CMD ["/bin/sh", "/var/www/html/start.sh"]
+CMD php artisan serve --host=0.0.0.0 --port=${PORT:-80}
