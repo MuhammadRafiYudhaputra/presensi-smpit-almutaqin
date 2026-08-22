@@ -428,7 +428,7 @@
                         <label class="form-label fw-bold small text-dark">Email Akun Terdaftar</label>
                         <div class="input-group-custom">
                             <i class="fa-regular fa-envelope text-primary me-1"></i>
-                            <input type="email" name="email" placeholder="admin@almutaqin.sch.id" required>
+                            <input type="email" name="email" placeholder="" required>
                         </div>
                     </div>
                 </div>
@@ -436,9 +436,6 @@
                     <button type="submit" class="btn btn-primary rounded-pill w-100 fw-bold py-2 shadow-sm">
                         <i class="fa-solid fa-rotate-right me-1"></i> Reset Password Saya
                     </button>
-                    <a href="https://wa.me/6281234567890?text=Assalamu'alaikum%20Admin%20SMP%20IT%20Al-Muttaqin,%20saya%20membutuhkan%20bantuan%20reset%20password%20akun%20portal%20presensi." target="_blank" class="btn btn-outline-success rounded-pill w-100 fw-semibold py-2">
-                        <i class="fa-brands fa-whatsapp me-1"></i> Hubungi Admin TU via WhatsApp
-                    </a>
                 </div>
             </form>
         </div>
