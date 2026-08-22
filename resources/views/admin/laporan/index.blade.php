@@ -8,7 +8,7 @@
             <h5 class="fw-bold mb-1 text-dark d-flex align-items-center">
                 <i class="fa-solid fa-file-invoice text-primary me-2 fs-4"></i> Generate Laporan Presensi Siswa
             </h5>
-            <small class="text-muted">Cetak dan unduh laporan rekapitulasi presensi siswa (Bulanan & Semester) berformat PDF resmi</small>
+            <small class="text-muted">Cetak dan unduh laporan rekapitulasi presensi siswa (Bulanan & Semester) berformat PDF</small>
         </div>
         <span class="badge bg-primary bg-opacity-10 text-primary border border-primary px-3 py-1.5 rounded-pill fw-semibold" style="font-size: 0.85rem;">
             <i class="fa-solid fa-users me-1"></i> Total: {{ $totalSiswa }} Siswa

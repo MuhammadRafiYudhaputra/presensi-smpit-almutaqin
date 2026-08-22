@@ -27,13 +27,8 @@
     <!-- Header & Mode Tabs -->
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
         <div>
-            <h5 class="fw-bold mb-1 text-dark d-flex align-items-center flex-wrap">
+            <h5 class="fw-bold mb-1 text-dark d-flex align-items-center">
                 <i class="fa-solid fa-chart-simple text-primary me-2 fs-4"></i> Rekapitulasi Presensi Siswa
-                @if($kelas)
-                    <span class="badge bg-primary bg-opacity-10 text-primary border border-primary px-3 py-1 rounded-pill fs-6 ms-2">
-                        <i class="fa-solid fa-chalkboard-user me-1"></i> Kelas {{ $kelas->nama_kelas }}
-                    </span>
-                @endif
             </h5>
             <small class="text-muted">Akumulasi kehadiran Sekolah</small>
         </div>

@@ -529,6 +529,19 @@
                 </div>
 
                 <div class="d-flex align-items-center gap-2">
+                    @if(Auth::user()->role === 'guru')
+                        @php
+                            $guruModel = \App\Models\Guru::where('user_id', Auth::id())->first();
+                            $guruKelas = $guruModel ? $guruModel->kelas : null;
+                        @endphp
+                        @if($guruKelas)
+                        <div class="user-role-badge text-primary border-primary bg-primary bg-opacity-10" title="Kelas Binaan Wali Kelas">
+                            <i class="fa-solid fa-chalkboard-user text-primary"></i>
+                            <span>Kelas {{ $guruKelas->nama_kelas }}</span>
+                        </div>
+                        @endif
+                    @endif
+
                     @php $globalActiveSetting = \App\Models\SettingAkademik::getActive(); @endphp
                     @if($globalActiveSetting)
                     <div class="user-role-badge text-success border-success bg-success bg-opacity-10 d-none d-sm-inline-flex" title="Periode Akademik Resmi Aktif">
