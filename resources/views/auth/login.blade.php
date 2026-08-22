@@ -176,6 +176,18 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            transition: opacity 0.5s ease, transform 0.5s ease, max-height 0.5s ease, margin 0.5s ease, padding 0.5s ease;
+            max-height: 80px;
+            overflow: hidden;
+        }
+
+        .custom-alert.fade-out {
+            opacity: 0;
+            transform: translateY(-8px);
+            max-height: 0;
+            margin-bottom: 0;
+            padding-top: 0;
+            padding-bottom: 0;
         }
 
         .form-label {
@@ -462,6 +474,23 @@ function togglePasswordVisibility() {
         toggleIcon.classList.add('fa-eye');
     }
 }
+
+// Auto-dismiss alert notification secara halus setelah 3 detik
+document.addEventListener('DOMContentLoaded', function() {
+    const alerts = document.querySelectorAll('.custom-alert');
+    if (alerts.length > 0) {
+        setTimeout(function() {
+            alerts.forEach(function(alert) {
+                alert.classList.add('fade-out');
+                setTimeout(function() {
+                    if (alert && alert.parentNode) {
+                        alert.parentNode.removeChild(alert);
+                    }
+                }, 500);
+            });
+        }, 3000);
+    }
+});
 </script>
 
 </body>
