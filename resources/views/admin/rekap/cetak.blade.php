@@ -13,39 +13,58 @@
         body {
             font-family: 'Times New Roman', Times, serif;
             color: #000;
-            padding: 2.5rem 3rem;
-            background: #f8fafc;
+            background: #f1f5f9;
+            margin: 0;
+            padding: 0;
         }
 
+        /* Fixed / Sticky Top Control Bar */
+        .control-bar-wrapper {
+            position: sticky;
+            top: 0;
+            z-index: 1050;
+            background: rgba(241, 245, 249, 0.95);
+            backdrop-filter: blur(8px);
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #cbd5e1;
+        }
+
+        .control-bar {
+            background: #ffffff;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 0.85rem 1.15rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+
+        /* Sized & Proportionate Paper Container */
         .paper-container {
             background: #ffffff;
-            max-width: 1050px;
-            margin: 0 auto;
-            padding: 3rem;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            max-width: 860px;
+            margin: 1.25rem auto 3rem;
+            padding: 2.25rem 2.75rem;
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06);
             border-radius: 8px;
+            border: 1px solid #e2e8f0;
         }
 
         .header-kop {
             text-align: center;
             border-bottom: 3px double #000;
-            padding-bottom: 0.75rem;
-            margin-bottom: 1.5rem;
+            padding-bottom: 0.6rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .table-print {
+            font-size: 0.82rem;
         }
 
         .table-print th, .table-print td {
             border: 1px solid #000 !important;
-            padding: 6px 10px;
-        }
-
-        .control-bar {
-            background: #ffffff;
-            max-width: 1050px;
-            margin: 0 auto 1.5rem;
-            padding: 1.25rem 1.5rem;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            font-family: system-ui, -apple-system, sans-serif;
+            padding: 5px 8px;
         }
 
         .editable-field {
@@ -53,7 +72,7 @@
             border-bottom: 1px dashed transparent;
             transition: border 0.2s;
             display: inline-block;
-            min-width: 150px;
+            min-width: 140px;
         }
 
         .editable-field:hover, .editable-field:focus {
@@ -62,17 +81,20 @@
         }
 
         @media print {
-            .control-bar {
+            .control-bar-wrapper {
                 display: none !important;
             }
             body {
                 background: #ffffff !important;
                 padding: 0 !important;
+                margin: 0 !important;
             }
             .paper-container {
                 box-shadow: none !important;
                 padding: 0 !important;
+                margin: 0 !important;
                 max-width: 100% !important;
+                border: none !important;
                 border-radius: 0 !important;
             }
             .editable-field {
@@ -85,59 +107,61 @@
 <body>
 
     @if(request()->get('format') !== 'doc')
-    <!-- Control Toolbar (Opsi Custom Pejabat TTD & Tombol Cetak) -->
-    <div class="control-bar">
-        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3">
-            <div class="d-flex align-items-center gap-2">
-                <i class="fa-solid fa-file-pdf text-danger fs-3"></i>
-                <div>
-                    <h6 class="fw-bold mb-0 text-dark">Pengaturan Cetak Laporan Presensi</h6>
-                    <small class="text-muted">Dasar perhitungan: <strong>{{ $hariEfektif }} Hari Efektif</strong>. Keterlambatan dicatat terpisah untuk catatan BK.</small>
+    <!-- Fixed / Sticky Top Control Toolbar -->
+    <div class="control-bar-wrapper">
+        <div class="control-bar">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="fa-solid fa-file-pdf text-danger fs-4"></i>
+                    <div>
+                        <h6 class="fw-bold mb-0 text-dark" style="font-size: 0.9rem;">Pengaturan Cetak Laporan Presensi</h6>
+                        <small class="text-muted" style="font-size: 0.75rem;">Dasar perhitungan: <strong>{{ $hariEfektif }} Hari Efektif</strong>. Keterlambatan dicatat terpisah untuk catatan BK.</small>
+                    </div>
                 </div>
+                <button onclick="window.print()" class="btn btn-sm btn-primary rounded-pill px-3.5 py-1.5 fw-bold shadow-sm d-inline-flex align-items-center gap-1.5" style="font-size: 0.82rem;">
+                    <i class="fa-solid fa-print"></i> Cetak / Simpan PDF
+                </button>
             </div>
-            <button onclick="window.print()" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm">
-                <i class="fa-solid fa-print me-1"></i> Cetak / Simpan PDF
-            </button>
-        </div>
 
-        <div class="row g-3 pt-2 border-top">
-            <div class="col-md-3">
-                <label class="form-label small fw-bold text-dark mb-1">Kota & Tanggal TTD:</label>
-                <input type="text" id="inputKotaTgl" class="form-control form-control-sm" placeholder="Contoh: Garut, 18 Agustus 2026" oninput="syncSignature()">
-            </div>
-            <div class="col-md-3">
-                <label class="form-label small fw-bold text-dark mb-1">Nama Kepala Sekolah:</label>
-                <input type="text" id="inputKepsek" class="form-control form-control-sm" placeholder="Nama Lengkap & Gelar" oninput="syncSignature()">
-            </div>
-            <div class="col-md-3">
-                <label class="form-label small fw-bold text-dark mb-1">NIP Kepala Sekolah:</label>
-                <input type="text" id="inputNipKepsek" class="form-control form-control-sm" placeholder="NIP (atau - jika tidak ada)" oninput="syncSignature()">
-            </div>
-            <div class="col-md-3">
-                <label class="form-label small fw-bold text-dark mb-1">Nama Wali Kelas (Opsional):</label>
-                <input type="text" id="inputWali" class="form-control form-control-sm" placeholder="Nama Wali Kelas" oninput="syncSignature()">
+            <div class="row g-2 pt-2 border-top">
+                <div class="col-6 col-md-3">
+                    <label class="form-label small fw-bold text-dark mb-0.5" style="font-size: 0.75rem;">Kota &amp; Tanggal TTD:</label>
+                    <input type="text" id="inputKotaTgl" class="form-control form-control-sm rounded-2" style="font-size: 0.78rem;" placeholder="Garut, {{ date('d F Y') }}" oninput="syncSignature()">
+                </div>
+                <div class="col-6 col-md-3">
+                    <label class="form-label small fw-bold text-dark mb-0.5" style="font-size: 0.75rem;">Nama Kepala Sekolah:</label>
+                    <input type="text" id="inputKepsek" class="form-control form-control-sm rounded-2" style="font-size: 0.78rem;" placeholder="Nama Lengkap &amp; Gelar" oninput="syncSignature()">
+                </div>
+                <div class="col-6 col-md-3">
+                    <label class="form-label small fw-bold text-dark mb-0.5" style="font-size: 0.75rem;">NIP Kepala Sekolah:</label>
+                    <input type="text" id="inputNipKepsek" class="form-control form-control-sm rounded-2" style="font-size: 0.78rem;" placeholder="NIP (atau -)" oninput="syncSignature()">
+                </div>
+                <div class="col-6 col-md-3">
+                    <label class="form-label small fw-bold text-dark mb-0.5" style="font-size: 0.75rem;">Nama Wali Kelas (Opsional):</label>
+                    <input type="text" id="inputWali" class="form-control form-control-sm rounded-2" style="font-size: 0.78rem;" placeholder="Nama Wali Kelas" oninput="syncSignature()">
+                </div>
             </div>
         </div>
     </div>
     @endif
 
-    <!-- Lembar Dokumen Cetak Laporan -->
+    <!-- Lembar Dokumen Cetak Laporan (Proporsional & Rapi) -->
     <div class="paper-container">
         <!-- Kop Surat -->
         <div class="header-kop position-relative d-flex align-items-center justify-content-center">
-            <img src="{{ asset('images/logo.png') }}" alt="Logo SMP IT Al-Muttaqin" style="width: 75px; height: 75px; object-fit: contain; position: absolute; left: 10px; top: 0;">
+            <img src="{{ asset('images/logo.png') }}" alt="Logo SMP IT Al-Muttaqin" style="width: 62px; height: 62px; object-fit: contain; position: absolute; left: 8px; top: 2px;">
             <div>
-                <h4 class="fw-bold text-uppercase m-0" style="letter-spacing: 1px;">YAYASAN AL-MUTAQIN</h4>
-                <h2 class="fw-bold text-uppercase m-0" style="letter-spacing: 1.5px;">SMP IT AL-MUTTAQIN</h2>
-                <p class="m-0 small">Sistem Monitoring Kehadiran Siswa dengan Notifikasi WhatsApp Otomatis</p>
-                <small style="font-size: 0.8rem; color: #475569;">Tarogong Kaler - Garut, Jawa Barat</small>
+                <h5 class="fw-bold text-uppercase m-0" style="letter-spacing: 0.8px; font-size: 1.05rem;">YAYASAN AL-MUTAQIN</h5>
+                <h3 class="fw-bold text-uppercase m-0" style="letter-spacing: 1.2px; font-size: 1.35rem;">SMP IT AL-MUTTAQIN</h3>
+                <p class="m-0" style="font-size: 0.82rem;">Sistem Monitoring Kehadiran Siswa dengan Notifikasi WhatsApp Otomatis</p>
+                <small style="font-size: 0.75rem; color: #475569;">Tarogong Kaler - Garut, Jawa Barat</small>
             </div>
         </div>
 
         <!-- Judul Laporan -->
-        <div class="text-center mb-4">
-            <h4 class="fw-bold text-uppercase text-decoration-underline mb-1">LAPORAN REKAPITULASI KEHADIRAN SISWA</h4>
-            <p class="m-0" style="font-size: 0.95rem;">
+        <div class="text-center mb-3">
+            <h5 class="fw-bold text-uppercase text-decoration-underline mb-1" style="font-size: 1.05rem;">LAPORAN REKAPITULASI KEHADIRAN SISWA</h5>
+            <p class="m-0 text-dark" style="font-size: 0.82rem;">
                 @if(($mode ?? 'bulanan') === 'semester')
                     Periode: Semester {{ ucfirst($semester ?? 'Ganjil') }} / {{ $tahun ?? date('Y') }}
                 @elseif(($mode ?? 'bulanan') === 'harian')
@@ -152,20 +176,20 @@
             </p>
         </div>
 
-        <!-- Tabel Data -->
+        <!-- Tabel Data Presensi -->
         <table class="table table-print table-bordered align-middle mb-4">
             <thead>
                 <tr class="text-center" style="background-color: #f8fafc;">
                     <th style="width: 35px;">No</th>
-                    <th style="width: 100px;">NISN</th>
+                    <th style="width: 95px;">NISN</th>
                     <th>Nama Peserta Didik</th>
-                    <th style="width: 85px;">Kelas</th>
-                    <th style="width: 65px;" title="Total Masuk Sekolah">Hadir</th>
-                    <th style="width: 80px;" title="Catatan Keterlambatan untuk Pihak BK">Terlambat (BK)</th>
-                    <th style="width: 60px;">Izin</th>
-                    <th style="width: 60px;">Sakit</th>
-                    <th style="width: 60px;">Alpa</th>
-                    <th style="width: 85px;">Persentase</th>
+                    <th style="width: 80px;">Kelas</th>
+                    <th style="width: 60px;" title="Total Masuk Sekolah">Hadir</th>
+                    <th style="width: 75px;" title="Catatan Keterlambatan untuk Pihak BK">Terlambat (BK)</th>
+                    <th style="width: 55px;">Izin</th>
+                    <th style="width: 55px;">Sakit</th>
+                    <th style="width: 55px;">Alpa</th>
+                    <th style="width: 80px;">Persentase</th>
                 </tr>
             </thead>
             <tbody>
@@ -196,12 +220,12 @@
         </table>
 
         <!-- Kolom Tanda Tangan Pejabat (Kepala Sekolah & Wali Kelas) -->
-        <div class="row mt-5 pt-3">
+        <div class="row mt-4 pt-2" style="font-size: 0.88rem;">
             <!-- Tanda Tangan Wali Kelas (Jika Ada) -->
             <div class="col-6 text-center" id="colWaliKelas">
                 <p class="mb-1" id="dispKotaWali">Garut, {{ date('d F Y') }}</p>
                 <p class="mb-1">Mengetahui,</p>
-                <p class="fw-bold mb-5">Wali Kelas {{ $kelas->nama_kelas ?? '' }}</p>
+                <p class="fw-bold mb-4">Wali Kelas {{ $kelas->nama_kelas ?? '' }}</p>
                 <br>
                 <p class="fw-bold text-decoration-underline mb-0">
                     ( <span class="editable-field" id="dispNamaWali" contenteditable="true">{{ $kelas->waliKelas->nama ?? 'Ustadz Ahmad, S.Pd' }}</span> )
@@ -213,7 +237,7 @@
             <div class="col-6 text-center ms-auto" id="colKepsek">
                 <p class="mb-1" id="dispKotaKepsek">Garut, {{ date('d F Y') }}</p>
                 <p class="mb-1">Mengetahui,</p>
-                <p class="fw-bold mb-5">Kepala Sekolah SMP IT Al-Muttaqin</p>
+                <p class="fw-bold mb-4">Kepala Sekolah SMP IT Al-Muttaqin</p>
                 <br>
                 <p class="fw-bold text-decoration-underline mb-0">
                     ( <span class="editable-field" id="dispNamaKepsek" contenteditable="true">H. Aep Saepudin, S.Pd.I, M.Pd</span> )
