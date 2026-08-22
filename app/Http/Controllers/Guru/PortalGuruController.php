@@ -74,6 +74,7 @@ class PortalGuruController extends Controller
         $sortBy = $request->get('sort_by', 'nama_asc');
 
         $query = Siswa::with(['kelas', 'orangTua'])
+            ->whereNotNull('kelas_id')
             ->where(function ($q) {
                 $q->where('status', '!=', 'alumni')->orWhereNull('status');
             });
@@ -157,6 +158,7 @@ class PortalGuruController extends Controller
 
         // Query Siswa strictly for this class
         $siswaQuery = Siswa::with(['kelas', 'orangTua'])
+            ->whereNotNull('kelas_id')
             ->where(function ($q) {
                 $q->where('status', '!=', 'alumni')->orWhereNull('status');
             });

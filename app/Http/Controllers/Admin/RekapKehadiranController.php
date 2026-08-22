@@ -23,6 +23,7 @@ class RekapKehadiranController extends Controller
         $kelases = Kelas::all();
 
         $siswasQuery = Siswa::with(['kelas', 'orangTua'])
+            ->whereNotNull('kelas_id')
             ->where(function ($q) {
                 $q->where('status', '!=', 'alumni')->orWhereNull('status');
             });
@@ -157,6 +158,7 @@ class RekapKehadiranController extends Controller
 
         // Query Siswa Aktif
         $siswasQuery = Siswa::with(['kelas', 'orangTua'])
+            ->whereNotNull('kelas_id')
             ->where(function ($q) {
                 $q->where('status', '!=', 'alumni')->orWhereNull('status');
             });
@@ -358,9 +360,11 @@ class RekapKehadiranController extends Controller
         $hariEfektif = (int) $request->get('hari_efektif', $defaultHariEfektif);
         if ($hariEfektif <= 0) $hariEfektif = $defaultHariEfektif;
 
-        $siswasQuery = Siswa::with('kelas')->where(function ($q) {
-            $q->where('status', '!=', 'alumni')->orWhereNull('status');
-        });
+        $siswasQuery = Siswa::with('kelas')
+            ->whereNotNull('kelas_id')
+            ->where(function ($q) {
+                $q->where('status', '!=', 'alumni')->orWhereNull('status');
+            });
         if ($kelasId) {
             $siswasQuery->where('kelas_id', $kelasId);
         }

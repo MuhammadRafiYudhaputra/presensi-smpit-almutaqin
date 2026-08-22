@@ -18,19 +18,25 @@ class DashboardController extends Controller
         $selectedKelasId = $request->get('kelas_id');
 
         // 1. Master Counts
-        $totalSiswa = Siswa::where('status', '!=', 'alumni')->orWhereNull('status')->count();
-        $totalAlumni = Siswa::where('status', 'alumni')->count();
+        $totalSiswa = Siswa::whereNotNull('kelas_id')->where(function ($q) {
+            $q->where('status', '!=', 'alumni')->orWhereNull('status');
+        })->count();
+        $totalAlumni = Siswa::where('status', 'alumni')->orWhereNull('kelas_id')->count();
         $totalGuru = Guru::count();
         $totalKelas = Kelas::count();
         $kelases = Kelas::withCount(['siswas' => function($q) {
-            $q->where('status', '!=', 'alumni')->orWhereNull('status');
+            $q->whereNotNull('kelas_id')->where(function ($q2) {
+                $q2->where('status', '!=', 'alumni')->orWhereNull('status');
+            });
         }])->get();
 
         // 2. Kehadiran Hari Ini (Filterable by Class if selected)
         $presensiHariIniQuery = Kehadiran::with(['siswa.kelas'])
             ->where('tanggal', $today)
             ->whereHas('siswa', function ($q) {
-                $q->where('status', '!=', 'alumni')->orWhereNull('status');
+                $q->whereNotNull('kelas_id')->where(function ($q2) {
+                    $q2->where('status', '!=', 'alumni')->orWhereNull('status');
+                });
             });
 
         $totalSiswaFiltered = $totalSiswa;
@@ -39,7 +45,7 @@ class DashboardController extends Controller
                 $q->where('kelas_id', $selectedKelasId);
             });
             $selectedKelas = Kelas::find($selectedKelasId);
-            $totalSiswaFiltered = $selectedKelas ? Siswa::where('kelas_id', $selectedKelasId)->where(function($q) { $q->where('status', '!=', 'alumni')->orWhereNull('status'); })->count() : $totalSiswa;
+            $totalSiswaFiltered = $selectedKelas ? Siswa::where('kelas_id', $selectedKelasId)->whereNotNull('kelas_id')->where(function($q) { $q->where('status', '!=', 'alumni')->orWhereNull('status'); })->count() : $totalSiswa;
         }
 
         $presensiHariIni = $presensiHariIniQuery->get();
@@ -68,7 +74,9 @@ class DashboardController extends Controller
 
             $dayKhs = Kehadiran::where('tanggal', $dateString)
                 ->whereHas('siswa', function ($q) {
-                    $q->where('status', '!=', 'alumni')->orWhereNull('status');
+                    $q->whereNotNull('kelas_id')->where(function ($q2) {
+                        $q2->where('status', '!=', 'alumni')->orWhereNull('status');
+                    });
                 })->get();
 
             $h = $dayKhs->whereIn('status', ['HADIR', 'TERLAMBAT'])->count();

@@ -29,11 +29,13 @@ class SiswaController extends Controller
 
         // Filter Status Siswa (Aktif vs Alumni vs Semua)
         if ($status === 'aktif') {
-            $query->where(function ($q) {
+            $query->whereNotNull('kelas_id')->where(function ($q) {
                 $q->where('status', '!=', 'alumni')->orWhereNull('status');
             });
         } elseif ($status === 'alumni') {
-            $query->where('status', 'alumni');
+            $query->where(function ($q) {
+                $q->where('status', 'alumni')->orWhereNull('kelas_id');
+            });
         }
 
         // Pencarian NISN, Nama, atau NIK/NIS
@@ -69,10 +71,12 @@ class SiswaController extends Controller
         $orangTuas = OrangTua::all();
 
         // Hitung statistik untuk badge status
-        $countAktif = Siswa::where(function ($q) {
+        $countAktif = Siswa::whereNotNull('kelas_id')->where(function ($q) {
             $q->where('status', '!=', 'alumni')->orWhereNull('status');
         })->count();
-        $countAlumni = Siswa::where('status', 'alumni')->count();
+        $countAlumni = Siswa::where(function ($q) {
+            $q->where('status', 'alumni')->orWhereNull('kelas_id');
+        })->count();
         $countSemua = Siswa::count();
 
         return view('admin.siswa.index', compact(

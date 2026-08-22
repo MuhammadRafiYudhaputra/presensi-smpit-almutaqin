@@ -115,7 +115,6 @@
                     <i class="fa-solid fa-file-pdf text-danger fs-4"></i>
                     <div>
                         <h6 class="fw-bold mb-0 text-dark" style="font-size: 0.9rem;">Pengaturan Cetak Laporan Presensi</h6>
-                        <small class="text-muted" style="font-size: 0.75rem;">Dasar perhitungan: <strong>{{ $hariEfektif }} Hari Efektif</strong>.</small>
                     </div>
                 </div>
                 <button onclick="window.print()" class="btn btn-primary rounded-pill px-4 py-2 fw-bold shadow-sm d-inline-flex align-items-center gap-2" style="font-size: 0.85rem;">
@@ -152,7 +151,6 @@
             <div>
                 <h5 class="fw-bold text-uppercase m-0" style="letter-spacing: 0.8px; font-size: 1.05rem;">YAYASAN AL-MUTAQIN</h5>
                 <h3 class="fw-bold text-uppercase m-0" style="letter-spacing: 1.2px; font-size: 1.35rem;">SMP IT AL-MUTTAQIN</h3>
-                <p class="m-0" style="font-size: 0.82rem;">Sistem Monitoring Kehadiran Siswa dengan Notifikasi WhatsApp Otomatis</p>
                 <small style="font-size: 0.75rem; color: #475569;">Tarogong Kaler - Garut, Jawa Barat</small>
             </div>
         </div>
