@@ -45,15 +45,16 @@
 
             <!-- Tombol Pengaturan Semester Aktif (Modal Trigger) -->
             @if(isset($settingAkademik))
-            <button type="button" class="btn btn-sm btn-outline-success rounded-pill px-3 py-1.5 fw-semibold shadow-xs text-nowrap d-inline-flex align-items-center gap-1.5" data-bs-toggle="modal" data-bs-target="#modalSettingAkademik" title="Klik untuk mengubah Semester atau Tahun Ajaran resmi aktif">
-                <i class="fa-solid fa-calendar-check text-success"></i>
+            <button type="button" class="btn btn-sm btn-outline-success rounded-pill px-3 py-1.5 fw-semibold shadow-xs text-nowrap d-inline-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modalSettingAkademik" title="Klik untuk mengubah Semester atau Tahun Ajaran resmi aktif">
+                <i class="fa-solid fa-calendar-check text-success me-1.5"></i>
                 <span>Semester Aktif: {{ ucfirst($settingAkademik->semester) }} ({{ $settingAkademik->tahun_ajaran }})</span>
             </button>
             @endif
 
             <!-- Tombol Cetak Laporan -->
-            <a href="{{ route('admin.rekap.cetak', ['mode' => $mode, 'bulan' => $bulan, 'tahun' => $tahun, 'semester' => $semester, 'kelas_id' => $kelasId, 'hari_efektif' => $hariEfektif]) }}" target="_blank" class="btn btn-outline-primary rounded-pill px-3 py-1.5 fw-semibold shadow-sm btn-sm text-nowrap d-inline-flex align-items-center gap-1">
-                <i class="fa-solid fa-print me-1"></i> Cetak Laporan
+            <a href="{{ route('admin.rekap.cetak', ['mode' => $mode, 'bulan' => $bulan, 'tahun' => $tahun, 'semester' => $semester, 'kelas_id' => $kelasId, 'hari_efektif' => $hariEfektif]) }}" target="_blank" class="btn btn-outline-primary rounded-pill px-3 py-1.5 fw-semibold shadow-sm btn-sm text-nowrap d-inline-flex align-items-center">
+                <i class="fa-solid fa-print me-1.5"></i>
+                <span>Cetak Laporan</span>
             </a>
         </div>
     </div>
@@ -132,15 +133,11 @@
             </select>
         </div>
 
-        <div class="col-12 mt-2 d-flex align-items-center gap-2 flex-wrap">
-            <button type="submit" class="btn btn-sm btn-primary rounded-pill px-3 fw-bold shadow-sm">
-                <i class="fa-solid fa-arrows-rotate me-1"></i> Terapkan Hari Efektif & Filter
+        <div class="col-12 mt-2">
+            <button type="submit" class="btn btn-sm btn-primary rounded-pill px-4 fw-bold shadow-sm d-inline-flex align-items-center">
+                <i class="fa-solid fa-arrows-rotate me-1.5"></i>
+                <span>Terapkan Hari Efektif & Filter</span>
             </button>
-            @if(isset($settingAkademik))
-            <a href="{{ route('admin.rekap.index', ['mode' => 'semester', 'semester' => $settingAkademik->semester, 'tahun' => (int)substr($settingAkademik->tahun_ajaran, 0, 4)]) }}" class="btn btn-sm btn-outline-secondary rounded-pill px-3 fw-semibold shadow-xs" title="Muat data sesuai semester dan tahun ajaran aktif">
-                <i class="fa-solid fa-bolt text-warning me-1"></i> Reset ke Semester Aktif ({{ ucfirst($settingAkademik->semester) }})
-            </a>
-            @endif
         </div>
     </form>
 
