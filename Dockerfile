@@ -29,12 +29,8 @@ RUN chmod -R 777 storage bootstrap/cache
 # Install Composer dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction --ignore-platform-reqs
 
-# Copy and setup entrypoint
-COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh \
-    && sed -i -e 's/\r$//' /usr/local/bin/docker-entrypoint.sh
-
 ENV PORT=80
 EXPOSE 80
 
-ENTRYPOINT ["docker-entrypoint.sh"]
+# Start Laravel application directly with artisan serve
+CMD sh -c "php artisan config:clear && php artisan view:clear && php artisan route:clear && php artisan migrate --force && php artisan db:seed --force && php artisan serve --host=0.0.0.0 --port=\${PORT:-80}"
