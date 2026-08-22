@@ -22,6 +22,22 @@ Route::post('/login', [AuthController::class, 'login'])->name('login.process');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::post('/forgot-password', [AuthController::class, 'forgotPassword'])->name('forgot.password');
 
+// 1-Click Database Setup & Seeder Route for Cloud Deployment
+Route::get('/setup-db', function () {
+    \Illuminate\Support\Facades\Artisan::call('migrate:fresh', ['--seed' => true, '--force' => true]);
+    return response('
+        <div style="font-family: system-ui, sans-serif; text-align: center; padding: 50px;">
+            <h1 style="color: #16a34a;">✅ Database Berhasil Diinisialisasi!</h1>
+            <p>Seluruh tabel, akun Admin, Guru, Siswa, dan Kelas telah dibuat dan di-seed.</p>
+            <p style="margin-top: 20px;">
+                <a href="/login" style="display: inline-block; background: #0284c7; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold;">
+                    Masuk ke Halaman Login &rarr;
+                </a>
+            </p>
+        </div>
+    ');
+});
+
 // Root Route Redirect
 Route::get('/', function () {
     if (Auth::check()) {
