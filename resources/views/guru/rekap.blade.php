@@ -123,10 +123,6 @@
             <button type="submit" class="btn btn-sm btn-primary rounded-pill px-3 fw-bold">
                 <i class="fa-solid fa-arrows-rotate me-1"></i> Terapkan Hari Efektif
             </button>
-            <small class="text-muted ms-2">
-                <i class="fa-solid fa-circle-info text-primary me-1"></i>
-                Dasar persentase kehadiran dihitung dari <strong>{{ $hariEfektif }} Hari Efektif</strong>. Keterlambatan dicatat terpisah untuk catatan BK.
-            </small>
         </div>
     </form>
 
