@@ -52,36 +52,36 @@
 
     <!-- Banner & Tombol Kontrol Semester Aktif -->
     @if(isset($settingAkademik))
-    <div class="p-3 mb-4 rounded-4 border bg-light d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+    <div class="p-3 mb-4 rounded-4 border bg-white shadow-xs d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3" style="border-left: 4px solid #16a34a !important; background: linear-gradient(to right, #f8fafc, #ffffff);">
         <div class="d-flex align-items-center gap-3">
-            <div class="p-2 rounded-3 bg-success bg-opacity-10 text-success fs-4 d-flex align-items-center justify-content-center" style="width: 44px; height: 44px;">
-                <i class="fa-solid fa-calendar-check"></i>
+            <div class="rounded-3 bg-success bg-opacity-10 text-success d-flex align-items-center justify-content-center flex-shrink-0" style="width: 46px; height: 46px;">
+                <i class="fa-solid fa-calendar-check fs-4"></i>
             </div>
             <div>
-                <div class="d-flex align-items-center gap-2">
-                    <span class="badge bg-success bg-opacity-10 text-success border border-success px-2.5 py-1 rounded-pill fw-bold">
-                        <i class="fa-solid fa-circle text-success me-1" style="font-size: 0.5rem;"></i> Periode Resmi Aktif
+                <div class="d-flex align-items-center gap-2 flex-wrap mb-1">
+                    <span class="badge bg-success bg-opacity-15 text-success border border-success border-opacity-25 px-2.5 py-1 rounded-pill fw-bold" style="font-size: 0.75rem;">
+                        <i class="fa-solid fa-circle text-success me-1" style="font-size: 0.45rem;"></i> Periode Aktif
                     </span>
-                    <strong class="text-dark">Semester {{ ucfirst($settingAkademik->semester) }} T.A. {{ $settingAkademik->tahun_ajaran }}</strong>
+                    <strong class="text-dark fs-6">Semester {{ ucfirst($settingAkademik->semester) }} T.A. {{ $settingAkademik->tahun_ajaran }}</strong>
                 </div>
-                <small class="text-muted">Default acuan operasional absensi harian dan perhitungan kehadiran sekolah saat ini.</small>
+                <div class="text-muted small" style="font-size: 0.8rem;">Acuan resmi default operasional absensi harian dan rekapitulasi sekolah.</div>
             </div>
         </div>
 
-        <div class="d-flex align-items-center gap-2 flex-wrap">
+        <div class="d-flex align-items-center gap-2 flex-shrink-0 flex-wrap flex-sm-nowrap">
             <!-- Tombol 1-Klik Beralih Semester Ganjil/Genap -->
-            <form action="{{ route('admin.setting.akademik.toggle') }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin mengalihkan semester aktif sekolah?')">
+            <form action="{{ route('admin.setting.akademik.toggle') }}" method="POST" class="m-0" onsubmit="return confirm('Apakah Anda yakin ingin mengalihkan semester aktif sekolah?')">
                 @csrf
-                <button type="submit" class="btn btn-sm btn-outline-success rounded-pill px-3 fw-semibold shadow-sm d-inline-flex align-items-center gap-1">
-                    <i class="fa-solid fa-repeat"></i>
-                    Beralih ke Semester {{ $settingAkademik->semester === 'ganjil' ? 'Genap' : 'Ganjil' }}
+                <button type="submit" class="btn btn-sm btn-outline-success rounded-pill px-3 py-1.5 fw-semibold shadow-xs text-nowrap d-inline-flex align-items-center gap-1.5" title="Klik untuk beralih langsung ke semester {{ $settingAkademik->semester === 'ganjil' ? 'Genap' : 'Ganjil' }}">
+                    <i class="fa-solid fa-repeat text-success"></i>
+                    <span>Beralih ke Semester {{ $settingAkademik->semester === 'ganjil' ? 'Genap' : 'Ganjil' }}</span>
                 </button>
             </form>
 
             <!-- Tombol Modal Ubah Master Tahun Ajaran & Semester -->
-            <button type="button" class="btn btn-sm btn-primary rounded-pill px-3 fw-semibold shadow-sm d-inline-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#modalSettingAkademik">
-                <i class="fa-solid fa-gear"></i>
-                Atur Periode Aktif
+            <button type="button" class="btn btn-sm btn-primary rounded-pill px-3 py-1.5 fw-semibold shadow-xs text-nowrap d-inline-flex align-items-center gap-1.5" data-bs-toggle="modal" data-bs-target="#modalSettingAkademik">
+                <i class="fa-solid fa-sliders"></i>
+                <span>Atur Periode</span>
             </button>
         </div>
     </div>

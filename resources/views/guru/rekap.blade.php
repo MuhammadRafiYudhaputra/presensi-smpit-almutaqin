@@ -57,24 +57,25 @@
 
     <!-- Banner Indikator Semester Aktif -->
     @if(isset($settingAkademik))
-    <div class="p-3 mb-4 rounded-4 border bg-light d-flex justify-content-between align-items-center flex-wrap gap-3">
+    <div class="p-3 mb-4 rounded-4 border bg-white shadow-xs d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3" style="border-left: 4px solid #16a34a !important; background: linear-gradient(to right, #f8fafc, #ffffff);">
         <div class="d-flex align-items-center gap-3">
-            <div class="p-2 rounded-3 bg-success bg-opacity-10 text-success fs-4 d-flex align-items-center justify-content-center" style="width: 44px; height: 44px;">
-                <i class="fa-solid fa-calendar-check"></i>
+            <div class="rounded-3 bg-success bg-opacity-10 text-success d-flex align-items-center justify-content-center flex-shrink-0" style="width: 46px; height: 46px;">
+                <i class="fa-solid fa-calendar-check fs-4"></i>
             </div>
             <div>
-                <div class="d-flex align-items-center gap-2">
-                    <span class="badge bg-success bg-opacity-10 text-success border border-success px-2.5 py-1 rounded-pill fw-bold">
-                        <i class="fa-solid fa-circle text-success me-1" style="font-size: 0.5rem;"></i> Periode Resmi Aktif
+                <div class="d-flex align-items-center gap-2 flex-wrap mb-1">
+                    <span class="badge bg-success bg-opacity-15 text-success border border-success border-opacity-25 px-2.5 py-1 rounded-pill fw-bold" style="font-size: 0.75rem;">
+                        <i class="fa-solid fa-circle text-success me-1" style="font-size: 0.45rem;"></i> Periode Aktif
                     </span>
-                    <strong class="text-dark">Semester {{ ucfirst($settingAkademik->semester) }} T.A. {{ $settingAkademik->tahun_ajaran }}</strong>
+                    <strong class="text-dark fs-6">Semester {{ ucfirst($settingAkademik->semester) }} T.A. {{ $settingAkademik->tahun_ajaran }}</strong>
                 </div>
-                <small class="text-muted">Data presensi dan perhitungan kehadiran mengacu pada semester resmi sekolah.</small>
+                <div class="text-muted small" style="font-size: 0.8rem;">Data presensi dan perhitungan kehadiran mengacu pada semester resmi sekolah.</div>
             </div>
         </div>
 
-        <a href="{{ route('guru.rekap', ['mode' => 'semester', 'semester' => $settingAkademik->semester, 'tahun' => (int)substr($settingAkademik->tahun_ajaran, 0, 4)]) }}" class="btn btn-sm btn-outline-success rounded-pill px-3 fw-semibold shadow-sm">
-            <i class="fa-solid fa-bolt me-1"></i> Buka Semester Aktif
+        <a href="{{ route('guru.rekap', ['mode' => 'semester', 'semester' => $settingAkademik->semester, 'tahun' => (int)substr($settingAkademik->tahun_ajaran, 0, 4)]) }}" class="btn btn-sm btn-outline-success rounded-pill px-3 py-1.5 fw-semibold shadow-xs text-nowrap d-inline-flex align-items-center gap-1.5 flex-shrink-0">
+            <i class="fa-solid fa-bolt text-success"></i>
+            <span>Buka Semester Aktif</span>
         </a>
     </div>
     @endif
