@@ -53,6 +53,17 @@
         align-items: center;
         gap: 12px;
         padding: 0.5rem 0.75rem;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.15s ease;
+    }
+    .status-radio-option:hover {
+        background: #f8fafc;
+    }
+    .status-radio-option input[type="radio"] {
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
     }
 
     /* Metric Summary Styles (Selaras dengan Dashboard) */
@@ -77,20 +88,9 @@
     .text-sakit { color: #475569 !important; }
     .text-izin { color: #0284c7 !important; }
     .text-alpa { color: #dc2626 !important; }
-    .text-total { color: #2563eb !important; }
+    .text-total { color: #7c3aed !important; }
     .text-belum { color: #64748b !important; }
-        border-radius: 8px;
-        cursor: pointer;
-        transition: background 0.15s ease;
-    }
-    .status-radio-option:hover {
-        background: #f8fafc;
-    }
-    .status-radio-option input[type="radio"] {
-        width: 18px;
-        height: 18px;
-        cursor: pointer;
-    }
+
     .radio-label-hadir { color: #16a34a; font-weight: 700; font-size: 0.95rem; }
     .radio-label-terlambat { color: #d97706; font-weight: 700; font-size: 0.95rem; }
     .radio-label-sakit { color: #475569; font-weight: 700; font-size: 0.95rem; }

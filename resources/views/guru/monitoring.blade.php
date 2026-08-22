@@ -80,7 +80,7 @@
     .text-sakit { color: #475569 !important; }
     .text-izin { color: #0284c7 !important; }
     .text-alpa { color: #dc2626 !important; }
-    .text-total { color: #2563eb !important; }
+    .text-total { color: #7c3aed !important; }
     .text-belum { color: #64748b !important; }
     .status-radio-option:hover {
         background: #f8fafc;
