@@ -24,8 +24,8 @@ $app = Application::configure(basePath: dirname(__DIR__))
         );
     })->create();
 
-// Gunakan /tmp/storage jika di lingkungan Vercel Serverless
-if (isset($_ENV['VERCEL']) || isset($_SERVER['VERCEL']) || env('VERCEL') || env('APP_ENV') === 'production') {
+// Gunakan /tmp/storage HANYA jika di lingkungan Vercel Serverless
+if (isset($_ENV['VERCEL']) || isset($_SERVER['VERCEL']) || env('VERCEL')) {
     $app->useStoragePath('/tmp/storage');
 }
 
