@@ -127,18 +127,19 @@
             <div class="backup-body">
                 <!-- Section 1: Backup Database -->
                 <div>
-                    <div class="backup-section-title">
-                        <i class="fa-solid fa-download text-primary"></i> Backup Database
+                    <div class="backup-section-title mb-1.5">
+                        <i class="fa-solid fa-download text-primary me-1.5"></i> Backup Database
                     </div>
                     <div class="backup-section-desc">
                         Unduh seluruh file cadangan <code>.sql</code> berisi seluruh tabel sistem.
-                        <div class="mt-1.5 small text-dark d-flex gap-3" style="font-size: 0.75rem;">
+                        <div class="mt-2 small text-dark d-flex gap-3" style="font-size: 0.75rem;">
                             <span><i class="fa-solid fa-server text-muted me-1"></i> Driver: <strong>{{ strtoupper($driver) }}</strong></span>
                             <span><i class="fa-solid fa-hard-drive text-muted me-1"></i> Ukuran: <strong>{{ $dbSize }}</strong></span>
                         </div>
                     </div>
-                    <a href="{{ route('admin.backup.database') }}" class="btn btn-sm btn-primary rounded-pill px-3 py-1.5 fw-bold shadow-sm d-inline-flex align-items-center gap-1.5 text-uppercase" style="font-size: 0.78rem;">
-                        <i class="fa-solid fa-cloud-arrow-down fs-6"></i> Download Backup Database
+                    <a href="{{ route('admin.backup.database') }}" class="btn btn-sm btn-primary rounded-pill px-3.5 py-2 fw-bold shadow-sm d-inline-flex align-items-center text-uppercase" style="font-size: 0.78rem;">
+                        <i class="fa-solid fa-cloud-arrow-down fs-6 me-2"></i>
+                        <span>Download Backup Database</span>
                     </a>
                 </div>
 
@@ -146,12 +147,12 @@
 
                 <!-- Section 2: Restore Database -->
                 <div>
-                    <div class="backup-section-title">
-                        <i class="fa-solid fa-upload text-warning"></i> Restore Database
+                    <div class="backup-section-title mb-1.5">
+                        <i class="fa-solid fa-upload text-warning me-1.5"></i> Restore Database
                     </div>
                     
                     <div class="warning-alert-box">
-                        <i class="fa-solid fa-triangle-exclamation flex-shrink-0 text-warning"></i>
+                        <i class="fa-solid fa-triangle-exclamation flex-shrink-0 text-warning fs-6 me-1.5"></i>
                         <div>
                             <strong>Peringatan:</strong> Tindakan ini akan menimpa seluruh database saat ini dengan berkas yang diunggah.
                         </div>
@@ -159,12 +160,13 @@
 
                     <form action="{{ route('admin.backup.database.restore') }}" method="POST" enctype="multipart/form-data" onsubmit="return confirm('Apakah Anda yakin ingin melakukan restore database? Seluruh data saat ini akan digantikan oleh isi file backup.');">
                         @csrf
-                        <div class="mb-2.5">
-                            <label class="form-label small fw-bold text-dark mb-1" style="font-size: 0.78rem;">Pilih Berkas Cadangan (.SQL):</label>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-dark mb-1.5" style="font-size: 0.78rem;">Pilih Berkas Cadangan (.SQL):</label>
                             <input type="file" name="sql_file" class="form-control form-control-sm rounded-2 shadow-none" style="font-size: 0.78rem;" accept=".sql, .txt" required>
                         </div>
-                        <button type="submit" class="btn btn-sm btn-warning rounded-pill px-3 py-1.5 fw-bold text-dark shadow-sm d-inline-flex align-items-center gap-1.5 text-uppercase" style="font-size: 0.78rem;">
-                            <i class="fa-solid fa-rotate-left fs-6"></i> Restore Database
+                        <button type="submit" class="btn btn-sm btn-warning rounded-pill px-3.5 py-2 fw-bold text-dark shadow-sm d-inline-flex align-items-center text-uppercase" style="font-size: 0.78rem;">
+                            <i class="fa-solid fa-rotate-left fs-6 me-2"></i>
+                            <span>Restore Database</span>
                         </button>
                     </form>
                 </div>
@@ -186,18 +188,19 @@
             <div class="backup-body">
                 <!-- Section 1: Backup Foto -->
                 <div>
-                    <div class="backup-section-title">
-                        <i class="fa-solid fa-download text-info"></i> Backup Foto (QR Code)
+                    <div class="backup-section-title mb-1.5">
+                        <i class="fa-solid fa-download text-info me-1.5"></i> Backup Foto (QR Code)
                     </div>
                     <div class="backup-section-desc">
                         Unduh seluruh file berkas gambar QR Code kartu siswa dalam bentuk arsip <code>.zip</code>.
-                        <div class="mt-1.5 small text-dark d-flex gap-3" style="font-size: 0.75rem;">
+                        <div class="mt-2 small text-dark d-flex gap-3" style="font-size: 0.75rem;">
                             <span><i class="fa-solid fa-image text-muted me-1"></i> Total Gambar: <strong>{{ $totalQrFiles }} Berkas</strong></span>
                             <span><i class="fa-solid fa-hard-drive text-muted me-1"></i> Ukuran: <strong>{{ $qrFolderSize }}</strong></span>
                         </div>
                     </div>
-                    <a href="{{ route('admin.backup.storage') }}" class="btn btn-sm btn-info text-white rounded-pill px-3 py-1.5 fw-bold shadow-sm d-inline-flex align-items-center gap-1.5 text-uppercase" style="font-size: 0.78rem;">
-                        <i class="fa-solid fa-cloud-arrow-down fs-6"></i> Download Backup Foto (ZIP)
+                    <a href="{{ route('admin.backup.storage') }}" class="btn btn-sm btn-info text-white rounded-pill px-3.5 py-2 fw-bold shadow-sm d-inline-flex align-items-center text-uppercase" style="font-size: 0.78rem;">
+                        <i class="fa-solid fa-cloud-arrow-down fs-6 me-2"></i>
+                        <span>Download Backup Foto (ZIP)</span>
                     </a>
                 </div>
 
@@ -205,12 +208,12 @@
 
                 <!-- Section 2: Restore Foto -->
                 <div>
-                    <div class="backup-section-title">
-                        <i class="fa-solid fa-upload text-warning"></i> Restore Foto / Asset
+                    <div class="backup-section-title mb-1.5">
+                        <i class="fa-solid fa-upload text-warning me-1.5"></i> Restore Foto / Asset
                     </div>
                     
                     <div class="warning-alert-box">
-                        <i class="fa-solid fa-circle-info flex-shrink-0 text-warning"></i>
+                        <i class="fa-solid fa-circle-info flex-shrink-0 text-warning fs-6 me-1.5"></i>
                         <div>
                             <strong>Peringatan:</strong> Berkas foto/QR code yang ada akan diperbarui jika memiliki nama berkas yang sama.
                         </div>
@@ -218,12 +221,13 @@
 
                     <form action="{{ route('admin.backup.storage.restore') }}" method="POST" enctype="multipart/form-data" onsubmit="return confirm('Apakah Anda yakin ingin melakukan restore foto & QR Code ke folder sistem?');">
                         @csrf
-                        <div class="mb-2.5">
-                            <label class="form-label small fw-bold text-dark mb-1" style="font-size: 0.78rem;">Pilih Berkas Arsip (.ZIP):</label>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-dark mb-1.5" style="font-size: 0.78rem;">Pilih Berkas Arsip (.ZIP):</label>
                             <input type="file" name="zip_file" class="form-control form-control-sm rounded-2 shadow-none" style="font-size: 0.78rem;" accept=".zip" required>
                         </div>
-                        <button type="submit" class="btn btn-sm btn-warning rounded-pill px-3 py-1.5 fw-bold text-dark shadow-sm d-inline-flex align-items-center gap-1.5 text-uppercase" style="font-size: 0.78rem;">
-                            <i class="fa-solid fa-rotate-left fs-6"></i> Restore Foto / Asset
+                        <button type="submit" class="btn btn-sm btn-warning rounded-pill px-3.5 py-2 fw-bold text-dark shadow-sm d-inline-flex align-items-center text-uppercase" style="font-size: 0.78rem;">
+                            <i class="fa-solid fa-rotate-left fs-6 me-2"></i>
+                            <span>Restore Foto / Asset</span>
                         </button>
                     </form>
                 </div>
