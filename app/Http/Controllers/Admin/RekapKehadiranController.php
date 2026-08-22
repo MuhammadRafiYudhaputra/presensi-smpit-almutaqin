@@ -277,13 +277,15 @@ class RekapKehadiranController extends Controller
             foreach ($siswas as $siswa) {
                 $tepatWaktu = Kehadiran::where('siswa_id', $siswa->id)
                     ->whereYear('tanggal', $tahun)
-                    ->whereBetween(\DB::raw('CAST(strftime("%m", tanggal) as integer)'), [$startMonth, $endMonth])
+                    ->whereMonth('tanggal', '>=', $startMonth)
+                    ->whereMonth('tanggal', '<=', $endMonth)
                     ->where('status', 'HADIR')
                     ->count();
 
                 $lateQuery = Kehadiran::where('siswa_id', $siswa->id)
                     ->whereYear('tanggal', $tahun)
-                    ->whereBetween(\DB::raw('CAST(strftime("%m", tanggal) as integer)'), [$startMonth, $endMonth])
+                    ->whereMonth('tanggal', '>=', $startMonth)
+                    ->whereMonth('tanggal', '<=', $endMonth)
                     ->where('status', 'TERLAMBAT')
                     ->orderBy('tanggal', 'asc');
                 $terlambat = $lateQuery->count();
@@ -291,19 +293,22 @@ class RekapKehadiranController extends Controller
 
                 $izin = Kehadiran::where('siswa_id', $siswa->id)
                     ->whereYear('tanggal', $tahun)
-                    ->whereBetween(\DB::raw('CAST(strftime("%m", tanggal) as integer)'), [$startMonth, $endMonth])
+                    ->whereMonth('tanggal', '>=', $startMonth)
+                    ->whereMonth('tanggal', '<=', $endMonth)
                     ->where('status', 'IZIN')
                     ->count();
 
                 $sakit = Kehadiran::where('siswa_id', $siswa->id)
                     ->whereYear('tanggal', $tahun)
-                    ->whereBetween(\DB::raw('CAST(strftime("%m", tanggal) as integer)'), [$startMonth, $endMonth])
+                    ->whereMonth('tanggal', '>=', $startMonth)
+                    ->whereMonth('tanggal', '<=', $endMonth)
                     ->where('status', 'SAKIT')
                     ->count();
 
                 $alpa = Kehadiran::where('siswa_id', $siswa->id)
                     ->whereYear('tanggal', $tahun)
-                    ->whereBetween(\DB::raw('CAST(strftime("%m", tanggal) as integer)'), [$startMonth, $endMonth])
+                    ->whereMonth('tanggal', '>=', $startMonth)
+                    ->whereMonth('tanggal', '<=', $endMonth)
                     ->where('status', 'ALPA')
                     ->count();
 
@@ -439,27 +444,32 @@ class RekapKehadiranController extends Controller
                 $endMonth = ($semester === 'ganjil') ? 12 : 6;
                 $tepatWaktu = Kehadiran::where('siswa_id', $siswa->id)
                     ->whereYear('tanggal', $tahun)
-                    ->whereBetween(\DB::raw('CAST(strftime("%m", tanggal) as integer)'), [$startMonth, $endMonth])
+                    ->whereMonth('tanggal', '>=', $startMonth)
+                    ->whereMonth('tanggal', '<=', $endMonth)
                     ->where('status', 'HADIR')
                     ->count();
                 $terlambat = Kehadiran::where('siswa_id', $siswa->id)
                     ->whereYear('tanggal', $tahun)
-                    ->whereBetween(\DB::raw('CAST(strftime("%m", tanggal) as integer)'), [$startMonth, $endMonth])
+                    ->whereMonth('tanggal', '>=', $startMonth)
+                    ->whereMonth('tanggal', '<=', $endMonth)
                     ->where('status', 'TERLAMBAT')
                     ->count();
                 $izin = Kehadiran::where('siswa_id', $siswa->id)
                     ->whereYear('tanggal', $tahun)
-                    ->whereBetween(\DB::raw('CAST(strftime("%m", tanggal) as integer)'), [$startMonth, $endMonth])
+                    ->whereMonth('tanggal', '>=', $startMonth)
+                    ->whereMonth('tanggal', '<=', $endMonth)
                     ->where('status', 'IZIN')
                     ->count();
                 $sakit = Kehadiran::where('siswa_id', $siswa->id)
                     ->whereYear('tanggal', $tahun)
-                    ->whereBetween(\DB::raw('CAST(strftime("%m", tanggal) as integer)'), [$startMonth, $endMonth])
+                    ->whereMonth('tanggal', '>=', $startMonth)
+                    ->whereMonth('tanggal', '<=', $endMonth)
                     ->where('status', 'SAKIT')
                     ->count();
                 $alpa = Kehadiran::where('siswa_id', $siswa->id)
                     ->whereYear('tanggal', $tahun)
-                    ->whereBetween(\DB::raw('CAST(strftime("%m", tanggal) as integer)'), [$startMonth, $endMonth])
+                    ->whereMonth('tanggal', '>=', $startMonth)
+                    ->whereMonth('tanggal', '<=', $endMonth)
                     ->where('status', 'ALPA')
                     ->count();
             } elseif ($mode === 'harian') {
