@@ -2,81 +2,84 @@
 
 @section('content')
 <style>
-    .stat-card {
+    .stat-card-custom {
         background: #ffffff;
-        border-radius: 18px;
-        padding: 1.25rem 1.5rem;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
-        border: 1px solid #f1f5f9;
+        border-radius: 14px;
+        padding: 1rem 1.25rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+        border: 1px solid #e2e8f0;
         display: flex;
         align-items: center;
-        gap: 1rem;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        gap: 0.85rem;
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
     }
-    .stat-card:hover {
+    .stat-card-custom:hover {
         transform: translateY(-2px);
-        box-shadow: 0 6px 25px rgba(0, 0, 0, 0.07);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
     }
-    .stat-icon {
-        width: 50px;
-        height: 50px;
-        border-radius: 14px;
+    .stat-icon-custom {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.4rem;
+        font-size: 1.25rem;
     }
-    .wa-btn {
-        background-color: #22c55e;
-        color: #ffffff;
+    .wa-chat-pill {
+        background-color: #f0fdf4;
+        color: #16a34a !important;
+        border: 1px solid #bbf7d0;
         border-radius: 50rem;
-        font-weight: 600;
-        font-size: 0.8rem;
+        font-weight: 700;
+        font-size: 0.78rem;
         padding: 0.35rem 0.75rem;
         display: inline-flex;
         align-items: center;
         gap: 6px;
         text-decoration: none;
-        transition: background-color 0.2s ease;
+        transition: all 0.15s ease;
     }
-    .wa-btn:hover {
-        background-color: #16a34a;
-        color: #ffffff;
+    .wa-chat-pill:hover {
+        background-color: #22c55e;
+        color: #ffffff !important;
+        border-color: #22c55e;
+        box-shadow: 0 2px 8px rgba(34, 197, 94, 0.25);
     }
 </style>
 
 <!-- Stat Cards Section -->
-<div class="row g-3 mb-4">
-    <div class="col-md-4">
-        <div class="stat-card">
-            <div class="stat-icon bg-primary bg-opacity-10 text-primary">
+<div class="row g-3 mb-3">
+    <div class="col-12 col-md-4">
+        <div class="stat-card-custom">
+            <div class="stat-icon-custom bg-primary bg-opacity-10 text-primary">
                 <i class="fa-solid fa-users"></i>
             </div>
             <div>
-                <small class="text-muted fw-semibold">Total Siswa Binaan</small>
-                <h4 class="fw-bold text-dark mb-0">{{ $totalSiswa }} <span class="fs-6 text-muted fw-normal">Siswa</span></h4>
+                <small class="text-muted fw-semibold d-block" style="font-size: 0.78rem;">Total Siswa Binaan</small>
+                <h5 class="fw-bold text-dark mb-0">{{ $totalSiswa }} <span class="fs-6 text-muted fw-normal">Siswa</span></h5>
             </div>
         </div>
     </div>
-    <div class="col-md-4">
-        <div class="stat-card">
-            <div class="stat-icon bg-info bg-opacity-10 text-info">
+    <div class="col-6 col-md-4">
+        <div class="stat-card-custom">
+            <div class="stat-icon-custom bg-info bg-opacity-10 text-info">
                 <i class="fa-solid fa-mars"></i>
             </div>
             <div>
-                <small class="text-muted fw-semibold">Laki-Laki (L)</small>
-                <h4 class="fw-bold text-dark mb-0">{{ $totalL }} <span class="fs-6 text-muted fw-normal">Siswa</span></h4>
+                <small class="text-muted fw-semibold d-block" style="font-size: 0.78rem;">Laki-Laki (L)</small>
+                <h5 class="fw-bold text-dark mb-0">{{ $totalL }} <span class="fs-6 text-muted fw-normal">Siswa</span></h5>
             </div>
         </div>
     </div>
-    <div class="col-md-4">
-        <div class="stat-card">
-            <div class="stat-icon bg-danger bg-opacity-10 text-danger">
+    <div class="col-6 col-md-4">
+        <div class="stat-card-custom">
+            <div class="stat-icon-custom bg-danger bg-opacity-10 text-danger">
                 <i class="fa-solid fa-venus"></i>
             </div>
             <div>
-                <small class="text-muted fw-semibold">Perempuan (P)</small>
-                <h4 class="fw-bold text-dark mb-0">{{ $totalP }} <span class="fs-6 text-muted fw-normal">Siswi</span></h4>
+                <small class="text-muted fw-semibold d-block" style="font-size: 0.78rem;">Perempuan (P)</small>
+                <h5 class="fw-bold text-dark mb-0">{{ $totalP }} <span class="fs-6 text-muted fw-normal">Siswi</span></h5>
             </div>
         </div>
     </div>
@@ -98,42 +101,43 @@
         </div>
     </div>
 
-    <!-- Search & Sort Bar (Tanpa Filter Kelas) -->
-    <form action="{{ route('guru.siswa.index') }}" method="GET" class="row g-3 mb-4 align-items-end">
+    <!-- Search & Sort Bar (Selaras dengan Halaman Orang Tua Admin) -->
+    <form action="{{ route('guru.siswa.index') }}" method="GET" class="row g-2 mb-4 align-items-center">
         <div class="col-md-7">
-            <label class="form-label fw-bold text-dark mb-1">Cari Data Siswa</label>
-            <div class="input-group shadow-sm">
-                <span class="input-group-text bg-light text-muted border-end-0"><i class="fa-solid fa-magnifying-glass"></i></span>
-                <input type="text" name="search" class="form-control border-start-0" placeholder="Nama siswa, NISN, ayah/ibu, WA, alamat..." value="{{ $search }}">
+            <div class="input-group">
+                <span class="input-group-text bg-white border-end-0 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
+                <input type="text" name="search" class="form-control border-start-0" placeholder="Cari Nama Siswa, NISN, Ayah/Ibu, No WA, atau Alamat..." value="{{ $search ?? '' }}">
+                <button type="submit" class="btn btn-primary px-4 fw-semibold">Cari</button>
             </div>
         </div>
-        <div class="col-md-3">
-            <label class="form-label fw-bold text-dark mb-1">Urutkan Data</label>
-            <select name="sort_by" class="form-select shadow-sm" onchange="this.form.submit()">
-                <option value="nama_asc" {{ ($sortBy ?? '') === 'nama_asc' ? 'selected' : '' }}>Nama Siswa (A-Z)</option>
-                <option value="nama_desc" {{ ($sortBy ?? '') === 'nama_desc' ? 'selected' : '' }}>Nama Siswa (Z-A)</option>
-                <option value="nisn" {{ ($sortBy ?? '') === 'nisn' ? 'selected' : '' }}>NISN Siswa</option>
-            </select>
-        </div>
-        <div class="col-md-2 d-grid">
-            <button type="submit" class="btn btn-primary rounded-pill fw-bold shadow-sm">
-                <i class="fa-solid fa-filter me-1"></i> Cari Data
-            </button>
+
+        <div class="col-md-5">
+            <div class="d-flex align-items-center justify-content-md-end gap-2">
+                <label class="form-label fw-bold text-nowrap mb-0 text-dark small">
+                    <i class="fa-solid fa-arrow-down-up-across-line text-primary me-1"></i> Urutkan:
+                </label>
+                <select name="sort_by" class="form-select shadow-sm form-select-sm" style="max-width: 220px;" onchange="this.form.submit()">
+                    <option value="nama_asc" {{ ($sortBy ?? '') === 'nama_asc' ? 'selected' : '' }}>Nama Siswa (A-Z)</option>
+                    <option value="nama_desc" {{ ($sortBy ?? '') === 'nama_desc' ? 'selected' : '' }}>Nama Siswa (Z-A)</option>
+                    <option value="nisn" {{ ($sortBy ?? '') === 'nisn' ? 'selected' : '' }}>NISN Siswa</option>
+                </select>
+            </div>
         </div>
     </form>
 
-    <!-- Table of Students -->
+    <!-- Table of Students (Selaras dengan Format Halaman Orang Tua Admin) -->
     <div class="table-responsive">
         <table class="table table-bordered table-hover align-middle mb-0" style="font-size: 0.9rem;">
             <thead class="table-light text-center">
                 <tr>
-                    <th style="width: 50px;" class="text-dark">No</th>
-                    <th style="width: 130px;" class="text-dark">NISN / NIS</th>
-                    <th class="text-dark text-start">Nama Peserta Didik</th>
-                    <th class="text-dark text-start" style="width: 200px;">Nama Orang Tua</th>
-                    <th class="text-dark text-center" style="width: 180px;">Kontak WhatsApp</th>
+                    <th style="width: 45px;" class="text-dark">No</th>
+                    <th style="width: 120px;" class="text-dark">NISN / NIS</th>
+                    <th class="text-dark text-start" style="min-width: 190px;">Peserta Didik</th>
+                    <th class="text-dark text-start" style="width: 170px;">Data Orang Tua</th>
+                    <th class="text-dark text-start" style="width: 140px;">Wali Siswa</th>
+                    <th class="text-dark text-center" style="width: 155px;">No. WhatsApp</th>
                     <th class="text-dark text-start">Alamat Domisili</th>
-                    <th style="width: 90px;" class="text-dark text-center">Aksi</th>
+                    <th style="width: 85px;" class="text-dark text-center">Aksi</th>
                 </tr>
             </thead>
             <tbody>
@@ -148,30 +152,46 @@
                     </td>
                     <td>
                         <div class="d-flex align-items-center gap-2">
-                            <div class="rounded-circle bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center fw-bold" style="width: 36px; height: 36px; font-size: 0.85rem;">
+                            <div class="rounded-circle {{ $s->jenis_kelamin === 'L' ? 'bg-primary' : 'bg-danger' }} bg-opacity-10 {{ $s->jenis_kelamin === 'L' ? 'text-primary' : 'text-danger' }} d-flex align-items-center justify-content-center fw-bold flex-shrink-0" style="width: 34px; height: 34px; font-size: 0.82rem;">
                                 {{ strtoupper(substr($s->nama, 0, 1)) }}
                             </div>
                             <div>
                                 <span class="fw-bold text-dark d-block">{{ $s->nama }}</span>
-                                <small class="text-muted">Kelas {{ $s->kelas->nama_kelas ?? '-' }}</small>
+                                <span class="badge {{ $s->jenis_kelamin === 'L' ? 'bg-primary' : 'bg-danger' }} bg-opacity-10 {{ $s->jenis_kelamin === 'L' ? 'text-primary border-primary' : 'text-danger border-danger' }} border px-1.5 py-0.5 rounded-pill" style="font-size: 0.7rem;">
+                                    {{ $s->jenis_kelamin === 'L' ? 'Laki-Laki' : 'Perempuan' }}
+                                </span>
                             </div>
                         </div>
                     </td>
                     <td>
-                        @if($s->orangTua)
-                            <div>
-                                @if($s->orangTua->nama_ayah)
-                                    <span class="d-block fw-semibold text-dark"><i class="fa-solid fa-user-tie text-muted me-1 small"></i>{{ $s->orangTua->nama_ayah }} <small class="text-muted fw-normal">(Ayah)</small></span>
-                                @endif
-                                @if($s->orangTua->nama_ibu)
-                                    <span class="d-block text-dark small"><i class="fa-solid fa-person-dress text-muted me-1 small"></i>{{ $s->orangTua->nama_ibu }} <small class="text-muted fw-normal">(Ibu)</small></span>
-                                @endif
-                                @if($s->orangTua->nama_wali)
-                                    <span class="d-block text-dark small fw-semibold"><i class="fa-solid fa-hands-holding-child text-warning me-1 small"></i>{{ $s->orangTua->nama_wali }} <small class="badge bg-warning bg-opacity-10 text-dark px-1.5 py-0.5 rounded-pill">{{ $s->orangTua->hubungan_wali ?: 'Wali' }}</small></span>
-                                @endif
-                            </div>
+                        @if($s->orangTua && ($s->orangTua->nama_ayah || $s->orangTua->nama_ibu))
+                            @if($s->orangTua->nama_ayah)
+                                <div class="fw-bold text-dark d-flex align-items-center gap-2">
+                                    <i class="fa-solid fa-user-tie text-primary fs-6"></i>
+                                    <span>{{ $s->orangTua->nama_ayah }}</span>
+                                </div>
+                            @endif
+                            @if($s->orangTua->nama_ibu)
+                                <div class="fw-bold text-dark d-flex align-items-center gap-2 {{ $s->orangTua->nama_ayah ? 'mt-1.5' : '' }}">
+                                    <i class="fa-solid fa-person-dress text-danger fs-6"></i>
+                                    <span>{{ $s->orangTua->nama_ibu }}</span>
+                                </div>
+                            @endif
                         @else
-                            <span class="text-muted fst-italic">- Belum terdata -</span>
+                            <span class="text-muted fst-italic small">- Data Belum Diisi -</span>
+                        @endif
+                    </td>
+                    <td>
+                        @if($s->orangTua && $s->orangTua->nama_wali)
+                            <div class="fw-bold text-dark d-flex align-items-center gap-2">
+                                <i class="fa-solid fa-hands-holding-child text-warning fs-6"></i>
+                                <span>{{ $s->orangTua->nama_wali }}</span>
+                            </div>
+                            <span class="badge bg-warning bg-opacity-10 text-dark border border-warning px-2 py-0.5 rounded-pill mt-1" style="font-size: 0.72rem;">
+                                {{ $s->orangTua->hubungan_wali ?: 'Wali Siswa' }}
+                            </span>
+                        @else
+                            <span class="text-muted small">-</span>
                         @endif
                     </td>
                     <td class="text-center">
@@ -183,13 +203,13 @@
                                 }
                             @endphp
                             <div class="d-flex flex-column align-items-center gap-1">
-                                <span class="fw-semibold text-dark small">{{ $s->orangTua->no_wa }}</span>
-                                <a href="https://wa.me/{{ $cleanWa }}?text={{ urlencode('Assalamu\'alaikum Wr. Wb. Bapak/Ibu wali dari ananda ' . $s->nama . ' (Kelas ' . ($s->kelas->nama_kelas ?? '') . ')...') }}" target="_blank" class="wa-btn shadow-sm" title="Kirim Pesan WhatsApp">
-                                    <i class="fa-brands fa-whatsapp"></i> Chat WA
+                                <a href="https://wa.me/{{ $cleanWa }}?text={{ urlencode('Assalamu\'alaikum Wr. Wb. Bapak/Ibu wali dari ananda ' . $s->nama . ' (Kelas ' . ($s->kelas->nama_kelas ?? '') . ')...') }}" target="_blank" class="wa-chat-pill shadow-sm" title="Klik untuk Chat WhatsApp">
+                                    <i class="fa-brands fa-whatsapp fs-6 text-success"></i>
+                                    <span>{{ $s->orangTua->no_wa }}</span>
                                 </a>
                             </div>
                         @else
-                            <span class="badge bg-light text-muted border px-2 py-1">Tidak Ada WA</span>
+                            <span class="badge bg-light text-muted border px-2 py-1 small">Tidak Ada WA</span>
                         @endif
                     </td>
                     <td>
@@ -203,7 +223,7 @@
                         @endif
                     </td>
                     <td class="text-center">
-                        <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3 py-1 fw-semibold shadow-sm" onclick="showDetailModal({{ json_encode($s) }})">
+                        <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-2.5 py-1 fw-semibold shadow-sm" onclick="showDetailModal({{ json_encode($s) }})">
                             <i class="fa-solid fa-id-card me-1"></i> Detail
                         </button>
                     </td>
@@ -221,7 +241,8 @@
     </div>
 
     <!-- Pagination -->
-    <div class="mt-4 d-flex justify-content-end">
+    <div class="mt-4 d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <small class="text-muted">Menampilkan {{ $siswas->firstItem() ?? 0 }} - {{ $siswas->lastItem() ?? 0 }} dari total {{ $siswas->total() }} siswa binaan</small>
         {{ $siswas->links() }}
     </div>
 </div>
@@ -248,32 +269,38 @@
                 <ul class="list-group list-group-flush rounded-3 border">
                     <li class="list-group-item d-flex justify-content-between align-items-center py-2">
                         <span class="text-muted small">NISN</span>
-                        <span class="fw-bold text-dark" id="detNisn">-</span>
+                        <strong class="text-dark small" id="detNisn">-</strong>
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center py-2">
                         <span class="text-muted small">NIS</span>
-                        <span class="fw-semibold text-dark" id="detNis">-</span>
+                        <strong class="text-dark small" id="detNis">-</strong>
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center py-2">
                         <span class="text-muted small">Nama Ayah</span>
-                        <span class="fw-semibold text-dark" id="detAyah">-</span>
+                        <strong class="text-dark small" id="detAyah">-</strong>
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center py-2">
                         <span class="text-muted small">Nama Ibu</span>
-                        <span class="fw-semibold text-dark" id="detIbu">-</span>
+                        <strong class="text-dark small" id="detIbu">-</strong>
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center py-2">
-                        <span class="text-muted small">No. WhatsApp Orang Tua</span>
-                        <span class="fw-bold text-success" id="detWa">-</span>
+                        <span class="text-muted small">Wali Siswa</span>
+                        <strong class="text-dark small" id="detWali">-</strong>
                     </li>
-                    <li class="list-group-item py-2">
-                        <span class="text-muted small d-block mb-1">Alamat Tempat Tinggal / Domisili:</span>
-                        <span class="fw-semibold text-dark small d-block" id="detAlamat">-</span>
+                    <li class="list-group-item d-flex justify-content-between align-items-center py-2">
+                        <span class="text-muted small">No. WhatsApp</span>
+                        <div id="detWaBox">
+                            <strong class="text-dark small" id="detWa">-</strong>
+                        </div>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-start py-2">
+                        <span class="text-muted small">Alamat</span>
+                        <small class="text-dark text-end ms-3" id="detAlamat">-</small>
                     </li>
                 </ul>
             </div>
             <div class="modal-footer border-0 pt-0">
-                <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Tutup</button>
+                <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Tutup</button>
             </div>
         </div>
     </div>
@@ -281,22 +308,39 @@
 
 <script>
 function showDetailModal(siswa) {
-    document.getElementById('detInisial').innerText = (siswa.nama || 'S').substring(0, 1).toUpperCase();
-    document.getElementById('detNama').innerText = siswa.nama || '-';
+    document.getElementById('detInisial').innerText = siswa.nama.charAt(0).toUpperCase();
+    document.getElementById('detNama').innerText = siswa.nama;
     document.getElementById('detKelas').innerText = 'Kelas ' + (siswa.kelas ? siswa.kelas.nama_kelas : '-');
-    document.getElementById('detJK').innerText = (siswa.jenis_kelamin === 'L' ? 'Laki-Laki (L)' : 'Perempuan (P)');
+    document.getElementById('detJK').innerText = siswa.jenis_kelamin === 'L' ? 'Laki-Laki (L)' : 'Perempuan (P)';
     document.getElementById('detNisn').innerText = siswa.nisn || '-';
     document.getElementById('detNis').innerText = siswa.nis || '-';
-
+    
     if (siswa.orang_tua) {
         document.getElementById('detAyah').innerText = siswa.orang_tua.nama_ayah || '-';
         document.getElementById('detIbu').innerText = siswa.orang_tua.nama_ibu || '-';
-        document.getElementById('detWa').innerText = siswa.orang_tua.no_wa || '-';
+        document.getElementById('detWali').innerText = siswa.orang_tua.nama_wali ? (siswa.orang_tua.nama_wali + ' (' + (siswa.orang_tua.hubungan_wali || 'Wali') + ')') : '-';
+        
+        if (siswa.orang_tua.no_wa) {
+            let cleanWa = siswa.orang_tua.no_wa.replace(/[^0-9]/g, '');
+            if (cleanWa.startsWith('0')) {
+                cleanWa = '62' + cleanWa.substring(1);
+            }
+            const waUrl = `https://wa.me/${cleanWa}?text=${encodeURIComponent('Assalamu\'alaikum Wr. Wb. Bapak/Ibu wali dari ananda ' + siswa.nama + '...')}`;
+            document.getElementById('detWaBox').innerHTML = `
+                <a href="${waUrl}" target="_blank" class="badge bg-success text-white px-2.5 py-1.5 rounded-pill text-decoration-none shadow-sm">
+                    <i class="fa-brands fa-whatsapp me-1"></i> ${siswa.orang_tua.no_wa}
+                </a>
+            `;
+        } else {
+            document.getElementById('detWaBox').innerHTML = '<span class="text-muted small">-</span>';
+        }
+
         document.getElementById('detAlamat').innerText = siswa.orang_tua.alamat || '-';
     } else {
         document.getElementById('detAyah').innerText = '-';
         document.getElementById('detIbu').innerText = '-';
-        document.getElementById('detWa').innerText = '-';
+        document.getElementById('detWali').innerText = '-';
+        document.getElementById('detWaBox').innerHTML = '<span class="text-muted small">-</span>';
         document.getElementById('detAlamat').innerText = '-';
     }
 
