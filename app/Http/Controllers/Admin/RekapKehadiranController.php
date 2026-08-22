@@ -151,20 +151,41 @@ class RekapKehadiranController extends Controller
         $kelases = Kelas::all();
         $selectedKelas = $kelasId ? Kelas::find($kelasId) : null;
 
+        // Tentukan Tahun Ajaran berdasarkan periode yang dipilih
+        if ($mode === 'semester') {
+            $tahunAjaran = ($semester === 'ganjil') ? ($tahun . '/' . ($tahun + 1)) : (($tahun - 1) . '/' . $tahun);
+        } else {
+            $tahunAjaran = ($bulan >= 7) ? ($tahun . '/' . ($tahun + 1)) : (($tahun - 1) . '/' . $tahun);
+        }
+
         // Hari Efektif (Bisa disesuaikan oleh Admin TU)
         $defaultHariEfektif = $this->calculateDefaultHariEfektif($mode, $bulan, $tahun, $semester, $selectedKelas ? $selectedKelas->nama_kelas : null);
         $hariEfektif = (int) $request->get('hari_efektif', $defaultHariEfektif);
         if ($hariEfektif <= 0) $hariEfektif = $defaultHariEfektif;
 
-        // Query Siswa Aktif
-        $siswasQuery = Siswa::with(['kelas', 'orangTua'])
-            ->whereNotNull('kelas_id')
-            ->where(function ($q) {
-                $q->where('status', '!=', 'alumni')->orWhereNull('status');
-            });
+        // Query Siswa berdasarkan riwayat kelas pada tahun ajaran yang dipilih
+        $hasHistory = \App\Models\RiwayatKelas::where('tahun_ajaran', $tahunAjaran)->exists();
 
-        if ($kelasId) {
-            $siswasQuery->where('kelas_id', $kelasId);
+        if ($hasHistory) {
+            $siswasQuery = Siswa::whereHas('riwayatKelas', function ($q) use ($tahunAjaran, $kelasId) {
+                $q->where('tahun_ajaran', $tahunAjaran);
+                if ($kelasId) {
+                    $q->where('kelas_id', $kelasId);
+                }
+            })->with(['riwayatKelas' => function($q) use ($tahunAjaran) {
+                $q->where('tahun_ajaran', $tahunAjaran)->with('kelas');
+            }, 'kelas', 'orangTua']);
+        } else {
+            // Fallback untuk tahun ajaran aktif jika belum ada entri riwayat
+            $siswasQuery = Siswa::with(['kelas', 'orangTua'])
+                ->whereNotNull('kelas_id')
+                ->where(function ($q) {
+                    $q->where('status', '!=', 'alumni')->orWhereNull('status');
+                });
+
+            if ($kelasId) {
+                $siswasQuery->where('kelas_id', $kelasId);
+            }
         }
 
         switch ($sortBy) {
@@ -218,12 +239,13 @@ class RekapKehadiranController extends Controller
                     ->where('status', 'ALPA')
                     ->count();
 
-                // Siswa yang hadir tepat waktu & terlambat KEDUANYA tetap dihitung hadir sekolah
                 $totalHadir = $tepatWaktu + $terlambat;
                 $persentase = ($hariEfektif > 0) ? round(($totalHadir / $hariEfektif) * 100, 1) : 0;
+                $kelasHistoris = $siswa->getKelasForTahunAjaran($tahunAjaran);
 
                 $bulananData[] = (object) [
                     'siswa' => $siswa,
+                    'kelas_historis' => $kelasHistoris,
                     'hadir' => $totalHadir,
                     'terlambat' => $terlambat,
                     'riwayat_terlambat' => $riwayatTerlambat,
@@ -274,12 +296,13 @@ class RekapKehadiranController extends Controller
                     ->where('status', 'ALPA')
                     ->count();
 
-                // Siswa yang hadir tepat waktu & terlambat KEDUANYA tetap dihitung hadir sekolah
                 $totalHadir = $tepatWaktu + $terlambat;
                 $persentase = ($hariEfektif > 0) ? round(($totalHadir / $hariEfektif) * 100, 1) : 0;
+                $kelasHistoris = $siswa->getKelasForTahunAjaran($tahunAjaran);
 
                 $semesterData[] = (object) [
                     'siswa' => $siswa,
+                    'kelas_historis' => $kelasHistoris,
                     'hadir' => $totalHadir,
                     'terlambat' => $terlambat,
                     'riwayat_terlambat' => $riwayatTerlambat,
@@ -296,6 +319,7 @@ class RekapKehadiranController extends Controller
             'tanggal',
             'bulan',
             'tahun',
+            'tahunAjaran',
             'semester',
             'kelasId',
             'sortBy',
@@ -356,22 +380,48 @@ class RekapKehadiranController extends Controller
 
         $kelas = $kelasId ? Kelas::with('waliKelas')->find($kelasId) : null;
 
+        // Tentukan Tahun Ajaran
+        if ($mode === 'semester') {
+            $tahunAjaran = ($semester === 'ganjil') ? ($tahun . '/' . ($tahun + 1)) : (($tahun - 1) . '/' . $tahun);
+        } elseif ($mode === 'harian') {
+            $dt = Carbon::parse($tanggal);
+            $tahunAjaran = ($dt->month >= 7) ? ($dt->year . '/' . ($dt->year + 1)) : (($dt->year - 1) . '/' . $dt->year);
+        } else {
+            $tahunAjaran = ($bulan >= 7) ? ($tahun . '/' . ($tahun + 1)) : (($tahun - 1) . '/' . $tahun);
+        }
+
         $defaultHariEfektif = $this->calculateDefaultHariEfektif($mode, $bulan, $tahun, $semester, $kelas ? $kelas->nama_kelas : null);
         $hariEfektif = (int) $request->get('hari_efektif', $defaultHariEfektif);
         if ($hariEfektif <= 0) $hariEfektif = $defaultHariEfektif;
 
-        $siswasQuery = Siswa::with('kelas')
-            ->whereNotNull('kelas_id')
-            ->where(function ($q) {
-                $q->where('status', '!=', 'alumni')->orWhereNull('status');
-            });
-        if ($kelasId) {
-            $siswasQuery->where('kelas_id', $kelasId);
+        // Query Siswa berdasarkan riwayat kelas
+        $hasHistory = \App\Models\RiwayatKelas::where('tahun_ajaran', $tahunAjaran)->exists();
+
+        if ($hasHistory) {
+            $siswasQuery = Siswa::whereHas('riwayatKelas', function ($q) use ($tahunAjaran, $kelasId) {
+                $q->where('tahun_ajaran', $tahunAjaran);
+                if ($kelasId) {
+                    $q->where('kelas_id', $kelasId);
+                }
+            })->with(['riwayatKelas' => function($q) use ($tahunAjaran) {
+                $q->where('tahun_ajaran', $tahunAjaran)->with('kelas');
+            }, 'kelas']);
+        } else {
+            $siswasQuery = Siswa::with('kelas')
+                ->whereNotNull('kelas_id')
+                ->where(function ($q) {
+                    $q->where('status', '!=', 'alumni')->orWhereNull('status');
+                });
+            if ($kelasId) {
+                $siswasQuery->where('kelas_id', $kelasId);
+            }
         }
         $siswas = $siswasQuery->orderBy('nama', 'asc')->get();
 
         $dataLaporan = [];
         foreach ($siswas as $siswa) {
+            $kelasHistoris = $siswa->getKelasForTahunAjaran($tahunAjaran);
+
             if ($mode === 'semester') {
                 $startMonth = ($semester === 'ganjil') ? 7 : 1;
                 $endMonth = ($semester === 'ganjil') ? 12 : 6;
@@ -441,6 +491,7 @@ class RekapKehadiranController extends Controller
 
             $dataLaporan[] = (object) [
                 'siswa' => $siswa,
+                'kelas_historis' => $kelasHistoris,
                 'hadir' => $totalHadir,
                 'terlambat' => $terlambat,
                 'izin' => $izin,

@@ -142,7 +142,7 @@
                     <th rowspan="2" class="align-middle text-dark text-start" style="min-width: 200px;">Nama Peserta Didik</th>
                     <th rowspan="2" class="align-middle text-dark" style="width: 100px;">Kelas</th>
                     <th colspan="5" class="text-dark bg-light">
-                        Kehadiran Bulan {{ \Carbon\Carbon::create()->month($bulan)->translatedFormat('F') }} {{ $tahun }}
+                        Kehadiran Bulan {{ \Carbon\Carbon::create()->month($bulan)->translatedFormat('F') }} {{ $tahun }} (T.A. {{ $tahunAjaran ?? '' }})
                     </th>
                     <th rowspan="2" class="align-middle text-dark" style="width: 95px;">Persentase</th>
                     <th rowspan="2" class="align-middle text-dark" style="width: 140px;">Catatan BK</th>
@@ -178,11 +178,11 @@
                     <td class="fw-bold text-dark text-nowrap">{{ $row->siswa->nama }}</td>
                     <td class="text-center">
                         <span class="badge bg-primary bg-opacity-10 text-primary border border-primary px-2 py-1 rounded-2">
-                            Kelas {{ $row->siswa->kelas->nama_kelas ?? '-' }}
+                            Kelas {{ $row->kelas_historis->nama_kelas ?? ($row->siswa->kelas->nama_kelas ?? '-') }}
                         </span>
                     </td>
                     <td class="text-center val-hadir" title="{{ $row->hadir }} hari hadir">{{ $row->hadir }}</td>
-                    <td class="text-center val-terlambat" onclick="openRiwayatTerlambatModal('{{ addslashes($row->siswa->nama) }}', '{{ $row->siswa->nisn }}', '{{ $row->siswa->kelas->nama_kelas ?? '-' }}', {{ json_encode($row->riwayat_terlambat) }}, '{{ $row->siswa->orangTua->no_wa ?? '' }}')">
+                    <td class="text-center val-terlambat" onclick="openRiwayatTerlambatModal('{{ addslashes($row->siswa->nama) }}', '{{ $row->siswa->nisn }}', '{{ $row->kelas_historis->nama_kelas ?? ($row->siswa->kelas->nama_kelas ?? '-') }}', {{ json_encode($row->riwayat_terlambat) }}, '{{ $row->siswa->orangTua->no_wa ?? '' }}')">
                         <span class="text-decoration-underline" title="Klik untuk rincian tanggal">{{ $row->terlambat }}x</span>
                         @if($row->terlambat >= 3)
                             <span class="badge bg-warning bg-opacity-25 text-dark border border-warning ms-1" style="font-size: 0.7rem;" title="Perlu tindak lanjut BK">
@@ -270,11 +270,11 @@
                     <td class="fw-bold text-dark text-nowrap">{{ $row->siswa->nama }}</td>
                     <td class="text-center">
                         <span class="badge bg-primary bg-opacity-10 text-primary border border-primary px-2 py-1 rounded-2">
-                            Kelas {{ $row->siswa->kelas->nama_kelas ?? '-' }}
+                            Kelas {{ $row->kelas_historis->nama_kelas ?? ($row->siswa->kelas->nama_kelas ?? '-') }}
                         </span>
                     </td>
                     <td class="text-center val-hadir" title="{{ $row->hadir }} hari hadir">{{ $row->hadir }}</td>
-                    <td class="text-center val-terlambat" onclick="openRiwayatTerlambatModal('{{ addslashes($row->siswa->nama) }}', '{{ $row->siswa->nisn }}', '{{ $row->siswa->kelas->nama_kelas ?? '-' }}', {{ json_encode($row->riwayat_terlambat) }}, '{{ $row->siswa->orangTua->no_wa ?? '' }}')">
+                    <td class="text-center val-terlambat" onclick="openRiwayatTerlambatModal('{{ addslashes($row->siswa->nama) }}', '{{ $row->siswa->nisn }}', '{{ $row->kelas_historis->nama_kelas ?? ($row->siswa->kelas->nama_kelas ?? '-') }}', {{ json_encode($row->riwayat_terlambat) }}, '{{ $row->siswa->orangTua->no_wa ?? '' }}')">
                         <span class="text-decoration-underline" title="Klik untuk rincian tanggal">{{ $row->terlambat }}x</span>
                         @if($row->terlambat >= 3)
                             <span class="badge bg-warning bg-opacity-25 text-dark border border-warning ms-1" style="font-size: 0.7rem;" title="Perlu tindak lanjut BK">

@@ -48,6 +48,12 @@ class KenaikanKelasController extends Controller
 
         DB::beginTransaction();
         try {
+            $currentYear = (int)date('Y');
+            $currentMonth = (int)date('n');
+            $currentTahunAjaran = ($currentMonth >= 7) ? ($currentYear . '/' . ($currentYear + 1)) : (($currentYear - 1) . '/' . $currentYear);
+            $parts = explode('/', $currentTahunAjaran);
+            $nextTahunAjaran = ((int)$parts[0] + 1) . '/' . ((int)$parts[1] + 1);
+
             $kelas7 = Kelas::where('nama_kelas', 'like', '7%')->orWhere('nama_kelas', '7')->get();
             $kelas8 = Kelas::where('nama_kelas', 'like', '8%')->orWhere('nama_kelas', '8')->get();
             $kelas9 = Kelas::where('nama_kelas', 'like', '9%')->orWhere('nama_kelas', '9')->get();
@@ -64,6 +70,11 @@ class KenaikanKelasController extends Controller
                 ->get();
 
             foreach ($siswaKelas9 as $siswa) {
+                \App\Models\RiwayatKelas::updateOrCreate(
+                    ['siswa_id' => $siswa->id, 'tahun_ajaran' => $currentTahunAjaran],
+                    ['kelas_id' => $siswa->kelas_id, 'status' => 'lulus']
+                );
+
                 $siswa->update([
                     'status' => 'alumni',
                     'kelas_id' => null,
@@ -73,29 +84,68 @@ class KenaikanKelasController extends Controller
             // 2. Siswa Kelas 8 -> Naik ke Kelas 9 (Kecuali yang tinggal kelas)
             $countNaikKelas9 = 0;
             if ($kelas9Target) {
-                $countNaikKelas9 = Siswa::whereIn('kelas_id', $kelas8->pluck('id'))
+                $siswaKelas8 = Siswa::whereIn('kelas_id', $kelas8->pluck('id'))
                     ->where(function ($q) {
                         $q->where('status', '!=', 'alumni')->orWhereNull('status');
                     })
                     ->whereNotIn('id', $exceptIds)
-                    ->update([
+                    ->get();
+
+                foreach ($siswaKelas8 as $s8) {
+                    \App\Models\RiwayatKelas::updateOrCreate(
+                        ['siswa_id' => $s8->id, 'tahun_ajaran' => $currentTahunAjaran],
+                        ['kelas_id' => $s8->kelas_id, 'status' => 'naik_kelas']
+                    );
+                    \App\Models\RiwayatKelas::updateOrCreate(
+                        ['siswa_id' => $s8->id, 'tahun_ajaran' => $nextTahunAjaran],
+                        ['kelas_id' => $kelas9Target->id, 'status' => 'aktif']
+                    );
+
+                    $s8->update([
                         'kelas_id' => $kelas9Target->id,
                         'status' => 'aktif',
                     ]);
+                    $countNaikKelas9++;
+                }
             }
 
             // 3. Siswa Kelas 7 -> Naik ke Kelas 8 (Kecuali yang tinggal kelas)
             $countNaikKelas8 = 0;
             if ($kelas8Target) {
-                $countNaikKelas8 = Siswa::whereIn('kelas_id', $kelas7->pluck('id'))
+                $siswaKelas7 = Siswa::whereIn('kelas_id', $kelas7->pluck('id'))
                     ->where(function ($q) {
                         $q->where('status', '!=', 'alumni')->orWhereNull('status');
                     })
                     ->whereNotIn('id', $exceptIds)
-                    ->update([
+                    ->get();
+
+                foreach ($siswaKelas7 as $s7) {
+                    \App\Models\RiwayatKelas::updateOrCreate(
+                        ['siswa_id' => $s7->id, 'tahun_ajaran' => $currentTahunAjaran],
+                        ['kelas_id' => $s7->kelas_id, 'status' => 'naik_kelas']
+                    );
+                    \App\Models\RiwayatKelas::updateOrCreate(
+                        ['siswa_id' => $s7->id, 'tahun_ajaran' => $nextTahunAjaran],
+                        ['kelas_id' => $kelas8Target->id, 'status' => 'aktif']
+                    );
+
+                    $s7->update([
                         'kelas_id' => $kelas8Target->id,
                         'status' => 'aktif',
                     ]);
+                    $countNaikKelas8++;
+                }
+            }
+
+            // 4. Siswa Tinggal Kelas (Dipertahankan di kelas yang sama)
+            foreach ($exceptIds as $tinggalId) {
+                $sTinggal = Siswa::find($tinggalId);
+                if ($sTinggal) {
+                    \App\Models\RiwayatKelas::updateOrCreate(
+                        ['siswa_id' => $sTinggal->id, 'tahun_ajaran' => $nextTahunAjaran],
+                        ['kelas_id' => $sTinggal->kelas_id, 'status' => 'tinggal_kelas']
+                    );
+                }
             }
 
             DB::commit();

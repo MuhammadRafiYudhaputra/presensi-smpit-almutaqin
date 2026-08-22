@@ -106,7 +106,7 @@ class SiswaController extends Controller
 
         $token = $this->qrCodeService->generateToken($request->nisn);
 
-        Siswa::create([
+        $siswa = Siswa::create([
             'nisn' => $request->nisn,
             'nis' => $request->nis,
             'nama' => $request->nama,
@@ -116,6 +116,15 @@ class SiswaController extends Controller
             'qr_code_token' => $token,
             'status' => 'aktif',
         ]);
+
+        $currentYear = (int)date('Y');
+        $currentMonth = (int)date('n');
+        $currentTahunAjaran = ($currentMonth >= 7) ? ($currentYear . '/' . ($currentYear + 1)) : (($currentYear - 1) . '/' . $currentYear);
+
+        \App\Models\RiwayatKelas::updateOrCreate(
+            ['siswa_id' => $siswa->id, 'tahun_ajaran' => $currentTahunAjaran],
+            ['kelas_id' => $request->kelas_id, 'status' => 'aktif']
+        );
 
         return redirect()->back()->with('success', 'Data siswa berhasil ditambahkan & QR Code di-generate!');
     }

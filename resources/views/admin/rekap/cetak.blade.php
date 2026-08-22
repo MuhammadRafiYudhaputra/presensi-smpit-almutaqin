@@ -208,7 +208,7 @@
                     <td class="text-center fw-bold">{{ $index + 1 }}</td>
                     <td class="text-center">{{ $row->siswa->nisn }}</td>
                     <td>{{ $row->siswa->nama }}</td>
-                    <td class="text-center">Kelas {{ $row->siswa->kelas->nama_kelas ?? '-' }}</td>
+                    <td class="text-center">Kelas {{ $row->kelas_historis->nama_kelas ?? ($row->siswa->kelas->nama_kelas ?? '-') }}</td>
                     <td class="text-center fw-bold">{{ $row->hadir }}</td>
                     <td class="text-center">{{ $row->terlambat }}</td>
                     <td class="text-center">{{ $row->izin }}</td>

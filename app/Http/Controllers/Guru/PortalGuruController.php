@@ -152,19 +152,36 @@ class PortalGuruController extends Controller
         $semester = $request->get('semester', (date('n') >= 7 ? 'ganjil' : 'genap'));
         $sortBy = $request->get('sort_by', 'nama_asc');
 
+        // Tentukan Tahun Ajaran
+        if ($mode === 'semester') {
+            $tahunAjaran = ($semester === 'ganjil') ? ($tahun . '/' . ($tahun + 1)) : (($tahun - 1) . '/' . $tahun);
+        } else {
+            $tahunAjaran = ($bulan >= 7) ? ($tahun . '/' . ($tahun + 1)) : (($tahun - 1) . '/' . $tahun);
+        }
+
         $defaultHariEfektif = $this->calculateDefaultHariEfektif($mode, $bulan, $tahun, $semester, $kelas ? $kelas->nama_kelas : null);
         $hariEfektif = (int) $request->get('hari_efektif', $defaultHariEfektif);
         if ($hariEfektif <= 0) $hariEfektif = $defaultHariEfektif;
 
-        // Query Siswa strictly for this class
-        $siswaQuery = Siswa::with(['kelas', 'orangTua'])
-            ->whereNotNull('kelas_id')
-            ->where(function ($q) {
-                $q->where('status', '!=', 'alumni')->orWhereNull('status');
-            });
+        // Query Siswa strictly for this class on the selected academic year
+        $hasHistory = \App\Models\RiwayatKelas::where('tahun_ajaran', $tahunAjaran)->exists();
 
-        if ($kelas) {
-            $siswaQuery->where('kelas_id', $kelas->id);
+        if ($hasHistory && $kelas) {
+            $siswaQuery = Siswa::whereHas('riwayatKelas', function ($q) use ($tahunAjaran, $kelas) {
+                $q->where('tahun_ajaran', $tahunAjaran)->where('kelas_id', $kelas->id);
+            })->with(['riwayatKelas' => function($q) use ($tahunAjaran) {
+                $q->where('tahun_ajaran', $tahunAjaran)->with('kelas');
+            }, 'kelas', 'orangTua']);
+        } else {
+            $siswaQuery = Siswa::with(['kelas', 'orangTua'])
+                ->whereNotNull('kelas_id')
+                ->where(function ($q) {
+                    $q->where('status', '!=', 'alumni')->orWhereNull('status');
+                });
+
+            if ($kelas) {
+                $siswaQuery->where('kelas_id', $kelas->id);
+            }
         }
 
         switch ($sortBy) {
