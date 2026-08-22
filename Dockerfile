@@ -43,5 +43,5 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction --ignore-pl
 ENV PORT=80
 EXPOSE 80
 
-# Start command
-CMD php artisan config:clear && php artisan view:clear && php artisan migrate --force && apache2-foreground
+# Start command with auto-migrate & auto-seed
+CMD php artisan config:clear && php artisan view:clear && php artisan migrate --force && php artisan db:seed --force && apache2-foreground
