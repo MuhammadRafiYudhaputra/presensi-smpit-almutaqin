@@ -118,8 +118,9 @@
                         <small class="text-muted" style="font-size: 0.75rem;">Dasar perhitungan: <strong>{{ $hariEfektif }} Hari Efektif</strong>. Keterlambatan dicatat terpisah untuk catatan BK.</small>
                     </div>
                 </div>
-                <button onclick="window.print()" class="btn btn-sm btn-primary rounded-pill px-3.5 py-1.5 fw-bold shadow-sm d-inline-flex align-items-center gap-1.5" style="font-size: 0.82rem;">
-                    <i class="fa-solid fa-print"></i> Cetak / Simpan PDF
+                <button onclick="window.print()" class="btn btn-primary rounded-pill px-4 py-2 fw-bold shadow-sm d-inline-flex align-items-center gap-2" style="font-size: 0.85rem;">
+                    <i class="fa-solid fa-print me-2 fs-6"></i>
+                    <span>Cetak / Simpan PDF</span>
                 </button>
             </div>
 
