@@ -57,6 +57,31 @@
         cursor: pointer;
         transition: background 0.15s ease;
     }
+
+    /* Metric Summary Styles (Selaras dengan Dashboard) */
+    .stat-metric-box {
+        text-align: center;
+        padding: 0.4rem 0.25rem;
+    }
+    .stat-metric-label {
+        font-size: 0.78rem;
+        font-weight: 700;
+        margin-bottom: 2px;
+        display: block;
+    }
+    .stat-metric-val {
+        font-size: 1.4rem;
+        font-weight: 800;
+        line-height: 1;
+        margin: 0;
+    }
+    .text-hadir { color: #16a34a !important; }
+    .text-terlambat { color: #d97706 !important; }
+    .text-sakit { color: #475569 !important; }
+    .text-izin { color: #0284c7 !important; }
+    .text-alpa { color: #dc2626 !important; }
+    .text-total { color: #2563eb !important; }
+    .text-belum { color: #64748b !important; }
     .status-radio-option:hover {
         background: #f8fafc;
     }
@@ -124,35 +149,37 @@
         </div>
     </form>
 
-    <!-- Ringkasan Cepat Hari Ini -->
-    <div class="p-3 bg-light rounded-3 mb-4 border d-flex flex-wrap gap-3 justify-content-around text-center" style="font-size: 0.85rem;">
-        <div>
-            <span class="text-muted d-block fw-semibold">Total Siswa:</span>
-            <strong class="fs-6 text-dark">{{ $summary['total'] }}</strong>
-        </div>
-        <div>
-            <span class="text-success d-block fw-semibold">Hadir:</span>
-            <strong class="fs-6 text-success">{{ $summary['hadir'] }}</strong>
-        </div>
-        <div>
-            <span class="text-warning d-block fw-semibold" style="color: #d97706 !important;">Terlambat:</span>
-            <strong class="fs-6" style="color: #d97706 !important;">{{ $summary['terlambat'] }}</strong>
-        </div>
-        <div>
-            <span class="text-primary d-block fw-semibold">Izin:</span>
-            <strong class="fs-6 text-primary">{{ $summary['izin'] }}</strong>
-        </div>
-        <div>
-            <span class="text-secondary d-block fw-semibold">Sakit:</span>
-            <strong class="fs-6 text-secondary">{{ $summary['sakit'] }}</strong>
-        </div>
-        <div>
-            <span class="text-danger d-block fw-semibold">Alpa:</span>
-            <strong class="fs-6 text-danger">{{ $summary['alpa'] }}</strong>
-        </div>
-        <div>
-            <span class="text-muted d-block fw-semibold">Belum Absen:</span>
-            <strong class="fs-6 text-dark">{{ $summary['belum'] }}</strong>
+    <!-- Ringkasan Cepat Hari Ini (Selaras dengan Halaman Dashboard) -->
+    <div class="p-3 bg-light rounded-3 mb-4 border">
+        <div class="row g-2 justify-content-around align-items-center text-center">
+            <div class="col-6 col-sm-3 col-md-auto stat-metric-box px-3">
+                <span class="stat-metric-label text-total">Total Siswa</span>
+                <h5 class="stat-metric-val text-total">{{ $summary['total'] }}</h5>
+            </div>
+            <div class="col-6 col-sm-3 col-md-auto stat-metric-box px-3">
+                <span class="stat-metric-label text-hadir">Hadir</span>
+                <h5 class="stat-metric-val text-hadir">{{ $summary['hadir'] }}</h5>
+            </div>
+            <div class="col-6 col-sm-3 col-md-auto stat-metric-box px-3">
+                <span class="stat-metric-label text-terlambat">Terlambat</span>
+                <h5 class="stat-metric-val text-terlambat">{{ $summary['terlambat'] }}</h5>
+            </div>
+            <div class="col-6 col-sm-3 col-md-auto stat-metric-box px-3">
+                <span class="stat-metric-label text-sakit">Sakit</span>
+                <h5 class="stat-metric-val text-sakit">{{ $summary['sakit'] }}</h5>
+            </div>
+            <div class="col-6 col-sm-3 col-md-auto stat-metric-box px-3">
+                <span class="stat-metric-label text-izin">Izin</span>
+                <h5 class="stat-metric-val text-izin">{{ $summary['izin'] }}</h5>
+            </div>
+            <div class="col-6 col-sm-3 col-md-auto stat-metric-box px-3">
+                <span class="stat-metric-label text-alpa">Alfa</span>
+                <h5 class="stat-metric-val text-alpa">{{ $summary['alpa'] }}</h5>
+            </div>
+            <div class="col-6 col-sm-3 col-md-auto stat-metric-box px-3">
+                <span class="stat-metric-label text-belum">Belum Absen</span>
+                <h5 class="stat-metric-val text-belum">{{ $summary['belum'] }}</h5>
+            </div>
         </div>
     </div>
 
