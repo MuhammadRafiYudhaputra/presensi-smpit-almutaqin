@@ -125,19 +125,15 @@
             </div>
 
             <div class="row g-2 pt-2 border-top">
-                <div class="col-6 col-md-3">
-                    <label class="form-label small fw-bold text-dark mb-0.5" style="font-size: 0.75rem;">Kota &amp; Tanggal TTD:</label>
-                    <input type="text" id="inputKotaTgl" class="form-control form-control-sm rounded-2" style="font-size: 0.78rem;" placeholder="Garut, {{ date('d F Y') }}" oninput="syncSignature()">
-                </div>
-                <div class="col-6 col-md-3">
+                <div class="col-12 col-md-4">
                     <label class="form-label small fw-bold text-dark mb-0.5" style="font-size: 0.75rem;">Nama Kepala Sekolah:</label>
                     <input type="text" id="inputKepsek" class="form-control form-control-sm rounded-2" style="font-size: 0.78rem;" placeholder="Nama Lengkap &amp; Gelar" oninput="syncSignature()">
                 </div>
-                <div class="col-6 col-md-3">
+                <div class="col-12 col-md-4">
                     <label class="form-label small fw-bold text-dark mb-0.5" style="font-size: 0.75rem;">NIP Kepala Sekolah:</label>
                     <input type="text" id="inputNipKepsek" class="form-control form-control-sm rounded-2" style="font-size: 0.78rem;" placeholder="NIP (atau -)" oninput="syncSignature()">
                 </div>
-                <div class="col-6 col-md-3">
+                <div class="col-12 col-md-4">
                     <label class="form-label small fw-bold text-dark mb-0.5" style="font-size: 0.75rem;">Nama Wali Kelas (Opsional):</label>
                     <input type="text" id="inputWali" class="form-control form-control-sm rounded-2" style="font-size: 0.78rem;" placeholder="Nama Wali Kelas" oninput="syncSignature()">
                 </div>
@@ -224,7 +220,7 @@
         <div class="row mt-4 pt-2" style="font-size: 0.88rem;">
             <!-- Tanda Tangan Wali Kelas (Jika Ada) -->
             <div class="col-6 text-center" id="colWaliKelas">
-                <p class="mb-1" id="dispKotaWali">Garut, {{ date('d F Y') }}</p>
+                <p class="mb-1">Garut, {{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}</p>
                 <p class="mb-1">Mengetahui,</p>
                 <p class="fw-bold mb-4">Wali Kelas {{ $kelas->nama_kelas ?? '' }}</p>
                 <br>
@@ -236,7 +232,7 @@
 
             <!-- Tanda Tangan Kepala Sekolah -->
             <div class="col-6 text-center ms-auto" id="colKepsek">
-                <p class="mb-1" id="dispKotaKepsek">Garut, {{ date('d F Y') }}</p>
+                <p class="mb-1">Garut, {{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}</p>
                 <p class="mb-1">Mengetahui,</p>
                 <p class="fw-bold mb-4">Kepala Sekolah SMP IT Al-Muttaqin</p>
                 <br>
@@ -251,13 +247,11 @@
 @if(request()->get('format') !== 'doc')
 <script>
     // Load stored values or defaults
-    const defaultKota = "Garut, {{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}";
     const defaultKepsek = localStorage.getItem('smpit_kepsek_nama') || "H. Aep Saepudin, S.Pd.I, M.Pd";
     const defaultNip = localStorage.getItem('smpit_kepsek_nip') || "197508122005011003";
     const defaultWali = "{{ $kelas->waliKelas->nama ?? 'Ustadz Ahmad, S.Pd' }}";
 
-    if (document.getElementById('inputKotaTgl')) {
-        document.getElementById('inputKotaTgl').value = defaultKota;
+    if (document.getElementById('inputKepsek')) {
         document.getElementById('inputKepsek').value = defaultKepsek;
         document.getElementById('inputNipKepsek').value = defaultNip;
         document.getElementById('inputWali').value = defaultWali;
@@ -265,15 +259,10 @@
     }
 
     function syncSignature() {
-        const inputKota = document.getElementById('inputKotaTgl');
-        if (!inputKota) return;
-        const kota = inputKota.value || defaultKota;
-        const kepsek = document.getElementById('inputKepsek').value || '________________________';
-        const nip = document.getElementById('inputNipKepsek').value || '-';
-        const wali = document.getElementById('inputWali').value || '________________________';
+        const kepsek = (document.getElementById('inputKepsek') ? document.getElementById('inputKepsek').value : '') || '________________________';
+        const nip = (document.getElementById('inputNipKepsek') ? document.getElementById('inputNipKepsek').value : '') || '-';
+        const wali = (document.getElementById('inputWali') ? document.getElementById('inputWali').value : '') || '________________________';
 
-        if (document.getElementById('dispKotaKepsek')) document.getElementById('dispKotaKepsek').innerText = kota;
-        if (document.getElementById('dispKotaWali')) document.getElementById('dispKotaWali').innerText = kota;
         if (document.getElementById('dispNamaKepsek')) document.getElementById('dispNamaKepsek').innerText = kepsek;
         if (document.getElementById('dispNipKepsek')) document.getElementById('dispNipKepsek').innerText = nip;
         if (document.getElementById('dispNamaWali')) document.getElementById('dispNamaWali').innerText = wali;
