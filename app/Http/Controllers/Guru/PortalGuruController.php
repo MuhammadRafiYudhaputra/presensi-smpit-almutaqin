@@ -146,10 +146,12 @@ class PortalGuruController extends Controller
             $mode = 'bulanan';
         }
 
+        $settingAkademik = \App\Models\SettingAkademik::getActive();
+
         $tanggal = $request->get('tanggal', date('Y-m-d'));
         $bulan = (int)$request->get('bulan', date('n'));
         $tahun = (int)$request->get('tahun', date('Y'));
-        $semester = $request->get('semester', (date('n') >= 7 ? 'ganjil' : 'genap'));
+        $semester = $request->get('semester', $settingAkademik->semester ?? (date('n') >= 7 ? 'ganjil' : 'genap'));
         $sortBy = $request->get('sort_by', 'nama_asc');
 
         // Tentukan Tahun Ajaran
@@ -309,9 +311,11 @@ class PortalGuruController extends Controller
             'tanggal',
             'bulan',
             'tahun',
+            'tahunAjaran',
             'semester',
             'sortBy',
             'hariEfektif',
+            'settingAkademik',
             'bulananData',
             'semesterData'
         ));

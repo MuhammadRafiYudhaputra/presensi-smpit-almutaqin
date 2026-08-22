@@ -50,6 +50,43 @@
         </div>
     </div>
 
+    <!-- Banner & Tombol Kontrol Semester Aktif -->
+    @if(isset($settingAkademik))
+    <div class="p-3 mb-4 rounded-4 border bg-light d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+        <div class="d-flex align-items-center gap-3">
+            <div class="p-2 rounded-3 bg-success bg-opacity-10 text-success fs-4 d-flex align-items-center justify-content-center" style="width: 44px; height: 44px;">
+                <i class="fa-solid fa-calendar-check"></i>
+            </div>
+            <div>
+                <div class="d-flex align-items-center gap-2">
+                    <span class="badge bg-success bg-opacity-10 text-success border border-success px-2.5 py-1 rounded-pill fw-bold">
+                        <i class="fa-solid fa-circle text-success me-1" style="font-size: 0.5rem;"></i> Periode Resmi Aktif
+                    </span>
+                    <strong class="text-dark">Semester {{ ucfirst($settingAkademik->semester) }} T.A. {{ $settingAkademik->tahun_ajaran }}</strong>
+                </div>
+                <small class="text-muted">Default acuan operasional absensi harian dan perhitungan kehadiran sekolah saat ini.</small>
+            </div>
+        </div>
+
+        <div class="d-flex align-items-center gap-2 flex-wrap">
+            <!-- Tombol 1-Klik Beralih Semester Ganjil/Genap -->
+            <form action="{{ route('admin.setting.akademik.toggle') }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin mengalihkan semester aktif sekolah?')">
+                @csrf
+                <button type="submit" class="btn btn-sm btn-outline-success rounded-pill px-3 fw-semibold shadow-sm d-inline-flex align-items-center gap-1">
+                    <i class="fa-solid fa-repeat"></i>
+                    Beralih ke Semester {{ $settingAkademik->semester === 'ganjil' ? 'Genap' : 'Ganjil' }}
+                </button>
+            </form>
+
+            <!-- Tombol Modal Ubah Master Tahun Ajaran & Semester -->
+            <button type="button" class="btn btn-sm btn-primary rounded-pill px-3 fw-semibold shadow-sm d-inline-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#modalSettingAkademik">
+                <i class="fa-solid fa-gear"></i>
+                Atur Periode Aktif
+            </button>
+        </div>
+    </div>
+    @endif
+
     <!-- Filter & Parameter Form -->
     <form action="{{ route('admin.rekap.index') }}" method="GET" class="row g-3 mb-4 align-items-end">
         <input type="hidden" name="mode" value="{{ $mode }}">
@@ -359,6 +396,69 @@
         </div>
     </div>
 </div>
+
+<!-- Modal Setting Master Semester & Tahun Ajaran Aktif -->
+@if(isset($settingAkademik))
+<div class="modal fade" id="modalSettingAkademik" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 border-0 shadow">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="fw-bold text-dark"><i class="fa-solid fa-calendar-days me-2 text-primary"></i>Pengaturan Periode Akademik Aktif</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="{{ route('admin.setting.akademik.update') }}" method="POST">
+                @csrf
+                <div class="modal-body">
+                    <div class="alert alert-info border-info d-flex align-items-center mb-3 py-2">
+                        <i class="fa-solid fa-circle-info fs-4 me-3 text-info"></i>
+                        <small class="text-dark">
+                            Periode yang diatur di sini akan menjadi <strong>acuan resmi default</strong> pada Scan Absensi QR, Rekapitulasi Presensi, dan Dashboard Sekolah.
+                        </small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold text-dark">Tahun Ajaran Aktif <span class="text-danger">*</span></label>
+                        <select name="tahun_ajaran" class="form-select shadow-sm" required>
+                            @for($y=date('Y')-2; $y<=date('Y')+2; $y++)
+                                @php $ta = $y . '/' . ($y+1); @endphp
+                                <option value="{{ $ta }}" {{ $settingAkademik->tahun_ajaran === $ta ? 'selected' : '' }}>
+                                    Tahun Ajaran {{ $ta }}
+                                </option>
+                            @endfor
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold text-dark">Semester Berjalan <span class="text-danger">*</span></label>
+                        <div class="d-flex gap-3">
+                            <div class="form-check p-2 border rounded-3 flex-fill">
+                                <input class="form-check-input ms-1" type="radio" name="semester" id="sem_ganjil" value="ganjil" {{ $settingAkademik->semester === 'ganjil' ? 'checked' : '' }} required>
+                                <label class="form-check-label ps-2 cursor-pointer w-100" for="sem_ganjil">
+                                    <strong class="d-block text-dark">Semester Ganjil</strong>
+                                    <small class="text-muted">Bulan Juli - Desember</small>
+                                </label>
+                            </div>
+                            <div class="form-check p-2 border rounded-3 flex-fill">
+                                <input class="form-check-input ms-1" type="radio" name="semester" id="sem_genap" value="genap" {{ $settingAkademik->semester === 'genap' ? 'checked' : '' }} required>
+                                <label class="form-check-label ps-2 cursor-pointer w-100" for="sem_genap">
+                                    <strong class="d-block text-dark">Semester Genap</strong>
+                                    <small class="text-muted">Bulan Januari - Juni</small>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 pt-0">
+                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm">
+                        <i class="fa-solid fa-check me-1"></i> Simpan & Aktifkan Periode
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@endif
 
 <script>
 function openRiwayatTerlambatModal(nama, nisn, kelas, riwayat, noWa) {

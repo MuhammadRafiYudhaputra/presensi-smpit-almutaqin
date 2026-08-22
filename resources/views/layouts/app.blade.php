@@ -528,7 +528,15 @@
                     </h5>
                 </div>
 
-                <div class="d-flex align-items-center gap-3">
+                <div class="d-flex align-items-center gap-2">
+                    @php $globalActiveSetting = \App\Models\SettingAkademik::getActive(); @endphp
+                    @if($globalActiveSetting)
+                    <div class="user-role-badge text-success border-success bg-success bg-opacity-10 d-none d-sm-inline-flex" title="Periode Akademik Resmi Aktif">
+                        <i class="fa-solid fa-calendar-check text-success"></i>
+                        <span>T.A. {{ $globalActiveSetting->tahun_ajaran }} ({{ ucfirst($globalActiveSetting->semester) }})</span>
+                    </div>
+                    @endif
+
                     <div class="user-role-badge">
                         <i class="fa-solid fa-circle-user text-danger"></i>
                         <span>USER : {{ strtoupper(Auth::user()->role === 'guru' ? (Auth::user()->name) : 'ADMIN') }}</span>

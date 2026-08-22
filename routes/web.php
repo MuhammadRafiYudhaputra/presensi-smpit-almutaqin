@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\FonnteSettingController;
 use App\Http\Controllers\Admin\RekapKehadiranController;
 use App\Http\Controllers\Admin\JamPresensiController;
 use App\Http\Controllers\Admin\KenaikanKelasController;
+use App\Http\Controllers\Admin\SettingAkademikController;
 use App\Http\Controllers\Presensi\ScanPresensiController;
 use App\Http\Controllers\Guru\PortalGuruController;
 
@@ -79,6 +80,10 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::post('/rekap/update-status', [RekapKehadiranController::class, 'updateStatus'])->name('rekap.updateStatus');
     Route::get('/laporan', [RekapKehadiranController::class, 'generateLaporanIndex'])->name('laporan.index');
     Route::get('/rekap/cetak', [RekapKehadiranController::class, 'cetakLaporan'])->name('rekap.cetak');
+
+    // Setting Semester & Tahun Ajaran Aktif
+    Route::post('/setting-akademik', [SettingAkademikController::class, 'update'])->name('setting.akademik.update');
+    Route::post('/setting-akademik/toggle', [SettingAkademikController::class, 'toggleSemester'])->name('setting.akademik.toggle');
 
     // Backup & Restore Database & Storage Asset
     Route::get('/backup', [App\Http\Controllers\Admin\BackupController::class, 'index'])->name('backup.index');
