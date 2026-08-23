@@ -55,6 +55,9 @@ class DashboardController extends Controller
         $totalSakit = $presensiHariIni->where('status', 'SAKIT')->count();
         $totalIzin = $presensiHariIni->where('status', 'IZIN')->count();
         
+        $totalMasuk = $totalHadir + $totalTerlambat;
+        $totalPresensi = $totalMasuk + $totalSakit + $totalIzin;
+
         $isTodayHoliday = \App\Helpers\HolidayHelper::isNonEffectiveDay($today);
         if ($isTodayHoliday) {
             $totalAlpa = ($totalPresensi > 0) ? max(0, $totalSiswaFiltered - $totalPresensi) : 0;
