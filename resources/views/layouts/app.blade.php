@@ -45,10 +45,10 @@
             width: 100%;
         }
 
-        /* Sidebar Styling (Sleek, Compact & No Scrollbars) */
+        /* Sidebar Styling (Sleek, Comfortable & No Scrollbars) */
         .sidebar {
-            width: 245px;
-            min-width: 245px;
+            width: 250px;
+            min-width: 250px;
             background-color: var(--sidebar-bg);
             border-right: 1px solid var(--sidebar-border);
             display: flex;
@@ -72,7 +72,7 @@
 
         /* Sidebar Brand Header */
         .sidebar-brand {
-            padding: 0.85rem 0.85rem 0.4rem;
+            padding: 1.1rem 1rem 0.6rem;
             text-align: center;
             position: sticky;
             top: 0;
@@ -81,56 +81,56 @@
         }
 
         .sidebar-brand-title {
-            font-size: 0.84rem;
+            font-size: 0.88rem;
             font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 0.4px;
+            letter-spacing: 0.5px;
             color: #1e293b;
-            line-height: 1.25;
+            line-height: 1.3;
             margin-bottom: 2px;
         }
 
         .sidebar-brand-sub {
-            font-size: 0.66rem;
+            font-size: 0.70rem;
             font-weight: 600;
             color: #64748b;
             text-transform: uppercase;
-            letter-spacing: 0.4px;
+            letter-spacing: 0.5px;
             display: block;
         }
 
         .sidebar-divider {
             border-top: 1px solid #e2e8f0;
-            margin: 0 0.85rem 0.4rem;
+            margin: 0 0.9rem 0.5rem;
             opacity: 0.8;
         }
 
         .sidebar-menu {
             list-style: none;
-            padding: 0 0.65rem;
+            padding: 0 0.8rem;
             margin: 0;
         }
 
         .sidebar-menu .nav-item {
-            margin-bottom: 1.5px;
+            margin-bottom: 2.5px;
         }
 
         .sidebar-menu .nav-link {
             color: #334155;
             font-weight: 600;
-            font-size: 0.81rem;
-            padding: 0.42rem 0.75rem;
+            font-size: 0.85rem;
+            padding: 0.50rem 0.85rem;
             border-radius: 8px;
             display: flex;
             align-items: center;
-            gap: 9px;
+            gap: 11px;
             transition: all 0.15s ease;
             text-decoration: none;
         }
 
         .sidebar-menu .nav-link i {
-            font-size: 0.9rem;
-            width: 17px;
+            font-size: 0.95rem;
+            width: 18px;
             text-align: center;
             color: #8c9ba5;
             transition: color 0.15s ease;
@@ -467,10 +467,10 @@
             </div>
 
             <!-- Sidebar Bottom Footer (Logout Button Pinned at Bottom) -->
-            <div class="sidebar-footer mt-auto pt-1.5 pb-2 px-3 border-top">
+            <div class="sidebar-footer mt-auto pt-2 pb-2.5 px-3 border-top">
                 <form action="{{ route('logout') }}" method="POST" class="m-0">
                     @csrf
-                    <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill w-100 fw-bold py-1.5 d-flex align-items-center justify-content-center gap-2 shadow-none border-0 bg-danger bg-opacity-10 text-danger" style="font-size: 0.82rem;">
+                    <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill w-100 fw-bold py-2 d-flex align-items-center justify-content-center gap-2 shadow-none border-0 bg-danger bg-opacity-10 text-danger" style="font-size: 0.85rem;">
                         <i class="fa-solid fa-arrow-right-from-bracket"></i> Keluar / Logout
                     </button>
                 </form>
