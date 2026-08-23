@@ -45,14 +45,6 @@
                 </a>
             </div>
 
-            <!-- Indikator Semester Aktif -->
-            @if(isset($settingAkademik))
-            <a href="{{ route('guru.rekap', ['mode' => 'semester', 'semester' => $settingAkademik->semester, 'tahun' => (int)substr($settingAkademik->tahun_ajaran, 0, 4)]) }}" class="btn btn-sm btn-outline-success rounded-pill px-3 py-1.5 fw-semibold shadow-xs text-nowrap d-inline-flex align-items-center gap-2" title="Semester & Tahun Ajaran resmi aktif">
-                <i class="fa-solid fa-calendar-check text-success"></i>
-                <span>Semester Aktif: {{ ucfirst($settingAkademik->semester) }} ({{ $settingAkademik->tahun_ajaran }})</span>
-            </a>
-            @endif
-
             <!-- Tombol Cetak Laporan -->
             <a href="{{ route('admin.rekap.cetak', ['mode' => $mode, 'bulan' => $bulan, 'tahun' => $tahun, 'semester' => $semester, 'kelas_id' => $kelas ? $kelas->id : null, 'hari_efektif' => $hariEfektif]) }}" target="_blank" class="btn btn-outline-primary rounded-pill px-3 py-1.5 fw-semibold shadow-sm btn-sm text-nowrap d-inline-flex align-items-center gap-2">
                 <i class="fa-solid fa-print"></i>
