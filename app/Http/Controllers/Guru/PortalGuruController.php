@@ -216,6 +216,7 @@ class PortalGuruController extends Controller
 
                 $bulananData[] = (object)[
                     'siswa' => $s,
+                    'kelas_historis' => $s->getKelasForTahunAjaran($tahunAjaran),
                     'hadir' => $totalHadir,
                     'terlambat' => $terlambat,
                     'riwayat_terlambat' => $riwayatTerlambat,
@@ -272,6 +273,7 @@ class PortalGuruController extends Controller
 
                 $semesterData[] = (object)[
                     'siswa' => $s,
+                    'kelas_historis' => $s->getKelasForTahunAjaran($tahunAjaran),
                     'hadir' => $totalHadir,
                     'terlambat' => $terlambat,
                     'riwayat_terlambat' => $riwayatTerlambat,
