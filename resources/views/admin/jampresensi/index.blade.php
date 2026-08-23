@@ -153,7 +153,7 @@
 
                     <!-- Keterangan -->
                     <p class="text-muted small mb-0 px-1" style="font-size: 0.76rem; line-height: 1.4;">
-                        Waktu resmi selesai KBM. Siswa dapat melakukan scan kepulangan sore hari.
+                        Waktu Siswa dapat melakukan scan kepulangan sore hari.
                     </p>
                 </div>
             </div>

@@ -1959,3 +1959,7 @@
 #52 C:/Users/Windows/.gemini/antigravity-ide/scratch/smpit-almutaqin-presensi/vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php(23): require_once('C://Users//Window...')
 #53 {main}
 "} 
+[2026-08-23 05:30:30] local.ERROR: Cannot redeclare App\Http\Controllers\Guru\PortalGuruController::calculateDefaultHariEfektif() {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare App\\Http\\Controllers\\Guru\\PortalGuruController::calculateDefaultHariEfektif() at C:/Users/Windows/.gemini/antigravity-ide/scratch/smpit-almutaqin-presensi/app/Http/Controllers/Guru/PortalGuruController.php:408)
+[stacktrace]
+#0 {main}
+"} 

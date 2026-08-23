@@ -28,42 +28,6 @@ class PortalGuruController extends Controller
         return Kelas::where('guru_id', $guru->id)->first();
     }
 
-    private function calculateDefaultHariEfektif($mode, $bulan, $tahun, $semester, $kelasNama = null)
-    {
-        if ($mode === 'bulanan') {
-            $startDate = Carbon::createFromDate($tahun, $bulan, 1);
-            $endDate = $startDate->copy()->endOfMonth();
-            $weekdays = 0;
-            $current = $startDate->copy();
-            while ($current <= $endDate) {
-                if (!$current->isWeekend()) {
-                    $weekdays++;
-                }
-                $current->addDay();
-            }
-            return max(1, $weekdays);
-        } elseif ($mode === 'semester') {
-            if ($kelasNama && str_contains(strtoupper($kelasNama), '9') && $semester === 'genap') {
-                return 90;
-            }
-
-            $startMonth = ($semester === 'ganjil') ? 7 : 1;
-            $endMonth = ($semester === 'ganjil') ? 12 : 6;
-            $startDate = Carbon::createFromDate($tahun, $startMonth, 1);
-            $endDate = Carbon::createFromDate($tahun, $endMonth, 1)->endOfMonth();
-            $weekdays = 0;
-            $current = $startDate->copy();
-            while ($current <= $endDate) {
-                if (!$current->isWeekend()) {
-                    $weekdays++;
-                }
-                $current->addDay();
-            }
-            return max(1, $weekdays);
-        }
-        return 1;
-    }
-
     /**
      * Absensi Siswa Harian Kelas Binaan
      */
