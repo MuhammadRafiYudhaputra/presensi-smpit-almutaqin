@@ -401,4 +401,43 @@ class PortalGuruController extends Controller
 
         return view('guru.siswa', compact('kelas', 'orangTuas', 'search', 'sortBy'));
     }
+
+    /**
+     * Helper untuk menghitung default hari efektif (Senin - Jumat tanpa Libur Nasional)
+     */
+    private function calculateDefaultHariEfektif($mode, $bulan, $tahun, $semester, $kelasNama = null)
+    {
+        if ($mode === 'bulanan') {
+            $startDate = \Carbon\Carbon::createFromDate($tahun, $bulan, 1);
+            $endDate = $startDate->copy()->endOfMonth();
+            $effectiveDays = 0;
+            $current = $startDate->copy();
+            while ($current <= $endDate) {
+                if (!\App\Helpers\HolidayHelper::isNonEffectiveDay($current)) {
+                    $effectiveDays++;
+                }
+                $current->addDay();
+            }
+            return max(1, $effectiveDays);
+        } elseif ($mode === 'semester') {
+            if ($kelasNama && str_contains(strtoupper($kelasNama), '9') && $semester === 'genap') {
+                return 90;
+            }
+
+            $startMonth = ($semester === 'ganjil') ? 7 : 1;
+            $endMonth = ($semester === 'ganjil') ? 12 : 6;
+            $startDate = \Carbon\Carbon::createFromDate($tahun, $startMonth, 1);
+            $endDate = \Carbon\Carbon::createFromDate($tahun, $endMonth, 1)->endOfMonth();
+            $effectiveDays = 0;
+            $current = $startDate->copy();
+            while ($current <= $endDate) {
+                if (!\App\Helpers\HolidayHelper::isNonEffectiveDay($current)) {
+                    $effectiveDays++;
+                }
+                $current->addDay();
+            }
+            return max(1, $effectiveDays);
+        }
+        return 1;
+    }
 }

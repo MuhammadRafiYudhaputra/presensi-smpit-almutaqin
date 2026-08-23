@@ -99,15 +99,15 @@ class RekapKehadiranController extends Controller
         if ($mode === 'bulanan') {
             $startDate = Carbon::createFromDate($tahun, $bulan, 1);
             $endDate = $startDate->copy()->endOfMonth();
-            $weekdays = 0;
+            $effectiveDays = 0;
             $current = $startDate->copy();
             while ($current <= $endDate) {
-                if (!$current->isWeekend()) {
-                    $weekdays++;
+                if (!\App\Helpers\HolidayHelper::isNonEffectiveDay($current)) {
+                    $effectiveDays++;
                 }
                 $current->addDay();
             }
-            return max(1, $weekdays);
+            return max(1, $effectiveDays);
         } elseif ($mode === 'semester') {
             // Khusus Kelas 9 Semester Genap (Semester 2) hari efektif biasanya lebih sedikit (~90 hari)
             if ($kelasNama && str_contains(strtoupper($kelasNama), '9') && $semester === 'genap') {
@@ -118,15 +118,15 @@ class RekapKehadiranController extends Controller
             $endMonth = ($semester === 'ganjil') ? 12 : 6;
             $startDate = Carbon::createFromDate($tahun, $startMonth, 1);
             $endDate = Carbon::createFromDate($tahun, $endMonth, 1)->endOfMonth();
-            $weekdays = 0;
+            $effectiveDays = 0;
             $current = $startDate->copy();
             while ($current <= $endDate) {
-                if (!$current->isWeekend()) {
-                    $weekdays++;
+                if (!\App\Helpers\HolidayHelper::isNonEffectiveDay($current)) {
+                    $effectiveDays++;
                 }
                 $current->addDay();
             }
-            return max(1, $weekdays);
+            return max(1, $effectiveDays);
         }
         return 1;
     }

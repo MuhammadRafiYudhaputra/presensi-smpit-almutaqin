@@ -55,9 +55,12 @@ class DashboardController extends Controller
         $totalSakit = $presensiHariIni->where('status', 'SAKIT')->count();
         $totalIzin = $presensiHariIni->where('status', 'IZIN')->count();
         
-        $totalMasuk = $totalHadir + $totalTerlambat;
-        $totalPresensi = $totalMasuk + $totalSakit + $totalIzin;
-        $totalAlpa = max(0, $totalSiswaFiltered - $totalPresensi);
+        $isTodayHoliday = \App\Helpers\HolidayHelper::isNonEffectiveDay($today);
+        if ($isTodayHoliday) {
+            $totalAlpa = ($totalPresensi > 0) ? max(0, $totalSiswaFiltered - $totalPresensi) : 0;
+        } else {
+            $totalAlpa = max(0, $totalSiswaFiltered - $totalPresensi);
+        }
 
         // 3. 7 Days Trend for Chart.js
         $chartLabels = [];
@@ -83,7 +86,14 @@ class DashboardController extends Controller
             $s = $dayKhs->where('status', 'SAKIT')->count();
             $iz = $dayKhs->where('status', 'IZIN')->count();
             $tot = $h + $s + $iz;
-            $a = ($date->isWeekend()) ? 0 : max(0, $totalSiswa - $tot);
+
+            $isNonEffective = \App\Helpers\HolidayHelper::isNonEffectiveDay($date);
+            // Jika tanggal merah / libur nasional / weekend, ATAU hari lampau tanpa kehadiran (libur sekolah), maka alpa = 0
+            if ($isNonEffective || ($tot === 0 && !$date->isToday())) {
+                $a = 0;
+            } else {
+                $a = max(0, $totalSiswa - $tot);
+            }
 
             $chartHadir[] = $h;
             $chartSakit[] = $s;
