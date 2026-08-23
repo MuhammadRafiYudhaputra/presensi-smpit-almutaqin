@@ -433,7 +433,15 @@ class RekapKehadiranController extends Controller
                 $siswasQuery->where('kelas_id', $kelasId);
             }
         }
-        $siswas = $siswasQuery->orderBy('nama', 'asc')->get();
+        $siswas = $siswasQuery->get()->sort(function ($a, $b) use ($tahunAjaran) {
+            $kelasA = $a->getKelasForTahunAjaran($tahunAjaran)?->nama_kelas ?? ($a->kelas?->nama_kelas ?? '');
+            $kelasB = $b->getKelasForTahunAjaran($tahunAjaran)?->nama_kelas ?? ($b->kelas?->nama_kelas ?? '');
+
+            if ($kelasA !== $kelasB) {
+                return strnatcasecmp($kelasA, $kelasB);
+            }
+            return strcasecmp($a->nama, $b->nama);
+        })->values();
 
         $dataLaporan = [];
         foreach ($siswas as $siswa) {

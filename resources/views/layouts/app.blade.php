@@ -451,11 +451,6 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('admin.laporan.index') }}" class="nav-link {{ request()->routeIs('admin.laporan.*') ? 'active' : '' }}">
-                                <i class="fa-solid fa-print"></i> Generate Laporan
-                            </a>
-                        </li>
-                        <li class="nav-item">
                             <a href="{{ route('admin.fonnte.index') }}" class="nav-link {{ request()->routeIs('admin.fonnte.*') ? 'active' : '' }}">
                                 <i class="fa-solid fa-gear"></i> Pengaturan WA
                             </a>
