@@ -451,6 +451,11 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="{{ route('admin.jampresensi.index') }}" class="nav-link {{ request()->routeIs('admin.jampresensi.*') ? 'active' : '' }}">
+                                <i class="fa-solid fa-clock"></i> Jam Presensi
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="{{ route('admin.fonnte.index') }}" class="nav-link {{ request()->routeIs('admin.fonnte.*') ? 'active' : '' }}">
                                 <i class="fa-solid fa-gear"></i> Pengaturan WA
                             </a>
