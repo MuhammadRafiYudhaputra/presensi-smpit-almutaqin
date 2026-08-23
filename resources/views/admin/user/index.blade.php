@@ -151,19 +151,23 @@
                             <td class="text-center">
                                 <div class="btn-group btn-group-sm">
                                     <!-- Edit Button -->
-                                    <button type="button" class="btn btn-outline-primary rounded-pill px-2.5 py-1 me-1.5 shadow-none" title="Edit Data Admin" onclick="openEditModal({{ $admin->id }}, '{{ addslashes($admin->name) }}', '{{ $admin->email }}')">
+                                    <button type="button" class="btn btn-outline-primary rounded-pill px-2.5 py-1 me-1.5 shadow-none" title="Edit Data Admin" onclick="openEditModal({{ $admin->id }}, '{{ addslashes($admin->name) }}', '{{ $admin->email }}', {{ $admin->id === Auth::id() ? 'true' : 'false' }})">
                                         <i class="fa-solid fa-pen-to-square"></i>
                                     </button>
 
-                                    <!-- Delete Button (Hanya jika bukan diri sendiri) -->
+                                    <!-- Delete Button -->
                                     @if($admin->id !== Auth::id())
                                     <form action="{{ route('admin.user.destroy', $admin->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus akun admin [{{ addslashes($admin->name) }}]?');">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-outline-danger rounded-pill px-2.5 py-1 shadow-none" title="Hapus Admin">
+                                        <button type="submit" class="btn btn-outline-danger rounded-pill px-2.5 py-1 shadow-none" title="Hapus Admin Ini">
                                             <i class="fa-solid fa-trash-can"></i>
                                         </button>
                                     </form>
+                                    @else
+                                    <button type="button" class="btn btn-light rounded-pill px-2.5 py-1 text-muted opacity-50 shadow-none border" disabled title="Tidak dapat menghapus akun Anda sendiri yang sedang aktif">
+                                        <i class="fa-solid fa-trash-can"></i>
+                                    </button>
                                     @endif
                                 </div>
                             </td>
@@ -248,26 +252,59 @@
                         <input type="password" name="password" class="form-control compact-input px-3" placeholder="Minimal 6 karakter baru">
                     </div>
                 </div>
-                <div class="modal-footer border-0 pt-0">
-                    <button type="button" class="btn btn-light rounded-pill px-4 btn-sm" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary rounded-pill px-4 btn-sm fw-bold">
-                        <i class="fa-solid fa-floppy-disk me-1.5"></i> Simpan Perubahan
-                    </button>
+                <div class="modal-footer border-0 pt-0 d-flex justify-content-between">
+                    <div>
+                        <button type="button" id="btnDeleteInModal" class="btn btn-outline-danger rounded-pill px-3.5 btn-sm fw-semibold" onclick="deleteAdminFromModal()">
+                            <i class="fa-solid fa-trash-can me-1.5"></i> Hapus Admin
+                        </button>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn btn-light rounded-pill px-3.5 btn-sm" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-primary rounded-pill px-3.5 btn-sm fw-bold">
+                            <i class="fa-solid fa-floppy-disk me-1.5"></i> Simpan Perubahan
+                        </button>
+                    </div>
                 </div>
+            </form>
+            <form id="formDeleteAdminModal" method="POST" class="d-none">
+                @csrf
+                @method('DELETE')
             </form>
         </div>
     </div>
 </div>
 
 <script>
-    function openEditModal(id, name, email) {
+    let currentEditAdminId = null;
+    let currentEditAdminName = '';
+
+    function openEditModal(id, name, email, isSelf) {
+        currentEditAdminId = id;
+        currentEditAdminName = name;
+
         const form = document.getElementById('formEditAdmin');
         form.action = `/admin/user/${id}`;
         document.getElementById('editName').value = name;
         document.getElementById('editEmail').value = email;
 
+        const deleteBtn = document.getElementById('btnDeleteInModal');
+        if (isSelf) {
+            deleteBtn.style.display = 'none';
+        } else {
+            deleteBtn.style.display = 'inline-flex';
+        }
+
         const modal = new bootstrap.Modal(document.getElementById('modalEditAdmin'));
         modal.show();
+    }
+
+    function deleteAdminFromModal() {
+        if (!currentEditAdminId) return;
+        if (confirm(`Apakah Anda yakin ingin menghapus akun admin [${currentEditAdminName}] dari sistem?`)) {
+            const delForm = document.getElementById('formDeleteAdminModal');
+            delForm.action = `/admin/user/${currentEditAdminId}`;
+            delForm.submit();
+        }
     }
 </script>
 @endsection
