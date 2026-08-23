@@ -3,76 +3,90 @@
 @section('content')
 <style>
     .admin-avatar-circle {
-        width: 48px;
-        height: 48px;
-        border-radius: 14px;
+        width: 38px;
+        height: 38px;
+        min-width: 38px;
+        border-radius: 10px;
         display: flex;
         align-items: center;
         justify-content: center;
         font-weight: 800;
-        font-size: 1.15rem;
+        font-size: 0.95rem;
+    }
+    .profile-card {
+        background: #ffffff;
+        border-radius: 16px;
+        padding: 1.5rem 1.35rem;
+    }
+    .compact-input {
+        font-size: 0.88rem;
+        padding: 0.45rem 0.75rem;
+    }
+    .compact-addon {
+        padding: 0.45rem 0.75rem;
+        font-size: 0.88rem;
     }
 </style>
 
-<div class="row g-4">
+<div class="row g-3">
     <!-- Kolom Kiri: Profil & Ganti Password Saya Sendiri -->
     <div class="col-lg-5">
-        <div class="card card-custom p-4 shadow-sm border-0 rounded-4 h-100">
-            <div class="d-flex align-items-center gap-3 mb-4 pb-3 border-bottom">
-                <div class="p-2.5 bg-primary bg-opacity-10 text-primary rounded-3">
-                    <i class="fa-solid fa-user-gear fs-4"></i>
+        <div class="card card-custom profile-card shadow-sm border-0 h-100">
+            <div class="d-flex align-items-center gap-2.5 mb-3 pb-2.5 border-bottom">
+                <div class="p-2 bg-primary bg-opacity-10 text-primary rounded-3">
+                    <i class="fa-solid fa-user-gear fs-5"></i>
                 </div>
                 <div>
-                    <h5 class="fw-bold mb-0 text-dark">Profil Akun Saya</h5>
-                    <small class="text-muted">Perbarui identitas &amp; kata sandi akun Anda</small>
+                    <h6 class="fw-bold mb-0 text-dark">Profil Akun Saya</h6>
+                    <small class="text-muted" style="font-size: 0.75rem;">Perbarui nama, email &amp; kata sandi Anda</small>
                 </div>
             </div>
 
             <form action="{{ route('admin.user.profile') }}" method="POST">
                 @csrf
                 <!-- Nama Lengkap -->
-                <div class="mb-3">
-                    <label class="form-label fw-bold small text-dark">Nama Lengkap Admin</label>
+                <div class="mb-2.5">
+                    <label class="form-label fw-bold text-dark mb-1" style="font-size: 0.8rem;">Nama Lengkap Admin</label>
                     <div class="input-group">
-                        <span class="input-group-text bg-light border-end-0 text-muted"><i class="fa-solid fa-user"></i></span>
-                        <input type="text" name="name" class="form-control border-start-0" value="{{ old('name', $currentUser->name) }}" required>
+                        <span class="input-group-text compact-addon bg-light border-end-0 text-muted"><i class="fa-solid fa-user"></i></span>
+                        <input type="text" name="name" class="form-control compact-input border-start-0" value="{{ old('name', $currentUser->name) }}" required>
                     </div>
                 </div>
 
                 <!-- Email -->
                 <div class="mb-3">
-                    <label class="form-label fw-bold small text-dark">Alamat Email Login</label>
+                    <label class="form-label fw-bold text-dark mb-1" style="font-size: 0.8rem;">Alamat Email Login</label>
                     <div class="input-group">
-                        <span class="input-group-text bg-light border-end-0 text-muted"><i class="fa-regular fa-envelope"></i></span>
-                        <input type="email" name="email" class="form-control border-start-0" value="{{ old('email', $currentUser->email) }}" required>
+                        <span class="input-group-text compact-addon bg-light border-end-0 text-muted"><i class="fa-regular fa-envelope"></i></span>
+                        <input type="email" name="email" class="form-control compact-input border-start-0" value="{{ old('email', $currentUser->email) }}" required>
                     </div>
                 </div>
 
-                <hr class="my-4 text-muted opacity-25">
+                <hr class="my-3 text-muted opacity-25">
 
-                <h6 class="fw-bold text-dark mb-3 d-flex align-items-center gap-2">
+                <h6 class="fw-bold text-dark mb-2.5 d-flex align-items-center gap-2" style="font-size: 0.85rem;">
                     <i class="fa-solid fa-key text-warning"></i> Ganti Kata Sandi (Opsional)
                 </h6>
 
                 <!-- Password Saat Ini -->
-                <div class="mb-3">
-                    <label class="form-label fw-semibold small text-muted">Kata Sandi Saat Ini</label>
-                    <input type="password" name="current_password" class="form-control" placeholder="Masukkan jika ingin mengganti password">
+                <div class="mb-2.5">
+                    <label class="form-label fw-semibold text-muted mb-1" style="font-size: 0.76rem;">Kata Sandi Saat Ini</label>
+                    <input type="password" name="current_password" class="form-control compact-input" placeholder="Masukkan jika ingin ubah password">
                 </div>
 
                 <!-- Password Baru -->
-                <div class="mb-3">
-                    <label class="form-label fw-semibold small text-muted">Kata Sandi Baru</label>
-                    <input type="password" name="new_password" class="form-control" placeholder="Minimal 6 karakter">
+                <div class="mb-2.5">
+                    <label class="form-label fw-semibold text-muted mb-1" style="font-size: 0.76rem;">Kata Sandi Baru</label>
+                    <input type="password" name="new_password" class="form-control compact-input" placeholder="Minimal 6 karakter">
                 </div>
 
                 <!-- Konfirmasi Password Baru -->
-                <div class="mb-4">
-                    <label class="form-label fw-semibold small text-muted">Konfirmasi Kata Sandi Baru</label>
-                    <input type="password" name="new_password_confirmation" class="form-control" placeholder="Ulangi kata sandi baru">
+                <div class="mb-3">
+                    <label class="form-label fw-semibold text-muted mb-1" style="font-size: 0.76rem;">Konfirmasi Kata Sandi Baru</label>
+                    <input type="password" name="new_password_confirmation" class="form-control compact-input" placeholder="Ulangi kata sandi baru">
                 </div>
 
-                <button type="submit" class="btn btn-primary rounded-pill w-100 fw-bold py-2.5 shadow-sm d-flex align-items-center justify-content-center gap-2">
+                <button type="submit" class="btn btn-primary rounded-pill w-100 fw-bold py-2 btn-sm shadow-sm d-flex align-items-center justify-content-center gap-2">
                     <i class="fa-solid fa-floppy-disk"></i> Simpan Perubahan Profil
                 </button>
             </form>
@@ -81,61 +95,61 @@
 
     <!-- Kolom Kanan: Daftar Seluruh Admin TU & Tambah Admin Baru -->
     <div class="col-lg-7">
-        <div class="card card-custom p-4 shadow-sm border-0 rounded-4 h-100">
-            <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 mb-4 pb-3 border-bottom">
-                <div class="d-flex align-items-center gap-3">
-                    <div class="p-2.5 bg-success bg-opacity-10 text-success rounded-3">
-                        <i class="fa-solid fa-users-gear fs-4"></i>
+        <div class="card card-custom profile-card shadow-sm border-0 h-100">
+            <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2 mb-3 pb-2.5 border-bottom">
+                <div class="d-flex align-items-center gap-2.5">
+                    <div class="p-2 bg-success bg-opacity-10 text-success rounded-3">
+                        <i class="fa-solid fa-users-gear fs-5"></i>
                     </div>
                     <div>
-                        <h5 class="fw-bold mb-0 text-dark">Daftar Admin TU</h5>
-                        <small class="text-muted">Kelola akun staf TU yang memiliki akses admin</small>
+                        <h6 class="fw-bold mb-0 text-dark">Daftar Admin TU</h6>
+                        <small class="text-muted" style="font-size: 0.75rem;">Kelola seluruh akun staf TU dengan hak akses admin</small>
                     </div>
                 </div>
-                <button type="button" class="btn btn-primary rounded-pill px-3 py-2 btn-sm fw-bold shadow-sm d-inline-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#modalTambahAdmin">
+                <button type="button" class="btn btn-primary rounded-pill px-3 py-1.5 btn-sm fw-bold shadow-sm d-inline-flex align-items-center gap-1.5" data-bs-toggle="modal" data-bs-target="#modalTambahAdmin" style="font-size: 0.8rem;">
                     <i class="fa-solid fa-user-plus"></i> Tambah Admin
                 </button>
             </div>
 
-            <!-- Tabel Daftar Admin -->
+            <!-- Tabel Daftar Admin (Proporsional & Rapi) -->
             <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0" style="font-size: 0.9rem;">
+                <table class="table table-hover align-middle mb-0" style="font-size: 0.84rem;">
                     <thead class="table-light">
                         <tr>
-                            <th style="width: 50px;">No</th>
+                            <th style="width: 40px;" class="text-center">No</th>
                             <th>Staf Admin</th>
                             <th>Email Login</th>
-                            <th class="text-center" style="width: 120px;">Aksi</th>
+                            <th class="text-center" style="width: 90px;">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($admins as $index => $admin)
                         <tr>
-                            <td class="fw-bold text-muted">{{ $index + 1 }}</td>
+                            <td class="fw-bold text-muted text-center">{{ $index + 1 }}</td>
                             <td>
                                 <div class="d-flex align-items-center gap-2.5">
-                                    <div class="admin-avatar-circle bg-primary bg-opacity-10 text-primary">
+                                    <div class="admin-avatar-circle bg-primary bg-opacity-10 text-primary flex-shrink-0">
                                         {{ strtoupper(substr($admin->name, 0, 1)) }}
                                     </div>
-                                    <div>
-                                        <div class="fw-bold text-dark">{{ $admin->name }}</div>
+                                    <div style="min-width: 0;">
+                                        <div class="fw-bold text-dark text-truncate">{{ $admin->name }}</div>
                                         @if($admin->id === Auth::id())
-                                            <span class="badge bg-primary bg-opacity-10 text-primary border border-primary px-2 py-0.5" style="font-size: 0.7rem;">
-                                                <i class="fa-solid fa-circle-check me-1"></i> Akun Anda
+                                            <span class="badge bg-primary bg-opacity-10 text-primary border border-primary px-1.5 py-0.5 rounded-pill" style="font-size: 0.68rem;">
+                                                <i class="fa-solid fa-circle-check me-0.5"></i> Akun Anda
                                             </span>
                                         @else
-                                            <small class="text-muted">Staf TU</small>
+                                            <small class="text-muted" style="font-size: 0.72rem;">Staf TU</small>
                                         @endif
                                     </div>
                                 </div>
                             </td>
                             <td>
-                                <span class="text-dark fw-semibold">{{ $admin->email }}</span>
+                                <span class="text-dark fw-semibold" style="font-size: 0.82rem;">{{ $admin->email }}</span>
                             </td>
                             <td class="text-center">
                                 <div class="btn-group btn-group-sm">
                                     <!-- Edit Button -->
-                                    <button type="button" class="btn btn-outline-primary rounded-pill px-2.5 py-1 me-1" title="Edit Data Admin" onclick="openEditModal({{ $admin->id }}, '{{ addslashes($admin->name) }}', '{{ $admin->email }}')">
+                                    <button type="button" class="btn btn-outline-primary rounded-pill px-2 py-1 me-1 shadow-none" title="Edit Data Admin" onclick="openEditModal({{ $admin->id }}, '{{ addslashes($admin->name) }}', '{{ $admin->email }}')">
                                         <i class="fa-solid fa-pen-to-square"></i>
                                     </button>
 
@@ -144,7 +158,7 @@
                                     <form action="{{ route('admin.user.destroy', $admin->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus akun admin [{{ addslashes($admin->name) }}]?');">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-outline-danger rounded-pill px-2.5 py-1" title="Hapus Admin">
+                                        <button type="submit" class="btn btn-outline-danger rounded-pill px-2 py-1 shadow-none" title="Hapus Admin">
                                             <i class="fa-solid fa-trash-can"></i>
                                         </button>
                                     </form>
@@ -165,36 +179,36 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content rounded-4 border-0 shadow">
             <div class="modal-header border-0 pb-0">
-                <h5 class="modal-title fw-bold text-dark d-flex align-items-center gap-2">
+                <h6 class="modal-title fw-bold text-dark d-flex align-items-center gap-2">
                     <i class="fa-solid fa-user-plus text-primary"></i> Tambah Akun Admin TU
-                </h5>
+                </h6>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form action="{{ route('admin.user.store') }}" method="POST">
                 @csrf
-                <div class="modal-body">
-                    <p class="text-muted small mb-3">
+                <div class="modal-body py-2">
+                    <p class="text-muted small mb-3" style="font-size: 0.78rem;">
                         Daftarkan staf TU baru untuk memiliki hak akses mengelola sistem presensi sekolah.
                     </p>
 
-                    <div class="mb-3">
-                        <label class="form-label fw-bold small text-dark">Nama Lengkap Staf TU</label>
-                        <input type="text" name="name" class="form-control" placeholder="Contoh: Siti Rahma, S.Pd" required>
+                    <div class="mb-2.5">
+                        <label class="form-label fw-bold small text-dark mb-1">Nama Lengkap Staf TU</label>
+                        <input type="text" name="name" class="form-control compact-input" placeholder="Contoh: Siti Rahma, S.Pd" required>
+                    </div>
+
+                    <div class="mb-2.5">
+                        <label class="form-label fw-bold small text-dark mb-1">Alamat Email Login</label>
+                        <input type="email" name="email" class="form-control compact-input" placeholder="Contoh: sitirahma@almutaqin.sch.id" required>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label fw-bold small text-dark">Alamat Email Login</label>
-                        <input type="email" name="email" class="form-control" placeholder="Contoh: sitirahma@almutaqin.sch.id" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label fw-bold small text-dark">Kata Sandi Awal</label>
-                        <input type="password" name="password" class="form-control" placeholder="Minimal 6 karakter" required>
+                        <label class="form-label fw-bold small text-dark mb-1">Kata Sandi Awal</label>
+                        <input type="password" name="password" class="form-control compact-input" placeholder="Minimal 6 karakter" required>
                     </div>
                 </div>
                 <div class="modal-footer border-0 pt-0">
-                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold">
+                    <button type="button" class="btn btn-light rounded-pill px-3.5 btn-sm" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary rounded-pill px-3.5 btn-sm fw-bold">
                         <i class="fa-solid fa-plus me-1"></i> Daftarkan Admin
                     </button>
                 </div>
@@ -208,33 +222,33 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content rounded-4 border-0 shadow">
             <div class="modal-header border-0 pb-0">
-                <h5 class="modal-title fw-bold text-dark d-flex align-items-center gap-2">
+                <h6 class="modal-title fw-bold text-dark d-flex align-items-center gap-2">
                     <i class="fa-solid fa-pen-to-square text-primary"></i> Edit Data Admin
-                </h5>
+                </h6>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form id="formEditAdmin" method="POST">
                 @csrf
                 @method('PUT')
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label class="form-label fw-bold small text-dark">Nama Lengkap Staf TU</label>
-                        <input type="text" name="name" id="editName" class="form-control" required>
+                <div class="modal-body py-2">
+                    <div class="mb-2.5">
+                        <label class="form-label fw-bold small text-dark mb-1">Nama Lengkap Staf TU</label>
+                        <input type="text" name="name" id="editName" class="form-control compact-input" required>
+                    </div>
+
+                    <div class="mb-2.5">
+                        <label class="form-label fw-bold small text-dark mb-1">Alamat Email Login</label>
+                        <input type="email" name="email" id="editEmail" class="form-control compact-input" required>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label fw-bold small text-dark">Alamat Email Login</label>
-                        <input type="email" name="email" id="editEmail" class="form-control" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label fw-bold small text-dark">Ganti Password (Kosongkan jika tidak diubah)</label>
-                        <input type="password" name="password" class="form-control" placeholder="Minimal 6 karakter baru">
+                        <label class="form-label fw-bold small text-dark mb-1">Ganti Password (Kosongkan jika tidak diubah)</label>
+                        <input type="password" name="password" class="form-control compact-input" placeholder="Minimal 6 karakter baru">
                     </div>
                 </div>
                 <div class="modal-footer border-0 pt-0">
-                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold">
+                    <button type="button" class="btn btn-light rounded-pill px-3.5 btn-sm" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary rounded-pill px-3.5 btn-sm fw-bold">
                         <i class="fa-solid fa-floppy-disk me-1"></i> Simpan Perubahan
                     </button>
                 </div>

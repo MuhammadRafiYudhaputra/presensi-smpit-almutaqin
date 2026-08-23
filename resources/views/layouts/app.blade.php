@@ -45,15 +45,15 @@
             width: 100%;
         }
 
-        /* Sidebar Styling (Fixed & Stay On Place When Scrolling) */
+        /* Sidebar Styling (Sleek, Compact & No Scrollbars) */
         .sidebar {
-            width: 250px;
-            min-width: 250px;
+            width: 245px;
+            min-width: 245px;
             background-color: var(--sidebar-bg);
             border-right: 1px solid var(--sidebar-border);
             display: flex;
             flex-direction: column;
-            padding-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
             z-index: 1040;
             position: fixed;
             top: 0;
@@ -61,21 +61,18 @@
             bottom: 0;
             height: 100vh;
             overflow-y: auto;
-            scrollbar-width: thin;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
             transition: transform 0.3s ease;
         }
 
         .sidebar::-webkit-scrollbar {
-            width: 4px;
-        }
-        .sidebar::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 4px;
+            display: none;
         }
 
-        /* Sidebar Brand Header (Sesuai Referensi Gambar) */
+        /* Sidebar Brand Header */
         .sidebar-brand {
-            padding: 1.25rem 1rem 1rem;
+            padding: 0.85rem 0.85rem 0.4rem;
             text-align: center;
             position: sticky;
             top: 0;
@@ -84,56 +81,56 @@
         }
 
         .sidebar-brand-title {
-            font-size: 0.9rem;
+            font-size: 0.84rem;
             font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.4px;
             color: #1e293b;
-            line-height: 1.3;
-            margin-bottom: 3px;
+            line-height: 1.25;
+            margin-bottom: 2px;
         }
 
         .sidebar-brand-sub {
-            font-size: 0.7rem;
+            font-size: 0.66rem;
             font-weight: 600;
             color: #64748b;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.4px;
             display: block;
         }
 
         .sidebar-divider {
             border-top: 1px solid #e2e8f0;
-            margin: 0 1rem 0.65rem;
+            margin: 0 0.85rem 0.4rem;
             opacity: 0.8;
         }
 
         .sidebar-menu {
             list-style: none;
-            padding: 0 0.85rem;
+            padding: 0 0.65rem;
             margin: 0;
         }
 
         .sidebar-menu .nav-item {
-            margin-bottom: 3px;
+            margin-bottom: 1.5px;
         }
 
         .sidebar-menu .nav-link {
             color: #334155;
             font-weight: 600;
-            font-size: 0.84rem;
-            padding: 0.55rem 0.85rem;
+            font-size: 0.81rem;
+            padding: 0.42rem 0.75rem;
             border-radius: 8px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 9px;
             transition: all 0.15s ease;
             text-decoration: none;
         }
 
         .sidebar-menu .nav-link i {
-            font-size: 0.95rem;
-            width: 18px;
+            font-size: 0.9rem;
+            width: 17px;
             text-align: center;
             color: #8c9ba5;
             transition: color 0.15s ease;
@@ -456,8 +453,8 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('admin.fonnte.index') }}" class="nav-link {{ request()->routeIs('admin.fonnte.*') ? 'active' : '' }}">
-                                <i class="fa-solid fa-gear"></i> Pengaturan WA
+                            <a href="{{ route('admin.backup.index') }}" class="nav-link {{ request()->routeIs('admin.backup.*') ? 'active' : '' }}">
+                                <i class="fa-solid fa-cloud-arrow-down"></i> Backup &amp; Restore
                             </a>
                         </li>
                         <li class="nav-item">
@@ -465,20 +462,15 @@
                                 <i class="fa-solid fa-user-shield"></i> Kelola Admin
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a href="{{ route('admin.backup.index') }}" class="nav-link {{ request()->routeIs('admin.backup.*') ? 'active' : '' }}">
-                                <i class="fa-solid fa-cloud-arrow-down"></i> Backup &amp; Restore
-                            </a>
-                        </li>
                     @endif
                 </ul>
             </div>
 
             <!-- Sidebar Bottom Footer (Logout Button Pinned at Bottom) -->
-            <div class="sidebar-footer mt-auto pt-2 pb-3 px-3 border-top">
+            <div class="sidebar-footer mt-auto pt-1.5 pb-2 px-3 border-top">
                 <form action="{{ route('logout') }}" method="POST" class="m-0">
                     @csrf
-                    <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill w-100 fw-bold py-2 d-flex align-items-center justify-content-center gap-2 shadow-none border-0 bg-danger bg-opacity-10 text-danger">
+                    <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill w-100 fw-bold py-1.5 d-flex align-items-center justify-content-center gap-2 shadow-none border-0 bg-danger bg-opacity-10 text-danger" style="font-size: 0.82rem;">
                         <i class="fa-solid fa-arrow-right-from-bracket"></i> Keluar / Logout
                     </button>
                 </form>
