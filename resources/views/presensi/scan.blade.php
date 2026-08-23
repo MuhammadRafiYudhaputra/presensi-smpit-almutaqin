@@ -235,14 +235,28 @@
                     <small class="text-success fw-semibold mt-1"><i class="fa-brands fa-whatsapp me-1"></i> Notifikasi WhatsApp Terkirim ke Orang Tua (${data.waktu})</small>
                 `;
             } else if (data.type === 'belum_pulang') {
+                playWarningBeep();
                 container.innerHTML = `
-                    <div class="bg-warning bg-opacity-10 p-3 rounded-circle text-warning border border-warning mb-2" style="width: 52px; height: 52px; display:flex; align-items:center; justify-content:center;">
-                        <i class="fa-solid fa-clock-rotate-left fs-3 text-warning"></i>
+                    <div class="d-flex align-items-center justify-content-center gap-3 mb-2">
+                        <div class="bg-warning bg-opacity-20 p-3 rounded-circle text-warning border border-warning" style="width: 56px; height: 56px; display:flex; align-items:center; justify-content:center;">
+                            <i class="fa-solid fa-triangle-exclamation fs-3 text-warning"></i>
+                        </div>
+                        <div class="text-start">
+                            <h5 class="fw-bold text-dark mb-0">${data.siswa.nama}</h5>
+                            <small class="text-muted">Kelas ${data.siswa.kelas ? data.siswa.kelas.nama_kelas : '-'} &bull; NISN: <strong>${data.siswa.nisn}</strong></small>
+                        </div>
                     </div>
-                    <h6 class="fw-bold text-dark mb-1">BELUM WAKTUNYA PULANG!</h6>
-                    <small class="text-muted">${data.message}</small>
+                    <div class="my-2">
+                        <span class="badge bg-warning bg-opacity-15 text-dark border border-warning px-3 py-2 rounded-pill fs-6 fw-bold">
+                            <i class="fa-solid fa-hand me-1 text-warning"></i> ⛔ DITOLAK: BELUM WAKTUNYA PULANG
+                        </span>
+                    </div>
+                    <small class="text-danger fw-semibold d-block mt-1">
+                        ${data.message}
+                    </small>
                 `;
             } else {
+                playErrorBeep();
                 container.innerHTML = `
                     <div class="bg-danger bg-opacity-10 p-3 rounded-circle text-danger border border-danger mb-2" style="width: 52px; height: 52px; display:flex; align-items:center; justify-content:center;">
                         <i class="fa-solid fa-xmark fs-3 text-danger"></i>
@@ -262,6 +276,40 @@
             qrInput.disabled = false;
             qrInput.focus();
         });
+    }
+
+    // Audio Feedback Synthesizer using Web Audio API
+    function playWarningBeep() {
+        try {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(300, ctx.currentTime);
+            osc.frequency.setValueAtTime(200, ctx.currentTime + 0.15);
+            gain.gain.setValueAtTime(0.3, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.35);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start();
+            osc.stop(ctx.currentTime + 0.35);
+        } catch(e) {}
+    }
+
+    function playErrorBeep() {
+        try {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(150, ctx.currentTime);
+            gain.gain.setValueAtTime(0.3, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start();
+            osc.stop(ctx.currentTime + 0.3);
+        } catch(e) {}
     }
 </script>
 @endsection
