@@ -32,7 +32,7 @@
 
 <div class="row g-3">
     <!-- Kolom Kiri: Profil & Ganti Password Saya Sendiri -->
-    <div class="col-lg-5">
+    <div class="col-lg-4">
         <div class="card card-custom profile-card shadow-sm border-0 h-100">
             <div class="d-flex align-items-center mb-3 pb-2.5 border-bottom">
                 <div class="bg-primary bg-opacity-10 text-primary rounded-3 me-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 42px; height: 42px;">
@@ -96,7 +96,7 @@
     </div>
 
     <!-- Kolom Kanan: Daftar Seluruh Admin TU & Tambah Admin Baru -->
-    <div class="col-lg-7">
+    <div class="col-lg-8">
         <div class="card card-custom profile-card shadow-sm border-0 h-100">
             <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 mb-3 pb-2.5 border-bottom">
                 <div class="d-flex align-items-center">
@@ -113,15 +113,15 @@
                 </button>
             </div>
 
-            <!-- Tabel Daftar Admin (Proporsional, Lega & Rapi) -->
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0" style="font-size: 0.85rem;">
+            <!-- Tabel Daftar Admin (Lebar Lega, Tanpa Scroll Samping) -->
+            <div class="table-responsive" style="overflow-x: auto;">
+                <table class="table table-hover align-middle mb-0" style="font-size: 0.85rem; min-width: 100%;">
                     <thead class="table-light">
                         <tr>
-                            <th style="width: 40px;" class="text-center">No</th>
+                            <th style="width: 45px;" class="text-center">No</th>
                             <th>Staf Admin</th>
                             <th>Email Login</th>
-                            <th class="text-center" style="width: 90px;">Aksi</th>
+                            <th class="text-center" style="width: 80px;">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -134,7 +134,7 @@
                                         {{ strtoupper(substr($admin->name, 0, 1)) }}
                                     </div>
                                     <div>
-                                        <div class="fw-bold text-dark text-nowrap mb-0.5" style="font-size: 0.86rem;">{{ $admin->name }}</div>
+                                        <div class="fw-bold text-dark mb-0.5" style="font-size: 0.86rem;">{{ $admin->name }}</div>
                                         @if($admin->id === Auth::id())
                                             <span class="badge bg-primary bg-opacity-10 text-primary border border-primary px-2 py-0.5 rounded-pill fw-semibold" style="font-size: 0.68rem;">
                                                 <i class="fa-solid fa-circle-check me-1"></i> Akun Anda
@@ -146,16 +146,16 @@
                                 </div>
                             </td>
                             <td>
-                                <span class="text-dark fw-semibold text-nowrap" style="font-size: 0.83rem;">{{ $admin->email }}</span>
+                                <span class="text-dark fw-semibold" style="font-size: 0.83rem;">{{ $admin->email }}</span>
                             </td>
                             <td class="text-center">
                                 <div class="btn-group btn-group-sm">
                                     <!-- Edit Button -->
-                                    <button type="button" class="btn btn-outline-primary rounded-pill px-2.5 py-1 me-1.5 shadow-none" title="Edit Data Admin" onclick="openEditModal({{ $admin->id }}, '{{ addslashes($admin->name) }}', '{{ $admin->email }}', {{ $admin->id === Auth::id() ? 'true' : 'false' }})">
+                                    <button type="button" class="btn btn-outline-primary rounded-pill px-2.5 py-1 shadow-none {{ $admin->id !== Auth::id() ? 'me-1.5' : '' }}" title="Edit Data Admin" onclick="openEditModal({{ $admin->id }}, '{{ addslashes($admin->name) }}', '{{ $admin->email }}', {{ $admin->id === Auth::id() ? 'true' : 'false' }})">
                                         <i class="fa-solid fa-pen-to-square"></i>
                                     </button>
 
-                                    <!-- Delete Button -->
+                                    <!-- Delete Button (Hanya jika admin lain) -->
                                     @if($admin->id !== Auth::id())
                                     <form action="{{ route('admin.user.destroy', $admin->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus akun admin [{{ addslashes($admin->name) }}]?');">
                                         @csrf
@@ -164,10 +164,6 @@
                                             <i class="fa-solid fa-trash-can"></i>
                                         </button>
                                     </form>
-                                    @else
-                                    <button type="button" class="btn btn-light rounded-pill px-2.5 py-1 text-muted opacity-50 shadow-none border" disabled title="Tidak dapat menghapus akun Anda sendiri yang sedang aktif">
-                                        <i class="fa-solid fa-trash-can"></i>
-                                    </button>
                                     @endif
                                 </div>
                             </td>
