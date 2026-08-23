@@ -101,6 +101,13 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::post('/setting-akademik', [SettingAkademikController::class, 'update'])->name('setting.akademik.update');
     Route::post('/setting-akademik/toggle', [SettingAkademikController::class, 'toggleSemester'])->name('setting.akademik.toggle');
 
+    // Kelola Akun Admin TU & Profil
+    Route::get('/user', [\App\Http\Controllers\Admin\AdminUserController::class, 'index'])->name('user.index');
+    Route::post('/user', [\App\Http\Controllers\Admin\AdminUserController::class, 'store'])->name('user.store');
+    Route::put('/user/{id}', [\App\Http\Controllers\Admin\AdminUserController::class, 'update'])->name('user.update');
+    Route::delete('/user/{id}', [\App\Http\Controllers\Admin\AdminUserController::class, 'destroy'])->name('user.destroy');
+    Route::post('/user/profile', [\App\Http\Controllers\Admin\AdminUserController::class, 'updateProfile'])->name('user.profile');
+
     // Backup & Restore Database & Storage Asset
     Route::get('/backup', [App\Http\Controllers\Admin\BackupController::class, 'index'])->name('backup.index');
     Route::get('/backup/database', [App\Http\Controllers\Admin\BackupController::class, 'backupDatabase'])->name('backup.database');

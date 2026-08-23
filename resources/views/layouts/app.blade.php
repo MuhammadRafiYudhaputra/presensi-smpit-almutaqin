@@ -461,6 +461,11 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="{{ route('admin.user.index') }}" class="nav-link {{ request()->routeIs('admin.user.*') ? 'active' : '' }}">
+                                <i class="fa-solid fa-user-shield"></i> Kelola Admin
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="{{ route('admin.backup.index') }}" class="nav-link {{ request()->routeIs('admin.backup.*') ? 'active' : '' }}">
                                 <i class="fa-solid fa-cloud-arrow-down"></i> Backup &amp; Restore
                             </a>
@@ -550,10 +555,17 @@
                     </div>
                     @endif
 
+                    @if(Auth::user()->role === 'admin')
+                    <a href="{{ route('admin.user.index') }}" class="user-role-badge text-decoration-none" title="Klik untuk Pengaturan Profil & Kelola Admin">
+                        <i class="fa-solid fa-circle-user text-danger"></i>
+                        <span>USER : {{ strtoupper(Auth::user()->name ?? 'ADMIN') }}</span>
+                    </a>
+                    @else
                     <div class="user-role-badge">
                         <i class="fa-solid fa-circle-user text-danger"></i>
-                        <span>USER : {{ strtoupper(Auth::user()->role === 'guru' ? (Auth::user()->name) : 'ADMIN') }}</span>
+                        <span>USER : {{ strtoupper(Auth::user()->name) }}</span>
                     </div>
+                    @endif
                 </div>
             </div>
 
