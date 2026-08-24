@@ -125,7 +125,7 @@
             <thead>
                 <tr>
                     <th style="width: 50px;">No</th>
-                    <th style="width: 130px;">NIS</th>
+                    <th style="width: 130px;">NISN</th>
                     <th>Nama Siswa</th>
                     <th style="width: 140px;">Kelas</th>
                     <th style="width: 180px;">No HP</th>
