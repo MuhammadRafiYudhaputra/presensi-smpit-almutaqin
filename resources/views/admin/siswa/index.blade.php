@@ -139,9 +139,6 @@
                     <td class="text-dark fw-bold">{{ $siswa->nisn }}</td>
                     <td>
                         <span class="fw-bold text-dark d-block">{{ $siswa->nama }}</span>
-                        @if($siswa->nis)
-                            <small class="text-muted">NIS: {{ $siswa->nis }}</small>
-                        @endif
                     </td>
                     <td>
                         @if(($siswa->status ?? '') === 'alumni')
@@ -217,14 +214,10 @@
                 <div class="modal-body">
                     <div class="row g-3">
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold text-dark">NISN <span class="text-danger">*</span></label>
-                            <input type="text" name="nisn" class="form-control" placeholder="10 Digit NISN" required>
+                            <label class="form-label fw-semibold text-dark">NISN (Nomor Induk Siswa Nasional) <span class="text-danger">*</span></label>
+                            <input type="text" name="nisn" class="form-control" placeholder="10 Digit NISN Resmi" required>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold text-dark">NIS (Nomor Induk)</label>
-                            <input type="text" name="nis" class="form-control" placeholder="Nomor Induk Sekolah">
-                        </div>
-                        <div class="col-md-8">
                             <label class="form-label fw-semibold text-dark">Nama Lengkap Siswa <span class="text-danger">*</span></label>
                             <input type="text" name="nama" class="form-control" placeholder="Nama Lengkap Siswa" required>
                         </div>
@@ -235,7 +228,7 @@
                                 <option value="P">Perempuan (P)</option>
                             </select>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label class="form-label fw-semibold text-dark">Kelas <span class="text-danger">*</span></label>
                             <select name="kelas_id" class="form-select" required>
                                 <option value="">-- Pilih Kelas --</option>
@@ -244,7 +237,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label class="form-label fw-semibold text-dark">Orang Tua / Wali <span class="text-danger">*</span></label>
                             <select name="orang_tua_id" class="form-select" required>
                                 <option value="">-- Pilih Data Orang Tua --</option>
@@ -282,10 +275,6 @@
                             <input type="text" name="nisn" id="edit_nisn" class="form-control" required>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold text-dark">NIS</label>
-                            <input type="text" name="nis" id="edit_nis" class="form-control">
-                        </div>
-                        <div class="col-md-8">
                             <label class="form-label fw-semibold text-dark">Nama Lengkap Siswa <span class="text-danger">*</span></label>
                             <input type="text" name="nama" id="edit_nama" class="form-control" required>
                         </div>
@@ -296,7 +285,7 @@
                                 <option value="P">Perempuan (P)</option>
                             </select>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label class="form-label fw-semibold text-dark">Kelas <span class="text-danger">*</span></label>
                             <select name="kelas_id" id="edit_kelas_id" class="form-select" required>
                                 <option value="">-- Pilih Kelas --</option>
@@ -305,7 +294,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label class="form-label fw-semibold text-dark">Orang Tua / Wali <span class="text-danger">*</span></label>
                             <select name="orang_tua_id" id="edit_orang_tua_id" class="form-select" required>
                                 <option value="">-- Pilih Data Orang Tua --</option>
@@ -356,7 +345,6 @@
 <script>
 function openEditSiswaModal(siswa) {
     document.getElementById('edit_nisn').value = siswa.nisn;
-    document.getElementById('edit_nis').value = siswa.nis || '';
     document.getElementById('edit_nama').value = siswa.nama;
     document.getElementById('edit_jenis_kelamin').value = siswa.jenis_kelamin;
     document.getElementById('edit_kelas_id').value = siswa.kelas_id || '';
