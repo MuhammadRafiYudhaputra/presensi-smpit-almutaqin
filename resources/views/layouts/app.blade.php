@@ -453,6 +453,11 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="{{ route('admin.fonnte.index') }}" class="nav-link {{ request()->routeIs('admin.fonnte.*') ? 'active' : '' }}">
+                                <i class="fa-solid fa-gear"></i> Pengaturan WA
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="{{ route('admin.backup.index') }}" class="nav-link {{ request()->routeIs('admin.backup.*') ? 'active' : '' }}">
                                 <i class="fa-solid fa-cloud-arrow-down"></i> Backup &amp; Restore
                             </a>
