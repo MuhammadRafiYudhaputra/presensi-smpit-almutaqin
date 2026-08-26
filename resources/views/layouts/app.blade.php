@@ -505,12 +505,18 @@
 
             <!-- Sidebar Bottom Footer (Logout Button Pinned at Bottom) -->
             <div class="sidebar-footer mt-auto pt-2 pb-2.5 px-3 border-top">
+                @if(Auth::check())
                 <form action="{{ route('logout') }}" method="POST" class="m-0">
                     @csrf
                     <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill w-100 fw-bold py-2 d-flex align-items-center justify-content-center gap-2 shadow-none border-0 bg-danger bg-opacity-10 text-danger" style="font-size: 0.85rem;">
                         <i class="fa-solid fa-arrow-right-from-bracket"></i> Keluar / Logout
                     </button>
                 </form>
+                @else
+                <a href="{{ route('login') }}" class="btn btn-primary btn-sm rounded-pill w-100 fw-bold py-2 d-flex align-items-center justify-content-center gap-2 shadow-none text-white" style="font-size: 0.85rem;">
+                    <i class="fa-solid fa-arrow-right-to-bracket"></i> Masuk / Login
+                </a>
+                @endif
             </div>
         </div>
 
@@ -525,9 +531,15 @@
                     <img src="{{ asset('images/logo.png') }}" alt="Logo" style="width: 26px; height: 26px; object-fit: contain;">
                     <span class="fw-bold text-dark fs-6">SMP IT Al-Muttaqin</span>
                 </div>
+                @if(Auth::check())
                 <div class="user-role-badge py-1 px-2" style="font-size: 0.72rem;">
-                    {{ Auth::user()->role === 'guru' ? 'GURU' : 'ADMIN' }}
+                    {{ (Auth::user()->role ?? '') === 'guru' ? 'GURU' : 'ADMIN' }}
                 </div>
+                @else
+                <a href="{{ route('login') }}" class="btn btn-sm btn-outline-primary rounded-pill px-2.5 py-1 fw-bold" style="font-size: 0.72rem;">
+                    <i class="fa-solid fa-arrow-right-to-bracket me-1"></i> Login
+                </a>
+                @endif
             </div>
 
             <!-- Desktop Top Header Navbar (Minimalist Style Sesuai Gambar) -->
@@ -563,7 +575,7 @@
                 </div>
 
                 <div class="d-flex align-items-center gap-2">
-                    @if(Auth::user()->role === 'guru')
+                    @if(Auth::check() && (Auth::user()->role ?? '') === 'guru')
                         @php
                             $guruModel = \App\Models\Guru::where('user_id', Auth::id())->first();
                             $guruKelas = $guruModel ? $guruModel->kelas : null;
@@ -584,16 +596,23 @@
                     </div>
                     @endif
 
-                    @if(Auth::user()->role === 'admin')
-                    <a href="{{ route('admin.user.index') }}" class="user-role-badge text-decoration-none" title="Klik untuk Pengaturan Profil & Kelola Admin">
-                        <i class="fa-solid fa-circle-user text-danger"></i>
-                        <span>USER : {{ strtoupper(Auth::user()->name ?? 'ADMIN') }}</span>
-                    </a>
+                    @if(Auth::check())
+                        @if((Auth::user()->role ?? '') === 'admin')
+                        <a href="{{ route('admin.user.index') }}" class="user-role-badge text-decoration-none" title="Klik untuk Pengaturan Profil & Kelola Admin">
+                            <i class="fa-solid fa-circle-user text-danger"></i>
+                            <span>USER : {{ strtoupper(Auth::user()->name ?? 'ADMIN') }}</span>
+                        </a>
+                        @else
+                        <div class="user-role-badge">
+                            <i class="fa-solid fa-circle-user text-danger"></i>
+                            <span>USER : {{ strtoupper(Auth::user()->name ?? 'GURU') }}</span>
+                        </div>
+                        @endif
                     @else
-                    <div class="user-role-badge">
-                        <i class="fa-solid fa-circle-user text-danger"></i>
-                        <span>USER : {{ strtoupper(Auth::user()->name) }}</span>
-                    </div>
+                        <a href="{{ route('login') }}" class="user-role-badge text-decoration-none text-primary border-primary bg-primary bg-opacity-10" title="Klik untuk Masuk ke Akun">
+                            <i class="fa-solid fa-arrow-right-to-bracket text-primary"></i>
+                            <span>MASUK / LOGIN</span>
+                        </a>
                     @endif
                 </div>
             </div>
