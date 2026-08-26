@@ -185,7 +185,11 @@
 
                 <div class="border-top pt-2 mt-2 px-1 d-flex justify-content-between align-items-center flex-wrap gap-2">
                     <small class="text-muted" style="font-size: 0.78rem;">
-                        <i class="fa-solid fa-circle-info text-primary me-1"></i> Total hadir: <strong>{{ $totalMasuk }} Siswa</strong>
+                        @if(($totalPresensi ?? 0) === 0)
+                            <i class="fa-solid fa-clock text-secondary me-1"></i> Status: <strong>Presensi belum dimulai</strong>
+                        @else
+                            <i class="fa-solid fa-circle-info text-primary me-1"></i> Total hadir: <strong>{{ $totalMasuk }} Siswa</strong> ({{ round(($totalMasuk / max(1, $totalSiswaFiltered)) * 100) }}%)
+                        @endif
                     </small>
                     <a href="{{ route('admin.rekap.monitoring') }}" class="btn btn-sm btn-outline-primary rounded-pill px-3 py-1 fw-bold" style="font-size: 0.78rem;">
                         <i class="fa-solid fa-list-check me-1"></i> Buka Absensi Siswa

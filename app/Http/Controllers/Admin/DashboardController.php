@@ -59,8 +59,8 @@ class DashboardController extends Controller
         $totalPresensi = $totalMasuk + $totalSakit + $totalIzin;
 
         $isTodayHoliday = \App\Helpers\HolidayHelper::isNonEffectiveDay($today);
-        if ($isTodayHoliday) {
-            $totalAlpa = ($totalPresensi > 0) ? max(0, $totalSiswaFiltered - $totalPresensi) : 0;
+        if ($isTodayHoliday || $totalPresensi === 0) {
+            $totalAlpa = 0;
         } else {
             $totalAlpa = max(0, $totalSiswaFiltered - $totalPresensi);
         }
@@ -91,8 +91,8 @@ class DashboardController extends Controller
             $tot = $h + $s + $iz;
 
             $isNonEffective = \App\Helpers\HolidayHelper::isNonEffectiveDay($date);
-            // Jika tanggal merah / libur nasional / weekend, ATAU hari lampau tanpa kehadiran (libur sekolah), maka alpa = 0
-            if ($isNonEffective || ($tot === 0 && !$date->isToday())) {
+            // Jika tanggal merah / libur nasional / weekend, ATAU belum ada kehadiran sama sekali, maka alpa = 0
+            if ($isNonEffective || $tot === 0) {
                 $a = 0;
             } else {
                 $a = max(0, $totalSiswa - $tot);
@@ -108,7 +108,7 @@ class DashboardController extends Controller
         $recentPresensi = Kehadiran::with(['siswa.kelas'])
             ->where('tanggal', $today)
             ->orderBy('updated_at', 'desc')
-            ->take(10)
+            ->limit(8)
             ->get();
 
         return view('admin.dashboard', compact(
@@ -121,10 +121,11 @@ class DashboardController extends Controller
             'totalSiswaFiltered',
             'totalHadir',
             'totalTerlambat',
-            'totalMasuk',
             'totalSakit',
             'totalIzin',
             'totalAlpa',
+            'totalMasuk',
+            'totalPresensi',
             'chartLabels',
             'chartHadir',
             'chartSakit',
