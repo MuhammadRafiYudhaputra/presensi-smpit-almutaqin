@@ -15,12 +15,17 @@ class PresensiService
      */
     public function processScan(string $qrToken): array
     {
-        $siswa = Siswa::with(['kelas', 'orangTua'])->where('qr_code_token', $qrToken)->first();
+        $qrToken = trim($qrToken);
+        $siswa = Siswa::with(['kelas', 'orangTua'])
+            ->where('qr_code_token', $qrToken)
+            ->orWhere('nisn', $qrToken)
+            ->orWhere('nis', $qrToken)
+            ->first();
 
         if (!$siswa) {
             return [
                 'success' => false,
-                'message' => 'Kartu QR Code tidak terdaftar / invalid!',
+                'message' => 'Kartu QR Code atau NISN [' . $qrToken . '] tidak terdaftar!',
             ];
         }
 

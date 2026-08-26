@@ -205,12 +205,19 @@
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                "Accept": "application/json"
             },
-            body: JSON.stringify({ qr_token: token })
+            body: JSON.stringify({ 
+                qr_code_token: token,
+                qr_token: token 
+            })
         })
-        .then(res => res.json())
-        .then(data => {
+        .then(async res => {
+            const data = await res.json();
+            return { ok: res.ok, data };
+        })
+        .then(({ ok, data }) => {
             const container = document.getElementById('resultContainer');
             if (data.success) {
                 const isPulang = (data.type === 'pulang');
@@ -227,8 +234,8 @@
                             <i class="fa-solid fa-check fs-3"></i>
                         </div>
                         <div class="text-start">
-                            <h5 class="fw-bold text-dark mb-0">${data.siswa.nama}</h5>
-                            <small class="text-muted">Kelas ${data.siswa.kelas ? data.siswa.kelas.nama_kelas : '-'} &bull; NISN: <strong>${data.siswa.nisn}</strong></small>
+                            <h5 class="fw-bold text-dark mb-0">${data.siswa ? data.siswa.nama : 'Siswa'}</h5>
+                            <small class="text-muted">Kelas ${data.siswa && data.siswa.kelas ? data.siswa.kelas.nama_kelas : '-'} &bull; NISN: <strong>${data.siswa ? data.siswa.nisn : '-'}</strong></small>
                         </div>
                     </div>
                     <div class="my-2">${statusBadge}</div>
@@ -242,8 +249,8 @@
                             <i class="fa-solid fa-triangle-exclamation fs-3 text-warning"></i>
                         </div>
                         <div class="text-start">
-                            <h5 class="fw-bold text-dark mb-0">${data.siswa.nama}</h5>
-                            <small class="text-muted">Kelas ${data.siswa.kelas ? data.siswa.kelas.nama_kelas : '-'} &bull; NISN: <strong>${data.siswa.nisn}</strong></small>
+                            <h5 class="fw-bold text-dark mb-0">${data.siswa ? data.siswa.nama : 'Siswa'}</h5>
+                            <small class="text-muted">Kelas ${data.siswa && data.siswa.kelas ? data.siswa.kelas.nama_kelas : '-'} &bull; NISN: <strong>${data.siswa ? data.siswa.nisn : '-'}</strong></small>
                         </div>
                     </div>
                     <div class="my-2">
@@ -252,7 +259,7 @@
                         </span>
                     </div>
                     <small class="text-danger fw-semibold d-block mt-1">
-                        ${data.message}
+                        ${data.message || 'Belum waktunya pulang.'}
                     </small>
                 `;
             } else {
@@ -262,13 +269,14 @@
                         <i class="fa-solid fa-xmark fs-3 text-danger"></i>
                     </div>
                     <h6 class="fw-bold text-danger mb-1">Presensi Gagal!</h6>
-                    <small class="text-muted">${data.message}</small>
+                    <small class="text-muted">${data.message || 'Token QR Code tidak valid.'}</small>
                 `;
             }
         })
         .catch(err => {
+            console.error('Scan Error:', err);
             document.getElementById('resultContainer').innerHTML = `
-                <div class="text-danger fw-bold"><i class="fa-solid fa-circle-exclamation me-1"></i> Terjadi kesalahan koneksi server.</div>
+                <div class="text-danger fw-bold"><i class="fa-solid fa-circle-exclamation me-1"></i> Terjadi kesalahan koneksi server. Silakan coba lagi.</div>
             `;
         })
         .finally(() => {

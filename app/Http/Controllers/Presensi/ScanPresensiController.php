@@ -29,11 +29,16 @@ class ScanPresensiController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-        $request->validate([
-            'qr_code_token' => 'required|string',
-        ]);
+        $token = $request->input('qr_code_token') ?? $request->input('qr_token');
 
-        $result = $this->presensiService->processScan($request->qr_code_token);
+        if (empty($token)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Token QR Code atau NISN tidak boleh kosong!',
+            ], 400);
+        }
+
+        $result = $this->presensiService->processScan(trim($token));
 
         return response()->json($result);
     }
