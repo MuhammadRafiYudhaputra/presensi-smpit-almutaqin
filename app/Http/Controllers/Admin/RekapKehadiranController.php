@@ -359,21 +359,42 @@ class RekapKehadiranController extends Controller
             'keterangan' => 'nullable|string|max:255',
         ]);
 
+        $jamSetting = \App\Models\JamPresensi::where('is_active', true)->first();
+        $defaultJamHadir = $jamSetting ? $jamSetting->jam_masuk : '07:00:00';
+        $defaultJamTerlambat = $jamSetting ? $jamSetting->jam_terlambat : '07:15:00';
+
         $kehadiran = Kehadiran::where('siswa_id', $request->siswa_id)
             ->where('tanggal', $request->tanggal)
             ->first();
 
         if ($kehadiran) {
+            $jamMasuk = $kehadiran->jam_masuk;
+            if ($request->status === 'HADIR') {
+                $jamMasuk = $jamMasuk ?: $defaultJamHadir;
+            } elseif ($request->status === 'TERLAMBAT') {
+                $jamMasuk = $jamMasuk ?: $defaultJamTerlambat;
+            } else {
+                $jamMasuk = null;
+            }
+
             $kehadiran->update([
                 'status' => $request->status,
                 'keterangan' => $request->keterangan,
-                'jam_masuk' => in_array($request->status, ['HADIR', 'TERLAMBAT']) ? ($kehadiran->jam_masuk ?? date('H:i:s')) : null,
+                'jam_masuk' => $jamMasuk,
+                'jam_pulang' => in_array($request->status, ['HADIR', 'TERLAMBAT']) ? $kehadiran->jam_pulang : null,
             ]);
         } else {
+            $jamMasuk = null;
+            if ($request->status === 'HADIR') {
+                $jamMasuk = $defaultJamHadir;
+            } elseif ($request->status === 'TERLAMBAT') {
+                $jamMasuk = $defaultJamTerlambat;
+            }
+
             Kehadiran::create([
                 'siswa_id' => $request->siswa_id,
                 'tanggal' => $request->tanggal,
-                'jam_masuk' => in_array($request->status, ['HADIR', 'TERLAMBAT']) ? date('H:i:s') : null,
+                'jam_masuk' => $jamMasuk,
                 'status' => $request->status,
                 'keterangan' => $request->keterangan,
                 'wa_masuk_sent' => false,

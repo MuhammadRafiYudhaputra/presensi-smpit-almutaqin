@@ -196,7 +196,7 @@
             <thead>
                 <tr>
                     <th style="width: 50px;">No.</th>
-                    <th style="width: 130px;">NIS</th>
+                    <th style="width: 130px;">NISN</th>
                     <th>Nama Siswa</th>
                     <th style="width: 140px; text-align: center;">Kehadiran</th>
                     <th style="width: 130px; text-align: center;">Jam masuk</th>
