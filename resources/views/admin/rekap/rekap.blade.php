@@ -480,24 +480,36 @@
 
                     <div class="mb-3">
                         <label class="form-label fw-semibold text-dark">Tahun Ajaran Aktif <span class="text-danger">*</span></label>
-                        <select name="tahun_ajaran" id="select_tahun_ajaran_setting" class="form-select shadow-sm" required onchange="checkCustomTahunAjaran(this)">
+                        <select name="tahun_ajaran" class="form-select shadow-sm" required>
                             @php
+                                $historyTAs = \App\Models\RiwayatKelas::distinct()->pluck('tahun_ajaran')->toArray();
                                 $taList = [];
-                                for ($y = date('Y') - 3; $y <= date('Y') + 6; $y++) {
+                                // Rentang tahun rolling: 5 tahun ke belakang hingga 5 tahun ke depan
+                                for ($y = date('Y') - 5; $y <= date('Y') + 5; $y++) {
                                     $taList[] = $y . '/' . ($y + 1);
                                 }
-                                if (!in_array($settingAkademik->tahun_ajaran, $taList)) {
-                                    array_unshift($taList, $settingAkademik->tahun_ajaran);
+                                // Gabungkan seluruh histori tahun ajaran yang pernah tercatat di database agar tidak pernah hilang
+                                foreach ($historyTAs as $hta) {
+                                    if (!empty($hta) && !in_array($hta, $taList)) {
+                                        $taList[] = $hta;
+                                    }
                                 }
+                                if (!in_array($settingAkademik->tahun_ajaran, $taList)) {
+                                    $taList[] = $settingAkademik->tahun_ajaran;
+                                }
+                                usort($taList, function($a, $b) {
+                                    return strcmp($a, $b);
+                                });
                             @endphp
                             @foreach($taList as $taOption)
                                 <option value="{{ $taOption }}" {{ $settingAkademik->tahun_ajaran === $taOption ? 'selected' : '' }}>
                                     Tahun Ajaran {{ $taOption }}
                                 </option>
                             @endforeach
-                            <option value="custom">+ Input Tahun Ajaran Lainnya (Kustom)...</option>
                         </select>
-                        <input type="text" name="custom_tahun_ajaran" id="input_custom_tahun_ajaran" class="form-control form-control-sm mt-2 d-none shadow-sm" placeholder="Contoh: 2030/2031" pattern="^[0-9]{4}/[0-9]{4}$" title="Format: YYYY/YYYY (contoh: 2030/2031)">
+                        <small class="text-muted mt-1 d-block" style="font-size: 0.75rem;">
+                            <i class="fa-solid fa-clock-rotate-left me-1 text-primary"></i> Daftar tahun ajaran otomatis bergerak maju setiap tahunnya dan riwayat terdahulu tersimpan permanen.
+                        </small>
                     </div>
 
                     <div class="mb-3">
@@ -603,18 +615,6 @@ function openRiwayatTerlambatModal(nama, nisn, kelas, riwayat, noWa) {
 
     const modal = new bootstrap.Modal(document.getElementById('modalRiwayatTerlambat'));
     modal.show();
-}
-
-function checkCustomTahunAjaran(selectElem) {
-    const customInput = document.getElementById('input_custom_tahun_ajaran');
-    if (selectElem.value === 'custom') {
-        customInput.classList.remove('d-none');
-        customInput.setAttribute('required', 'required');
-        customInput.focus();
-    } else {
-        customInput.classList.add('d-none');
-        customInput.removeAttribute('required');
-    }
 }
 </script>
 @endsection
