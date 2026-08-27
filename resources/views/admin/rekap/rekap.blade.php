@@ -471,12 +471,6 @@
             <form action="{{ route('admin.setting.akademik.update') }}" method="POST">
                 @csrf
                 <div class="modal-body">
-                    <div class="alert alert-info border-info d-flex align-items-center mb-3 py-2">
-                        <i class="fa-solid fa-circle-info fs-4 me-3 text-info"></i>
-                        <small class="text-dark">
-                            Periode yang diatur di sini akan menjadi <strong>acuan resmi default</strong> pada Scan Absensi QR, Rekapitulasi Presensi, dan Dashboard Sekolah.
-                        </small>
-                    </div>
 
                     <div class="mb-3">
                         <label class="form-label fw-semibold text-dark">Tahun Ajaran Aktif <span class="text-danger">*</span></label>
@@ -507,9 +501,6 @@
                                 </option>
                             @endforeach
                         </select>
-                        <small class="text-muted mt-1 d-block" style="font-size: 0.75rem;">
-                            <i class="fa-solid fa-clock-rotate-left me-1 text-primary"></i> Daftar tahun ajaran otomatis bergerak maju setiap tahunnya dan riwayat terdahulu tersimpan permanen.
-                        </small>
                     </div>
 
                     <div class="mb-3">
