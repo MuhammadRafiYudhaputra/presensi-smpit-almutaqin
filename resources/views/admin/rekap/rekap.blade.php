@@ -28,11 +28,11 @@
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-3 pb-2 border-bottom">
         <div>
             <h5 class="fw-bold mb-0.5 text-dark d-flex align-items-center" style="font-size: 1.05rem;">
-                <i class="fa-solid fa-chart-simple text-primary me-2.5 fs-5"></i> Rekapitulasi Presensi Siswa
+                <i class="fa-solid fa-chart-simple text-primary me-3 fs-5"></i> Rekapitulasi Presensi Siswa
             </h5>
-            <small class="text-muted" style="font-size: 0.76rem;">Akumulasi kehadiran berkala (Bulanan &amp; Semester)</small>
+            <small class="text-muted ms-4 ps-2 d-block" style="font-size: 0.76rem;">Akumulasi kehadiran berkala (Bulanan &amp; Semester)</small>
         </div>
-        <div class="d-flex align-items-center gap-2.5 flex-wrap flex-sm-nowrap">
+        <div class="d-flex align-items-center gap-2 flex-wrap flex-sm-nowrap">
             <!-- Mode Switcher Tabs (Bulanan & Semester) -->
             <div class="btn-group p-0.5 bg-light rounded-pill border" role="group">
                 <a href="{{ route('admin.rekap.index', ['mode' => 'bulanan', 'bulan' => $bulan, 'tahun' => $tahun, 'kelas_id' => $kelasId, 'sort_by' => $sortBy]) }}" class="btn btn-sm rounded-pill px-3 py-1 fw-semibold d-inline-flex align-items-center gap-2 {{ $mode === 'bulanan' ? 'btn-primary shadow-sm' : 'btn-light text-muted' }}" style="font-size: 0.8rem;">
@@ -121,21 +121,21 @@
             </select>
         </div>
 
-        <!-- Bar Informasi Dasar Hari Efektif Masing-Masing Kelas (Single, Clean, Zero Redundancy) -->
-        <div class="col-12 mt-2">
-            <div class="d-flex align-items-center justify-content-between gap-2 flex-wrap p-2.5 bg-light rounded-3 border">
+        <!-- Bar Informasi Dasar Hari Efektif Masing-Masing Kelas (Compact & Rapi) -->
+        <div class="col-12 mt-1">
+            <div class="d-flex align-items-center justify-content-between p-2 px-3 bg-light rounded-3 border">
                 <div class="d-flex align-items-center gap-2 flex-wrap">
-                    <small class="fw-bold text-dark d-flex align-items-center me-2">
-                        <i class="fa-solid fa-calendar-check text-primary me-2"></i> Dasar Hari Efektif:
-                    </small>
+                    <span class="fw-bold text-dark d-flex align-items-center me-2" style="font-size: 0.82rem;">
+                        <i class="fa-solid fa-calendar-days text-primary me-2 fs-6"></i> Dasar Hari Efektif (100%):
+                    </span>
                     @foreach($kelases as $k)
-                        <span class="badge bg-white text-dark border shadow-xs px-2.5 py-1.5 rounded-2 d-inline-flex align-items-center gap-1.5">
-                            <span class="text-secondary">Kelas {{ $k->nama_kelas }}: </span>
+                        <span class="badge bg-white text-dark border px-2.5 py-1 rounded-2 shadow-xs d-inline-flex align-items-center" style="font-size: 0.78rem;">
+                            <span class="text-secondary">Kelas {{ $k->nama_kelas }}:&nbsp;</span>
                             <strong class="text-primary">{{ $hariEfektifMap[$k->id] ?? 20 }} Hari</strong>
                         </span>
                     @endforeach
                 </div>
-                <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3.5 py-1.5 fw-bold d-inline-flex align-items-center gap-2 shadow-none" data-bs-toggle="modal" data-bs-target="#modalAturHariEfektif">
+                <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3 py-1 fw-bold d-inline-flex align-items-center gap-1.5 shadow-none" style="font-size: 0.78rem;" data-bs-toggle="modal" data-bs-target="#modalAturHariEfektif">
                     <i class="fa-solid fa-sliders text-primary"></i>
                     <span>Atur Hari Efektif</span>
                 </button>
