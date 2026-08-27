@@ -293,4 +293,21 @@ class BackupController extends Controller
             return back()->with('error', 'Gagal melakukan restore foto/QR: ' . $e->getMessage());
         }
     }
+
+    /**
+     * Muat Ulang / Sinkronisasi Dataset 112 Siswa Dummy (Local & Railway)
+     */
+    public function seedDummy(Request $request)
+    {
+        try {
+            \Illuminate\Support\Facades\Artisan::call('db:seed', [
+                '--class' => 'DummySchoolDataSeeder',
+                '--force' => true,
+            ]);
+
+            return back()->with('success', 'Dataset 112 Siswa (Kelas 7, 8, 9A, 9B), Riwayat Akademik, dan Sample Kehadiran berhasil disinkronisasi & dimuat ulang ke database!');
+        } catch (\Throwable $e) {
+            return back()->with('error', 'Gagal memuat dataset: ' . $e->getMessage());
+        }
+    }
 }

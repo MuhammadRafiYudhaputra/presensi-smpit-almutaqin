@@ -235,4 +235,27 @@
         </div>
     </div>
 </div>
+
+<!-- Bar Sinkronisasi Data Dummy Sample 112 Siswa -->
+<div class="card card-custom p-3.5 shadow-sm border-0 rounded-3 mt-3 bg-light border">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 p-2">
+        <div>
+            <h6 class="fw-bold mb-1 text-dark d-flex align-items-center" style="font-size: 0.92rem;">
+                <i class="fa-solid fa-arrows-rotate text-success me-2 fs-5"></i> Sinkronisasi Dataset Lengkap (112 Siswa Dummy)
+            </h6>
+            <small class="text-muted" style="font-size: 0.78rem;">
+                Muat atau samakan dataset lengkap 112 siswa (32 Kelas 7, 40 Kelas 8, 20 Kelas 9A, 20 Kelas 9B), data wali murid, riwayat kenaikan kelas, hari efektif, dan sample kehadiran agar 100% identik dengan local.
+            </small>
+        </div>
+        <div>
+            <form action="{{ route('admin.backup.seedDummy') }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin memuat/menyinkronkan dataset lengkap 112 siswa dummy ke database?');">
+                @csrf
+                <button type="submit" class="btn btn-sm btn-success rounded-pill px-4 py-2 fw-bold shadow-sm d-inline-flex align-items-center text-nowrap gap-2" style="font-size: 0.8rem;">
+                    <i class="fa-solid fa-rotate"></i>
+                    <span>Sinkronkan Dataset Siswa</span>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
 @endsection
