@@ -113,7 +113,8 @@
         <div class="modal-content rounded-4 border-0 shadow">
             <div class="modal-header border-0 pb-0">
                 <h6 class="modal-title fw-bold text-dark d-flex align-items-center">
-                    <i class="fa-solid fa-user-plus text-primary me-2.5"></i> Tambah Akun Admin TU
+                    <i class="fa-solid fa-user-plus text-primary me-2.5 fs-5"></i>
+                    <span>Tambah Akun Admin TU</span>
                 </h6>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -141,8 +142,8 @@
                 </div>
                 <div class="modal-footer border-0 pt-0">
                     <button type="button" class="btn btn-light rounded-pill px-4 btn-sm" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary rounded-pill px-4 btn-sm fw-bold d-inline-flex align-items-center gap-1.5">
-                        <i class="fa-solid fa-plus"></i>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4 btn-sm fw-bold d-inline-flex align-items-center gap-2">
+                        <i class="fa-solid fa-plus me-1"></i>
                         <span>Daftarkan Admin</span>
                     </button>
                 </div>
@@ -157,7 +158,8 @@
         <div class="modal-content rounded-4 border-0 shadow">
             <div class="modal-header border-0 pb-0">
                 <h6 class="modal-title fw-bold text-dark d-flex align-items-center">
-                    <i class="fa-solid fa-pen-to-square text-primary me-2.5"></i> Edit Profil &amp; Kata Sandi Admin
+                    <i class="fa-solid fa-pen-to-square text-primary me-2.5 fs-5"></i>
+                    <span>Edit Profil &amp; Kata Sandi Admin</span>
                 </h6>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -182,8 +184,8 @@
                 </div>
                 <div class="modal-footer border-0 pt-0 d-flex justify-content-end gap-2">
                     <button type="button" class="btn btn-light rounded-pill px-3.5 btn-sm" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary rounded-pill px-4 btn-sm fw-bold d-inline-flex align-items-center gap-1.5">
-                        <i class="fa-solid fa-floppy-disk"></i>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4 btn-sm fw-bold d-inline-flex align-items-center gap-2">
+                        <i class="fa-solid fa-floppy-disk me-1"></i>
                         <span>Simpan Perubahan</span>
                     </button>
                 </div>
