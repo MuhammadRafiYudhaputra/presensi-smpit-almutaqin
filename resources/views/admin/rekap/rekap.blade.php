@@ -363,7 +363,7 @@
                         <i class="fa-solid fa-circle-info fs-5 text-primary mt-0.5"></i>
                         <div>
                             <strong>Dasar Perhitungan Persentase:</strong><br>
-                            Nilai $100\%$ kehadiran dihitung berdasarkan jumlah hari efektif masuk sekolah masing-masing kelas. Anda dapat menentukan angka yang berbeda antar kelas (contoh: pada semester genap, kelas IX memiliki hari efektif yang lebih sedikit karena kelulusan lebih awal).
+                            Kehadiran dihitung berdasarkan jumlah hari efektif masuk sekolah. 
                         </div>
                     </div>
 
@@ -480,14 +480,24 @@
 
                     <div class="mb-3">
                         <label class="form-label fw-semibold text-dark">Tahun Ajaran Aktif <span class="text-danger">*</span></label>
-                        <select name="tahun_ajaran" class="form-select shadow-sm" required>
-                            @for($y=date('Y')-2; $y<=date('Y')+2; $y++)
-                                @php $ta = $y . '/' . ($y+1); @endphp
-                                <option value="{{ $ta }}" {{ $settingAkademik->tahun_ajaran === $ta ? 'selected' : '' }}>
-                                    Tahun Ajaran {{ $ta }}
+                        <select name="tahun_ajaran" id="select_tahun_ajaran_setting" class="form-select shadow-sm" required onchange="checkCustomTahunAjaran(this)">
+                            @php
+                                $taList = [];
+                                for ($y = date('Y') - 3; $y <= date('Y') + 6; $y++) {
+                                    $taList[] = $y . '/' . ($y + 1);
+                                }
+                                if (!in_array($settingAkademik->tahun_ajaran, $taList)) {
+                                    array_unshift($taList, $settingAkademik->tahun_ajaran);
+                                }
+                            @endphp
+                            @foreach($taList as $taOption)
+                                <option value="{{ $taOption }}" {{ $settingAkademik->tahun_ajaran === $taOption ? 'selected' : '' }}>
+                                    Tahun Ajaran {{ $taOption }}
                                 </option>
-                            @endfor
+                            @endforeach
+                            <option value="custom">+ Input Tahun Ajaran Lainnya (Kustom)...</option>
                         </select>
+                        <input type="text" name="custom_tahun_ajaran" id="input_custom_tahun_ajaran" class="form-control form-control-sm mt-2 d-none shadow-sm" placeholder="Contoh: 2030/2031" pattern="^[0-9]{4}/[0-9]{4}$" title="Format: YYYY/YYYY (contoh: 2030/2031)">
                     </div>
 
                     <div class="mb-3">
@@ -593,6 +603,18 @@ function openRiwayatTerlambatModal(nama, nisn, kelas, riwayat, noWa) {
 
     const modal = new bootstrap.Modal(document.getElementById('modalRiwayatTerlambat'));
     modal.show();
+}
+
+function checkCustomTahunAjaran(selectElem) {
+    const customInput = document.getElementById('input_custom_tahun_ajaran');
+    if (selectElem.value === 'custom') {
+        customInput.classList.remove('d-none');
+        customInput.setAttribute('required', 'required');
+        customInput.focus();
+    } else {
+        customInput.classList.add('d-none');
+        customInput.removeAttribute('required');
+    }
 }
 </script>
 @endsection

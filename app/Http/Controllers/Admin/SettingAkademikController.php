@@ -13,6 +13,13 @@ class SettingAkademikController extends Controller
      */
     public function update(Request $request)
     {
+        $tahunAjaran = $request->tahun_ajaran;
+        if ($tahunAjaran === 'custom' && $request->filled('custom_tahun_ajaran')) {
+            $tahunAjaran = trim($request->custom_tahun_ajaran);
+        }
+
+        $request->merge(['tahun_ajaran' => $tahunAjaran]);
+
         $request->validate([
             'tahun_ajaran' => 'required|string|max:20',
             'semester' => 'required|in:ganjil,genap',
@@ -20,7 +27,7 @@ class SettingAkademikController extends Controller
 
         $setting = SettingAkademik::getActive();
         $setting->update([
-            'tahun_ajaran' => $request->tahun_ajaran,
+            'tahun_ajaran' => $tahunAjaran,
             'semester' => $request->semester,
             'is_active' => true,
         ]);
