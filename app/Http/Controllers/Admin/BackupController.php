@@ -293,49 +293,4 @@ class BackupController extends Controller
             return back()->with('error', 'Gagal melakukan restore foto/QR: ' . $e->getMessage());
         }
     }
-
-    /**
-     * Muat Ulang / Sinkronisasi Dataset 112 Siswa Dummy (Local & Railway)
-     */
-    public function seedDummy(Request $request)
-    {
-        try {
-            // 1. Pastikan seluruh tabel database (termasuk hari_efektifs) termigrasi lengkap
-            \Illuminate\Support\Facades\Artisan::call('migrate', [
-                '--force' => true,
-            ]);
-
-            // 2. Jalankan seeder dataset 112 siswa
-            \Illuminate\Support\Facades\Artisan::call('db:seed', [
-                '--class' => 'DummySchoolDataSeeder',
-                '--force' => true,
-            ]);
-
-            // 3. Bersihkan cache
-            \Illuminate\Support\Facades\Artisan::call('config:clear');
-            \Illuminate\Support\Facades\Artisan::call('view:clear');
-
-            return back()->with('success', 'Migrasi tabel database & Dataset lengkap 112 Siswa (Kelas 7, 8, 9A, 9B), Riwayat Akademik, serta Sample Kehadiran berhasil dimuat ke database!');
-        } catch (\Throwable $e) {
-            return back()->with('error', 'Gagal memuat dataset: ' . $e->getMessage());
-        }
-    }
-
-    /**
-     * Jalankan Migrasi Database Mandiri
-     */
-    public function runMigration(Request $request)
-    {
-        try {
-            \Illuminate\Support\Facades\Artisan::call('migrate', [
-                '--force' => true,
-            ]);
-            \Illuminate\Support\Facades\Artisan::call('config:clear');
-            \Illuminate\Support\Facades\Artisan::call('view:clear');
-
-            return back()->with('success', 'Seluruh struktur tabel database berhasil dimigrasi (Update Database Sukses)!');
-        } catch (\Throwable $e) {
-            return back()->with('error', 'Gagal menjalankan migrasi: ' . $e->getMessage());
-        }
-    }
 }
