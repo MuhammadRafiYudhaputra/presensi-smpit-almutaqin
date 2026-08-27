@@ -25,21 +25,21 @@
 
 <div class="card card-custom p-4 shadow-sm border-0 rounded-4">
     <!-- Header & Mode Tabs (Bulanan & Semester Saja) -->
-    <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-3 pb-2 border-bottom">
         <div>
-            <h5 class="fw-bold mb-1 text-dark d-flex align-items-center">
-                <i class="fa-solid fa-chart-simple text-primary me-2 fs-4"></i> Rekapitulasi Presensi Siswa
+            <h5 class="fw-bold mb-0.5 text-dark d-flex align-items-center" style="font-size: 1.05rem;">
+                <i class="fa-solid fa-chart-simple text-primary me-2 fs-5"></i> Rekapitulasi Presensi Siswa
             </h5>
-            <small class="text-muted">Akumulasi kehadiran berkala (Bulanan &amp; Semester)</small>
+            <small class="text-muted" style="font-size: 0.76rem;">Akumulasi kehadiran berkala (Bulanan &amp; Semester)</small>
         </div>
-        <div class="d-flex gap-2 align-items-center flex-wrap">
+        <div class="d-flex align-items-center gap-2 flex-wrap flex-sm-nowrap">
             <!-- Mode Switcher Tabs (Bulanan & Semester) -->
-            <div class="btn-group p-1 bg-light rounded-pill border" role="group">
-                <a href="{{ route('admin.rekap.index', ['mode' => 'bulanan', 'bulan' => $bulan, 'tahun' => $tahun, 'kelas_id' => $kelasId, 'sort_by' => $sortBy]) }}" class="btn btn-sm rounded-pill px-3 fw-semibold d-inline-flex align-items-center gap-2 {{ $mode === 'bulanan' ? 'btn-primary shadow-sm' : 'btn-light text-muted' }}">
+            <div class="btn-group p-0.5 bg-light rounded-pill border" role="group">
+                <a href="{{ route('admin.rekap.index', ['mode' => 'bulanan', 'bulan' => $bulan, 'tahun' => $tahun, 'kelas_id' => $kelasId, 'sort_by' => $sortBy]) }}" class="btn btn-sm rounded-pill px-2.5 py-1 fw-semibold d-inline-flex align-items-center gap-1.5 {{ $mode === 'bulanan' ? 'btn-primary shadow-sm' : 'btn-light text-muted' }}" style="font-size: 0.8rem;">
                     <i class="fa-solid fa-chart-simple"></i>
                     <span>Bulanan</span>
                 </a>
-                <a href="{{ route('admin.rekap.index', ['mode' => 'semester', 'semester' => $semester, 'tahun' => $tahun, 'kelas_id' => $kelasId, 'sort_by' => $sortBy]) }}" class="btn btn-sm rounded-pill px-3 fw-semibold d-inline-flex align-items-center gap-2 {{ $mode === 'semester' ? 'btn-primary shadow-sm' : 'btn-light text-muted' }}">
+                <a href="{{ route('admin.rekap.index', ['mode' => 'semester', 'semester' => $semester, 'tahun' => $tahun, 'kelas_id' => $kelasId, 'sort_by' => $sortBy]) }}" class="btn btn-sm rounded-pill px-2.5 py-1 fw-semibold d-inline-flex align-items-center gap-1.5 {{ $mode === 'semester' ? 'btn-primary shadow-sm' : 'btn-light text-muted' }}" style="font-size: 0.8rem;">
                     <i class="fa-solid fa-graduation-cap"></i>
                     <span>Semester</span>
                 </a>
@@ -47,14 +47,14 @@
 
             <!-- Tombol Pengaturan Semester & Tahun Ajaran Aktif (Modal Trigger) -->
             @if(isset($settingAkademik))
-            <button type="button" class="btn btn-sm btn-outline-success rounded-pill px-3 py-1.5 fw-semibold shadow-xs text-nowrap d-inline-flex align-items-center gap-1.5" data-bs-toggle="modal" data-bs-target="#modalSettingAkademik" title="Klik untuk mengubah Semester atau Tahun Ajaran resmi aktif">
+            <button type="button" class="btn btn-sm btn-outline-success rounded-pill px-2.5 py-1 fw-semibold shadow-xs text-nowrap d-inline-flex align-items-center gap-1.5" data-bs-toggle="modal" data-bs-target="#modalSettingAkademik" style="font-size: 0.8rem;" title="Klik untuk mengubah Semester atau Tahun Ajaran resmi aktif">
                 <i class="fa-solid fa-calendar-check text-success"></i>
-                <span>Semester Aktif: {{ ucfirst($settingAkademik->semester) }} ({{ $settingAkademik->tahun_ajaran }})</span>
+                <span>Semester {{ ucfirst($settingAkademik->semester) }} ({{ $settingAkademik->tahun_ajaran }})</span>
             </button>
             @endif
 
             <!-- Tombol Cetak Laporan -->
-            <a href="{{ route('admin.rekap.cetak', ['mode' => $mode, 'bulan' => $bulan, 'tahun' => $tahun, 'semester' => $semester, 'kelas_id' => $kelasId]) }}" target="_blank" class="btn btn-outline-primary rounded-pill px-3.5 py-1.5 fw-semibold shadow-sm btn-sm text-nowrap d-inline-flex align-items-center gap-2">
+            <a href="{{ route('admin.rekap.cetak', ['mode' => $mode, 'bulan' => $bulan, 'tahun' => $tahun, 'semester' => $semester, 'kelas_id' => $kelasId]) }}" target="_blank" class="btn btn-outline-primary rounded-pill px-3 py-1 fw-semibold shadow-sm btn-sm text-nowrap d-inline-flex align-items-center gap-1.5" style="font-size: 0.8rem;">
                 <i class="fa-solid fa-print"></i>
                 <span>Cetak Laporan</span>
             </a>
