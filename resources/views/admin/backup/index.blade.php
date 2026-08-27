@@ -247,7 +247,14 @@
                 Muat atau samakan dataset lengkap 112 siswa (32 Kelas 7, 40 Kelas 8, 20 Kelas 9A, 20 Kelas 9B), data wali murid, riwayat kenaikan kelas, hari efektif, dan sample kehadiran agar 100% identik dengan local.
             </small>
         </div>
-        <div>
+        <div class="d-flex align-items-center gap-2 flex-wrap">
+            <form action="{{ route('admin.backup.migrate') }}" method="POST" onsubmit="return confirm('Jalankan migrasi struktur database terbaru?');">
+                @csrf
+                <button type="submit" class="btn btn-sm btn-outline-primary rounded-pill px-3.5 py-2 fw-bold shadow-sm d-inline-flex align-items-center text-nowrap gap-1.5" style="font-size: 0.8rem;" title="Membuat tabel baru jika ada perubahan skema database">
+                    <i class="fa-solid fa-table"></i>
+                    <span>Update Struktur Database</span>
+                </button>
+            </form>
             <form action="{{ route('admin.backup.seedDummy') }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin memuat/menyinkronkan dataset lengkap 112 siswa dummy ke database?');">
                 @csrf
                 <button type="submit" class="btn btn-sm btn-success rounded-pill px-4 py-2 fw-bold shadow-sm d-inline-flex align-items-center text-nowrap gap-2" style="font-size: 0.8rem;">

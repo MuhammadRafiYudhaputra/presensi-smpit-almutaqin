@@ -116,4 +116,5 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::get('/backup/storage', [App\Http\Controllers\Admin\BackupController::class, 'backupStorage'])->name('backup.storage');
     Route::post('/backup/storage/restore', [App\Http\Controllers\Admin\BackupController::class, 'restoreStorage'])->name('backup.storage.restore');
     Route::post('/backup/seed-dummy', [App\Http\Controllers\Admin\BackupController::class, 'seedDummy'])->name('backup.seedDummy');
+    Route::post('/backup/migrate', [App\Http\Controllers\Admin\BackupController::class, 'runMigration'])->name('backup.migrate');
 });
