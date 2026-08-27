@@ -33,42 +33,46 @@ class HariEfektif extends Model
      */
     public static function getForKelas(string $mode, string $tahunAjaran, string $semester, ?int $bulan, int $tahun, ?int $kelasId, ?string $namaKelas = null): int
     {
-        // 1. Cek di database apakah ada entri custom untuk kelas_id ini
-        if ($kelasId) {
-            $query = static::where('mode', $mode)
+        try {
+            // 1. Cek di database apakah ada entri custom untuk kelas_id ini
+            if ($kelasId) {
+                $query = static::where('mode', $mode)
+                    ->where('tahun_ajaran', $tahunAjaran)
+                    ->where('semester', $semester)
+                    ->where('tahun', $tahun)
+                    ->where('kelas_id', $kelasId);
+
+                if ($mode === 'bulanan' && $bulan) {
+                    $query->where('bulan', $bulan);
+                }
+
+                $record = $query->first();
+                if ($record && $record->jumlah_hari > 0) {
+                    return (int) $record->jumlah_hari;
+                }
+            }
+
+            // 2. Cek apakah ada entri general (kelas_id null)
+            $queryGeneral = static::where('mode', $mode)
                 ->where('tahun_ajaran', $tahunAjaran)
                 ->where('semester', $semester)
                 ->where('tahun', $tahun)
-                ->where('kelas_id', $kelasId);
+                ->whereNull('kelas_id');
 
             if ($mode === 'bulanan' && $bulan) {
-                $query->where('bulan', $bulan);
+                $queryGeneral->where('bulan', $bulan);
             }
 
-            $record = $query->first();
-            if ($record && $record->jumlah_hari > 0) {
-                return (int) $record->jumlah_hari;
+            $generalRecord = $queryGeneral->first();
+            if ($generalRecord && $generalRecord->jumlah_hari > 0) {
+                // Jika ada namaKelas 9 dan semester genap, terapkan penyesuaian proporsional jika belum di-custom
+                if ($namaKelas && str_contains(strtoupper($namaKelas), '9') && $semester === 'genap' && $mode === 'semester') {
+                    return min($generalRecord->jumlah_hari, 85);
+                }
+                return (int) $generalRecord->jumlah_hari;
             }
-        }
-
-        // 2. Cek apakah ada entri general (kelas_id null)
-        $queryGeneral = static::where('mode', $mode)
-            ->where('tahun_ajaran', $tahunAjaran)
-            ->where('semester', $semester)
-            ->where('tahun', $tahun)
-            ->whereNull('kelas_id');
-
-        if ($mode === 'bulanan' && $bulan) {
-            $queryGeneral->where('bulan', $bulan);
-        }
-
-        $generalRecord = $queryGeneral->first();
-        if ($generalRecord && $generalRecord->jumlah_hari > 0) {
-            // Jika ada namaKelas 9 dan semester genap, terapkan penyesuaian proporsional jika belum di-custom
-            if ($namaKelas && str_contains(strtoupper($namaKelas), '9') && $semester === 'genap' && $mode === 'semester') {
-                return min($generalRecord->jumlah_hari, 85);
-            }
-            return (int) $generalRecord->jumlah_hari;
+        } catch (\Throwable $e) {
+            // Jika tabel belum termigrasi di server hosting/Railway, fallback mulus tanpa error
         }
 
         // 3. Fallback: Hitung otomatis berdasarkan kalender kerja (Senin - Jumat non-libur nasional)

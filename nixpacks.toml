@@ -2,4 +2,4 @@
 NIXPACKS_PHP_EXTENSIONS = 'gd,pdo_mysql,mbstring,zip,bcmath,curl,openssl'
 
 [start]
-cmd = 'php -S 0.0.0.0:$PORT -t public'
+cmd = 'sh start.sh'
