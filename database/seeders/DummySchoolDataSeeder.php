@@ -279,5 +279,69 @@ class DummySchoolDataSeeder extends Seeder
                 ]);
             }
         }
+
+        // 6. Seed Default Hari Efektif per Kelas untuk Kalender Akademik
+        $kelasMap = [
+            '7' => ['ganjil' => 110, 'genap' => 110, 'bulan' => 22],
+            '8' => ['ganjil' => 110, 'genap' => 110, 'bulan' => 22],
+            '9A' => ['ganjil' => 110, 'genap' => 85, 'bulan' => 20],
+            '9B' => ['ganjil' => 110, 'genap' => 85, 'bulan' => 20],
+        ];
+
+        $kelasObjMap = [
+            '7' => Kelas::where('nama_kelas', '7')->first(),
+            '8' => Kelas::where('nama_kelas', '8')->first(),
+            '9A' => Kelas::where('nama_kelas', '9A')->first(),
+            '9B' => Kelas::where('nama_kelas', '9B')->first(),
+        ];
+
+        $academicYears = ['2025/2026', '2026/2027'];
+        foreach ($academicYears as $ta) {
+            $baseYear = (int) substr($ta, 0, 4);
+            foreach ($kelasMap as $kName => $cfg) {
+                $kls = $kelasObjMap[$kName] ?? null;
+                if (!$kls) continue;
+
+                // Mode Semester Ganjil
+                \App\Models\HariEfektif::updateOrCreate([
+                    'tahun_ajaran' => $ta,
+                    'semester' => 'ganjil',
+                    'mode' => 'semester',
+                    'tahun' => $baseYear,
+                    'kelas_id' => $kls->id,
+                ], [
+                    'jumlah_hari' => $cfg['ganjil'],
+                ]);
+
+                // Mode Semester Genap
+                \App\Models\HariEfektif::updateOrCreate([
+                    'tahun_ajaran' => $ta,
+                    'semester' => 'genap',
+                    'mode' => 'semester',
+                    'tahun' => $baseYear + 1,
+                    'kelas_id' => $kls->id,
+                ], [
+                    'jumlah_hari' => $cfg['genap'],
+                ]);
+
+                // Mode Bulanan (Sample untuk semua 12 bulan)
+                for ($m = 1; $m <= 12; $m++) {
+                    $yr = ($m >= 7) ? $baseYear : ($baseYear + 1);
+                    $sem = ($m >= 7) ? 'ganjil' : 'genap';
+                    $targetHari = ($kName === '9A' || $kName === '9B') && in_array($m, [4, 5, 6]) ? 16 : 22;
+
+                    \App\Models\HariEfektif::updateOrCreate([
+                        'tahun_ajaran' => $ta,
+                        'semester' => $sem,
+                        'mode' => 'bulanan',
+                        'bulan' => $m,
+                        'tahun' => $yr,
+                        'kelas_id' => $kls->id,
+                    ], [
+                        'jumlah_hari' => $targetHari,
+                    ]);
+                }
+            }
+        }
     }
 }

@@ -8,6 +8,7 @@ use App\Models\Siswa;
 use App\Models\Kelas;
 use App\Models\Guru;
 use App\Models\OrangTua;
+use App\Models\HariEfektif;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -134,7 +135,7 @@ class PortalGuruController extends Controller
             $tahunAjaran = ($bulan >= 7) ? ($tahun . '/' . ($tahun + 1)) : (($tahun - 1) . '/' . $tahun);
         }
 
-        $defaultHariEfektif = $this->calculateDefaultHariEfektif($mode, $bulan, $tahun, $semester, $kelas ? $kelas->nama_kelas : null);
+        $defaultHariEfektif = HariEfektif::getForKelas($mode, $tahunAjaran, $semester, $bulan, $tahun, $kelas ? $kelas->id : null, $kelas ? $kelas->nama_kelas : null);
         $hariEfektif = (int) $request->get('hari_efektif', $defaultHariEfektif);
         if ($hariEfektif <= 0) $hariEfektif = $defaultHariEfektif;
 
@@ -223,6 +224,7 @@ class PortalGuruController extends Controller
                     'izin' => $izin,
                     'sakit' => $sakit,
                     'alpa' => $alpa,
+                    'hari_efektif_siswa' => $hariEfektif,
                     'persentase' => min(100, $persentase),
                 ];
             }
@@ -280,6 +282,7 @@ class PortalGuruController extends Controller
                     'izin' => $izin,
                     'sakit' => $sakit,
                     'alpa' => $alpa,
+                    'hari_efektif_siswa' => $hariEfektif,
                     'persentase' => min(100, $persentase),
                 ];
             }

@@ -188,9 +188,12 @@
                     <td class="text-center val-sakit">{{ $row->sakit }}</td>
                     <td class="text-center val-alpa">{{ $row->alpa }}</td>
                     <td class="text-center">
-                        <span class="badge {{ $row->persentase >= 85 ? 'bg-success' : ($row->persentase >= 75 ? 'bg-warning text-dark' : 'bg-danger') }} rounded-pill px-3 py-2 fw-bold">
+                        <span class="badge {{ $row->persentase >= 85 ? 'bg-success' : ($row->persentase >= 75 ? 'bg-warning text-dark' : 'bg-danger') }} rounded-pill px-3 py-1.5 fw-bold">
                             {{ $row->persentase }}%
                         </span>
+                        <div class="small text-muted mt-1" style="font-size: 0.72rem;" title="Dasar Hitungan: Hadir {{ $row->hadir }} hari dari {{ $row->hari_efektif_siswa }} hari efektif kelas">
+                            {{ $row->hadir }}/{{ $row->hari_efektif_siswa }} hr
+                        </div>
                     </td>
                     <td class="text-center">
                         @if($row->terlambat >= 3)
@@ -280,9 +283,12 @@
                     <td class="text-center val-sakit">{{ $row->sakit }}</td>
                     <td class="text-center val-alpa">{{ $row->alpa }}</td>
                     <td class="text-center">
-                        <span class="badge {{ $row->persentase >= 85 ? 'bg-success' : ($row->persentase >= 75 ? 'bg-warning text-dark' : 'bg-danger') }} rounded-pill px-3 py-2 fw-bold">
+                        <span class="badge {{ $row->persentase >= 85 ? 'bg-success' : ($row->persentase >= 75 ? 'bg-warning text-dark' : 'bg-danger') }} rounded-pill px-3 py-1.5 fw-bold">
                             {{ $row->persentase }}%
                         </span>
+                        <div class="small text-muted mt-1" style="font-size: 0.72rem;" title="Dasar Hitungan: Hadir {{ $row->hadir }} hari dari {{ $row->hari_efektif_siswa }} hari efektif kelas">
+                            {{ $row->hadir }}/{{ $row->hari_efektif_siswa }} hr
+                        </div>
                     </td>
                     <td class="text-center">
                         @if($row->terlambat >= 3)

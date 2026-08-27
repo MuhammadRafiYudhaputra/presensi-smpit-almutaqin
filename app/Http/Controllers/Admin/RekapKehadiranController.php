@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Kehadiran;
 use App\Models\Kelas;
 use App\Models\Siswa;
+use App\Models\HariEfektif;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -94,41 +95,49 @@ class RekapKehadiranController extends Controller
     /**
      * Helper untuk menghitung default hari efektif (Senin - Jumat)
      */
-    private function calculateDefaultHariEfektif($mode, $bulan, $tahun, $semester, $kelasNama = null)
+    private function calculateDefaultHariEfektif($mode, $bulan, $tahun, $semester, $kelasId = null, $kelasNama = null, $tahunAjaran = '2026/2027')
     {
-        if ($mode === 'bulanan') {
-            $startDate = Carbon::createFromDate($tahun, $bulan, 1);
-            $endDate = $startDate->copy()->endOfMonth();
-            $effectiveDays = 0;
-            $current = $startDate->copy();
-            while ($current <= $endDate) {
-                if (!\App\Helpers\HolidayHelper::isNonEffectiveDay($current)) {
-                    $effectiveDays++;
-                }
-                $current->addDay();
-            }
-            return max(1, $effectiveDays);
-        } elseif ($mode === 'semester') {
-            // Khusus Kelas 9 Semester Genap (Semester 2) hari efektif biasanya lebih sedikit (~90 hari)
-            if ($kelasNama && str_contains(strtoupper($kelasNama), '9') && $semester === 'genap') {
-                return 90;
-            }
+        return HariEfektif::getForKelas($mode, $tahunAjaran, $semester, $bulan, $tahun, $kelasId, $kelasNama);
+    }
 
-            $startMonth = ($semester === 'ganjil') ? 7 : 1;
-            $endMonth = ($semester === 'ganjil') ? 12 : 6;
-            $startDate = Carbon::createFromDate($tahun, $startMonth, 1);
-            $endDate = Carbon::createFromDate($tahun, $endMonth, 1)->endOfMonth();
-            $effectiveDays = 0;
-            $current = $startDate->copy();
-            while ($current <= $endDate) {
-                if (!\App\Helpers\HolidayHelper::isNonEffectiveDay($current)) {
-                    $effectiveDays++;
-                }
-                $current->addDay();
-            }
-            return max(1, $effectiveDays);
+    /**
+     * Simpan Pengaturan Hari Efektif per Kelas
+     */
+    public function saveHariEfektif(Request $request)
+    {
+        $request->validate([
+            'mode' => 'required|in:bulanan,semester',
+            'tahun_ajaran' => 'required|string',
+            'semester' => 'required|in:ganjil,genap',
+            'tahun' => 'required|integer',
+            'bulan' => 'nullable|integer|between:1,12',
+            'hari_efektif_kelas' => 'required|array',
+            'hari_efektif_kelas.*' => 'required|integer|min:1|max:365',
+        ]);
+
+        $mode = $request->mode;
+        $tahunAjaran = $request->tahun_ajaran;
+        $semester = $request->semester;
+        $tahun = (int) $request->tahun;
+        $bulan = ($mode === 'bulanan') ? (int) $request->bulan : null;
+
+        foreach ($request->hari_efektif_kelas as $kelasId => $jumlahHari) {
+            HariEfektif::updateOrCreate(
+                [
+                    'mode' => $mode,
+                    'tahun_ajaran' => $tahunAjaran,
+                    'semester' => $semester,
+                    'tahun' => $tahun,
+                    'bulan' => $bulan,
+                    'kelas_id' => $kelasId,
+                ],
+                [
+                    'jumlah_hari' => (int) $jumlahHari,
+                ]
+            );
         }
-        return 1;
+
+        return redirect()->back()->with('success', 'Pengaturan Hari Efektif per kelas berhasil disimpan!');
     }
 
     /**
@@ -169,8 +178,23 @@ class RekapKehadiranController extends Controller
             $tahunAjaran = ($bulan >= 7) ? ($tahun . '/' . ($tahun + 1)) : (($tahun - 1) . '/' . $tahun);
         }
 
-        // Hari Efektif (Bisa disesuaikan oleh Admin TU)
-        $defaultHariEfektif = $this->calculateDefaultHariEfektif($mode, $bulan, $tahun, $semester, $selectedKelas ? $selectedKelas->nama_kelas : null);
+        // Hitung mapping Hari Efektif untuk masing-masing kelas
+        $hariEfektifMap = [];
+        foreach ($kelases as $k) {
+            $hariEfektifMap[$k->id] = HariEfektif::getForKelas(
+                $mode,
+                $tahunAjaran,
+                $semester,
+                $bulan,
+                $tahun,
+                $k->id,
+                $k->nama_kelas
+            );
+        }
+
+        $defaultHariEfektif = $selectedKelas 
+            ? ($hariEfektifMap[$selectedKelas->id] ?? 20)
+            : ($hariEfektifMap[$kelases->first()->id ?? 0] ?? 20);
         $hariEfektif = (int) $request->get('hari_efektif', $defaultHariEfektif);
         if ($hariEfektif <= 0) $hariEfektif = $defaultHariEfektif;
 
@@ -251,8 +275,15 @@ class RekapKehadiranController extends Controller
                     ->count();
 
                 $totalHadir = $tepatWaktu + $terlambat;
-                $persentase = ($hariEfektif > 0) ? round(($totalHadir / $hariEfektif) * 100, 1) : 0;
                 $kelasHistoris = $siswa->getKelasForTahunAjaran($tahunAjaran);
+                $effectiveKelasId = $kelasHistoris ? $kelasHistoris->id : $siswa->kelas_id;
+                $effectiveKelasNama = $kelasHistoris ? $kelasHistoris->nama_kelas : ($siswa->kelas->nama_kelas ?? null);
+
+                $studentEffectiveDays = $hariEfektifMap[$effectiveKelasId] ?? HariEfektif::getForKelas(
+                    $mode, $tahunAjaran, $semester, $bulan, $tahun, $effectiveKelasId, $effectiveKelasNama
+                );
+
+                $persentase = ($studentEffectiveDays > 0) ? round(($totalHadir / $studentEffectiveDays) * 100, 1) : 0;
 
                 $bulananData[] = (object) [
                     'siswa' => $siswa,
@@ -263,6 +294,7 @@ class RekapKehadiranController extends Controller
                     'izin' => $izin,
                     'sakit' => $sakit,
                     'alpa' => $alpa,
+                    'hari_efektif_siswa' => $studentEffectiveDays,
                     'persentase' => min(100, $persentase),
                 ];
             }
@@ -313,8 +345,15 @@ class RekapKehadiranController extends Controller
                     ->count();
 
                 $totalHadir = $tepatWaktu + $terlambat;
-                $persentase = ($hariEfektif > 0) ? round(($totalHadir / $hariEfektif) * 100, 1) : 0;
                 $kelasHistoris = $siswa->getKelasForTahunAjaran($tahunAjaran);
+                $effectiveKelasId = $kelasHistoris ? $kelasHistoris->id : $siswa->kelas_id;
+                $effectiveKelasNama = $kelasHistoris ? $kelasHistoris->nama_kelas : ($siswa->kelas->nama_kelas ?? null);
+
+                $studentEffectiveDays = $hariEfektifMap[$effectiveKelasId] ?? HariEfektif::getForKelas(
+                    $mode, $tahunAjaran, $semester, $bulan, $tahun, $effectiveKelasId, $effectiveKelasNama
+                );
+
+                $persentase = ($studentEffectiveDays > 0) ? round(($totalHadir / $studentEffectiveDays) * 100, 1) : 0;
 
                 $semesterData[] = (object) [
                     'siswa' => $siswa,
@@ -325,6 +364,7 @@ class RekapKehadiranController extends Controller
                     'izin' => $izin,
                     'sakit' => $sakit,
                     'alpa' => $alpa,
+                    'hari_efektif_siswa' => $studentEffectiveDays,
                     'persentase' => min(100, $persentase),
                 ];
             }
@@ -338,8 +378,10 @@ class RekapKehadiranController extends Controller
             'tahunAjaran',
             'semester',
             'kelasId',
+            'selectedKelas',
             'sortBy',
             'hariEfektif',
+            'hariEfektifMap',
             'kelases',
             'settingAkademik',
             'bulananData',
@@ -428,7 +470,24 @@ class RekapKehadiranController extends Controller
             $tahunAjaran = ($bulan >= 7) ? ($tahun . '/' . ($tahun + 1)) : (($tahun - 1) . '/' . $tahun);
         }
 
-        $defaultHariEfektif = $this->calculateDefaultHariEfektif($mode, $bulan, $tahun, $semester, $kelas ? $kelas->nama_kelas : null);
+        // Hitung mapping Hari Efektif untuk masing-masing kelas
+        $allKelases = Kelas::all();
+        $hariEfektifMap = [];
+        foreach ($allKelases as $k) {
+            $hariEfektifMap[$k->id] = HariEfektif::getForKelas(
+                $mode,
+                $tahunAjaran,
+                $semester,
+                $bulan,
+                $tahun,
+                $k->id,
+                $k->nama_kelas
+            );
+        }
+
+        $defaultHariEfektif = $kelas 
+            ? ($hariEfektifMap[$kelas->id] ?? 20)
+            : ($hariEfektifMap[$allKelases->first()->id ?? 0] ?? 20);
         $hariEfektif = (int) $request->get('hari_efektif', $defaultHariEfektif);
         if ($hariEfektif <= 0) $hariEfektif = $defaultHariEfektif;
 
@@ -467,6 +526,12 @@ class RekapKehadiranController extends Controller
         $dataLaporan = [];
         foreach ($siswas as $siswa) {
             $kelasHistoris = $siswa->getKelasForTahunAjaran($tahunAjaran);
+            $effectiveKelasId = $kelasHistoris ? $kelasHistoris->id : $siswa->kelas_id;
+            $effectiveKelasNama = $kelasHistoris ? $kelasHistoris->nama_kelas : ($siswa->kelas->nama_kelas ?? null);
+
+            $studentEffectiveDays = $hariEfektifMap[$effectiveKelasId] ?? HariEfektif::getForKelas(
+                $mode, $tahunAjaran, $semester, $bulan, $tahun, $effectiveKelasId, $effectiveKelasNama
+            );
 
             if ($mode === 'semester') {
                 $startMonth = ($semester === 'ganjil') ? 7 : 1;
@@ -538,7 +603,7 @@ class RekapKehadiranController extends Controller
             }
 
             $totalHadir = $tepatWaktu + $terlambat;
-            $persentase = ($hariEfektif > 0) ? round(($totalHadir / $hariEfektif) * 100, 1) : 0;
+            $persentase = ($studentEffectiveDays > 0) ? round(($totalHadir / $studentEffectiveDays) * 100, 1) : 0;
 
             $dataLaporan[] = (object) [
                 'siswa' => $siswa,
@@ -548,6 +613,7 @@ class RekapKehadiranController extends Controller
                 'izin' => $izin,
                 'sakit' => $sakit,
                 'alpa' => $alpa,
+                'hari_efektif_siswa' => $studentEffectiveDays,
                 'persentase' => min(100, $persentase),
             ];
         }

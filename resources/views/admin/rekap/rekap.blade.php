@@ -45,6 +45,12 @@
                 </a>
             </div>
 
+            <!-- Tombol Pengaturan Hari Efektif per Kelas -->
+            <button type="button" class="btn btn-sm btn-outline-dark rounded-pill px-3 py-1.5 fw-semibold shadow-xs text-nowrap d-inline-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#modalAturHariEfektif" title="Klik untuk menyesuaikan hari efektif masing-masing kelas">
+                <i class="fa-solid fa-sliders text-primary"></i>
+                <span>Atur Hari Efektif per Kelas</span>
+            </button>
+
             <!-- Tombol Pengaturan Semester Aktif (Modal Trigger) -->
             @if(isset($settingAkademik))
             <button type="button" class="btn btn-sm btn-outline-success rounded-pill px-3 py-1.5 fw-semibold shadow-xs text-nowrap d-inline-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#modalSettingAkademik" title="Klik untuk mengubah Semester atau Tahun Ajaran resmi aktif">
@@ -62,11 +68,11 @@
     </div>
 
     <!-- Filter & Parameter Form -->
-    <form action="{{ route('admin.rekap.index') }}" method="GET" class="row g-3 mb-4 align-items-end">
+    <form action="{{ route('admin.rekap.index') }}" method="GET" class="row g-3 mb-3 align-items-end">
         <input type="hidden" name="mode" value="{{ $mode }}">
 
         @if($mode === 'bulanan')
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <label class="form-label fw-bold text-dark mb-1">Pilih Bulan</label>
                 <select name="bulan" class="form-select shadow-sm" onchange="this.form.submit()">
                     @for($m=1; $m<=12; $m++)
@@ -76,7 +82,7 @@
                     @endfor
                 </select>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <label class="form-label fw-bold text-dark mb-1">Pilih Tahun</label>
                 <select name="tahun" class="form-select shadow-sm" onchange="this.form.submit()">
                     @for($y=date('Y')-2; $y<=date('Y')+1; $y++)
@@ -84,35 +90,21 @@
                     @endfor
                 </select>
             </div>
-            <div class="col-md-2">
-                <label class="form-label fw-bold text-dark mb-1">Hari Efektif</label>
-                <div class="input-group shadow-sm">
-                    <input type="number" name="hari_efektif" class="form-control" value="{{ $hariEfektif }}" min="1" max="31" title="Jumlah hari efektif/masuk sekolah dalam bulan ini">
-                    <span class="input-group-text bg-light text-muted small">Hari</span>
-                </div>
-            </div>
         @elseif($mode === 'semester')
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <label class="form-label fw-bold text-dark mb-1">Pilih Semester</label>
                 <select name="semester" class="form-select shadow-sm" onchange="this.form.submit()">
                     <option value="ganjil" {{ $semester === 'ganjil' ? 'selected' : '' }}>Semester Ganjil (Jul - Des)</option>
                     <option value="genap" {{ $semester === 'genap' ? 'selected' : '' }}>Semester Genap (Jan - Jun)</option>
                 </select>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <label class="form-label fw-bold text-dark mb-1">Tahun Ajaran</label>
                 <select name="tahun" class="form-select shadow-sm" onchange="this.form.submit()">
                     @for($y=date('Y')-2; $y<=date('Y')+1; $y++)
                         <option value="{{ $y }}" {{ $tahun == $y ? 'selected' : '' }}>{{ $y }}/{{ $y+1 }}</option>
                     @endfor
                 </select>
-            </div>
-            <div class="col-md-2">
-                <label class="form-label fw-bold text-dark mb-1">Hari Efektif Semester</label>
-                <div class="input-group shadow-sm">
-                    <input type="number" name="hari_efektif" class="form-control" value="{{ $hariEfektif }}" min="1" max="180" title="Jumlah hari efektif sekolah semester ini">
-                    <span class="input-group-text bg-light text-muted small">Hari</span>
-                </div>
             </div>
         @endif
 
@@ -135,11 +127,22 @@
             </select>
         </div>
 
+        <!-- Bar Informasi Dasar Hari Efektif Masing-Masing Kelas -->
         <div class="col-12 mt-2">
-            <button type="submit" class="btn btn-sm btn-primary rounded-pill px-4 py-2 fw-bold shadow-sm d-inline-flex align-items-center gap-2">
-                <i class="fa-solid fa-arrows-rotate"></i>
-                <span>Terapkan Hari Efektif & Filter</span>
-            </button>
+            <div class="d-flex align-items-center gap-2 flex-wrap p-2.5 bg-light rounded-3 border">
+                <small class="fw-bold text-dark d-flex align-items-center">
+                    <i class="fa-solid fa-calendar-days text-primary me-1.5"></i> Dasar Hari Efektif (100%):
+                </small>
+                @foreach($kelases as $k)
+                    <span class="badge bg-white text-dark border shadow-xs px-2.5 py-1.5 rounded-2 d-inline-flex align-items-center gap-1.5">
+                        <span>Kelas {{ $k->nama_kelas }}:</span>
+                        <strong class="text-primary">{{ $hariEfektifMap[$k->id] ?? 20 }} Hari</strong>
+                    </span>
+                @endforeach
+                <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3 py-1 ms-auto fw-bold" data-bs-toggle="modal" data-bs-target="#modalAturHariEfektif">
+                    <i class="fa-solid fa-sliders me-1"></i> Sesuaikan Hari Efektif
+                </button>
+            </div>
         </div>
     </form>
 
@@ -206,9 +209,12 @@
                     <td class="text-center val-sakit">{{ $row->sakit }}</td>
                     <td class="text-center val-alpa">{{ $row->alpa }}</td>
                     <td class="text-center">
-                        <span class="badge {{ $row->persentase >= 85 ? 'bg-success' : ($row->persentase >= 75 ? 'bg-warning text-dark' : 'bg-danger') }} rounded-pill px-3 py-2 fw-bold">
+                        <span class="badge {{ $row->persentase >= 85 ? 'bg-success' : ($row->persentase >= 75 ? 'bg-warning text-dark' : 'bg-danger') }} rounded-pill px-3 py-1.5 fw-bold">
                             {{ $row->persentase }}%
                         </span>
+                        <div class="small text-muted mt-1" style="font-size: 0.72rem;" title="Dasar Hitungan: Hadir {{ $row->hadir }} hari dari {{ $row->hari_efektif_siswa }} hari efektif kelas {{ $row->kelas_historis->nama_kelas ?? ($row->siswa->kelas->nama_kelas ?? '-') }}">
+                            {{ $row->hadir }}/{{ $row->hari_efektif_siswa }} hr
+                        </div>
                     </td>
                     <td class="text-center">
                         @if($row->terlambat >= 3)
@@ -298,9 +304,12 @@
                     <td class="text-center val-sakit">{{ $row->sakit }}</td>
                     <td class="text-center val-alpa">{{ $row->alpa }}</td>
                     <td class="text-center">
-                        <span class="badge {{ $row->persentase >= 85 ? 'bg-success' : ($row->persentase >= 75 ? 'bg-warning text-dark' : 'bg-danger') }} rounded-pill px-3 py-2 fw-bold">
+                        <span class="badge {{ $row->persentase >= 85 ? 'bg-success' : ($row->persentase >= 75 ? 'bg-warning text-dark' : 'bg-danger') }} rounded-pill px-3 py-1.5 fw-bold">
                             {{ $row->persentase }}%
                         </span>
+                        <div class="small text-muted mt-1" style="font-size: 0.72rem;" title="Dasar Hitungan: Hadir {{ $row->hadir }} hari dari {{ $row->hari_efektif_siswa }} hari efektif kelas {{ $row->kelas_historis->nama_kelas ?? ($row->siswa->kelas->nama_kelas ?? '-') }}">
+                            {{ $row->hadir }}/{{ $row->hari_efektif_siswa }} hr
+                        </div>
                     </td>
                     <td class="text-center">
                         @if($row->terlambat >= 3)
@@ -327,6 +336,87 @@
         </table>
     </div>
     @endif
+</div>
+
+<!-- Modal Pengaturan Hari Efektif per Kelas -->
+<div class="modal fade" id="modalAturHariEfektif" tabindex="-1" aria-labelledby="modalAturHariEfektifLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+            <div class="modal-header bg-primary text-white py-3 px-4">
+                <div>
+                    <h6 class="modal-title fw-bold" id="modalAturHariEfektifLabel">
+                        <i class="fa-solid fa-sliders me-2"></i> Atur Hari Efektif per Kelas
+                    </h6>
+                    <small class="text-white text-opacity-75">
+                        Periode: {{ $mode === 'semester' ? 'Semester ' . ucfirst($semester) . ' (T.A. ' . $tahunAjaran . ')' : 'Bulan ' . \Carbon\Carbon::create()->month($bulan)->translatedFormat('F') . ' ' . $tahun . ' (T.A. ' . $tahunAjaran . ')' }}
+                    </small>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ route('admin.rekap.saveHariEfektif') }}" method="POST">
+                @csrf
+                <input type="hidden" name="mode" value="{{ $mode }}">
+                <input type="hidden" name="tahun_ajaran" value="{{ $tahunAjaran }}">
+                <input type="hidden" name="semester" value="{{ $semester }}">
+                <input type="hidden" name="tahun" value="{{ $tahun }}">
+                <input type="hidden" name="bulan" value="{{ $bulan }}">
+
+                <div class="modal-body p-4">
+                    <div class="alert alert-info border-0 rounded-3 mb-3 d-flex align-items-start gap-2.5 small">
+                        <i class="fa-solid fa-circle-info fs-5 text-primary mt-0.5"></i>
+                        <div>
+                            <strong>Dasar Perhitungan Persentase:</strong><br>
+                            Nilai $100\%$ kehadiran dihitung berdasarkan jumlah hari efektif masuk sekolah masing-masing kelas. Anda dapat menentukan angka yang berbeda antar kelas (contoh: pada semester genap, kelas IX memiliki hari efektif yang lebih sedikit karena kelulusan lebih awal).
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th style="width: 50px;" class="text-center">No</th>
+                                    <th>Nama Kelas</th>
+                                    <th>Wali Kelas</th>
+                                    <th style="width: 200px;" class="text-center">Hari Efektif (Hari)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($kelases as $idx => $k)
+                                @php
+                                    $currentDays = $hariEfektifMap[$k->id] ?? 20;
+                                @endphp
+                                <tr>
+                                    <td class="text-center fw-bold text-muted">{{ $idx + 1 }}</td>
+                                    <td class="fw-bold text-dark">
+                                        <span class="badge bg-primary bg-opacity-10 text-primary border border-primary px-2.5 py-1.5 rounded-2">
+                                            Kelas {{ $k->nama_kelas }}
+                                        </span>
+                                    </td>
+                                    <td class="text-muted small">
+                                        {{ $k->waliKelas->nama ?? 'Belum ditentukan' }}
+                                    </td>
+                                    <td>
+                                        <div class="input-group input-group-sm">
+                                            <input type="number" name="hari_efektif_kelas[{{ $k->id }}]" class="form-control text-center fw-bold text-primary" value="{{ $currentDays }}" min="1" max="365" required>
+                                            <span class="input-group-text bg-light text-muted small">Hari</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="modal-footer bg-light px-4 py-3 border-0 d-flex justify-content-between">
+                    <button type="button" class="btn btn-light border rounded-pill px-3" data-bs-dismiss="modal">Tutup</button>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm">
+                        <i class="fa-solid fa-floppy-disk me-1"></i> Simpan Hari Efektif
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 
 <!-- Modal Riwayat Keterlambatan & Catatan BK -->

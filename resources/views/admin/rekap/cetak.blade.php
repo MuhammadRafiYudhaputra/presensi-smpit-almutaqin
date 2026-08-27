@@ -181,7 +181,11 @@
                 | Tahun Ajaran: {{ $thnAjaran }}
                 | Kelas: {{ $kelas->nama_kelas ?? 'Semua Kelas' }}
                 @if(($mode ?? 'bulanan') !== 'harian')
-                    | Dasar Perhitungan: {{ $hariEfektif }} Hari Efektif
+                    @if($kelas)
+                        | Dasar Perhitungan: {{ $hariEfektif }} Hari Efektif
+                    @else
+                        | Dasar Perhitungan: Disesuaikan per Hari Efektif Kelas
+                    @endif
                 @endif
             </p>
         </div>
@@ -199,7 +203,7 @@
                     <th style="width: 55px;">Izin</th>
                     <th style="width: 55px;">Sakit</th>
                     <th style="width: 55px;">Alpa</th>
-                    <th style="width: 80px;">Persentase</th>
+                    <th style="width: 85px;">Persentase</th>
                 </tr>
             </thead>
             <tbody>
@@ -214,7 +218,14 @@
                     <td class="text-center">{{ $row->izin }}</td>
                     <td class="text-center">{{ $row->sakit }}</td>
                     <td class="text-center">{{ $row->alpa }}</td>
-                    <td class="text-center fw-bold">{{ $row->persentase }}%</td>
+                    <td class="text-center fw-bold">
+                        {{ $row->persentase }}%
+                        @if(isset($row->hari_efektif_siswa) && ($mode ?? '') !== 'harian')
+                            <div style="font-size: 0.68rem; font-weight: normal; color: #475569;">
+                                ({{ $row->hadir }}/{{ $row->hari_efektif_siswa }} hr)
+                            </div>
+                        @endif
+                    </td>
                 </tr>
                 @empty
                 <tr>

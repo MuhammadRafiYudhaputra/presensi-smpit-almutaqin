@@ -93,6 +93,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     // Monitoring & Rekap Laporan
     Route::get('/monitoring', [RekapKehadiranController::class, 'monitoring'])->name('rekap.monitoring');
     Route::get('/rekap', [RekapKehadiranController::class, 'rekap'])->name('rekap.index');
+    Route::post('/rekap/hari-efektif', [RekapKehadiranController::class, 'saveHariEfektif'])->name('rekap.saveHariEfektif');
     Route::post('/rekap/update-status', [RekapKehadiranController::class, 'updateStatus'])->name('rekap.updateStatus');
     Route::get('/laporan', [RekapKehadiranController::class, 'generateLaporanIndex'])->name('laporan.index');
     Route::get('/rekap/cetak', [RekapKehadiranController::class, 'cetakLaporan'])->name('rekap.cetak');
