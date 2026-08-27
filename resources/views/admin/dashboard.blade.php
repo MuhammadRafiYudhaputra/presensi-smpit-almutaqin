@@ -142,17 +142,10 @@
                     <h6 class="fw-bold mb-0 text-white" style="font-size: 0.95rem;">Absensi Siswa Hari Ini</h6>
                     <small class="text-white-50" style="font-size: 0.75rem;">{{ \Carbon\Carbon::now('Asia/Jakarta')->translatedFormat('d F Y') }}</small>
                 </div>
-                <!-- Filter Dropdown Kelas -->
-                <form action="{{ route('admin.dashboard') }}" method="GET" class="m-0">
-                    <select name="kelas_id" class="form-select form-select-sm shadow-sm" style="min-width: 175px; border-radius: 6px; font-size: 0.78rem;" onchange="this.form.submit()">
-                        <option value="">-- Semua Kelas ({{ $totalSiswa }} siswa) --</option>
-                        @foreach($kelases as $k)
-                            <option value="{{ $k->id }}" {{ $selectedKelasId == $k->id ? 'selected' : '' }}>
-                                Kelas {{ $k->nama_kelas }} ({{ $k->siswas_count }} siswa)
-                            </option>
-                        @endforeach
-                    </select>
-                </form>
+                <!-- Badge Info Total Siswa -->
+                <span class="badge bg-white bg-opacity-20 text-white border border-white border-opacity-25 px-2.5 py-1 rounded-pill fw-semibold" style="font-size: 0.76rem;">
+                    <i class="fa-solid fa-users me-1"></i> Semua Kelas ({{ $totalSiswa }} Siswa)
+                </span>
             </div>
 
             <div class="p-3">
@@ -188,12 +181,12 @@
                         @if(($totalPresensi ?? 0) === 0)
                             <i class="fa-solid fa-clock text-secondary me-1"></i> Status: <strong>Presensi belum dimulai</strong>
                         @else
-                            <i class="fa-solid fa-circle-info text-primary me-1"></i> Total hadir: <strong>{{ $totalMasuk }} Siswa</strong> ({{ round(($totalMasuk / max(1, $totalSiswaFiltered)) * 100) }}%)
+                            <i class="fa-solid fa-circle-check text-success me-1"></i> Total hadir: <strong>{{ $totalMasuk }} Siswa</strong> ({{ round(($totalMasuk / max(1, $totalSiswaFiltered)) * 100) }}%)
                         @endif
                     </small>
-                    <a href="{{ route('admin.rekap.monitoring') }}" class="btn btn-sm btn-outline-primary rounded-pill px-3 py-1 fw-bold" style="font-size: 0.78rem;">
-                        <i class="fa-solid fa-list-check me-1"></i> Buka Absensi Siswa
-                    </a>
+                    <small class="text-muted" style="font-size: 0.78rem;">
+                        <i class="fa-solid fa-building-columns text-primary me-1"></i> SMP IT Al-Muttaqin
+                    </small>
                 </div>
             </div>
         </div>
@@ -215,10 +208,12 @@
                 </div>
 
                 <div class="border-top pt-2 mt-2 px-1 d-flex justify-content-between align-items-center flex-wrap gap-2">
-                    <small class="text-muted" style="font-size: 0.78rem;">Data sinkron otomatis</small>
-                    <a href="{{ route('admin.rekap.index') }}" class="text-decoration-none fw-bold text-primary" style="font-size: 0.78rem;">
-                        <i class="fa-solid fa-chart-column me-1"></i> Lihat Rekapitulasi Lengkap &rarr;
-                    </a>
+                    <small class="text-muted" style="font-size: 0.78rem;">
+                        <i class="fa-solid fa-arrows-rotate text-primary me-1"></i> Data sinkron otomatis real-time
+                    </small>
+                    <small class="text-muted" style="font-size: 0.78rem;">
+                        <i class="fa-solid fa-chart-simple text-info me-1"></i> Statistik 7 Hari Terakhir
+                    </small>
                 </div>
             </div>
         </div>
