@@ -429,7 +429,7 @@
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('guru.rekap') }}" class="nav-link {{ request()->routeIs('guru.rekap') ? 'active' : '' }}">
-                                <i class="fa-solid fa-file-lines"></i> Rekap Kehadiran
+                                <i class="fa-solid fa-chart-simple"></i> Rekapitulasi Presensi
                             </a>
                         </li>
                         <li class="nav-item">

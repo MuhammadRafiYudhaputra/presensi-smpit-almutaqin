@@ -25,28 +25,28 @@
 
 <div class="card card-custom p-4 shadow-sm border-0 rounded-4">
     <!-- Header & Mode Tabs -->
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-3 pb-2 border-bottom">
         <div>
-            <h5 class="fw-bold mb-1 text-dark d-flex align-items-center">
-                <i class="fa-solid fa-chart-simple text-primary me-2 fs-4"></i> Rekapitulasi Presensi Siswa
+            <h5 class="fw-bold mb-0.5 text-dark d-flex align-items-center" style="font-size: 1.05rem;">
+                <i class="fa-solid fa-chart-simple text-primary me-3 fs-5"></i> Rekapitulasi Presensi Siswa
             </h5>
-            <small class="text-muted">Akumulasi kehadiran Sekolah</small>
+            <small class="text-muted ms-4 ps-2 d-block" style="font-size: 0.76rem;">Akumulasi kehadiran berkala (Bulanan &amp; Semester) &bull; Kelas {{ $kelas->nama_kelas ?? '' }}</small>
         </div>
-        <div class="d-flex gap-2 align-items-center flex-wrap flex-md-nowrap flex-shrink-0">
+        <div class="d-flex align-items-center gap-2 flex-wrap flex-sm-nowrap">
             <!-- Mode Switcher Tabs (Bulanan & Semester Saja) -->
-            <div class="btn-group p-1 bg-light rounded-pill border" role="group">
-                <a href="{{ route('guru.rekap', ['mode' => 'bulanan', 'bulan' => $bulan, 'tahun' => $tahun, 'hari_efektif' => $hariEfektif, 'sort_by' => $sortBy]) }}" class="btn btn-sm rounded-pill px-3 fw-semibold d-inline-flex align-items-center gap-2 {{ $mode === 'bulanan' ? 'btn-primary shadow-sm' : 'btn-light text-muted' }}">
+            <div class="btn-group p-0.5 bg-light rounded-pill border" role="group">
+                <a href="{{ route('guru.rekap', ['mode' => 'bulanan', 'bulan' => $bulan, 'tahun' => $tahun, 'sort_by' => $sortBy]) }}" class="btn btn-sm rounded-pill px-3 py-1 fw-semibold d-inline-flex align-items-center gap-2 {{ $mode === 'bulanan' ? 'btn-primary shadow-sm' : 'btn-light text-muted' }}" style="font-size: 0.8rem;">
                     <i class="fa-solid fa-chart-simple"></i>
                     <span>Bulanan</span>
                 </a>
-                <a href="{{ route('guru.rekap', ['mode' => 'semester', 'semester' => $semester, 'tahun' => $tahun, 'hari_efektif' => $hariEfektif, 'sort_by' => $sortBy]) }}" class="btn btn-sm rounded-pill px-3 fw-semibold d-inline-flex align-items-center gap-2 {{ $mode === 'semester' ? 'btn-primary shadow-sm' : 'btn-light text-muted' }}">
+                <a href="{{ route('guru.rekap', ['mode' => 'semester', 'semester' => $semester, 'tahun' => $tahun, 'sort_by' => $sortBy]) }}" class="btn btn-sm rounded-pill px-3 py-1 fw-semibold d-inline-flex align-items-center gap-2 {{ $mode === 'semester' ? 'btn-primary shadow-sm' : 'btn-light text-muted' }}" style="font-size: 0.8rem;">
                     <i class="fa-solid fa-graduation-cap"></i>
                     <span>Semester</span>
                 </a>
             </div>
 
             <!-- Tombol Cetak Laporan -->
-            <a href="{{ route('admin.rekap.cetak', ['mode' => $mode, 'bulan' => $bulan, 'tahun' => $tahun, 'semester' => $semester, 'kelas_id' => $kelas ? $kelas->id : null, 'hari_efektif' => $hariEfektif]) }}" target="_blank" class="btn btn-outline-primary rounded-pill px-3 py-1.5 fw-semibold shadow-sm btn-sm text-nowrap d-inline-flex align-items-center gap-2">
+            <a href="{{ route('admin.rekap.cetak', ['mode' => $mode, 'bulan' => $bulan, 'tahun' => $tahun, 'semester' => $semester, 'kelas_id' => $kelas ? $kelas->id : null]) }}" target="_blank" class="btn btn-outline-primary rounded-pill px-3 py-1 fw-semibold shadow-sm btn-sm text-nowrap d-inline-flex align-items-center gap-2" style="font-size: 0.8rem;">
                 <i class="fa-solid fa-print"></i>
                 <span>Cetak Laporan</span>
             </a>
@@ -54,11 +54,11 @@
     </div>
 
     <!-- Filter & Parameter Form -->
-    <form action="{{ route('guru.rekap') }}" method="GET" class="row g-3 mb-4 align-items-end">
+    <form action="{{ route('guru.rekap') }}" method="GET" class="row g-3 mb-3 align-items-end">
         <input type="hidden" name="mode" value="{{ $mode }}">
 
         @if($mode === 'bulanan')
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <label class="form-label fw-bold text-dark mb-1">Pilih Bulan</label>
                 <select name="bulan" class="form-select shadow-sm" onchange="this.form.submit()">
                     @for($m=1; $m<=12; $m++)
@@ -68,7 +68,7 @@
                     @endfor
                 </select>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-4">
                 <label class="form-label fw-bold text-dark mb-1">Pilih Tahun</label>
                 <select name="tahun" class="form-select shadow-sm" onchange="this.form.submit()">
                     @for($y=date('Y')-2; $y<=date('Y')+1; $y++)
@@ -76,35 +76,21 @@
                     @endfor
                 </select>
             </div>
-            <div class="col-md-3">
-                <label class="form-label fw-bold text-dark mb-1">Hari Efektif</label>
-                <div class="input-group shadow-sm">
-                    <input type="number" name="hari_efektif" class="form-control" value="{{ $hariEfektif }}" min="1" max="31" title="Jumlah hari efektif/masuk sekolah dalam bulan ini">
-                    <span class="input-group-text bg-light text-muted small">Hari</span>
-                </div>
-            </div>
         @elseif($mode === 'semester')
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <label class="form-label fw-bold text-dark mb-1">Pilih Semester</label>
                 <select name="semester" class="form-select shadow-sm" onchange="this.form.submit()">
                     <option value="ganjil" {{ $semester === 'ganjil' ? 'selected' : '' }}>Semester Ganjil (Jul - Des)</option>
                     <option value="genap" {{ $semester === 'genap' ? 'selected' : '' }}>Semester Genap (Jan - Jun)</option>
                 </select>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <label class="form-label fw-bold text-dark mb-1">Tahun Ajaran</label>
                 <select name="tahun" class="form-select shadow-sm" onchange="this.form.submit()">
                     @for($y=date('Y')-2; $y<=date('Y')+1; $y++)
                         <option value="{{ $y }}" {{ $tahun == $y ? 'selected' : '' }}>{{ $y }}/{{ $y+1 }}</option>
                     @endfor
                 </select>
-            </div>
-            <div class="col-md-2">
-                <label class="form-label fw-bold text-dark mb-1">Hari Efektif</label>
-                <div class="input-group shadow-sm">
-                    <input type="number" name="hari_efektif" class="form-control" value="{{ $hariEfektif }}" min="1" max="180" title="Jumlah hari efektif sekolah semester ini">
-                    <span class="input-group-text bg-light text-muted small">Hari</span>
-                </div>
             </div>
         @endif
 
@@ -117,11 +103,16 @@
             </select>
         </div>
 
-        <div class="col-12 mt-2">
-            <button type="submit" class="btn btn-sm btn-primary rounded-pill px-4 py-2 fw-bold shadow-sm d-inline-flex align-items-center gap-2">
-                <i class="fa-solid fa-arrows-rotate"></i>
-                <span>Terapkan Hari Efektif & Filter</span>
-            </button>
+        <!-- Bar Informasi Dasar Hari Efektif Kelas Ini (Ditetapkan Terpusat oleh Admin) -->
+        <div class="col-12 mt-1">
+            <div class="d-flex align-items-center justify-content-between p-2 px-3 bg-light rounded-3 border flex-wrap gap-2">
+                <span class="fw-bold text-dark d-flex align-items-center" style="font-size: 0.82rem;">
+                    <i class="fa-solid fa-calendar-check text-primary me-2"></i> Dasar Hari Efektif Kelas {{ $kelas->nama_kelas ?? '' }}: <strong class="text-primary ms-1.5">{{ $hariEfektif }} Hari</strong>
+                </span>
+                <small class="text-muted" style="font-size: 0.76rem;">
+                    <i class="fa-solid fa-shield-halved text-success me-1"></i> Standar hari efektif diatur terpusat oleh Administrator TU
+                </small>
+            </div>
         </div>
     </form>
 
