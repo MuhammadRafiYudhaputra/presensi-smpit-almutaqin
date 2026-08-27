@@ -103,15 +103,12 @@
             </select>
         </div>
 
-        <!-- Bar Informasi Dasar Hari Efektif Kelas Ini (Ditetapkan Terpusat oleh Admin) -->
+        <!-- Bar Informasi Dasar Hari Efektif Kelas Ini -->
         <div class="col-12 mt-1">
-            <div class="d-flex align-items-center justify-content-between p-2 px-3 bg-light rounded-3 border flex-wrap gap-2">
+            <div class="d-flex align-items-center p-2 px-3 bg-light rounded-3 border">
                 <span class="fw-bold text-dark d-flex align-items-center" style="font-size: 0.82rem;">
-                    <i class="fa-solid fa-calendar-check text-primary me-2"></i> Dasar Hari Efektif Kelas {{ $kelas->nama_kelas ?? '' }}: <strong class="text-primary ms-1.5">{{ $hariEfektif }} Hari</strong>
+                    <i class="fa-solid fa-calendar-check text-primary me-2"></i> Dasar Hari Efektif Kelas {{ $kelas->nama_kelas ?? '' }}:&nbsp;<strong class="text-primary">{{ $hariEfektif }} Hari</strong>
                 </span>
-                <small class="text-muted" style="font-size: 0.76rem;">
-                    <i class="fa-solid fa-shield-halved text-success me-1"></i> Standar hari efektif diatur terpusat oleh Administrator TU
-                </small>
             </div>
         </div>
     </form>
