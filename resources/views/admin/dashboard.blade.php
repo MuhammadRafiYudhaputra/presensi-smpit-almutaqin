@@ -144,7 +144,7 @@
                 </div>
             </div>
 
-            <div class="p-3">
+            <div class="p-3.5 py-4">
                 <div class="row g-1 justify-content-around">
                     <div class="col-4 col-sm-2 stat-metric-box">
                         <span class="stat-metric-label text-hadir">Hadir</span>
@@ -171,19 +171,6 @@
                         <h4 class="stat-metric-val text-total">{{ $totalSiswaFiltered }}</h4>
                     </div>
                 </div>
-
-                <div class="border-top pt-2 mt-2 px-1 d-flex justify-content-between align-items-center flex-wrap gap-2">
-                    <small class="text-muted" style="font-size: 0.78rem;">
-                        @if(($totalPresensi ?? 0) === 0)
-                            <i class="fa-solid fa-clock text-secondary me-1"></i> Status: <strong>Presensi belum dimulai</strong>
-                        @else
-                            <i class="fa-solid fa-circle-check text-success me-1"></i> Total hadir: <strong>{{ $totalMasuk }} Siswa</strong> ({{ round(($totalMasuk / max(1, $totalSiswaFiltered)) * 100) }}%)
-                        @endif
-                    </small>
-                    <small class="text-muted" style="font-size: 0.78rem;">
-                        <i class="fa-solid fa-building-columns text-primary me-1"></i> SMP IT Al-Muttaqin
-                    </small>
-                </div>
             </div>
         </div>
     </div>
@@ -199,7 +186,7 @@
             </div>
 
             <div class="p-3">
-                <div style="height: 180px; position: relative;">
+                <div style="height: 145px; position: relative;">
                     <canvas id="chartKehadiran"></canvas>
                 </div>
             </div>
