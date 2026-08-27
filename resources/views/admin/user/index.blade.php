@@ -25,12 +25,12 @@
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4 pb-2 border-bottom">
         <div>
             <h5 class="fw-bold mb-0.5 text-dark d-flex align-items-center" style="font-size: 1.05rem;">
-                <i class="fa-solid fa-users-gear text-primary me-2.5 fs-5"></i> Kelola Akun Administrator TU
+                <i class="fa-solid fa-users-gear text-primary me-3 fs-5"></i> Kelola Akun Administrator TU
             </h5>
-            <small class="text-muted" style="font-size: 0.78rem;">Kelola seluruh hak akses staf TU dan administrator sistem presensi sekolah</small>
+            <small class="text-muted ms-4 ps-2 d-block" style="font-size: 0.76rem;">Kelola seluruh hak akses staf TU dan administrator sistem presensi sekolah</small>
         </div>
         <button type="button" class="btn btn-primary rounded-pill px-3.5 py-1.5 btn-sm fw-bold shadow-sm d-inline-flex align-items-center gap-2 text-nowrap" data-bs-toggle="modal" data-bs-target="#modalTambahAdmin" style="font-size: 0.82rem;">
-            <i class="fa-solid fa-user-plus"></i>
+            <i class="fa-solid fa-user-plus me-1.5"></i>
             <span>Tambah Admin TU</span>
         </button>
     </div>
@@ -44,7 +44,7 @@
                     <th class="text-dark">Nama Administrator TU</th>
                     <th class="text-dark">Email Login</th>
                     <th class="text-dark text-center" style="width: 180px;">Hak Akses</th>
-                    <th class="text-center text-dark" style="width: 120px;">Aksi</th>
+                    <th class="text-center text-dark" style="width: 130px;">Aksi</th>
                 </tr>
             </thead>
             <tbody>
@@ -59,8 +59,9 @@
                             <div>
                                 <div class="fw-bold text-dark mb-0.5" style="font-size: 0.9rem;">{{ $admin->name }}</div>
                                 @if($admin->id === Auth::id())
-                                    <span class="badge bg-success bg-opacity-10 text-success border border-success px-2 py-0.5 rounded-pill fw-semibold" style="font-size: 0.7rem;">
-                                        <i class="fa-solid fa-circle-check me-1"></i> Akun Anda (Aktif)
+                                    <span class="badge bg-success bg-opacity-10 text-success border border-success px-2.5 py-0.5 rounded-pill fw-semibold d-inline-flex align-items-center gap-1.5" style="font-size: 0.7rem;">
+                                        <i class="fa-solid fa-circle-check text-success"></i>
+                                        <span>Akun Anda (Aktif)</span>
                                     </span>
                                 @else
                                     <small class="text-muted" style="font-size: 0.74rem;">Staf Tata Usaha</small>
@@ -69,20 +70,22 @@
                         </div>
                     </td>
                     <td>
-                        <span class="text-dark fw-semibold" style="font-size: 0.86rem;">
-                            <i class="fa-regular fa-envelope text-muted me-1.5"></i>{{ $admin->email }}
+                        <span class="text-dark fw-semibold d-inline-flex align-items-center" style="font-size: 0.86rem;">
+                            <i class="fa-regular fa-envelope text-muted me-2"></i>{{ $admin->email }}
                         </span>
                     </td>
                     <td class="text-center">
-                        <span class="badge bg-primary bg-opacity-10 text-primary border border-primary px-2.5 py-1 rounded-pill fw-semibold" style="font-size: 0.75rem;">
-                            <i class="fa-solid fa-shield text-primary me-1"></i> Administrator TU
+                        <span class="badge bg-primary bg-opacity-10 text-primary border border-primary px-3 py-1 rounded-pill fw-semibold d-inline-flex align-items-center gap-1.5" style="font-size: 0.75rem;">
+                            <i class="fa-solid fa-shield text-primary"></i>
+                            <span>Administrator TU</span>
                         </span>
                     </td>
                     <td class="text-center">
-                        <div class="d-inline-flex gap-1.5 align-items-center">
+                        <div class="d-inline-flex gap-2 align-items-center">
                             <!-- Edit Button -->
-                            <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-2.5 py-1 shadow-none" title="Edit Profil & Password" onclick="openEditModal({{ $admin->id }}, '{{ addslashes($admin->name) }}', '{{ $admin->email }}', {{ $admin->id === Auth::id() ? 'true' : 'false' }})">
-                                <i class="fa-solid fa-pen-to-square me-1"></i> Edit
+                            <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3 py-1 shadow-none d-inline-flex align-items-center gap-1.5" title="Edit Profil & Password" onclick="openEditModal({{ $admin->id }}, '{{ addslashes($admin->name) }}', '{{ $admin->email }}', {{ $admin->id === Auth::id() ? 'true' : 'false' }})">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                                <span>Edit</span>
                             </button>
 
                             <!-- Delete Button (Hanya untuk akun staf lain) -->
@@ -90,7 +93,7 @@
                             <form action="{{ route('admin.user.destroy', $admin->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus akun admin [{{ addslashes($admin->name) }}]?');">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-2 py-1 shadow-none" title="Hapus Admin Ini">
+                                <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-2.5 py-1 shadow-none d-inline-flex align-items-center" title="Hapus Admin Ini">
                                     <i class="fa-solid fa-trash-can"></i>
                                 </button>
                             </form>
@@ -110,7 +113,7 @@
         <div class="modal-content rounded-4 border-0 shadow">
             <div class="modal-header border-0 pb-0">
                 <h6 class="modal-title fw-bold text-dark d-flex align-items-center">
-                    <i class="fa-solid fa-user-plus text-primary me-2"></i> Tambah Akun Admin TU
+                    <i class="fa-solid fa-user-plus text-primary me-2.5"></i> Tambah Akun Admin TU
                 </h6>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -138,8 +141,9 @@
                 </div>
                 <div class="modal-footer border-0 pt-0">
                     <button type="button" class="btn btn-light rounded-pill px-4 btn-sm" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary rounded-pill px-4 btn-sm fw-bold">
-                        <i class="fa-solid fa-plus me-1.5"></i> Daftarkan Admin
+                    <button type="submit" class="btn btn-primary rounded-pill px-4 btn-sm fw-bold d-inline-flex align-items-center gap-1.5">
+                        <i class="fa-solid fa-plus"></i>
+                        <span>Daftarkan Admin</span>
                     </button>
                 </div>
             </form>
@@ -153,7 +157,7 @@
         <div class="modal-content rounded-4 border-0 shadow">
             <div class="modal-header border-0 pb-0">
                 <h6 class="modal-title fw-bold text-dark d-flex align-items-center">
-                    <i class="fa-solid fa-pen-to-square text-primary me-2"></i> Edit Profil &amp; Kata Sandi Admin
+                    <i class="fa-solid fa-pen-to-square text-primary me-2.5"></i> Edit Profil &amp; Kata Sandi Admin
                 </h6>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -178,8 +182,9 @@
                 </div>
                 <div class="modal-footer border-0 pt-0 d-flex justify-content-end gap-2">
                     <button type="button" class="btn btn-light rounded-pill px-3.5 btn-sm" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary rounded-pill px-4 btn-sm fw-bold">
-                        <i class="fa-solid fa-floppy-disk me-1.5"></i> Simpan Perubahan
+                    <button type="submit" class="btn btn-primary rounded-pill px-4 btn-sm fw-bold d-inline-flex align-items-center gap-1.5">
+                        <i class="fa-solid fa-floppy-disk"></i>
+                        <span>Simpan Perubahan</span>
                     </button>
                 </div>
             </form>
