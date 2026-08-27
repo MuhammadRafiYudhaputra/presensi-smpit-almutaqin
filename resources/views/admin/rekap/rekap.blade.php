@@ -45,6 +45,14 @@
                 </a>
             </div>
 
+            <!-- Tombol Pengaturan Semester & Tahun Ajaran Aktif (Modal Trigger) -->
+            @if(isset($settingAkademik))
+            <button type="button" class="btn btn-sm btn-outline-success rounded-pill px-3 py-1.5 fw-semibold shadow-xs text-nowrap d-inline-flex align-items-center gap-1.5" data-bs-toggle="modal" data-bs-target="#modalSettingAkademik" title="Klik untuk mengubah Semester atau Tahun Ajaran resmi aktif">
+                <i class="fa-solid fa-calendar-check text-success"></i>
+                <span>Semester Aktif: {{ ucfirst($settingAkademik->semester) }} ({{ $settingAkademik->tahun_ajaran }})</span>
+            </button>
+            @endif
+
             <!-- Tombol Cetak Laporan -->
             <a href="{{ route('admin.rekap.cetak', ['mode' => $mode, 'bulan' => $bulan, 'tahun' => $tahun, 'semester' => $semester, 'kelas_id' => $kelasId]) }}" target="_blank" class="btn btn-outline-primary rounded-pill px-3.5 py-1.5 fw-semibold shadow-sm btn-sm text-nowrap d-inline-flex align-items-center gap-2">
                 <i class="fa-solid fa-print"></i>
