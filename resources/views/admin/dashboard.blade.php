@@ -142,10 +142,6 @@
                     <h6 class="fw-bold mb-0 text-white" style="font-size: 0.95rem;">Absensi Siswa Hari Ini</h6>
                     <small class="text-white-50" style="font-size: 0.75rem;">{{ \Carbon\Carbon::now('Asia/Jakarta')->translatedFormat('d F Y') }}</small>
                 </div>
-                <!-- Badge Info Total Siswa -->
-                <span class="badge bg-white bg-opacity-20 text-white border border-white border-opacity-25 px-2.5 py-1 rounded-pill fw-semibold" style="font-size: 0.76rem;">
-                    <i class="fa-solid fa-users me-1"></i> Semua Kelas ({{ $totalSiswa }} Siswa)
-                </span>
             </div>
 
             <div class="p-3">
@@ -203,17 +199,8 @@
             </div>
 
             <div class="p-3">
-                <div style="height: 165px; position: relative;">
+                <div style="height: 180px; position: relative;">
                     <canvas id="chartKehadiran"></canvas>
-                </div>
-
-                <div class="border-top pt-2 mt-2 px-1 d-flex justify-content-between align-items-center flex-wrap gap-2">
-                    <small class="text-muted" style="font-size: 0.78rem;">
-                        <i class="fa-solid fa-arrows-rotate text-primary me-1"></i> Data sinkron otomatis real-time
-                    </small>
-                    <small class="text-muted" style="font-size: 0.78rem;">
-                        <i class="fa-solid fa-chart-simple text-info me-1"></i> Statistik 7 Hari Terakhir
-                    </small>
                 </div>
             </div>
         </div>
