@@ -28,18 +28,18 @@
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-3 pb-2 border-bottom">
         <div>
             <h5 class="fw-bold mb-0.5 text-dark d-flex align-items-center" style="font-size: 1.05rem;">
-                <i class="fa-solid fa-chart-simple text-primary me-2 fs-5"></i> Rekapitulasi Presensi Siswa
+                <i class="fa-solid fa-chart-simple text-primary me-2.5 fs-5"></i> Rekapitulasi Presensi Siswa
             </h5>
             <small class="text-muted" style="font-size: 0.76rem;">Akumulasi kehadiran berkala (Bulanan &amp; Semester)</small>
         </div>
-        <div class="d-flex align-items-center gap-2 flex-wrap flex-sm-nowrap">
+        <div class="d-flex align-items-center gap-2.5 flex-wrap flex-sm-nowrap">
             <!-- Mode Switcher Tabs (Bulanan & Semester) -->
             <div class="btn-group p-0.5 bg-light rounded-pill border" role="group">
-                <a href="{{ route('admin.rekap.index', ['mode' => 'bulanan', 'bulan' => $bulan, 'tahun' => $tahun, 'kelas_id' => $kelasId, 'sort_by' => $sortBy]) }}" class="btn btn-sm rounded-pill px-2.5 py-1 fw-semibold d-inline-flex align-items-center gap-1.5 {{ $mode === 'bulanan' ? 'btn-primary shadow-sm' : 'btn-light text-muted' }}" style="font-size: 0.8rem;">
+                <a href="{{ route('admin.rekap.index', ['mode' => 'bulanan', 'bulan' => $bulan, 'tahun' => $tahun, 'kelas_id' => $kelasId, 'sort_by' => $sortBy]) }}" class="btn btn-sm rounded-pill px-3 py-1 fw-semibold d-inline-flex align-items-center gap-2 {{ $mode === 'bulanan' ? 'btn-primary shadow-sm' : 'btn-light text-muted' }}" style="font-size: 0.8rem;">
                     <i class="fa-solid fa-chart-simple"></i>
                     <span>Bulanan</span>
                 </a>
-                <a href="{{ route('admin.rekap.index', ['mode' => 'semester', 'semester' => $semester, 'tahun' => $tahun, 'kelas_id' => $kelasId, 'sort_by' => $sortBy]) }}" class="btn btn-sm rounded-pill px-2.5 py-1 fw-semibold d-inline-flex align-items-center gap-1.5 {{ $mode === 'semester' ? 'btn-primary shadow-sm' : 'btn-light text-muted' }}" style="font-size: 0.8rem;">
+                <a href="{{ route('admin.rekap.index', ['mode' => 'semester', 'semester' => $semester, 'tahun' => $tahun, 'kelas_id' => $kelasId, 'sort_by' => $sortBy]) }}" class="btn btn-sm rounded-pill px-3 py-1 fw-semibold d-inline-flex align-items-center gap-2 {{ $mode === 'semester' ? 'btn-primary shadow-sm' : 'btn-light text-muted' }}" style="font-size: 0.8rem;">
                     <i class="fa-solid fa-graduation-cap"></i>
                     <span>Semester</span>
                 </a>
@@ -47,14 +47,14 @@
 
             <!-- Tombol Pengaturan Semester & Tahun Ajaran Aktif (Modal Trigger) -->
             @if(isset($settingAkademik))
-            <button type="button" class="btn btn-sm btn-outline-success rounded-pill px-2.5 py-1 fw-semibold shadow-xs text-nowrap d-inline-flex align-items-center gap-1.5" data-bs-toggle="modal" data-bs-target="#modalSettingAkademik" style="font-size: 0.8rem;" title="Klik untuk mengubah Semester atau Tahun Ajaran resmi aktif">
+            <button type="button" class="btn btn-sm btn-outline-success rounded-pill px-3 py-1 fw-semibold shadow-xs text-nowrap d-inline-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#modalSettingAkademik" style="font-size: 0.8rem;" title="Klik untuk mengubah Semester atau Tahun Ajaran resmi aktif">
                 <i class="fa-solid fa-calendar-check text-success"></i>
                 <span>Semester {{ ucfirst($settingAkademik->semester) }} ({{ $settingAkademik->tahun_ajaran }})</span>
             </button>
             @endif
 
             <!-- Tombol Cetak Laporan -->
-            <a href="{{ route('admin.rekap.cetak', ['mode' => $mode, 'bulan' => $bulan, 'tahun' => $tahun, 'semester' => $semester, 'kelas_id' => $kelasId]) }}" target="_blank" class="btn btn-outline-primary rounded-pill px-3 py-1 fw-semibold shadow-sm btn-sm text-nowrap d-inline-flex align-items-center gap-1.5" style="font-size: 0.8rem;">
+            <a href="{{ route('admin.rekap.cetak', ['mode' => $mode, 'bulan' => $bulan, 'tahun' => $tahun, 'semester' => $semester, 'kelas_id' => $kelasId]) }}" target="_blank" class="btn btn-outline-primary rounded-pill px-3 py-1 fw-semibold shadow-sm btn-sm text-nowrap d-inline-flex align-items-center gap-2" style="font-size: 0.8rem;">
                 <i class="fa-solid fa-print"></i>
                 <span>Cetak Laporan</span>
             </a>
@@ -125,17 +125,17 @@
         <div class="col-12 mt-2">
             <div class="d-flex align-items-center justify-content-between gap-2 flex-wrap p-2.5 bg-light rounded-3 border">
                 <div class="d-flex align-items-center gap-2 flex-wrap">
-                    <small class="fw-bold text-dark d-flex align-items-center me-1">
-                        <i class="fa-solid fa-calendar-check text-primary me-1.5"></i> Dasar Hari Efektif:
+                    <small class="fw-bold text-dark d-flex align-items-center me-2">
+                        <i class="fa-solid fa-calendar-check text-primary me-2"></i> Dasar Hari Efektif:
                     </small>
                     @foreach($kelases as $k)
                         <span class="badge bg-white text-dark border shadow-xs px-2.5 py-1.5 rounded-2 d-inline-flex align-items-center gap-1.5">
-                            <span class="text-secondary">Kelas {{ $k->nama_kelas }}:</span>
+                            <span class="text-secondary">Kelas {{ $k->nama_kelas }}: </span>
                             <strong class="text-primary">{{ $hariEfektifMap[$k->id] ?? 20 }} Hari</strong>
                         </span>
                     @endforeach
                 </div>
-                <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3 py-1.5 fw-bold d-inline-flex align-items-center gap-1.5 shadow-none" data-bs-toggle="modal" data-bs-target="#modalAturHariEfektif">
+                <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3.5 py-1.5 fw-bold d-inline-flex align-items-center gap-2 shadow-none" data-bs-toggle="modal" data-bs-target="#modalAturHariEfektif">
                     <i class="fa-solid fa-sliders text-primary"></i>
                     <span>Atur Hari Efektif</span>
                 </button>
