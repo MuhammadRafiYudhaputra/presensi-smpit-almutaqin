@@ -131,27 +131,18 @@
 
     <!-- Filter & Parameter Form -->
     <form method="GET" action="{{ route('admin.rekap.monitoring') }}" class="row g-3 mb-4 align-items-end">
-        <div class="col-md-4">
+        <div class="col-md-6">
             <label class="form-label fw-bold text-dark mb-1">Pilih Tanggal Presensi</label>
             <input type="date" name="tanggal" value="{{ $tanggal }}" class="form-control shadow-sm" onchange="this.form.submit()">
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-6">
             <label class="form-label fw-bold text-dark mb-1">Filter Kelas</label>
             <select name="kelas_id" class="form-select shadow-sm" onchange="this.form.submit()">
                 <option value="">Semua Kelas</option>
                 @foreach($kelases as $k)
                     <option value="{{ $k->id }}" {{ ($kelasId ?? '') == $k->id ? 'selected' : '' }}>Kelas {{ $k->nama_kelas }}</option>
                 @endforeach
-            </select>
-        </div>
-
-        <div class="col-md-4">
-            <label class="form-label fw-bold text-dark mb-1">Urutkan Data (Sorting)</label>
-            <select name="sort_by" class="form-select shadow-sm" onchange="this.form.submit()">
-                <option value="nama_asc" {{ ($sortBy ?? '') === 'nama_asc' ? 'selected' : '' }}>Nama Siswa (A-Z)</option>
-                <option value="nama_desc" {{ ($sortBy ?? '') === 'nama_desc' ? 'selected' : '' }}>Nama Siswa (Z-A)</option>
-                <option value="nisn" {{ ($sortBy ?? '') === 'nisn' ? 'selected' : '' }}>NISN Siswa</option>
             </select>
         </div>
     </form>
