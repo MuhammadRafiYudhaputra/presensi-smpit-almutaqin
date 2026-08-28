@@ -1,6 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
+<style>
+    .table-badge-icon {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+</style>
+
 <div class="card card-custom p-4 shadow-sm border-0 rounded-4">
     <!-- Header & Action Buttons -->
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4 pb-2 border-bottom">
@@ -44,30 +52,34 @@
                     <td class="text-center fw-semibold text-dark">{{ $guru->nip ?? '-' }}</td>
                     <td>
                         <span class="fw-bold text-dark d-block" style="font-size: 0.88rem;">{{ $guru->nama }}</span>
-                        <small class="text-muted d-inline-flex align-items-center" style="font-size: 0.74rem;">
-                            <i class="fa-solid fa-location-dot text-secondary me-1.5"></i>{{ $guru->alamat ?? 'Tasikmalaya' }}
+                        <small class="text-muted d-inline-flex align-items-center gap-1.5" style="font-size: 0.75rem;">
+                            <i class="fa-solid fa-location-dot text-secondary"></i>
+                            <span>{{ $guru->alamat ?? 'Tasikmalaya' }}</span>
                         </small>
                     </td>
                     <td class="text-center">
-                        <span class="badge bg-primary bg-opacity-10 text-primary border border-primary px-2.5 py-1 rounded-pill fw-semibold" style="font-size: 0.76rem;">
-                            <i class="fa-solid fa-envelope me-1.5 text-primary"></i>{{ $guru->user->email ?? '-' }}
+                        <span class="badge bg-primary bg-opacity-10 text-primary border border-primary px-3 py-1.5 rounded-pill fw-semibold table-badge-icon" style="font-size: 0.78rem;">
+                            <i class="fa-solid fa-envelope text-primary"></i>
+                            <span>{{ $guru->user->email ?? '-' }}</span>
                         </span>
                     </td>
                     <td class="text-center">
                         @if($guru->kelas)
-                            <span class="badge bg-success px-2.5 py-1 rounded-pill shadow-sm fw-semibold" style="font-size: 0.76rem;">
-                                <i class="fa-solid fa-school me-1.5"></i>Wali Kelas {{ $guru->kelas->nama_kelas }}
+                            <span class="badge bg-success px-3 py-1.5 rounded-pill shadow-sm fw-semibold table-badge-icon" style="font-size: 0.78rem;">
+                                <i class="fa-solid fa-school"></i>
+                                <span>Wali Kelas {{ $guru->kelas->nama_kelas }}</span>
                             </span>
                         @else
-                            <span class="badge bg-secondary bg-opacity-10 text-muted border px-2.5 py-1 rounded-pill fw-semibold" style="font-size: 0.76rem;">
-                                Belum Ditugaskan
+                            <span class="badge bg-secondary bg-opacity-10 text-muted border px-3 py-1.5 rounded-pill fw-semibold table-badge-icon" style="font-size: 0.78rem;">
+                                <span>Belum Ditugaskan</span>
                             </span>
                         @endif
                     </td>
                     <td class="text-center">
                         @if($guru->no_hp)
-                            <span class="badge bg-success bg-opacity-10 text-success border border-success px-2.5 py-1 rounded-pill fw-semibold" style="font-size: 0.76rem;">
-                                <i class="fa-brands fa-whatsapp me-1.5 text-success"></i>{{ $guru->no_hp }}
+                            <span class="badge bg-success bg-opacity-10 text-success border border-success px-3 py-1.5 rounded-pill fw-semibold table-badge-icon" style="font-size: 0.78rem;">
+                                <i class="fa-brands fa-whatsapp text-success"></i>
+                                <span>{{ $guru->no_hp }}</span>
                             </span>
                         @else
                             <span class="text-muted">-</span>
