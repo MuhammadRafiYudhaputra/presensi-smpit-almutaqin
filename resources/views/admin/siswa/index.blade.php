@@ -65,55 +65,43 @@
     <!-- Status Filter Tabs (Siswa Aktif vs Arsip Alumni vs Semua Data) -->
     <div class="d-flex align-items-center mb-4 flex-wrap gap-2">
         <div class="btn-group p-1 bg-light rounded-pill border" role="group">
-            <a href="{{ route('admin.siswa.index', ['status' => 'aktif', 'search' => $search, 'kelas_id' => $kelasId, 'sort_by' => $sortBy]) }}" class="btn btn-sm rounded-pill {{ ($status ?? 'aktif') === 'aktif' ? 'btn-primary shadow-sm' : 'btn-light text-muted' }}">
+            <a href="{{ route('admin.siswa.index', ['status' => 'aktif', 'search' => $search, 'kelas_id' => $kelasId]) }}" class="btn btn-sm rounded-pill {{ ($status ?? 'aktif') === 'aktif' ? 'btn-primary shadow-sm' : 'btn-light text-muted' }}">
                 <i class="fa-solid fa-user me-1"></i> Siswa Aktif
                 <span class="badge {{ ($status ?? 'aktif') === 'aktif' ? 'bg-white text-primary' : 'bg-secondary text-white' }} rounded-circle ms-1">{{ $countAktif }}</span>
             </a>
-            <a href="{{ route('admin.siswa.index', ['status' => 'alumni', 'search' => $search, 'kelas_id' => $kelasId, 'sort_by' => $sortBy]) }}" class="btn btn-sm rounded-pill {{ ($status ?? '') === 'alumni' ? 'btn-primary shadow-sm' : 'btn-light text-muted' }}">
+            <a href="{{ route('admin.siswa.index', ['status' => 'alumni', 'search' => $search, 'kelas_id' => $kelasId]) }}" class="btn btn-sm rounded-pill {{ ($status ?? '') === 'alumni' ? 'btn-primary shadow-sm' : 'btn-light text-muted' }}">
                 <i class="fa-solid fa-graduation-cap text-warning me-1"></i> Arsip Alumni
                 <span class="badge bg-light text-dark rounded-circle ms-1">{{ $countAlumni }}</span>
             </a>
-            <a href="{{ route('admin.siswa.index', ['status' => 'semua', 'search' => $search, 'kelas_id' => $kelasId, 'sort_by' => $sortBy]) }}" class="btn btn-sm rounded-pill {{ ($status ?? '') === 'semua' ? 'btn-primary shadow-sm' : 'btn-light text-muted' }}">
+            <a href="{{ route('admin.siswa.index', ['status' => 'semua', 'search' => $search, 'kelas_id' => $kelasId]) }}" class="btn btn-sm rounded-pill {{ ($status ?? '') === 'semua' ? 'btn-primary shadow-sm' : 'btn-light text-muted' }}">
                 <i class="fa-solid fa-users text-secondary me-1"></i> Semua Data
                 <span class="badge bg-secondary text-white rounded-circle ms-1">{{ $countSemua }}</span>
             </a>
         </div>
     </div>
 
-    <!-- Search, Filter & Sorting Bar -->
-    <form action="{{ route('admin.siswa.index') }}" method="GET" class="row g-2 mb-4 align-items-center">
+    <!-- Search & Filter Bar -->
+    <form action="{{ route('admin.siswa.index') }}" method="GET" class="row g-3 mb-4 align-items-center">
         <input type="hidden" name="status" value="{{ $status ?? 'aktif' }}">
         
         <!-- Search Input -->
-        <div class="col-md-5">
-            <div class="input-group">
-                <span class="input-group-text bg-white border-end-0 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
-                <input type="text" name="search" class="form-control border-start-0" placeholder="Cari NISN, Nama Siswa, atau Kontak WA..." value="{{ $search ?? '' }}">
+        <div class="col-md-7 col-lg-8">
+            <div class="input-group shadow-sm">
+                <span class="input-group-text bg-white border-end-0 text-muted ps-3"><i class="fa-solid fa-magnifying-glass"></i></span>
+                <input type="text" name="search" class="form-control border-start-0 ps-2" placeholder="Cari NISN, Nama Siswa, atau Kontak WA..." value="{{ $search ?? '' }}">
                 <button type="submit" class="btn btn-primary px-4 fw-semibold">Cari</button>
             </div>
         </div>
 
         <!-- Filter Kelas -->
-        <div class="col-md-3">
+        <div class="col-md-5 col-lg-4">
             <div class="d-flex align-items-center gap-2">
                 <label class="form-label fw-bold text-nowrap mb-0 text-dark"><i class="fa-solid fa-filter text-primary me-1"></i> Kelas:</label>
-                <select name="kelas_id" class="form-select" onchange="this.form.submit()">
+                <select name="kelas_id" class="form-select shadow-sm" onchange="this.form.submit()">
                     <option value="">Semua Kelas</option>
                     @foreach($kelases as $k)
                         <option value="{{ $k->id }}" {{ ($kelasId ?? '') == $k->id ? 'selected' : '' }}>Kelas {{ $k->nama_kelas }}</option>
                     @endforeach
-                </select>
-            </div>
-        </div>
-
-        <!-- Sorting -->
-        <div class="col-md-4">
-            <div class="d-flex align-items-center gap-2">
-                <label class="form-label fw-bold text-nowrap mb-0 text-dark"><i class="fa-solid fa-arrow-down-up-across-line text-primary me-1"></i> Urutkan:</label>
-                <select name="sort_by" class="form-select" onchange="this.form.submit()">
-                    <option value="nama_asc" {{ ($sortBy ?? '') === 'nama_asc' ? 'selected' : '' }}>Nama Siswa (A-Z)</option>
-                    <option value="nama_desc" {{ ($sortBy ?? '') === 'nama_desc' ? 'selected' : '' }}>Nama Siswa (Z-A)</option>
-                    <option value="nisn" {{ ($sortBy ?? '') === 'nisn' ? 'selected' : '' }}>NISN Siswa</option>
                 </select>
             </div>
         </div>
