@@ -3,37 +3,23 @@
 @section('content')
 <div class="card card-custom p-4 shadow-sm border-0 rounded-4">
     <!-- Header Page (Tanpa Tombol Tambah/Import Master) -->
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4 pb-2 border-bottom">
         <div>
-            <h5 class="fw-bold mb-1 text-dark d-flex align-items-center">
-                <i class="fa-solid fa-user-group text-primary me-2 fs-4"></i> Data Orang Tua / Wali Siswa
+            <h5 class="fw-bold mb-0.5 text-dark d-flex align-items-center" style="font-size: 1.05rem;">
+                <i class="fa-solid fa-user-group text-primary me-3 fs-5"></i>
+                <span>Data Orang Tua / Wali Siswa</span>
             </h5>
-            <small class="text-muted">Data orang tua, wali murid siswa, nomor WhatsApp, dan anak yang terhubung di kelas Anda</small>
+            <small class="text-muted ms-4 ps-2 d-block" style="font-size: 0.78rem;">Data orang tua, wali murid siswa, nomor WhatsApp, dan anak yang terhubung di kelas Anda</small>
         </div>
     </div>
 
-    <!-- Search & Sorting Row (Persis seperti Halaman Admin) -->
+    <!-- Search Bar (Tanpa Urutkan Redundan) -->
     <form action="{{ route('guru.siswa.index') }}" method="GET" class="row g-2 mb-4 align-items-center">
-        <div class="col-md-7">
-            <div class="input-group">
-                <span class="input-group-text bg-white border-end-0 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
-                <input type="text" name="search" class="form-control border-start-0" placeholder="Cari Nama Ayah, Nama Ibu, Nama Wali, Siswa, No WA, atau Alamat..." value="{{ $search ?? '' }}">
+        <div class="col-12 col-md-8 col-lg-6">
+            <div class="input-group shadow-sm">
+                <span class="input-group-text bg-white border-end-0 text-muted ps-3"><i class="fa-solid fa-magnifying-glass"></i></span>
+                <input type="text" name="search" class="form-control border-start-0 ps-2" placeholder="Cari Nama Ayah, Nama Ibu, Nama Wali, Siswa, No WA, atau Alamat..." value="{{ $search ?? '' }}">
                 <button type="submit" class="btn btn-primary px-4 fw-semibold">Cari</button>
-            </div>
-        </div>
-
-        <div class="col-md-5">
-            <div class="d-flex align-items-center justify-content-md-end gap-2">
-                <label class="form-label fw-bold text-nowrap mb-0 text-dark">
-                    <i class="fa-solid fa-arrow-down-up-across-line text-primary me-1"></i> Urutkan:
-                </label>
-                <select name="sort_by" class="form-select shadow-sm" style="max-width: 250px;" onchange="this.form.submit()">
-                    <option value="ayah_asc" {{ ($sortBy ?? '') === 'ayah_asc' ? 'selected' : '' }}>Nama Ayah (A-Z)</option>
-                    <option value="ayah_desc" {{ ($sortBy ?? '') === 'ayah_desc' ? 'selected' : '' }}>Nama Ayah (Z-A)</option>
-                    <option value="ibu_asc" {{ ($sortBy ?? '') === 'ibu_asc' ? 'selected' : '' }}>Nama Ibu (A-Z)</option>
-                    <option value="wali_asc" {{ ($sortBy ?? '') === 'wali_asc' ? 'selected' : '' }}>Nama Wali (A-Z)</option>
-                    <option value="no_wa" {{ ($sortBy ?? '') === 'no_wa' ? 'selected' : '' }}>No. WhatsApp</option>
-                </select>
             </div>
         </div>
     </form>

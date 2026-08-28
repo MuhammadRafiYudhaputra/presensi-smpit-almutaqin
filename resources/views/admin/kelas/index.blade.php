@@ -3,33 +3,25 @@
 @section('content')
 <div class="card card-custom p-4 shadow-sm border-0 rounded-4">
     <!-- Header & Action Buttons -->
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4 pb-2 border-bottom">
         <div>
-            <h5 class="fw-bold mb-1 text-dark d-flex align-items-center">
-                <i class="fa-solid fa-school text-primary me-2 fs-4"></i> Kelola Data Kelas
+            <h5 class="fw-bold mb-0.5 text-dark d-flex align-items-center" style="font-size: 1.05rem;">
+                <i class="fa-solid fa-school text-primary me-3 fs-5"></i>
+                <span>Kelola Data Kelas</span>
             </h5>
-            <small class="text-muted">Daftar kelas, penugasan Wali Kelas, dan kenaikan kelas otomatis di tahun ajaran baru</small>
+            <small class="text-muted ms-4 ps-2 d-block" style="font-size: 0.78rem;">Daftar kelas, penugasan Wali Kelas, dan kenaikan kelas otomatis di tahun ajaran baru</small>
         </div>
         <div class="d-flex gap-2 flex-wrap align-items-center">
-            <button type="button" class="btn btn-outline-primary rounded-pill px-3 py-2 fw-semibold shadow-sm btn-sm d-inline-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#modalKenaikanKelas">
-                <i class="fa-solid fa-graduation-cap me-1"></i> Kenaikan Kelas
+            <button type="button" class="btn btn-outline-primary rounded-pill px-3 py-1.5 fw-semibold shadow-sm btn-sm d-inline-flex align-items-center gap-1.5 text-nowrap" data-bs-toggle="modal" data-bs-target="#modalKenaikanKelas" style="font-size: 0.82rem;">
+                <i class="fa-solid fa-graduation-cap me-1"></i>
+                <span>Kenaikan Kelas</span>
             </button>
-            <button type="button" class="btn btn-primary rounded-pill px-3 py-2 fw-semibold shadow-sm btn-sm d-inline-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#modalAddKelas">
-                <i class="fa-solid fa-plus me-1"></i> Tambah Kelas
+            <button type="button" class="btn btn-primary rounded-pill px-3.5 py-1.5 fw-semibold shadow-sm btn-sm d-inline-flex align-items-center gap-1.5 text-nowrap" data-bs-toggle="modal" data-bs-target="#modalAddKelas" style="font-size: 0.82rem;">
+                <i class="fa-solid fa-plus me-1"></i>
+                <span>Tambah Kelas</span>
             </button>
         </div>
     </div>
-
-    <!-- Sorting Filter -->
-    <form action="{{ route('admin.kelas.index') }}" method="GET" class="d-flex align-items-center gap-2 mb-4">
-        <label class="form-label fw-bold text-nowrap mb-0 text-dark">
-            <i class="fa-solid fa-arrow-down-up-across-line text-primary me-1"></i> Urutkan:
-        </label>
-        <select name="sort_by" class="form-select shadow-sm" style="max-width: 250px;" onchange="this.form.submit()">
-            <option value="nama_asc" {{ ($sortBy ?? '') === 'nama_asc' ? 'selected' : '' }}>Nama Kelas (A-Z)</option>
-            <option value="nama_desc" {{ ($sortBy ?? '') === 'nama_desc' ? 'selected' : '' }}>Nama Kelas (Z-A)</option>
-        </select>
-    </form>
 
     <!-- Tabel Data Kelas -->
     <div class="table-responsive">

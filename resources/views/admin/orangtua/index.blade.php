@@ -3,45 +3,33 @@
 @section('content')
 <div class="card card-custom p-4 shadow-sm border-0 rounded-4">
     <!-- Header & Action Buttons -->
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4 pb-2 border-bottom">
         <div>
-            <h5 class="fw-bold mb-1 text-dark d-flex align-items-center">
-                <i class="fa-solid fa-user-group text-primary me-2 fs-4"></i> Kelola Data Orang Tua / Wali
+            <h5 class="fw-bold mb-0.5 text-dark d-flex align-items-center" style="font-size: 1.05rem;">
+                <i class="fa-solid fa-user-group text-primary me-3 fs-5"></i>
+                <span>Kelola Data Orang Tua / Wali</span>
             </h5>
-            <small class="text-muted">Data orang tua, wali murid siswa, nomor WhatsApp, dan anak yang terhubung</small>
+            <small class="text-muted ms-4 ps-2 d-block" style="font-size: 0.78rem;">Data orang tua, wali murid siswa, nomor WhatsApp, dan anak yang terhubung</small>
         </div>
-        <div class="d-flex gap-2 align-items-center flex-nowrap flex-shrink-0">
-            <button type="button" class="btn btn-outline-primary rounded-pill px-3 py-1.5 fw-semibold shadow-sm btn-sm text-nowrap d-inline-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#modalImportOrangTua">
-                <i class="fa-solid fa-file-import me-1"></i> Import Orang Tua
+        <div class="d-flex gap-2 align-items-center flex-wrap flex-sm-nowrap flex-shrink-0">
+            <button type="button" class="btn btn-outline-primary rounded-pill px-3 py-1.5 fw-semibold shadow-sm btn-sm text-nowrap d-inline-flex align-items-center gap-1.5" data-bs-toggle="modal" data-bs-target="#modalImportOrangTua" style="font-size: 0.82rem;">
+                <i class="fa-solid fa-file-import me-1"></i>
+                <span>Import Orang Tua</span>
             </button>
-            <button type="button" class="btn btn-primary rounded-pill px-3 py-1.5 fw-semibold shadow-sm btn-sm text-nowrap d-inline-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#modalAddOrangTua">
-                <i class="fa-solid fa-plus me-1"></i> Tambah Orang Tua
+            <button type="button" class="btn btn-primary rounded-pill px-3.5 py-1.5 fw-semibold shadow-sm btn-sm text-nowrap d-inline-flex align-items-center gap-1.5" data-bs-toggle="modal" data-bs-target="#modalAddOrangTua" style="font-size: 0.82rem;">
+                <i class="fa-solid fa-plus me-1"></i>
+                <span>Tambah Orang Tua</span>
             </button>
         </div>
     </div>
 
-    <!-- Search & Sorting Row -->
+    <!-- Search Bar (Tanpa Urutkan Redundan) -->
     <form action="{{ route('admin.orangtua.index') }}" method="GET" class="row g-2 mb-4 align-items-center">
-        <div class="col-md-7">
-            <div class="input-group">
-                <span class="input-group-text bg-white border-end-0 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
-                <input type="text" name="search" class="form-control border-start-0" placeholder="Cari Nama Ayah, Nama Ibu, Nama Wali, No WA, atau Alamat..." value="{{ $search ?? '' }}">
+        <div class="col-12 col-md-8 col-lg-6">
+            <div class="input-group shadow-sm">
+                <span class="input-group-text bg-white border-end-0 text-muted ps-3"><i class="fa-solid fa-magnifying-glass"></i></span>
+                <input type="text" name="search" class="form-control border-start-0 ps-2" placeholder="Cari Nama Ayah, Nama Ibu, Nama Wali, No WA, atau Alamat..." value="{{ $search ?? '' }}">
                 <button type="submit" class="btn btn-primary px-4 fw-semibold">Cari</button>
-            </div>
-        </div>
-
-        <div class="col-md-5">
-            <div class="d-flex align-items-center justify-content-md-end gap-2">
-                <label class="form-label fw-bold text-nowrap mb-0 text-dark">
-                    <i class="fa-solid fa-arrow-down-up-across-line text-primary me-1"></i> Urutkan:
-                </label>
-                <select name="sort_by" class="form-select shadow-sm" style="max-width: 250px;" onchange="this.form.submit()">
-                    <option value="ayah_asc" {{ ($sortBy ?? '') === 'ayah_asc' ? 'selected' : '' }}>Nama Ayah (A-Z)</option>
-                    <option value="ayah_desc" {{ ($sortBy ?? '') === 'ayah_desc' ? 'selected' : '' }}>Nama Ayah (Z-A)</option>
-                    <option value="ibu_asc" {{ ($sortBy ?? '') === 'ibu_asc' ? 'selected' : '' }}>Nama Ibu (A-Z)</option>
-                    <option value="wali_asc" {{ ($sortBy ?? '') === 'wali_asc' ? 'selected' : '' }}>Nama Wali (A-Z)</option>
-                    <option value="no_wa" {{ ($sortBy ?? '') === 'no_wa' ? 'selected' : '' }}>No. WhatsApp</option>
-                </select>
             </div>
         </div>
     </form>
