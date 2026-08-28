@@ -66,7 +66,7 @@
         <input type="hidden" name="mode" value="{{ $mode }}">
 
         @if($mode === 'bulanan')
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <label class="form-label fw-bold text-dark mb-1">Pilih Bulan</label>
                 <select name="bulan" class="form-select shadow-sm" onchange="this.form.submit()">
                     @for($m=1; $m<=12; $m++)
@@ -76,7 +76,7 @@
                     @endfor
                 </select>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <label class="form-label fw-bold text-dark mb-1">Pilih Tahun</label>
                 <select name="tahun" class="form-select shadow-sm" onchange="this.form.submit()">
                     @for($y=date('Y')-2; $y<=date('Y')+1; $y++)
@@ -85,14 +85,14 @@
                 </select>
             </div>
         @elseif($mode === 'semester')
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <label class="form-label fw-bold text-dark mb-1">Pilih Semester</label>
                 <select name="semester" class="form-select shadow-sm" onchange="this.form.submit()">
                     <option value="ganjil" {{ $semester === 'ganjil' ? 'selected' : '' }}>Semester Ganjil (Jul - Des)</option>
                     <option value="genap" {{ $semester === 'genap' ? 'selected' : '' }}>Semester Genap (Jan - Jun)</option>
                 </select>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <label class="form-label fw-bold text-dark mb-1">Tahun Ajaran</label>
                 <select name="tahun" class="form-select shadow-sm" onchange="this.form.submit()">
                     @for($y=date('Y')-2; $y<=date('Y')+1; $y++)
@@ -102,22 +102,13 @@
             </div>
         @endif
 
-        <div class="col-md-3">
+        <div class="col-md-4">
             <label class="form-label fw-bold text-dark mb-1">Filter Kelas</label>
             <select name="kelas_id" class="form-select shadow-sm" onchange="this.form.submit()">
                 <option value="">Semua Kelas</option>
                 @foreach($kelases as $k)
                     <option value="{{ $k->id }}" {{ ($kelasId ?? '') == $k->id ? 'selected' : '' }}>Kelas {{ $k->nama_kelas }}</option>
                 @endforeach
-            </select>
-        </div>
-
-        <div class="col-md-3">
-            <label class="form-label fw-bold text-dark mb-1">Urutkan Data</label>
-            <select name="sort_by" class="form-select shadow-sm" onchange="this.form.submit()">
-                <option value="nama_asc" {{ ($sortBy ?? '') === 'nama_asc' ? 'selected' : '' }}>Nama Siswa (A-Z)</option>
-                <option value="nama_desc" {{ ($sortBy ?? '') === 'nama_desc' ? 'selected' : '' }}>Nama Siswa (Z-A)</option>
-                <option value="nisn" {{ ($sortBy ?? '') === 'nisn' ? 'selected' : '' }}>NISN Siswa</option>
             </select>
         </div>
 
