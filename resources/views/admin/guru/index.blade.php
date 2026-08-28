@@ -23,69 +23,69 @@
         </div>
     </div>
 
-    <!-- Tabel Data Wali Kelas -->
+    <!-- Tabel Data Wali Kelas (Fit 100% Tanpa Scroll Samping) -->
     <div class="table-responsive">
-        <table class="table table-bordered table-hover align-middle mb-0" style="font-size: 0.88rem;">
+        <table class="table table-bordered table-hover align-middle mb-0" style="font-size: 0.85rem; width: 100%;">
             <thead class="table-light text-center">
                 <tr>
-                    <th style="width: 50px;" class="text-dark">No</th>
-                    <th class="text-dark" style="width: 170px;">NIP Pegawai</th>
-                    <th class="text-dark text-start" style="min-width: 200px;">Nama Wali Kelas</th>
+                    <th style="width: 45px;" class="text-dark">No</th>
+                    <th class="text-dark" style="width: 140px;">NIP Pegawai</th>
+                    <th class="text-dark text-start">Nama Wali Kelas</th>
                     <th class="text-dark">Email Login Portal</th>
                     <th class="text-dark">Penugasan Kelas</th>
                     <th class="text-dark">No. HP / WA</th>
-                    <th class="text-center text-dark" style="width: 120px;">Aksi</th>
+                    <th class="text-center text-dark" style="width: 110px;">Aksi</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($gurus as $idx => $guru)
                 <tr>
                     <td class="text-center fw-bold text-muted">{{ $gurus->firstItem() + $idx }}</td>
-                    <td class="text-center fw-bold text-dark">{{ $guru->nip ?? '-' }}</td>
+                    <td class="text-center fw-semibold text-dark">{{ $guru->nip ?? '-' }}</td>
                     <td>
-                        <span class="fw-bold text-dark d-block text-nowrap" style="font-size: 0.9rem;">{{ $guru->nama }}</span>
-                        <small class="text-muted d-inline-flex align-items-center" style="font-size: 0.76rem;">
-                            <i class="fa-solid fa-location-dot text-secondary me-2"></i>{{ $guru->alamat ?? 'Tasikmalaya' }}
+                        <span class="fw-bold text-dark d-block" style="font-size: 0.88rem;">{{ $guru->nama }}</span>
+                        <small class="text-muted d-inline-flex align-items-center" style="font-size: 0.74rem;">
+                            <i class="fa-solid fa-location-dot text-secondary me-1.5"></i>{{ $guru->alamat ?? 'Tasikmalaya' }}
                         </small>
                     </td>
                     <td class="text-center">
-                        <span class="badge bg-primary bg-opacity-10 text-primary border border-primary px-3 py-1.5 rounded-pill fw-semibold" style="font-size: 0.8rem;">
-                            <i class="fa-solid fa-envelope me-2 text-primary"></i>{{ $guru->user->email ?? '-' }}
+                        <span class="badge bg-primary bg-opacity-10 text-primary border border-primary px-2.5 py-1 rounded-pill fw-semibold" style="font-size: 0.76rem;">
+                            <i class="fa-solid fa-envelope me-1.5 text-primary"></i>{{ $guru->user->email ?? '-' }}
                         </span>
                     </td>
                     <td class="text-center">
                         @if($guru->kelas)
-                            <span class="badge bg-success px-3 py-1.5 rounded-pill shadow-sm fw-semibold" style="font-size: 0.8rem;">
-                                <i class="fa-solid fa-school me-2"></i>Wali Kelas {{ $guru->kelas->nama_kelas }}
+                            <span class="badge bg-success px-2.5 py-1 rounded-pill shadow-sm fw-semibold" style="font-size: 0.76rem;">
+                                <i class="fa-solid fa-school me-1.5"></i>Wali Kelas {{ $guru->kelas->nama_kelas }}
                             </span>
                         @else
-                            <span class="badge bg-secondary bg-opacity-10 text-muted border px-3 py-1.5 rounded-pill fw-semibold" style="font-size: 0.8rem;">
+                            <span class="badge bg-secondary bg-opacity-10 text-muted border px-2.5 py-1 rounded-pill fw-semibold" style="font-size: 0.76rem;">
                                 Belum Ditugaskan
                             </span>
                         @endif
                     </td>
                     <td class="text-center">
                         @if($guru->no_hp)
-                            <span class="badge bg-success bg-opacity-10 text-success border border-success px-3 py-1.5 rounded-pill fw-semibold" style="font-size: 0.8rem;">
-                                <i class="fa-brands fa-whatsapp me-2 text-success"></i>{{ $guru->no_hp }}
+                            <span class="badge bg-success bg-opacity-10 text-success border border-success px-2.5 py-1 rounded-pill fw-semibold" style="font-size: 0.76rem;">
+                                <i class="fa-brands fa-whatsapp me-1.5 text-success"></i>{{ $guru->no_hp }}
                             </span>
                         @else
                             <span class="text-muted">-</span>
                         @endif
                     </td>
                     <td class="text-center">
-                        <div class="d-inline-flex gap-2 justify-content-center align-items-center">
-                            <button type="button" class="btn btn-warning text-dark btn-sm rounded-2 d-inline-flex align-items-center justify-content-center shadow-sm" style="width: 32px; height: 32px;" title="Ubah Password Login" onclick="openResetPasswordModal({{ $guru->id }}, '{{ addslashes($guru->nama) }}')">
-                                <i class="fa-solid fa-key"></i>
+                        <div class="d-inline-flex gap-1.5 justify-content-center align-items-center">
+                            <button type="button" class="btn btn-warning text-dark btn-sm rounded-2 d-inline-flex align-items-center justify-content-center shadow-sm" style="width: 30px; height: 30px;" title="Ubah Password Login" onclick="openResetPasswordModal({{ $guru->id }}, '{{ addslashes($guru->nama) }}')">
+                                <i class="fa-solid fa-key" style="font-size: 0.78rem;"></i>
                             </button>
-                            <button type="button" class="btn btn-primary btn-sm rounded-2 d-inline-flex align-items-center justify-content-center" style="width: 32px; height: 32px;" title="Edit Data Wali Kelas" onclick="openEditGuruModal({{ json_encode($guru) }}, {{ $guru->kelas ? $guru->kelas->id : 'null' }})">
-                                <i class="fa-solid fa-pen"></i>
+                            <button type="button" class="btn btn-primary btn-sm rounded-2 d-inline-flex align-items-center justify-content-center" style="width: 30px; height: 30px;" title="Edit Data Wali Kelas" onclick="openEditGuruModal({{ json_encode($guru) }}, {{ $guru->kelas ? $guru->kelas->id : 'null' }})">
+                                <i class="fa-solid fa-pen" style="font-size: 0.78rem;"></i>
                             </button>
                             <form action="{{ route('admin.guru.destroy', $guru->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data guru ini?')">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm rounded-2 d-inline-flex align-items-center justify-content-center" style="width: 32px; height: 32px;" title="Hapus Guru">
-                                    <i class="fa-solid fa-trash"></i>
+                                <button type="submit" class="btn btn-danger btn-sm rounded-2 d-inline-flex align-items-center justify-content-center" style="width: 30px; height: 30px;" title="Hapus Guru">
+                                    <i class="fa-solid fa-trash" style="font-size: 0.78rem;"></i>
                                 </button>
                             </form>
                         </div>
