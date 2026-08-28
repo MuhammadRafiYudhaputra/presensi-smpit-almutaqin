@@ -3,19 +3,22 @@
 @section('content')
 <div class="card card-custom p-4 shadow-sm border-0 rounded-4">
     <!-- Header & Action Buttons -->
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4 pb-2 border-bottom">
         <div>
-            <h5 class="fw-bold mb-1 text-dark d-flex align-items-center">
-                <i class="fa-solid fa-chalkboard-user text-primary me-2 fs-4"></i> Kelola Data Wali Kelas
+            <h5 class="fw-bold mb-0.5 text-dark d-flex align-items-center" style="font-size: 1.05rem;">
+                <i class="fa-solid fa-chalkboard-user text-primary me-3 fs-5"></i>
+                <span>Kelola Data Wali Kelas</span>
             </h5>
-            <small class="text-muted">Data Tenaga Pendidik, Penugasan Kelas, & Akun Login Portal Guru</small>
+            <small class="text-muted ms-4 ps-2 d-block" style="font-size: 0.78rem;">Data Tenaga Pendidik, Penugasan Kelas, &amp; Akun Login Portal Guru</small>
         </div>
         <div class="d-flex gap-2 flex-wrap align-items-center">
-            <button type="button" class="btn btn-outline-primary rounded-pill px-3 py-2 fw-semibold shadow-sm btn-sm d-inline-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#modalImportGuru">
-                <i class="fa-solid fa-file-import me-1"></i> Import Wali Kelas
+            <button type="button" class="btn btn-outline-primary rounded-pill px-3 py-1.5 fw-semibold shadow-sm btn-sm d-inline-flex align-items-center gap-1.5 text-nowrap" data-bs-toggle="modal" data-bs-target="#modalImportGuru" style="font-size: 0.82rem;">
+                <i class="fa-solid fa-file-import me-1"></i>
+                <span>Import Wali Kelas</span>
             </button>
-            <button type="button" class="btn btn-primary rounded-pill px-3 py-2 fw-semibold shadow-sm btn-sm d-inline-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#modalAddGuru">
-                <i class="fa-solid fa-plus me-1"></i> Tambah Wali Kelas
+            <button type="button" class="btn btn-primary rounded-pill px-3.5 py-1.5 fw-semibold shadow-sm btn-sm d-inline-flex align-items-center gap-1.5 text-nowrap" data-bs-toggle="modal" data-bs-target="#modalAddGuru" style="font-size: 0.82rem;">
+                <i class="fa-solid fa-plus me-1"></i>
+                <span>Tambah Wali Kelas</span>
             </button>
         </div>
     </div>
@@ -41,35 +44,38 @@
                     <td class="text-center fw-bold text-dark">{{ $guru->nip ?? '-' }}</td>
                     <td>
                         <span class="fw-bold text-dark d-block">{{ $guru->nama }}</span>
-                        <small class="text-muted"><i class="fa-solid fa-location-dot text-secondary me-1"></i>{{ $guru->alamat ?? 'Tasikmalaya' }}</small>
+                        <small class="text-muted"><i class="fa-solid fa-location-dot text-secondary me-1.5"></i>{{ $guru->alamat ?? 'Tasikmalaya' }}</small>
                     </td>
                     <td class="text-center">
-                        <span class="badge bg-primary bg-opacity-10 text-primary border border-primary px-3 py-2 rounded-3">
-                            <i class="fa-solid fa-envelope me-1"></i> {{ $guru->user->email ?? '-' }}
+                        <span class="badge bg-primary bg-opacity-10 text-primary border border-primary px-3 py-1.5 rounded-3 d-inline-flex align-items-center gap-1.5">
+                            <i class="fa-solid fa-envelope"></i>
+                            <span>{{ $guru->user->email ?? '-' }}</span>
                         </span>
                     </td>
                     <td class="text-center">
                         @if($guru->kelas)
-                            <span class="badge bg-success px-3 py-2 rounded-3 shadow-sm">
-                                <i class="fa-solid fa-school me-1"></i> Wali Kelas {{ $guru->kelas->nama_kelas }}
+                            <span class="badge bg-success px-3 py-1.5 rounded-3 shadow-sm d-inline-flex align-items-center gap-1.5">
+                                <i class="fa-solid fa-school"></i>
+                                <span>Wali Kelas {{ $guru->kelas->nama_kelas }}</span>
                             </span>
                         @else
-                            <span class="badge bg-secondary bg-opacity-10 text-muted border px-3 py-2 rounded-3">
+                            <span class="badge bg-secondary bg-opacity-10 text-muted border px-3 py-1.5 rounded-3">
                                 Belum Ditugaskan
                             </span>
                         @endif
                     </td>
                     <td class="text-center">
                         @if($guru->no_hp)
-                            <span class="badge bg-success bg-opacity-10 text-success border border-success px-3 py-2 rounded-3">
-                                <i class="fa-brands fa-whatsapp me-1"></i> {{ $guru->no_hp }}
+                            <span class="badge bg-success bg-opacity-10 text-success border border-success px-3 py-1.5 rounded-3 d-inline-flex align-items-center gap-1.5">
+                                <i class="fa-brands fa-whatsapp"></i>
+                                <span>{{ $guru->no_hp }}</span>
                             </span>
                         @else
                             <span class="text-muted">-</span>
                         @endif
                     </td>
                     <td class="text-center">
-                        <div class="d-inline-flex gap-1.5 justify-content-center align-items-center">
+                        <div class="d-inline-flex gap-2 justify-content-center align-items-center">
                             <button type="button" class="btn btn-warning text-dark btn-sm rounded-2 d-inline-flex align-items-center justify-content-center shadow-sm" style="width: 32px; height: 32px;" title="Ubah Password Login" onclick="openResetPasswordModal({{ $guru->id }}, '{{ addslashes($guru->nama) }}')">
                                 <i class="fa-solid fa-key"></i>
                             </button>
@@ -110,7 +116,10 @@
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content rounded-4 border-0 shadow">
             <div class="modal-header border-0 pb-0">
-                <h5 class="fw-bold text-dark"><i class="fa-solid fa-user-plus me-2 text-primary"></i>Tambah Wali Kelas Baru</h5>
+                <h5 class="fw-bold text-dark d-flex align-items-center">
+                    <i class="fa-solid fa-user-plus me-2.5 text-primary fs-5"></i>
+                    <span>Tambah Wali Kelas Baru</span>
+                </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <form action="{{ route('admin.guru.store') }}" method="POST">
@@ -152,9 +161,12 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer border-0 pt-0">
-                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm">Simpan Wali Kelas</button>
+                <div class="modal-footer border-0 pt-0 d-flex justify-content-end gap-3">
+                    <button type="button" class="btn btn-light rounded-pill px-4 btn-sm" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4 btn-sm fw-bold shadow-sm d-inline-flex align-items-center gap-1.5">
+                        <i class="fa-solid fa-floppy-disk"></i>
+                        <span>Simpan Wali Kelas</span>
+                    </button>
                 </div>
             </form>
         </div>
@@ -166,7 +178,10 @@
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content rounded-4 border-0 shadow">
             <div class="modal-header border-0 pb-0">
-                <h5 class="fw-bold text-dark"><i class="fa-solid fa-user-pen me-2 text-primary"></i>Edit Data Wali Kelas</h5>
+                <h5 class="fw-bold text-dark d-flex align-items-center">
+                    <i class="fa-solid fa-user-pen me-2.5 text-primary fs-5"></i>
+                    <span>Edit Data Wali Kelas</span>
+                </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <form id="formEditGuru" method="POST">
@@ -205,9 +220,12 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer border-0 pt-0">
-                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm">Simpan Perubahan</button>
+                <div class="modal-footer border-0 pt-0 d-flex justify-content-end gap-3">
+                    <button type="button" class="btn btn-light rounded-pill px-4 btn-sm" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4 btn-sm fw-bold shadow-sm d-inline-flex align-items-center gap-1.5">
+                        <i class="fa-solid fa-floppy-disk"></i>
+                        <span>Simpan Perubahan</span>
+                    </button>
                 </div>
             </form>
         </div>
@@ -220,7 +238,7 @@
         <div class="modal-content rounded-4 border-0 shadow">
             <div class="modal-header border-0 pb-0">
                 <h5 class="fw-bold text-dark d-flex align-items-center">
-                    <i class="fa-solid fa-key me-2.5 text-warning fs-5"></i>
+                    <i class="fa-solid fa-key me-3 text-warning fs-5"></i>
                     <span>Ubah Password Akun Guru</span>
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -235,10 +253,10 @@
                         <small class="text-muted mt-1 d-block" style="font-size: 0.78rem;">Password default cepat: <code>12345678</code></small>
                     </div>
                 </div>
-                <div class="modal-footer border-0 pt-0 d-flex justify-content-end gap-2">
+                <div class="modal-footer border-0 pt-0 d-flex justify-content-end gap-3">
                     <button type="button" class="btn btn-light rounded-pill px-4 btn-sm" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-warning text-dark rounded-pill px-4 btn-sm fw-bold shadow-sm d-inline-flex align-items-center gap-1.5">
-                        <i class="fa-solid fa-floppy-disk"></i>
+                    <button type="submit" class="btn btn-warning text-dark rounded-pill px-4 btn-sm fw-bold shadow-sm d-inline-flex align-items-center gap-2">
+                        <i class="fa-solid fa-floppy-disk me-1"></i>
                         <span>Simpan Password</span>
                     </button>
                 </div>
