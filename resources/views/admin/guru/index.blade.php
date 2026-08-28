@@ -31,6 +31,18 @@
         </div>
     </div>
 
+    <!-- Sorting Filter -->
+    <form action="{{ route('admin.guru.index') }}" method="GET" class="d-flex align-items-center gap-2 mb-4">
+        <label class="form-label fw-bold text-nowrap mb-0 text-dark small">
+            <i class="fa-solid fa-arrow-down-up-across-line text-primary me-1.5"></i> Urutkan:
+        </label>
+        <select name="sort_by" class="form-select form-select-sm shadow-sm" style="max-width: 230px;" onchange="this.form.submit()">
+            <option value="nama_asc" {{ ($sortBy ?? '') === 'nama_asc' ? 'selected' : '' }}>Nama Wali Kelas (A-Z)</option>
+            <option value="nama_desc" {{ ($sortBy ?? '') === 'nama_desc' ? 'selected' : '' }}>Nama Wali Kelas (Z-A)</option>
+            <option value="nip" {{ ($sortBy ?? '') === 'nip' ? 'selected' : '' }}>NIP Pegawai</option>
+        </select>
+    </form>
+
     <!-- Tabel Data Wali Kelas (Fit 100% Tanpa Scroll Samping) -->
     <div class="table-responsive">
         <table class="table table-bordered table-hover align-middle mb-0" style="font-size: 0.85rem; width: 100%;">
