@@ -20,18 +20,6 @@
         </div>
     </div>
 
-    <!-- Sorting Filter -->
-    <form action="{{ route('admin.guru.index') }}" method="GET" class="d-flex align-items-center gap-2 mb-4">
-        <label class="form-label fw-bold text-nowrap mb-0 text-dark">
-            <i class="fa-solid fa-arrow-down-up-across-line text-primary me-1"></i> Urutkan:
-        </label>
-        <select name="sort_by" class="form-select shadow-sm" style="max-width: 250px;" onchange="this.form.submit()">
-            <option value="nama_asc" {{ ($sortBy ?? '') === 'nama_asc' ? 'selected' : '' }}>Nama Wali Kelas (A-Z)</option>
-            <option value="nama_desc" {{ ($sortBy ?? '') === 'nama_desc' ? 'selected' : '' }}>Nama Wali Kelas (Z-A)</option>
-            <option value="nip" {{ ($sortBy ?? '') === 'nip' ? 'selected' : '' }}>NIP Pegawai</option>
-        </select>
-    </form>
-
     <!-- Tabel Data Wali Kelas -->
     <div class="table-responsive">
         <table class="table table-bordered table-hover align-middle mb-0" style="font-size: 0.9rem;">
@@ -43,7 +31,7 @@
                     <th class="text-dark">Email Login Portal</th>
                     <th class="text-dark">Penugasan Kelas</th>
                     <th class="text-dark">No. HP / WA</th>
-                    <th class="text-center text-dark" style="width: 110px;">Aksi</th>
+                    <th class="text-center text-dark" style="width: 120px;">Aksi</th>
                 </tr>
             </thead>
             <tbody>
@@ -81,8 +69,8 @@
                         @endif
                     </td>
                     <td class="text-center">
-                        <div class="d-inline-flex gap-1 justify-content-center">
-                            <button type="button" class="btn btn-warning text-dark btn-sm rounded-2 d-inline-flex align-items-center justify-content-center shadow-sm" style="width: 32px; height: 32px;" title="Reset Password Login" onclick="openResetPasswordModal({{ $guru->id }}, '{{ addslashes($guru->nama) }}')">
+                        <div class="d-inline-flex gap-1.5 justify-content-center align-items-center">
+                            <button type="button" class="btn btn-warning text-dark btn-sm rounded-2 d-inline-flex align-items-center justify-content-center shadow-sm" style="width: 32px; height: 32px;" title="Ubah Password Login" onclick="openResetPasswordModal({{ $guru->id }}, '{{ addslashes($guru->nama) }}')">
                                 <i class="fa-solid fa-key"></i>
                             </button>
                             <button type="button" class="btn btn-primary btn-sm rounded-2 d-inline-flex align-items-center justify-content-center" style="width: 32px; height: 32px;" title="Edit Data Wali Kelas" onclick="openEditGuruModal({{ json_encode($guru) }}, {{ $guru->kelas ? $guru->kelas->id : 'null' }})">
@@ -226,27 +214,33 @@
     </div>
 </div>
 
-<!-- Modal Reset Password -->
+<!-- Modal Ubah Password -->
 <div class="modal fade" id="modalResetPassword" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content rounded-4 border-0 shadow">
             <div class="modal-header border-0 pb-0">
-                <h5 class="fw-bold text-dark"><i class="fa-solid fa-key me-2 text-warning"></i>Reset Password Akun Guru</h5>
+                <h5 class="fw-bold text-dark d-flex align-items-center">
+                    <i class="fa-solid fa-key me-2.5 text-warning fs-5"></i>
+                    <span>Ubah Password Akun Guru</span>
+                </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <form id="formResetPassword" method="POST">
                 @csrf
-                <div class="modal-body">
-                    <p class="text-dark">Reset password untuk akun guru: <strong id="reset_guru_nama">-</strong></p>
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold text-dark">Password Baru:</label>
-                        <input type="text" name="password" class="form-control" value="12345678" required>
-                        <small class="text-muted">Password default cepat: <code>12345678</code></small>
+                <div class="modal-body py-3">
+                    <p class="text-dark mb-3">Ubah kata sandi login untuk akun guru: <strong id="reset_guru_nama">-</strong></p>
+                    <div class="mb-2">
+                        <label class="form-label fw-bold small text-dark mb-1">Password Baru:</label>
+                        <input type="text" name="password" class="form-control px-3" value="12345678" placeholder="Masukkan kata sandi baru" required>
+                        <small class="text-muted mt-1 d-block" style="font-size: 0.78rem;">Password default cepat: <code>12345678</code></small>
                     </div>
                 </div>
-                <div class="modal-footer border-0 pt-0">
-                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-warning text-dark rounded-pill px-4 fw-bold shadow-sm">Reset Sekarang</button>
+                <div class="modal-footer border-0 pt-0 d-flex justify-content-end gap-2">
+                    <button type="button" class="btn btn-light rounded-pill px-4 btn-sm" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-warning text-dark rounded-pill px-4 btn-sm fw-bold shadow-sm d-inline-flex align-items-center gap-1.5">
+                        <i class="fa-solid fa-floppy-disk"></i>
+                        <span>Simpan Password</span>
+                    </button>
                 </div>
             </form>
         </div>

@@ -120,7 +120,7 @@ class GuruController extends Controller
             'password' => Hash::make($newPassword),
         ]);
 
-        return redirect()->back()->with('success', "Password akun Guru [{$guru->nama}] berhasil di-reset menjadi: {$newPassword}");
+        return redirect()->back()->with('success', "Password akun Guru [{$guru->nama}] berhasil diubah menjadi: {$newPassword}");
     }
 
     public function destroy($id)
