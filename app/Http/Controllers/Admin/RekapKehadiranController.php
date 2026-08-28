@@ -35,14 +35,14 @@ class RekapKehadiranController extends Controller
 
         switch ($sortBy) {
             case 'nama_desc':
-                $siswasQuery->orderBy('nama', 'desc');
+                $siswasQuery->orderBy('nama', 'desc')->orderBy('nisn', 'asc');
                 break;
             case 'nisn':
-                $siswasQuery->orderBy('nisn', 'asc');
+                $siswasQuery->orderBy('nisn', 'asc')->orderBy('nama', 'asc');
                 break;
             case 'nama_asc':
             default:
-                $siswasQuery->orderBy('nama', 'asc');
+                $siswasQuery->orderBy('nama', 'asc')->orderBy('nisn', 'asc');
                 break;
         }
 
@@ -225,14 +225,14 @@ class RekapKehadiranController extends Controller
 
         switch ($sortBy) {
             case 'nama_desc':
-                $siswasQuery->orderBy('nama', 'desc');
+                $siswasQuery->orderBy('nama', 'desc')->orderBy('nisn', 'asc');
                 break;
             case 'nisn':
-                $siswasQuery->orderBy('nisn', 'asc');
+                $siswasQuery->orderBy('nisn', 'asc')->orderBy('nama', 'asc');
                 break;
             case 'nama_asc':
             default:
-                $siswasQuery->orderBy('nama', 'asc');
+                $siswasQuery->orderBy('nama', 'asc')->orderBy('nisn', 'asc');
                 break;
         }
 

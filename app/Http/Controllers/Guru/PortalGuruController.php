@@ -50,14 +50,14 @@ class PortalGuruController extends Controller
 
         switch ($sortBy) {
             case 'nama_desc':
-                $query->orderBy('nama', 'desc');
+                $query->orderBy('nama', 'desc')->orderBy('nisn', 'asc');
                 break;
             case 'nisn':
-                $query->orderBy('nisn', 'asc');
+                $query->orderBy('nisn', 'asc')->orderBy('nama', 'asc');
                 break;
             case 'nama_asc':
             default:
-                $query->orderBy('nama', 'asc');
+                $query->orderBy('nama', 'asc')->orderBy('nisn', 'asc');
                 break;
         }
 
@@ -162,14 +162,14 @@ class PortalGuruController extends Controller
 
         switch ($sortBy) {
             case 'nama_desc':
-                $siswaQuery->orderBy('nama', 'desc');
+                $siswaQuery->orderBy('nama', 'desc')->orderBy('nisn', 'asc');
                 break;
             case 'nisn':
-                $siswaQuery->orderBy('nisn', 'asc');
+                $siswaQuery->orderBy('nisn', 'asc')->orderBy('nama', 'asc');
                 break;
             case 'nama_asc':
             default:
-                $siswaQuery->orderBy('nama', 'asc');
+                $siswaQuery->orderBy('nama', 'asc')->orderBy('nisn', 'asc');
                 break;
         }
 

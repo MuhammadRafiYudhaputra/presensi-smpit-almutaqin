@@ -52,17 +52,17 @@ class SiswaController extends Controller
             $query->where('kelas_id', $kelasId);
         }
 
-        // Sorting Multikriteria
+        // Sorting Default Berdasarkan Nama Siswa (A-Z) dan NISN
         switch ($sortBy) {
             case 'nama_desc':
-                $query->orderBy('nama', 'desc');
+                $query->orderBy('nama', 'desc')->orderBy('nisn', 'asc');
                 break;
             case 'nisn':
-                $query->orderBy('nisn', 'asc');
+                $query->orderBy('nisn', 'asc')->orderBy('nama', 'asc');
                 break;
             case 'nama_asc':
             default:
-                $query->orderBy('nama', 'asc');
+                $query->orderBy('nama', 'asc')->orderBy('nisn', 'asc');
                 break;
         }
 
