@@ -42,7 +42,7 @@
                     <th class="text-dark">Email Login Portal</th>
                     <th class="text-dark">Penugasan Kelas</th>
                     <th class="text-dark">No. HP / WA</th>
-                    <th class="text-center text-dark" style="width: 110px;">Aksi</th>
+                    <th class="text-center text-dark" style="width: 120px;">Aksi</th>
                 </tr>
             </thead>
             <tbody>
@@ -86,7 +86,7 @@
                         @endif
                     </td>
                     <td class="text-center">
-                        <div class="d-inline-flex gap-1.5 justify-content-center align-items-center">
+                        <div class="d-inline-flex gap-2 justify-content-center align-items-center">
                             <button type="button" class="btn btn-warning text-dark btn-sm rounded-2 d-inline-flex align-items-center justify-content-center shadow-sm" style="width: 30px; height: 30px;" title="Ubah Password Login" onclick="openResetPasswordModal({{ $guru->id }}, '{{ addslashes($guru->nama) }}')">
                                 <i class="fa-solid fa-key" style="font-size: 0.78rem;"></i>
                             </button>
