@@ -471,17 +471,10 @@
                         <label class="form-label fw-semibold text-dark">Tahun Ajaran Aktif <span class="text-danger">*</span></label>
                         <select name="tahun_ajaran" class="form-select shadow-sm" required>
                             @php
-                                $historyTAs = \App\Models\RiwayatKelas::distinct()->pluck('tahun_ajaran')->toArray();
                                 $taList = [];
-                                // Rentang tahun rolling: 5 tahun ke belakang hingga 5 tahun ke depan
-                                for ($y = date('Y') - 5; $y <= date('Y') + 5; $y++) {
+                                // Rentang tahun: 2 tahun ke belakang (menyesuaikan siswa kelas 9 saat ini yang masuk sejak kelas 7) hingga 1 tahun ke depan
+                                for ($y = date('Y') - 2; $y <= date('Y') + 1; $y++) {
                                     $taList[] = $y . '/' . ($y + 1);
-                                }
-                                // Gabungkan seluruh histori tahun ajaran yang pernah tercatat di database agar tidak pernah hilang
-                                foreach ($historyTAs as $hta) {
-                                    if (!empty($hta) && !in_array($hta, $taList)) {
-                                        $taList[] = $hta;
-                                    }
                                 }
                                 if (!in_array($settingAkademik->tahun_ajaran, $taList)) {
                                     $taList[] = $settingAkademik->tahun_ajaran;
