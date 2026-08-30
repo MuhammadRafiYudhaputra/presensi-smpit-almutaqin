@@ -27,7 +27,7 @@
         background-color: #f8fafc;
     }
 
-    /* Metric Summary Styles (Selaras dengan Dashboard) */
+    /* Metric Summary Styles */
     .stat-metric-box {
         text-align: center;
         padding: 0.4rem 0.25rem;
@@ -79,7 +79,7 @@
         </div>
     </form>
 
-    <!-- Ringkasan Cepat Hari Ini (Selaras dengan Halaman Dashboard) -->
+    <!-- Ringkasan Cepat Hari Ini -->
     <div class="p-3 bg-light rounded-3 mb-4 border">
         <div class="row g-2 justify-content-around align-items-center text-center">
             <div class="col-6 col-sm-3 col-md-auto stat-metric-box px-3">
@@ -113,7 +113,7 @@
         </div>
     </div>
 
-    <!-- Table Absensi Harian (Format Bersih Sesuai Tema Website Tanpa Kolom Aksi) -->
+    <!-- Table Absensi Harian -->
     <div class="table-responsive">
         <table class="table-presensi-minimal align-middle mb-0">
             <thead>

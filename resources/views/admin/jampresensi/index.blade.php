@@ -74,7 +74,7 @@
         @csrf
         <input type="hidden" name="nama_jadwal" value="{{ $jamPresensi->nama_jadwal ?? 'Jadwal Reguler Sekolah' }}">
 
-        <!-- 3 Time Cards Row (Lebih Ringkas & Rapi) -->
+        <!-- 3 Time Cards Row -->
         <div class="row g-3 mb-4">
             <!-- Card 1: Jam Masuk -->
             <div class="col-lg-4 col-md-6">

@@ -45,7 +45,7 @@
             width: 100%;
         }
 
-        /* Sidebar Styling (Sleek, Comfortable & No Scrollbars) */
+        /* Sidebar Styling */
         .sidebar {
             width: 250px;
             min-width: 250px;
@@ -144,7 +144,7 @@
             color: #2563eb;
         }
 
-        /* Active Menu Button (Biru Elegan Sesuai Button Cetak) */
+        /* Active Menu Button */
         .sidebar-menu .nav-link.active {
             color: #ffffff !important;
             background: #2563eb;
@@ -182,7 +182,7 @@
             color: #dc2626 !important;
         }
 
-        /* Main Content Container (Offset by Fixed Sidebar Width) */
+        /* Main Content Container */
         .main-content {
             flex: 1;
             min-width: 0;
@@ -192,7 +192,7 @@
             min-height: 100vh;
         }
 
-        /* Top Minimalist Header / Navbar (Sticky & Stay On Top When Scrolling) */
+        /* Top Minimalist Header / Navbar */
         .top-header-card {
             position: sticky;
             top: 1rem;
@@ -395,10 +395,10 @@
     <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="toggleSidebar()"></div>
 
     <div class="app-wrapper">
-        <!-- Sidebar Navigation (Fixed & Stay On Place When Scrolling) -->
+        <!-- Sidebar Navigation -->
         <div class="sidebar d-flex flex-column justify-content-between" id="sidebarDrawer">
             <div>
-                <!-- Branding Header (Sesuai Role User) -->
+                <!-- Branding Header -->
                 <div class="sidebar-brand">
                     <div class="d-flex justify-content-center mb-2">
                         <img src="{{ asset('images/logo.png') }}" alt="Logo SMP IT Al-Muttaqin" style="width: 44px; height: 44px; object-fit: contain;">
@@ -438,7 +438,7 @@
                             </a>
                         </li>
                     @else
-                        <!-- MENU OPERATOR / ADMIN TU (Sesuai Struktur Gambar) -->
+                        <!-- MENU OPERATOR / ADMIN TU -->
                         <li class="nav-item">
                             <a href="{{ route('admin.dashboard') }}" class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                                 <i class="fa-solid fa-table-cells-large"></i> Dashboard
@@ -503,7 +503,7 @@
                 </ul>
             </div>
 
-            <!-- Sidebar Bottom Footer (Logout Button Pinned at Bottom) -->
+            <!-- Sidebar Bottom Footer -->
             <div class="sidebar-footer mt-auto pt-2 pb-2.5 px-3 border-top">
                 @if(Auth::check())
                 <form action="{{ route('logout') }}" method="POST" class="m-0">
@@ -542,7 +542,7 @@
                 @endif
             </div>
 
-            <!-- Desktop Top Header Navbar (Minimalist Style Sesuai Gambar) -->
+            <!-- Desktop Top Header Navbar -->
             <div class="top-header-card d-none d-lg-flex">
                 <div>
                     <h5 class="top-header-title">

@@ -70,7 +70,7 @@
                     </form>
                 </div>
 
-                <!-- Tombol Action (Generate PDF Saja) -->
+                <!-- Tombol Action (Generate PDF) -->
                 <div class="pt-2">
                     <button type="submit" form="formBulanan" name="format" value="pdf" class="btn btn-danger text-uppercase fw-bold rounded-pill py-2.5 w-100 shadow-sm d-flex align-items-center justify-content-center gap-2">
                         <i class="fa-solid fa-print fs-6"></i> GENERATE PDF
@@ -129,7 +129,7 @@
                     </form>
                 </div>
 
-                <!-- Tombol Action (Generate PDF Saja) -->
+                <!-- Tombol Action (Generate PDF) -->
                 <div class="pt-2">
                     <button type="submit" form="formSemester" name="format" value="pdf" class="btn btn-danger text-uppercase fw-bold rounded-pill py-2.5 w-100 shadow-sm d-flex align-items-center justify-content-center gap-2">
                         <i class="fa-solid fa-print fs-6"></i> GENERATE PDF

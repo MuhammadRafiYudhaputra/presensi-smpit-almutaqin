@@ -34,7 +34,6 @@
         </button>
     </div>
 
-    <!-- Tabel Lengkap Daftar Admin TU (Full-Width, Lega & Bersih) -->
     <div class="table-responsive">
         <table class="table table-bordered table-hover align-middle mb-0" style="font-size: 0.88rem;">
             <thead class="table-light">
@@ -87,7 +86,7 @@
                                 <span>Edit</span>
                             </button>
 
-                            <!-- Delete Button (Hanya untuk akun staf lain) -->
+                            <!-- Delete Button -->
                             @if($admin->id !== Auth::id())
                             <form action="{{ route('admin.user.destroy', $admin->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus akun admin [{{ addslashes($admin->name) }}]?');">
                                 @csrf

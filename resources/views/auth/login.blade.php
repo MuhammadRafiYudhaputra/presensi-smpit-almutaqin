@@ -391,7 +391,7 @@
                 </a>
             </div>
 
-            <!-- Submit Button (Sesuai Gaya Desain Website) -->
+            <!-- Submit Button -->
             <button type="submit" class="btn btn-primary text-uppercase fw-bold rounded-pill py-2.5 w-100 shadow-sm d-flex align-items-center justify-content-center gap-2 mb-3">
                 <i class="fa-solid fa-right-to-bracket fs-6"></i> Masuk ke Sistem
             </button>
@@ -475,7 +475,6 @@ function togglePasswordVisibility() {
     }
 }
 
-// Auto-dismiss alert notification secara halus setelah 3 detik
 document.addEventListener('DOMContentLoaded', function() {
     const alerts = document.querySelectorAll('.custom-alert');
     if (alerts.length > 0) {

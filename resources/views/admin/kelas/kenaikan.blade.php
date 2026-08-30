@@ -15,7 +15,7 @@
         </a>
     </div>
 
-    <!-- 1. Alur Visual Kenaikan Kelas Otomatis -->
+    <!-- 1. Alur Visual Kenaikan Kelas -->
     <div class="row g-3 mb-4">
         <div class="col-md-4">
             <div class="p-3 rounded-4 bg-primary bg-opacity-10 border border-primary text-center">

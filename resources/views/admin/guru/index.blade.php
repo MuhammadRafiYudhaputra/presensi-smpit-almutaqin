@@ -42,7 +42,7 @@
         </select>
     </form>
 
-    <!-- Tabel Data Wali Kelas (Fit 100% Tanpa Scroll Samping) -->
+    <!-- Tabel Data Wali Kelas -->
     <div class="table-responsive">
         <table class="table table-bordered table-hover align-middle mb-0" style="font-size: 0.85rem; width: 100%;">
             <thead class="table-light text-center">

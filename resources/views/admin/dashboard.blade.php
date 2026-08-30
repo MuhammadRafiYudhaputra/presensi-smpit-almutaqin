@@ -61,9 +61,9 @@
     .text-total { color: #7c3aed; }
 </style>
 
-<!-- 1. Top 4 Metric Cards (Floating Badge Style from Reference UI) -->
+<!-- 1. Top 4 Metric Cards -->
 <div class="row g-3 mb-3">
-    <!-- Card 1: Jumlah Siswa (Purple Badge) -->
+    <!-- Card 1: Jumlah Siswa -->
     <div class="col-12 col-sm-6 col-xl-3">
         <div class="stat-card-floating">
             <div class="stat-floating-icon" style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);">
@@ -80,7 +80,7 @@
         </div>
     </div>
 
-    <!-- Card 2: Jumlah Guru (Green Badge) -->
+    <!-- Card 2: Jumlah Guru -->
     <div class="col-12 col-sm-6 col-xl-3">
         <div class="stat-card-floating">
             <div class="stat-floating-icon" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
@@ -97,7 +97,7 @@
         </div>
     </div>
 
-    <!-- Card 3: Kelas Aktif (Blue Badge) -->
+    <!-- Card 3: Kelas Aktif -->
     <div class="col-12 col-sm-6 col-xl-3">
         <div class="stat-card-floating">
             <div class="stat-floating-icon" style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);">
@@ -114,7 +114,7 @@
         </div>
     </div>
 
-    <!-- Card 4: Petugas Admin (Red Badge) -->
+    <!-- Card 4: Petugas Admin -->
     <div class="col-12 col-sm-6 col-xl-3">
         <div class="stat-card-floating">
             <div class="stat-floating-icon" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);">

@@ -24,7 +24,7 @@
 </style>
 
 <div class="card card-custom p-4 shadow-sm border-0 rounded-4">
-    <!-- Header & Mode Tabs (Bulanan & Semester Saja) -->
+    <!-- Header & Mode Tabs (Bulanan & Semester) -->
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-3 pb-2 border-bottom">
         <div>
             <h5 class="fw-bold mb-0.5 text-dark d-flex align-items-center" style="font-size: 1.05rem;">
@@ -112,7 +112,7 @@
         </div>
 
         @if($mode === 'semester')
-        <!-- Bar Informasi Dasar Hari Efektif Masing-Masing Kelas (Hanya Tampil di Mode Semester) -->
+        <!-- Bar Informasi Dasar Hari Efektif Masing-Masing Kelas -->
         <div class="col-12 mt-1">
             <div class="d-flex align-items-center justify-content-between p-2 px-3 bg-light rounded-3 border">
                 <div class="d-flex align-items-center gap-2 flex-wrap">

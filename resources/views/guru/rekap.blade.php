@@ -33,7 +33,7 @@
             <small class="text-muted ms-4 ps-2 d-block" style="font-size: 0.76rem;">Akumulasi kehadiran berkala (Bulanan &amp; Semester) &bull; Kelas {{ $kelas->nama_kelas ?? '' }}</small>
         </div>
         <div class="d-flex align-items-center gap-2 flex-wrap flex-sm-nowrap">
-            <!-- Mode Switcher Tabs (Bulanan & Semester Saja) -->
+            <!-- Mode Switcher Tabs (Bulanan & Semester) -->
             <div class="btn-group p-0.5 bg-light rounded-pill border" role="group">
                 <a href="{{ route('guru.rekap', ['mode' => 'bulanan', 'bulan' => $bulan, 'tahun' => $tahun, 'sort_by' => $sortBy]) }}" class="btn btn-sm rounded-pill px-3 py-1 fw-semibold d-inline-flex align-items-center gap-2 {{ $mode === 'bulanan' ? 'btn-primary shadow-sm' : 'btn-light text-muted' }}" style="font-size: 0.8rem;">
                     <i class="fa-solid fa-chart-simple"></i>
@@ -95,7 +95,7 @@
         @endif
 
         @if($mode === 'semester')
-        <!-- Bar Informasi Dasar Hari Efektif Kelas Ini (Hanya Tampil di Mode Semester) -->
+        <!-- Bar Informasi Dasar Hari Efektif Kelas Ini -->
         <div class="col-12 mt-1">
             <div class="d-flex align-items-center p-2 px-3 bg-light rounded-3 border">
                 <span class="fw-bold text-dark d-flex align-items-center" style="font-size: 0.82rem;">

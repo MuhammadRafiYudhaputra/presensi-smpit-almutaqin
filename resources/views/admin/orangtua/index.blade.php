@@ -22,7 +22,7 @@
         </div>
     </div>
 
-    <!-- Search Bar (Tanpa Urutkan Redundan) -->
+    <!-- Search Bar -->
     <form action="{{ route('admin.orangtua.index') }}" method="GET" class="row g-2 mb-4 align-items-center">
         <div class="col-12 col-md-8 col-lg-6">
             <div class="input-group shadow-sm">

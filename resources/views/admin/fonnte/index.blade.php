@@ -31,7 +31,7 @@
     <form action="{{ route('admin.fonnte.update') }}" method="POST">
         @csrf
         
-        <!-- Fonnte API Token (Compact Form) -->
+        <!-- Fonnte API Token -->
         <div class="mb-4 p-3 bg-light rounded-3 border">
             <div class="row align-items-center g-2">
                 <div class="col-md-3">
@@ -57,9 +57,9 @@
             </h6>
         </div>
 
-        <!-- 3 Template Columns Side-by-Side (Compact & Tidy) -->
+        <!-- 3 Template Columns Side-by-Side -->
         <div class="row g-3 mb-4">
-            <!-- Template 1: Masuk (Tepat Waktu) -->
+            <!-- Template 1: Masuk -->
             <div class="col-lg-4">
                 <div class="card h-100 border rounded-3 p-3 bg-light bg-opacity-30 shadow-none">
                     <label class="form-label fw-bold text-dark d-flex align-items-center mb-2 small gap-2">

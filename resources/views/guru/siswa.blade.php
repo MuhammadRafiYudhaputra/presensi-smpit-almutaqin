@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="card card-custom p-4 shadow-sm border-0 rounded-4">
-    <!-- Header Page (Tanpa Tombol Tambah/Import Master) -->
+    <!-- Header Page -->
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4 pb-2 border-bottom">
         <div>
             <h5 class="fw-bold mb-0.5 text-dark d-flex align-items-center" style="font-size: 1.05rem;">
@@ -13,7 +13,7 @@
         </div>
     </div>
 
-    <!-- Search Bar (Tanpa Urutkan Redundan) -->
+    <!-- Search Bar -->
     <form action="{{ route('guru.siswa.index') }}" method="GET" class="row g-2 mb-4 align-items-center">
         <div class="col-12 col-md-8 col-lg-6">
             <div class="input-group shadow-sm">
@@ -24,7 +24,7 @@
         </div>
     </form>
 
-    <!-- Tabel Data Orang Tua / Wali (Persis seperti Halaman Admin) -->
+    <!-- Tabel Data Orang Tua / Wali -->
     <div class="table-responsive">
         <table class="table table-bordered table-hover align-middle mb-0" style="font-size: 0.9rem;">
             <thead class="table-light text-center">

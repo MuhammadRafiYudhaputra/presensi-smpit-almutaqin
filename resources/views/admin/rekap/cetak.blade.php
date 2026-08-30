@@ -143,7 +143,7 @@
     </div>
     @endif
 
-    <!-- Lembar Dokumen Cetak Laporan (Proporsional & Rapi) -->
+    <!-- Lembar Dokumen Cetak Laporan -->
     <div class="paper-container">
         <!-- Kop Surat -->
         <div class="header-kop position-relative d-flex align-items-center justify-content-center">

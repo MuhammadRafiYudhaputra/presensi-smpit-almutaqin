@@ -44,7 +44,7 @@
 </style>
 
 <div class="card card-custom p-4 shadow-sm border-0 rounded-4">
-    <!-- Header & Action Buttons (Sesuai Referensi Gambar) -->
+    <!-- Header & Action Buttons -->
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
         <div>
             <h5 class="fw-bold mb-1 text-dark d-flex align-items-center">
@@ -61,7 +61,7 @@
         </div>
     </div>
 
-    <!-- Status Filter Tabs (Siswa Aktif vs Arsip Alumni vs Semua Data) -->
+    <!-- Status Filter Tabs (Siswa Aktif, Arsip Alumni, Semua Data) -->
     <div class="d-flex align-items-center mb-4 flex-wrap gap-2">
         <div class="btn-group p-1 bg-light rounded-pill border" role="group">
             <a href="{{ route('admin.siswa.index', ['status' => 'aktif', 'search' => $search, 'kelas_id' => $kelasId]) }}" class="btn btn-sm rounded-pill {{ ($status ?? 'aktif') === 'aktif' ? 'btn-primary shadow-sm' : 'btn-light text-muted' }}">
@@ -106,7 +106,7 @@
         </div>
     </form>
 
-    <!-- Tabel Data Siswa (Format Bersih Sesuai Referensi) -->
+    <!-- Tabel Data Siswa -->
     <div class="table-responsive">
         <table class="table-siswa-minimal align-middle mb-0">
             <thead>
