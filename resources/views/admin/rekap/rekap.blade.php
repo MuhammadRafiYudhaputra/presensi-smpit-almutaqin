@@ -112,7 +112,8 @@
             </select>
         </div>
 
-        <!-- Bar Informasi Dasar Hari Efektif Masing-Masing Kelas (Compact & Rapi) -->
+        @if($mode === 'semester')
+        <!-- Bar Informasi Dasar Hari Efektif Masing-Masing Kelas (Hanya Tampil di Mode Semester) -->
         <div class="col-12 mt-1">
             <div class="d-flex align-items-center justify-content-between p-2 px-3 bg-light rounded-3 border">
                 <div class="d-flex align-items-center gap-2 flex-wrap">
@@ -132,6 +133,7 @@
                 </button>
             </div>
         </div>
+        @endif
     </form>
 
     <!-- 1. TAMPILAN TABEL MODE BULANAN -->
@@ -187,8 +189,8 @@
                     <td class="text-center val-hadir" title="{{ $row->hadir }} hari hadir">{{ $row->hadir }}</td>
                     <td class="text-center val-terlambat" onclick="openRiwayatTerlambatModal('{{ addslashes($row->siswa->nama) }}', '{{ $row->siswa->nisn }}', '{{ $row->kelas_historis->nama_kelas ?? ($row->siswa->kelas->nama_kelas ?? '-') }}', {{ json_encode($row->riwayat_terlambat) }}, '{{ $row->siswa->orangTua->no_wa ?? '' }}')">
                         <span class="text-decoration-underline" title="Klik untuk rincian tanggal">{{ $row->terlambat }}x</span>
-                        @if($row->terlambat >= 3)
-                            <span class="badge bg-warning bg-opacity-25 text-dark border border-warning ms-1" style="font-size: 0.7rem;" title="Perlu tindak lanjut BK">
+                        @if($row->terlambat > 4)
+                            <span class="badge bg-warning bg-opacity-25 text-dark border border-warning ms-1" style="font-size: 0.7rem;" title="Perlu tindak lanjut BK (Lebih dari 4x terlambat)">
                                 <i class="fa-solid fa-triangle-exclamation"></i> BK
                             </span>
                         @endif
@@ -205,7 +207,7 @@
                         </div>
                     </td>
                     <td class="text-center">
-                        @if($row->terlambat >= 3)
+                        @if($row->terlambat > 4)
                             <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-2 py-1 bk-badge-btn" style="font-size: 0.75rem;" onclick="openRiwayatTerlambatModal('{{ addslashes($row->siswa->nama) }}', '{{ $row->siswa->nisn }}', '{{ $row->siswa->kelas->nama_kelas ?? '-' }}', {{ json_encode($row->riwayat_terlambat) }}, '{{ $row->siswa->orangTua->no_wa ?? '' }}')">
                                 <i class="fa-solid fa-user-shield me-1"></i> Perlu Tindak Lanjut BK
                             </button>
@@ -218,6 +220,8 @@
                                 <i class="fa-solid fa-check me-1"></i> Tertib
                             </span>
                         @endif
+                    </td>
+                </tr>
                     </td>
                 </tr>
                 @empty
@@ -282,7 +286,7 @@
                     <td class="text-center val-hadir" title="{{ $row->hadir }} hari hadir">{{ $row->hadir }}</td>
                     <td class="text-center val-terlambat" onclick="openRiwayatTerlambatModal('{{ addslashes($row->siswa->nama) }}', '{{ $row->siswa->nisn }}', '{{ $row->kelas_historis->nama_kelas ?? ($row->siswa->kelas->nama_kelas ?? '-') }}', {{ json_encode($row->riwayat_terlambat) }}, '{{ $row->siswa->orangTua->no_wa ?? '' }}')">
                         <span class="text-decoration-underline" title="Klik untuk rincian tanggal">{{ $row->terlambat }}x</span>
-                        @if($row->terlambat >= 3)
+                        @if($row->terlambat > 4)
                             <span class="badge bg-warning bg-opacity-25 text-dark border border-warning ms-1" style="font-size: 0.7rem;" title="Perlu tindak lanjut BK">
                                 <i class="fa-solid fa-triangle-exclamation"></i> BK
                             </span>
@@ -300,7 +304,7 @@
                         </div>
                     </td>
                     <td class="text-center">
-                        @if($row->terlambat >= 3)
+                        @if($row->terlambat > 4)
                             <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-2 py-1 bk-badge-btn" style="font-size: 0.75rem;" onclick="openRiwayatTerlambatModal('{{ addslashes($row->siswa->nama) }}', '{{ $row->siswa->nisn }}', '{{ $row->siswa->kelas->nama_kelas ?? '-' }}', {{ json_encode($row->riwayat_terlambat) }}, '{{ $row->siswa->orangTua->no_wa ?? '' }}')">
                                 <i class="fa-solid fa-user-shield me-1"></i> Perlu Tindak Lanjut BK
                             </button>
@@ -538,7 +542,7 @@ function openRiwayatTerlambatModal(nama, nisn, kelas, riwayat, noWa) {
     const count = riwayat ? riwayat.length : 0;
     const rekBox = document.getElementById('bk_rekomendasi_box');
 
-    if (count >= 3) {
+    if (count > 4) {
         rekBox.className = 'p-3 rounded-3 mb-3 bg-danger bg-opacity-10 border border-danger text-danger';
         rekBox.innerHTML = `
             <div class="d-flex align-items-center gap-2 mb-1">

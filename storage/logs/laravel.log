@@ -2255,3 +2255,4 @@
 #26 C:/Users/Windows/.gemini/antigravity-ide/scratch/smpit-almutaqin-presensi/artisan(16): Illuminate/Foundation/Application->handleCommand(Object(Symfony/Component/Console/Input/ArgvInput))
 #27 {main}
 "} 
+[2026-08-29 07:33:58] local.INFO: Fonnte WA Sent to 082317087527: {"reason":"invalid token","status":false}  

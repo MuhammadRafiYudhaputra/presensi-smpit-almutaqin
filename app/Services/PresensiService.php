@@ -29,8 +29,8 @@ class PresensiService
             ];
         }
 
-        $today = Carbon::today()->toDateString();
-        $nowTime = Carbon::now()->format('H:i:s');
+        $today = Carbon::today('Asia/Jakarta')->toDateString();
+        $nowTime = Carbon::now('Asia/Jakarta')->format('H:i:s');
 
         // Ambil pengaturan jam presensi aktif (atau fallback default)
         $jamSetting = JamPresensi::where('is_active', true)->first();
