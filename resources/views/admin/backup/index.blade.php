@@ -78,12 +78,6 @@
             <h6 class="fw-bold mb-0.5 text-dark d-flex align-items-center" style="font-size: 0.95rem;">
                 <i class="fa-solid fa-cloud-arrow-down text-primary me-2 fs-5"></i> Backup &amp; Restore Data Sistem
             </h6>
-            <small class="text-muted" style="font-size: 0.78rem;">Kelola pencadangan salinan data database &amp; penyimpanan berkas QR Code untuk keamanan data sekolah.</small>
-        </div>
-        <div>
-            <span class="badge bg-primary bg-opacity-10 text-primary border border-primary px-2.5 py-1 rounded-pill fw-semibold" style="font-size: 0.75rem;">
-                <i class="fa-solid fa-shield-halved me-1"></i> Data Security Center
-            </span>
         </div>
     </div>
 </div>

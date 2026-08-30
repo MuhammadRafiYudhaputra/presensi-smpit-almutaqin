@@ -669,7 +669,6 @@
             }
         }
 
-        // Auto-dismiss alert notifications secara halus setelah 3.5 detik
         document.addEventListener("DOMContentLoaded", function() {
             const alerts = document.querySelectorAll('.alert.alert-dismissible');
             alerts.forEach(function(alert) {

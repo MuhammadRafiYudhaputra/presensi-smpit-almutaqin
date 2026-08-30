@@ -17,7 +17,6 @@
                 <i class="fa-solid fa-chalkboard-user text-primary me-3 fs-5"></i>
                 <span>Kelola Data Wali Kelas</span>
             </h5>
-            <small class="text-muted ms-4 ps-2 d-block" style="font-size: 0.78rem;">Data Tenaga Pendidik, Penugasan Kelas, &amp; Akun Login Portal Guru</small>
         </div>
         <div class="d-flex gap-2 flex-wrap align-items-center">
             <button type="button" class="btn btn-outline-primary rounded-pill px-3 py-1.5 fw-semibold shadow-sm btn-sm d-inline-flex align-items-center gap-1.5 text-nowrap" data-bs-toggle="modal" data-bs-target="#modalImportGuru" style="font-size: 0.82rem;">

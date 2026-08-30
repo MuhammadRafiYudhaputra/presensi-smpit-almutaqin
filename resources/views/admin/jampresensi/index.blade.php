@@ -66,12 +66,8 @@
             </div>
             <div>
                 <h5 class="fw-bold mb-1 text-dark">Pengaturan Jam Operasional Presensi</h5>
-                <p class="text-muted small mb-0">Atur jam batas masuk, batas toleransi terlambat, dan jam kepulangan resmi siswa</p>
             </div>
         </div>
-        <span class="badge bg-primary bg-opacity-10 text-primary border border-primary px-3 py-1.5 rounded-pill fw-semibold" style="font-size: 0.82rem;">
-            <i class="fa-solid fa-school me-1"></i> Jadwal Reguler Sekolah
-        </span>
     </div>
 
     <form action="{{ route('admin.jampresensi.update') }}" method="POST">

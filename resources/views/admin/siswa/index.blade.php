@@ -50,7 +50,6 @@
             <h5 class="fw-bold mb-1 text-dark d-flex align-items-center">
                 <i class="fa-solid fa-users text-primary me-2 fs-4"></i> Data Siswa
             </h5>
-            <small class="text-muted">Kelola data seluruh siswa, kelas, kontak orang tua, dan cetak kartu QR presensi</small>
         </div>
         <div class="d-flex gap-2 flex-wrap align-items-center">
             <button type="button" class="btn btn-outline-primary rounded-pill px-3 py-2 fw-semibold shadow-sm btn-sm d-inline-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#modalImportDapodik">

@@ -9,7 +9,6 @@
                 <i class="fa-solid fa-user-group text-primary me-3 fs-5"></i>
                 <span>Kelola Data Orang Tua / Wali</span>
             </h5>
-            <small class="text-muted ms-4 ps-2 d-block" style="font-size: 0.78rem;">Data orang tua, wali murid siswa, nomor WhatsApp, dan anak yang terhubung</small>
         </div>
         <div class="d-flex gap-2 align-items-center flex-wrap flex-sm-nowrap flex-shrink-0">
             <button type="button" class="btn btn-outline-primary rounded-pill px-3 py-1.5 fw-semibold shadow-sm btn-sm text-nowrap d-inline-flex align-items-center gap-1.5" data-bs-toggle="modal" data-bs-target="#modalImportOrangTua" style="font-size: 0.82rem;">

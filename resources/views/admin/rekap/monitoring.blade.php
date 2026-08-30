@@ -2,7 +2,6 @@
 
 @section('content')
 <style>
-    /* Table Styling Selaras dengan Tema Website */
     .table-presensi-minimal {
         border-collapse: separate;
         border-spacing: 0;
@@ -27,7 +26,6 @@
         background-color: #f8fafc;
     }
 
-    /* Button Edit Aksi Selaras dengan Warna Biru Cetak Absensi */
     .btn-edit-action {
         background-color: #2563eb;
         border: 1px solid #2563eb;
@@ -66,7 +64,6 @@
         cursor: pointer;
     }
 
-    /* Metric Summary Styles (Selaras dengan Dashboard) */
     .stat-metric-box {
         text-align: center;
         padding: 0.4rem 0.25rem;
@@ -120,7 +117,6 @@
             <h5 class="fw-bold mb-1 text-dark d-flex align-items-center">
                 <i class="fa-solid fa-list-check text-primary me-2 fs-4"></i> Absensi Siswa
             </h5>
-            <small class="text-muted">Daftar presensi harian seluruh peserta didik, jam masuk & pulang, serta keterangan kehadiran</small>
         </div>
         <div class="d-flex gap-2 flex-wrap">
             <a href="{{ route('admin.rekap.cetak', ['mode' => 'harian', 'tanggal' => $tanggal, 'kelas_id' => $kelasId]) }}" target="_blank" class="btn btn-outline-primary rounded-pill px-3 fw-semibold shadow-sm">

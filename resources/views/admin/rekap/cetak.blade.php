@@ -235,10 +235,8 @@
             </tbody>
         </table>
 
-        <!-- Kolom Tanda Tangan Pejabat (Kepala Sekolah & Wali Kelas jika per kelas) -->
         <div class="row mt-4 pt-2" style="font-size: 0.88rem;">
             @if($kelas)
-            <!-- Tanda Tangan Wali Kelas (Hanya Muncul Jika Memilih Kelas Tertentu) -->
             <div class="col-6 text-center" id="colWaliKelas">
                 <p class="mb-1">Garut, {{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}</p>
                 <p class="mb-1">Mengetahui,</p>
@@ -251,7 +249,6 @@
             </div>
             @endif
 
-            <!-- Tanda Tangan Kepala Sekolah (Jika Semua Kelas ditarik ke kanan/ms-auto) -->
             <div class="{{ $kelas ? 'col-6' : 'col-6 ms-auto' }} text-center" id="colKepsek">
                 <p class="mb-1">Garut, {{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}</p>
                 <p class="mb-1">Mengetahui,</p>

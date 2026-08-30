@@ -25,11 +25,7 @@
             <h5 class="fw-bold mb-0 text-dark d-flex align-items-center">
                 <i class="fa-brands fa-whatsapp text-success fs-4 me-2"></i> Pengaturan WhatsApp Gateway & Template
             </h5>
-            <small class="text-muted" style="font-size: 0.8rem;">Konfigurasi Fonnte API Token dan kustomisasi format pesan notifikasi presensi otomatis</small>
         </div>
-        <span class="badge bg-success bg-opacity-10 text-success border border-success px-3 py-1.5 rounded-pill fw-semibold" style="font-size: 0.8rem;">
-            <i class="fa-solid fa-bolt me-1"></i> Fonnte API
-        </span>
     </div>
 
     <form action="{{ route('admin.fonnte.update') }}" method="POST">
@@ -71,7 +67,6 @@
                         <span>Presensi MASUK</span>
                     </label>
                     <textarea name="template_masuk" class="form-control form-control-sm template-textarea shadow-sm mb-2" rows="6" required>{{ old('template_masuk', $setting->template_masuk ?? "Assalamu'alaikum Warahmatullahi Wabarakatuh.\n\nPemberitahuan Presensi MASUK SMP IT Al-Muttaqin:\nNama: {nama}\nNISN: {nisn}\nKelas: {kelas}\nStatus: {status}\n\nTelah melakukan presensi MASUK pada tanggal {tanggal} pukul {waktu}.\n\nTerima kasih.") }}</textarea>
-                    <small class="text-muted d-block" style="font-size: 0.72rem;">Dikirim saat siswa melakukan scan masuk sekolah.</small>
                 </div>
             </div>
 
@@ -83,7 +78,6 @@
                         <span>Presensi TERLAMBAT</span>
                     </label>
                     <textarea name="template_terlambat" class="form-control form-control-sm template-textarea shadow-sm mb-2" rows="6" required>{{ old('template_terlambat', $setting->template_terlambat ?? "Assalamu'alaikum Warahmatullahi Wabarakatuh.\n\nPemberitahuan Presensi TERLAMBAT SMP IT Al-Muttaqin:\nNama: {nama}\nNISN: {nisn}\nKelas: {kelas}\nStatus: {status}\n\nTelah melakukan presensi MASUK TERLAMBAT pada tanggal {tanggal} pukul {waktu}. Mohon perhatian dari Bapak/Ibu Wali Murid.\n\nTerima kasih.") }}</textarea>
-                    <small class="text-muted d-block" style="font-size: 0.72rem;">Dikirim saat siswa scan masuk melebihi batas jam masuk.</small>
                 </div>
             </div>
 
@@ -95,7 +89,6 @@
                         <span>Presensi PULANG</span>
                     </label>
                     <textarea name="template_pulang" class="form-control form-control-sm template-textarea shadow-sm mb-2" rows="6" required>{{ old('template_pulang', $setting->template_pulang ?? "Assalamu'alaikum Warahmatullahi Wabarakatuh.\n\nPemberitahuan Presensi PULANG SMP IT Al-Muttaqin:\nNama: {nama}\nNISN: {nisn}\nKelas: {kelas}\n\nTelah menyelesaikan kegiatan belajar dan melakukan presensi PULANG pada tanggal {tanggal} pukul {waktu}.\n\nTerima kasih.") }}</textarea>
-                    <small class="text-muted d-block" style="font-size: 0.72rem;">Dikirim saat siswa melakukan scan kepulangan sekolah.</small>
                 </div>
             </div>
         </div>

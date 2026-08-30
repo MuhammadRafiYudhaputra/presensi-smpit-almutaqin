@@ -28,9 +28,8 @@
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-3 pb-2 border-bottom">
         <div>
             <h5 class="fw-bold mb-0.5 text-dark d-flex align-items-center" style="font-size: 1.05rem;">
-                <i class="fa-solid fa-chart-simple text-primary me-3 fs-5"></i> Rekapitulasi Presensi Siswa
+                <i class="fa-solid fa-chart-simple text-primary me-3 fs-5"></i> Rekapitulasi Presensi
             </h5>
-            <small class="text-muted ms-4 ps-2 d-block" style="font-size: 0.76rem;">Akumulasi kehadiran berkala (Bulanan &amp; Semester)</small>
         </div>
         <div class="d-flex align-items-center gap-2 flex-wrap flex-sm-nowrap">
             <!-- Mode Switcher Tabs (Bulanan & Semester) -->

@@ -27,7 +27,6 @@
             <h5 class="fw-bold mb-0.5 text-dark d-flex align-items-center" style="font-size: 1.05rem;">
                 <i class="fa-solid fa-users-gear text-primary me-3 fs-5"></i> Kelola Akun Administrator TU
             </h5>
-            <small class="text-muted ms-4 ps-2 d-block" style="font-size: 0.76rem;">Kelola seluruh hak akses staf TU dan administrator sistem presensi sekolah</small>
         </div>
         <button type="button" class="btn btn-primary rounded-pill px-3.5 py-1.5 btn-sm fw-bold shadow-sm d-inline-flex align-items-center gap-2 text-nowrap" data-bs-toggle="modal" data-bs-target="#modalTambahAdmin" style="font-size: 0.82rem;">
             <i class="fa-solid fa-user-plus me-1.5"></i>

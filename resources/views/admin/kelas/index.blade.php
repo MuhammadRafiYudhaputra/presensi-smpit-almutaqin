@@ -9,7 +9,6 @@
                 <i class="fa-solid fa-school text-primary me-3 fs-5"></i>
                 <span>Kelola Data Kelas</span>
             </h5>
-            <small class="text-muted ms-4 ps-2 d-block" style="font-size: 0.78rem;">Daftar kelas, penugasan Wali Kelas, dan kenaikan kelas otomatis di tahun ajaran baru</small>
         </div>
         <div class="d-flex gap-2 flex-wrap align-items-center">
             <button type="button" class="btn btn-outline-primary rounded-pill px-3 py-1.5 fw-semibold shadow-sm btn-sm d-inline-flex align-items-center gap-1.5 text-nowrap" data-bs-toggle="modal" data-bs-target="#modalKenaikanKelas" style="font-size: 0.82rem;">
