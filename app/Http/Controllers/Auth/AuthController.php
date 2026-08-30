@@ -26,6 +26,22 @@ class AuthController extends Controller
 
         $remember = $request->boolean('remember');
 
+        // Cek apakah alamat email terdaftar
+        $user = \App\Models\User::where('email', $request->email)->first();
+
+        if (!$user) {
+            return back()->withErrors([
+                'email' => 'Alamat email yang Anda masukkan tidak terdaftar dalam sistem.',
+            ])->onlyInput('email');
+        }
+
+        // Cek apakah password cocok
+        if (!\Illuminate\Support\Facades\Hash::check($request->password, $user->password)) {
+            return back()->withErrors([
+                'password' => 'Kata sandi yang Anda masukkan salah. Silakan periksa kembali.',
+            ])->onlyInput('email');
+        }
+
         if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
 
@@ -40,7 +56,7 @@ class AuthController extends Controller
         }
 
         return back()->withErrors([
-            'email' => 'Email atau password yang Anda masukkan tidak sesuai.',
+            'email' => 'Gagal melakukan login. Silakan periksa kembali email dan kata sandi Anda.',
         ])->onlyInput('email');
     }
 
