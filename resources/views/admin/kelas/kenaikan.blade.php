@@ -84,7 +84,7 @@
 
         <div class="d-flex justify-content-end">
             <button type="submit" class="btn btn-success rounded-pill px-5 py-2 fw-bold shadow-sm">
-                <i class="fa-solid fa-check-double me-2"></i> Eksekusi Kenaikan Kelas Tahun Ajaran Baru
+                <i class="fa-solid fa-check-double me-2"></i> Proses Kenaikan Kelas Tahun Ajaran Baru
             </button>
         </div>
     </form>

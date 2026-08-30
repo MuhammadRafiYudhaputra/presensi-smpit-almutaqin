@@ -141,11 +141,6 @@
         <small class="text-muted" style="font-size: 0.75rem;">Dekatkan ke Scanner USB</small>
     </div>
 
-    <!-- Status Subtext -->
-    <div class="d-inline-flex align-items-center gap-2 badge bg-success bg-opacity-10 text-success border border-success px-3 py-2 rounded-pill fw-semibold mb-2">
-        <i class="fa-solid fa-barcode"></i> Sensor USB Scanner Terhubung & Auto-Focus Aktif
-    </div>
-
     <!-- Input Scanner Form -->
     <form id="formScan" onsubmit="event.preventDefault(); submitScan();" class="scanner-input-group">
         <div class="input-group">

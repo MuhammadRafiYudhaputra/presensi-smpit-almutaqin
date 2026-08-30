@@ -222,7 +222,7 @@
                 <div class="modal-footer border-0 pt-0">
                     <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Batal</button>
                     <button type="submit" class="btn btn-success rounded-pill px-4 fw-bold shadow-sm">
-                        <i class="fa-solid fa-check-double me-1"></i> Eksekusi Kenaikan Kelas
+                        <i class="fa-solid fa-check-double me-1"></i> Proses Kenaikan Kelas
                     </button>
                 </div>
             </form>
