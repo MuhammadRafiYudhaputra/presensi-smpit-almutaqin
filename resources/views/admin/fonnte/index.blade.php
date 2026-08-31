@@ -37,7 +37,7 @@
                 <div class="col-md-3">
                     <label class="form-label fw-bold text-dark mb-0 small d-flex align-items-center gap-2">
                         <i class="fa-solid fa-key text-warning fs-6"></i>
-                        <span>Fonnte API Token:</span>
+                        <span>API Token:</span>
                     </label>
                 </div>
                 <div class="col-md-9">
@@ -96,7 +96,7 @@
         <!-- Tombol Simpan -->
         <div class="d-flex justify-content-end pt-2 border-top">
             <button type="submit" class="btn btn-primary rounded-pill px-4 py-1.5 btn-sm fw-bold shadow-sm d-inline-flex align-items-center gap-1">
-                <i class="fa-solid fa-floppy-disk me-1"></i> Simpan Pengaturan Fonnte
+                <i class="fa-solid fa-floppy-disk me-1"></i> Simpan Pengaturan
             </button>
         </div>
     </form>
