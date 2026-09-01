@@ -293,4 +293,17 @@ class BackupController extends Controller
             return back()->with('error', 'Gagal melakukan restore foto/QR: ' . $e->getMessage());
         }
     }
+
+    /**
+     * Reset & Sinkronisasi Ulang Data Dummy Standar Sekolah
+     */
+    public function resetDummyData()
+    {
+        try {
+            \Illuminate\Support\Facades\Artisan::call('db:seed', ['--force' => true]);
+            return back()->with('success', 'Database berhasil disinkronisasi ulang dengan data standar sekolah (112 Siswa, 4 Kelas, dan Kalender Akademik Aktif).');
+        } catch (\Throwable $e) {
+            return back()->with('error', 'Gagal menyinkronkan data: ' . $e->getMessage());
+        }
+    }
 }

@@ -167,36 +167,55 @@ class DummySchoolDataSeeder extends Seeder
         ];
 
         // Seed Siswa Generator
-        $this->seedBatchStudents($dataKelas7, $k7, '2526', '012', '2025/2026', 1, $alamatSample, ['2025/2026' => $k7->id]);
-        $this->seedBatchStudents($dataKelas8, $k8, '2425', '011', '2024/2025', 1, $alamatSample, ['2024/2025' => $k7->id, '2025/2026' => $k8->id]);
-        $this->seedBatchStudents($dataKelas9A, $k9A, '2324', '010', '2023/2024', 1, $alamatSample, ['2023/2024' => $k7->id, '2024/2025' => $k8->id, '2025/2026' => $k9A->id]);
-        $this->seedBatchStudents($dataKelas9B, $k9B, '2324', '010', '2023/2024', 21, $alamatSample, ['2023/2024' => $k7->id, '2024/2025' => $k8->id, '2025/2026' => $k9B->id]);
+        $validNisns = [];
+        $validNisns = array_merge($validNisns, $this->seedBatchStudents($dataKelas7, $k7, '2526', '012', '2025/2026', 1, $alamatSample, ['2025/2026' => $k7->id]));
+        $validNisns = array_merge($validNisns, $this->seedBatchStudents($dataKelas8, $k8, '2425', '011', '2024/2025', 1, $alamatSample, ['2024/2025' => $k7->id, '2025/2026' => $k8->id]));
+        $validNisns = array_merge($validNisns, $this->seedBatchStudents($dataKelas9A, $k9A, '2324', '010', '2023/2024', 1, $alamatSample, ['2023/2024' => $k7->id, '2024/2025' => $k8->id, '2025/2026' => $k9A->id]));
+        $validNisns = array_merge($validNisns, $this->seedBatchStudents($dataKelas9B, $k9B, '2324', '010', '2023/2024', 21, $alamatSample, ['2023/2024' => $k7->id, '2024/2025' => $k8->id, '2025/2026' => $k9B->id]));
+
+        // Bersihkan data siswa di database yang bukan bagian dari 112 siswa resmi
+        Siswa::whereNotIn('nisn', $validNisns)->delete();
+
+        // Bersihkan data orang tua yang tidak memiliki siswa terkait
+        OrangTua::doesntHave('siswas')->delete();
+
+        // 5. Pastikan Setting Periode Akademik Aktif adalah 2026/2027 Ganjil
+        SettingAkademik::updateOrCreate(
+            ['is_active' => true],
+            [
+                'tahun_ajaran' => '2026/2027',
+                'semester' => 'ganjil',
+            ]
+        );
 
         // Seed Sample Kehadiran untuk 14 Hari Terakhir (Agar grafik dashboard & rekap penuh & realistis)
         $this->seedAttendanceRecords();
     }
 
-    private function seedBatchStudents(array $list, Kelas $currentKelas, string $nisPrefix, string $nisnPrefix, string $tahunMasuk, int $startCounter, array $alamatList, array $historyMap)
+    private function seedBatchStudents(array $list, Kelas $currentKelas, string $nisPrefix, string $nisnPrefix, string $tahunMasuk, int $startCounter, array $alamatList, array $historyMap): array
     {
+        $seededNisns = [];
         $counter = $startCounter;
         foreach ($list as $item) {
             $nis = $nisPrefix . str_pad($counter, 4, '0', STR_PAD_LEFT);
             $nisn = $nisnPrefix . str_pad($counter + 1000000, 7, '0', STR_PAD_LEFT);
+            $seededNisns[] = $nisn;
             $counter++;
 
-            // Orang Tua
-            $randomWa = '0823' . rand(10000000, 99999999);
-            $randomAlamat = $alamatList[array_rand($alamatList)];
+            // Orang Tua (No. WA Deterministik dan stabil)
+            $phoneWa = '0823' . substr($nisn, -8);
+            $fixedAlamat = $alamatList[($counter) % count($alamatList)];
 
             $ot = OrangTua::updateOrCreate(
                 ['nama_ayah' => $item['ayah'], 'nama_ibu' => $item['ibu']],
                 [
-                    'no_wa' => $randomWa,
-                    'alamat' => $randomAlamat,
+                    'no_wa' => $phoneWa,
+                    'alamat' => $fixedAlamat,
                 ]
             );
 
-            $qrToken = 'SMPIT-' . $nisn . '-' . Str::random(4);
+            // Token QR Code Konsisten & Statis Berdasarkan NISN
+            $qrToken = 'SMPIT-' . $nisn;
 
             $siswa = Siswa::updateOrCreate(
                 ['nisn' => $nisn],
@@ -219,6 +238,8 @@ class DummySchoolDataSeeder extends Seeder
                 );
             }
         }
+
+        return $seededNisns;
     }
 
     private function seedAttendanceRecords()
