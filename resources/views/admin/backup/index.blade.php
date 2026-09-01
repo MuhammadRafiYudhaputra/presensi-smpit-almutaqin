@@ -228,29 +228,5 @@
             </div>
         </div>
     </div>
-
-    <!-- Panel 3: Sinkronisasi Ulang Data Dummy Standar -->
-    <div class="col-12 mt-3">
-        <div class="card card-custom p-3.5 shadow-sm border-0 rounded-4 bg-light">
-            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
-                <div>
-                    <h6 class="fw-bold text-dark mb-1 d-flex align-items-center gap-2">
-                        <i class="fa-solid fa-arrows-rotate text-primary fs-5"></i>
-                        <span>Sinkronisasi Ulang Data Standar Sekolah</span>
-                    </h6>
-                    <small class="text-muted d-block">
-                        Gunakan fitur ini untuk mereset dan menyamakan data database secara utuh (112 Siswa, 4 Kelas: 7, 8, 9A, 9B, Wali Kelas, dan Kalender Akademik Aktif) agar 100% identik di seluruh server (Local &amp; Railway).
-                    </small>
-                </div>
-                <form action="{{ route('admin.backup.resetDummy') }}" method="POST" onsubmit="return confirm('PERHATIAN: Tindakan ini akan menyinkronkan ulang data siswa (112 siswa), kelas, dan riwayat presensi standar sekolah. Lanjutkan?')">
-                    @csrf
-                    <button type="submit" class="btn btn-primary rounded-pill px-4 py-2 fw-bold shadow-sm d-inline-flex align-items-center gap-2 text-nowrap" style="font-size: 0.82rem;">
-                        <i class="fa-solid fa-rotate"></i>
-                        <span>Sinkronkan Data Standar</span>
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
 </div>
 @endsection
