@@ -134,22 +134,54 @@
         <span id="liveClock">--.--.--</span>
     </div>
 
-    <!-- Center Target QR Box -->
-    <div class="scanner-target-box">
-        <i class="fa-solid fa-qrcode fs-2 mb-1 text-primary"></i>
-        <span class="fw-bold text-dark fs-6 d-block">SCAN KARTU QR</span>
-        <small class="text-muted" style="font-size: 0.75rem;">Dekatkan ke Scanner USB</small>
-    </div>
-
-    <!-- Input Scanner Form -->
-    <form id="formScan" onsubmit="event.preventDefault(); submitScan();" class="scanner-input-group">
-        <div class="input-group">
-            <input type="text" id="qrInput" class="form-control scanner-input" placeholder="Hasil scan USB akan tampil otomatis di sini..." autocomplete="off" autofocus>
-            <button type="submit" class="btn scanner-btn">
-                <i class="fa-solid fa-qrcode"></i> Scan
+    <!-- Mode Selector Tabs (Kamera HP vs Scanner USB) -->
+    <div class="d-flex justify-content-center mb-3">
+        <div class="nav nav-pills bg-light p-1 rounded-pill border" id="scannerModeTabs" role="tablist">
+            <button class="nav-link active rounded-pill px-4 py-2 fw-bold d-flex align-items-center gap-2" id="tab-camera" data-bs-toggle="pill" data-bs-target="#mode-camera" type="button" role="tab" onclick="switchScanMode('camera')">
+                <i class="fa-solid fa-camera"></i> Kamera HP / Webcam
+            </button>
+            <button class="nav-link rounded-pill px-4 py-2 fw-bold d-flex align-items-center gap-2" id="tab-usb" data-bs-toggle="pill" data-bs-target="#mode-usb" type="button" role="tab" onclick="switchScanMode('usb')">
+                <i class="fa-solid fa-barcode"></i> Scanner USB Fisik
             </button>
         </div>
-    </form>
+    </div>
+
+    <!-- Mode 1: Kamera HP / Webcam Container -->
+    <div id="cameraScanSection" class="mb-3">
+        <div class="position-relative mx-auto" style="max-width: 380px;">
+            <div id="reader" class="rounded-4 overflow-hidden shadow-sm border border-primary border-opacity-25 bg-dark"></div>
+            <div id="cameraLoadingPlaceholder" class="p-4 bg-light rounded-4 border text-center" style="display: none;">
+                <div class="spinner-border text-primary mb-2" role="status"></div>
+                <div class="fw-bold text-dark small">Mengakses Sensor Kamera...</div>
+                <small class="text-muted">Izinkan browser mengakses kamera smartphone/laptop Anda</small>
+            </div>
+        </div>
+        <div class="mt-2">
+            <span class="badge bg-primary bg-opacity-10 text-primary border border-primary px-3 py-1.5 rounded-pill fw-semibold" id="cameraStatusBadge" style="font-size: 0.78rem;">
+                <i class="fa-solid fa-camera me-1"></i> Arahkan QR Code Kartu Siswa ke Bidik Kamera
+            </span>
+        </div>
+    </div>
+
+    <!-- Mode 2: USB Scanner Gun Container -->
+    <div id="usbScanSection" style="display: none;">
+        <!-- Center Target QR Box -->
+        <div class="scanner-target-box">
+            <i class="fa-solid fa-qrcode fs-2 mb-1 text-primary"></i>
+            <span class="fw-bold text-dark fs-6 d-block">SCAN KARTU QR</span>
+            <small class="text-muted" style="font-size: 0.75rem;">Dekatkan ke Scanner USB</small>
+        </div>
+
+        <!-- Input Scanner Form -->
+        <form id="formScan" onsubmit="event.preventDefault(); submitUsbScan();" class="scanner-input-group">
+            <div class="input-group">
+                <input type="text" id="qrInput" class="form-control scanner-input" placeholder="Hasil scan USB akan tampil otomatis di sini..." autocomplete="off">
+                <button type="submit" class="btn scanner-btn">
+                    <i class="fa-solid fa-qrcode"></i> Scan
+                </button>
+            </div>
+        </form>
+    </div>
 
     <!-- Result Display Card -->
     <div class="result-display-card" id="resultContainer">
@@ -157,9 +189,12 @@
             <i class="fa-solid fa-id-card-clip fs-4"></i>
         </div>
         <h6 class="fw-bold text-dark mb-1">Siap Menerima Presensi Siswa</h6>
-        <small class="text-muted">Silakan arahkan Kartu QR Siswa pada sensor USB scanner.</small>
+        <small class="text-muted">Arahkan Kartu QR Siswa pada Kamera HP atau Sensor USB Scanner.</small>
     </div>
 </div>
+
+<!-- Include Library HTML5-QRCode untuk Scanner Kamera HP / Webcam -->
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 
 <script>
     // 1. Live Digital Clock
@@ -173,28 +208,157 @@
     setInterval(updateClock, 1000);
     updateClock();
 
-    // 2. Auto Focus QR Input
-    const qrInput = document.getElementById('qrInput');
-    qrInput.focus();
-    document.addEventListener('click', () => qrInput.focus());
+    // 2. State & Mode Handling
+    let activeMode = 'camera'; // 'camera' or 'usb'
+    let html5QrCode = null;
+    let isCameraRunning = false;
+    let canScanCamera = true;
 
-    // 3. Fast submit on Enter / USB scan
+    function switchScanMode(mode) {
+        activeMode = mode;
+        const cameraSection = document.getElementById('cameraScanSection');
+        const usbSection = document.getElementById('usbScanSection');
+        const qrInput = document.getElementById('qrInput');
+
+        if (mode === 'camera') {
+            cameraSection.style.display = 'block';
+            usbSection.style.display = 'none';
+            startCameraScanner();
+        } else {
+            cameraSection.style.display = 'none';
+            usbSection.style.display = 'block';
+            stopCameraScanner();
+            setTimeout(() => {
+                qrInput.focus();
+            }, 200);
+        }
+    }
+
+    // 3. Camera Scanner (Kamera HP / Webcam)
+    function startCameraScanner() {
+        if (isCameraRunning) return;
+
+        const readerElem = document.getElementById('reader');
+        const statusBadge = document.getElementById('cameraStatusBadge');
+        const placeholder = document.getElementById('cameraLoadingPlaceholder');
+
+        if (!readerElem) return;
+
+        placeholder.style.display = 'block';
+        readerElem.style.display = 'none';
+
+        if (!html5QrCode) {
+            html5QrCode = new Html5Qrcode("reader");
+        }
+
+        const config = { 
+            fps: 10, 
+            qrbox: { width: 240, height: 240 },
+            aspectRatio: 1.0
+        };
+
+        // Prioritas gunakan kamera belakang HP (facingMode: environment)
+        html5QrCode.start(
+            { facingMode: "environment" }, 
+            config, 
+            onCameraScanSuccess, 
+            () => {} // onScanError (silent continuous)
+        )
+        .then(() => {
+            isCameraRunning = true;
+            placeholder.style.display = 'none';
+            readerElem.style.display = 'block';
+            statusBadge.className = 'badge bg-success bg-opacity-10 text-success border border-success px-3 py-1.5 rounded-pill fw-semibold';
+            statusBadge.innerHTML = '<i class="fa-solid fa-video me-1"></i> Kamera Aktif &amp; Siap Mendeteksi Kartu QR';
+        })
+        .catch(err => {
+            console.warn("Kamera belakang tidak ditemukan, mencoba kamera default:", err);
+            // Fallback coba kamera apa saja yang tersedia (Webcam PC/Laptop)
+            html5QrCode.start(
+                { facingMode: "user" }, 
+                config, 
+                onCameraScanSuccess, 
+                () => {}
+            )
+            .then(() => {
+                isCameraRunning = true;
+                placeholder.style.display = 'none';
+                readerElem.style.display = 'block';
+                statusBadge.className = 'badge bg-success bg-opacity-10 text-success border border-success px-3 py-1.5 rounded-pill fw-semibold';
+                statusBadge.innerHTML = '<i class="fa-solid fa-video me-1"></i> Kamera Aktif &amp; Siap Mendeteksi Kartu QR';
+            })
+            .catch(finalErr => {
+                console.error("Camera access denied or error:", finalErr);
+                placeholder.style.display = 'none';
+                readerElem.style.display = 'block';
+                statusBadge.className = 'badge bg-danger bg-opacity-10 text-danger border border-danger px-3 py-1.5 rounded-pill fw-semibold';
+                statusBadge.innerHTML = '<i class="fa-solid fa-triangle-exclamation me-1"></i> Izin kamera belum diberikan. Silakan izinkan akses kamera di browser Anda.';
+            });
+        });
+    }
+
+    function stopCameraScanner() {
+        if (html5QrCode && isCameraRunning) {
+            html5QrCode.stop().then(() => {
+                isCameraRunning = false;
+            }).catch(err => console.error("Error stopping camera:", err));
+        }
+    }
+
+    function onCameraScanSuccess(decodedText) {
+        if (!canScanCamera) return;
+        canScanCamera = false;
+
+        processPresensi(decodedText, () => {
+            // Cooldown 2.5 detik sebelum siap menerima scan kartu berikutnya
+            setTimeout(() => {
+                canScanCamera = true;
+            }, 2500);
+        });
+    }
+
+    // 4. USB Scanner Gun Input Listener
+    const qrInput = document.getElementById('qrInput');
     let scanTimeout = null;
+
     qrInput.addEventListener('input', function() {
         if (scanTimeout) clearTimeout(scanTimeout);
         if (this.value.length >= 6) {
             scanTimeout = setTimeout(() => {
-                submitScan();
+                submitUsbScan();
             }, 250);
         }
     });
 
-    // 4. AJAX Process Scan
-    function submitScan() {
+    document.addEventListener('click', () => {
+        if (activeMode === 'usb') qrInput.focus();
+    });
+
+    function submitUsbScan() {
         const token = qrInput.value.trim();
         if (!token) return;
 
         qrInput.disabled = true;
+        processPresensi(token, () => {
+            qrInput.value = '';
+            qrInput.disabled = false;
+            qrInput.focus();
+        });
+    }
+
+    // 5. Unified Core AJAX Process Scan
+    function processPresensi(token, callback) {
+        token = token.trim();
+        if (!token) {
+            if (callback) callback();
+            return;
+        }
+
+        const container = document.getElementById('resultContainer');
+        container.innerHTML = `
+            <div class="spinner-border text-primary mb-2" role="status" style="width: 2rem; height: 2rem;"></div>
+            <div class="fw-bold text-dark small">Memproses Data Presensi...</div>
+        `;
 
         fetch("{{ route('presensi.scan.store') }}", {
             method: "POST",
@@ -213,7 +377,6 @@
             return { ok: res.ok, data };
         })
         .then(({ ok, data }) => {
-            const container = document.getElementById('resultContainer');
             if (data.success) {
                 playSuccessBeep();
                 const isPulang = (data.type === 'pulang');
@@ -271,18 +434,21 @@
         })
         .catch(err => {
             console.error('Scan Error:', err);
-            document.getElementById('resultContainer').innerHTML = `
+            container.innerHTML = `
                 <div class="text-danger fw-bold"><i class="fa-solid fa-circle-exclamation me-1"></i> Terjadi kesalahan koneksi server. Silakan coba lagi.</div>
             `;
         })
         .finally(() => {
-            qrInput.value = '';
-            qrInput.disabled = false;
-            qrInput.focus();
+            if (callback) callback();
         });
     }
 
-    // Audio Feedback Synthesizer using Web Audio API
+    // 6. Start Camera automatically on initial page load
+    document.addEventListener('DOMContentLoaded', () => {
+        startCameraScanner();
+    });
+
+    // 7. Audio Feedback Synthesizer using Web Audio API
     function playSuccessBeep() {
         try {
             const ctx = new (window.AudioContext || window.webkitAudioContext)();
