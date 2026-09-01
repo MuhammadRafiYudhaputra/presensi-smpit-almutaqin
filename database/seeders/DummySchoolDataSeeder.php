@@ -173,19 +173,22 @@ class DummySchoolDataSeeder extends Seeder
         $validNisns = array_merge($validNisns, $this->seedBatchStudents($dataKelas9A, $k9A, '2324', '010', '2023/2024', 1, $alamatSample, ['2023/2024' => $k7->id, '2024/2025' => $k8->id, '2025/2026' => $k9A->id]));
         $validNisns = array_merge($validNisns, $this->seedBatchStudents($dataKelas9B, $k9B, '2324', '010', '2023/2024', 21, $alamatSample, ['2023/2024' => $k7->id, '2024/2025' => $k8->id, '2025/2026' => $k9B->id]));
 
-        // Bersihkan data siswa di database yang bukan bagian dari 112 siswa resmi
-        Siswa::whereNotIn('nisn', $validNisns)->delete();
+        // Bersihkan data siswa di database yang bukan bagian dari 112 siswa resmi secara aman (cascade relation)
+        $invalidSiswaIds = Siswa::whereNotIn('nisn', $validNisns)->pluck('id');
+        if ($invalidSiswaIds->isNotEmpty()) {
+            Kehadiran::whereIn('siswa_id', $invalidSiswaIds)->delete();
+            RiwayatKelas::whereIn('siswa_id', $invalidSiswaIds)->delete();
+            Siswa::whereIn('id', $invalidSiswaIds)->delete();
+        }
 
         // Bersihkan data orang tua yang tidak memiliki siswa terkait
         OrangTua::doesntHave('siswas')->delete();
 
         // 5. Pastikan Setting Periode Akademik Aktif adalah 2026/2027 Ganjil
+        SettingAkademik::query()->update(['is_active' => false]);
         SettingAkademik::updateOrCreate(
-            ['is_active' => true],
-            [
-                'tahun_ajaran' => '2026/2027',
-                'semester' => 'ganjil',
-            ]
+            ['tahun_ajaran' => '2026/2027', 'semester' => 'ganjil'],
+            ['is_active' => true]
         );
 
         // Seed Sample Kehadiran untuk 14 Hari Terakhir (Agar grafik dashboard & rekap penuh & realistis)
