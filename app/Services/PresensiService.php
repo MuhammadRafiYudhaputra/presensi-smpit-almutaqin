@@ -16,11 +16,34 @@ class PresensiService
     public function processScan(string $qrToken): array
     {
         $qrToken = trim($qrToken);
+
+        // 1. Coba pencarian presisi
         $siswa = Siswa::with(['kelas', 'orangTua'])
             ->where('qr_code_token', $qrToken)
             ->orWhere('nisn', $qrToken)
             ->orWhere('nis', $qrToken)
             ->first();
+
+        // 2. Jika belum ditemukan dan token berformat SMPIT-XXXXX, ekstrak NISN-nya
+        if (!$siswa && str_contains($qrToken, 'SMPIT-')) {
+            $parts = explode('-', $qrToken);
+            $extractedNisn = $parts[1] ?? null;
+
+            if ($extractedNisn) {
+                $siswa = Siswa::with(['kelas', 'orangTua'])
+                    ->where('nisn', $extractedNisn)
+                    ->orWhere('qr_code_token', 'LIKE', "SMPIT-{$extractedNisn}%")
+                    ->first();
+            }
+        }
+
+        // 3. Jika token adalah angka NISN murni, coba juga wildcard token
+        if (!$siswa && is_numeric($qrToken)) {
+            $siswa = Siswa::with(['kelas', 'orangTua'])
+                ->where('nisn', $qrToken)
+                ->orWhere('qr_code_token', 'LIKE', "%{$qrToken}%")
+                ->first();
+        }
 
         if (!$siswa) {
             return [
