@@ -247,9 +247,12 @@ class DummySchoolDataSeeder extends Seeder
         $siswas = Siswa::all();
         $today = Carbon::today();
 
-        // 14 hari efektif terakhir (Senin - Jumat)
+        // Pastikan hari ini (Today) KOSONG / BELUM ABSEN agar siap untuk demo aplikasi
+        Kehadiran::whereDate('tanggal', $today)->delete();
+
+        // 14 hari efektif terakhir dimulai dari KEMARIN (H-1) ke belakang
         $dates = [];
-        $cursor = $today->copy();
+        $cursor = $today->copy()->subDay();
         while (count($dates) < 14) {
             if (!$cursor->isWeekend() && !\App\Helpers\HolidayHelper::isNationalHoliday($cursor)) {
                 $dates[] = $cursor->copy()->toDateString();
