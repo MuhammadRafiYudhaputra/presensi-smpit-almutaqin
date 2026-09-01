@@ -148,18 +148,42 @@
 
     <!-- Mode 1: Kamera HP / Webcam Container -->
     <div id="cameraScanSection" class="mb-3">
-        <div class="position-relative mx-auto" style="max-width: 380px;">
-            <div id="reader" class="rounded-4 overflow-hidden shadow-sm border border-primary border-opacity-25 bg-dark"></div>
-            <div id="cameraLoadingPlaceholder" class="p-4 bg-light rounded-4 border text-center" style="display: none;">
+        <!-- Insecure context (HTTP) Alert if any -->
+        <div id="httpWarningAlert" class="alert alert-warning border-warning py-2 px-3 small rounded-3 mx-auto mb-3" style="max-width: 420px; display: none;">
+            <i class="fa-solid fa-triangle-exclamation me-1 text-warning"></i>
+            <strong>Peringatan HTTPS:</strong> Browser HP mewajibkan koneksi <strong>HTTPS</strong> untuk mengakses kamera. Pastikan URL dibuka dengan <code>https://</code>.
+        </div>
+
+        <div class="position-relative mx-auto rounded-4 overflow-hidden shadow-sm border border-primary border-opacity-25 bg-dark" style="max-width: 400px; min-height: 260px; display: flex; align-items: center; justify-content: center;">
+            <div id="reader" style="width: 100%;"></div>
+            
+            <div id="cameraLoadingPlaceholder" class="p-4 bg-light text-center w-100" style="display: none;">
                 <div class="spinner-border text-primary mb-2" role="status"></div>
-                <div class="fw-bold text-dark small">Mengakses Sensor Kamera...</div>
-                <small class="text-muted">Izinkan browser mengakses kamera smartphone/laptop Anda</small>
+                <div class="fw-bold text-dark small">Menghubungkan ke Sensor Kamera...</div>
+                <small class="text-muted d-block">Izinkan akses kamera di browser Anda</small>
+            </div>
+
+            <div id="cameraStoppedPlaceholder" class="p-4 bg-light text-center w-100">
+                <i class="fa-solid fa-camera fs-1 text-primary mb-2 opacity-50"></i>
+                <div class="fw-bold text-dark small mb-1">Kamera Belum Aktif</div>
+                <small class="text-muted d-block mb-3">Klik tombol di bawah untuk menyalakan kamera HP / Webcam</small>
+                <button type="button" class="btn btn-primary rounded-pill px-4 py-2 fw-bold shadow-sm d-inline-flex align-items-center gap-2" onclick="startCameraScanner()">
+                    <i class="fa-solid fa-camera"></i> Nyalakan Kamera
+                </button>
             </div>
         </div>
-        <div class="mt-2">
-            <span class="badge bg-primary bg-opacity-10 text-primary border border-primary px-3 py-1.5 rounded-pill fw-semibold" id="cameraStatusBadge" style="font-size: 0.78rem;">
-                <i class="fa-solid fa-camera me-1"></i> Arahkan QR Code Kartu Siswa ke Bidik Kamera
+
+        <!-- Camera Control Bar -->
+        <div class="d-flex align-items-center justify-content-center gap-2 mt-2.5 flex-wrap">
+            <span class="badge bg-primary bg-opacity-10 text-primary border border-primary px-3 py-2 rounded-pill fw-semibold" id="cameraStatusBadge" style="font-size: 0.78rem;">
+                <i class="fa-solid fa-camera me-1"></i> Siap Menyalakan Kamera
             </span>
+            <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3 py-1.5 fw-semibold d-inline-flex align-items-center gap-1.5 shadow-none" id="btnSwitchCam" onclick="toggleCameraFacing()" style="font-size: 0.78rem; display: none;">
+                <i class="fa-solid fa-camera-rotate"></i> Putar Kamera
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-3 py-1.5 fw-semibold d-inline-flex align-items-center gap-1.5 shadow-none" id="btnStopCam" onclick="stopCameraScanner()" style="font-size: 0.78rem; display: none;">
+                <i class="fa-solid fa-stop"></i> Matikan Kamera
+            </button>
         </div>
     </div>
 
@@ -193,8 +217,13 @@
     </div>
 </div>
 
-<!-- Include Library HTML5-QRCode untuk Scanner Kamera HP / Webcam -->
-<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<!-- Include Library HTML5-QRCode dengan Fallback CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+<script>
+    if (typeof Html5Qrcode === 'undefined') {
+        document.write('<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"><\/script>');
+    }
+</script>
 
 <script>
     // 1. Live Digital Clock
@@ -208,8 +237,14 @@
     setInterval(updateClock, 1000);
     updateClock();
 
-    // 2. State & Mode Handling
+    // 2. HTTPS Check for Mobile Camera Permission
+    if (location.protocol !== 'https:' && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
+        document.getElementById('httpWarningAlert').style.display = 'block';
+    }
+
+    // 3. State & Mode Handling
     let activeMode = 'camera'; // 'camera' or 'usb'
+    let currentFacingMode = "environment"; // "environment" (belakang) or "user" (depan)
     let html5QrCode = null;
     let isCameraRunning = false;
     let canScanCamera = true;
@@ -234,17 +269,21 @@
         }
     }
 
-    // 3. Camera Scanner (Kamera HP / Webcam)
+    // 4. Camera Scanner Lifecycle
     function startCameraScanner() {
         if (isCameraRunning) return;
 
         const readerElem = document.getElementById('reader');
         const statusBadge = document.getElementById('cameraStatusBadge');
-        const placeholder = document.getElementById('cameraLoadingPlaceholder');
+        const loadingPlaceholder = document.getElementById('cameraLoadingPlaceholder');
+        const stoppedPlaceholder = document.getElementById('cameraStoppedPlaceholder');
+        const btnSwitchCam = document.getElementById('btnSwitchCam');
+        const btnStopCam = document.getElementById('btnStopCam');
 
         if (!readerElem) return;
 
-        placeholder.style.display = 'block';
+        stoppedPlaceholder.style.display = 'none';
+        loadingPlaceholder.style.display = 'block';
         readerElem.style.display = 'none';
 
         if (!html5QrCode) {
@@ -252,47 +291,62 @@
         }
 
         const config = { 
-            fps: 10, 
-            qrbox: { width: 240, height: 240 },
+            fps: 15, 
+            qrbox: (viewfinderWidth, viewfinderHeight) => {
+                const minEdge = Math.min(viewfinderWidth, viewfinderHeight);
+                const size = Math.floor(minEdge * 0.72);
+                return { width: Math.max(180, size), height: Math.max(180, size) };
+            },
             aspectRatio: 1.0
         };
 
-        // Prioritas gunakan kamera belakang HP (facingMode: environment)
         html5QrCode.start(
-            { facingMode: "environment" }, 
+            { facingMode: currentFacingMode }, 
             config, 
             onCameraScanSuccess, 
-            () => {} // onScanError (silent continuous)
+            () => {} // continuous frame scan
         )
         .then(() => {
             isCameraRunning = true;
-            placeholder.style.display = 'none';
+            loadingPlaceholder.style.display = 'none';
+            stoppedPlaceholder.style.display = 'none';
             readerElem.style.display = 'block';
-            statusBadge.className = 'badge bg-success bg-opacity-10 text-success border border-success px-3 py-1.5 rounded-pill fw-semibold';
-            statusBadge.innerHTML = '<i class="fa-solid fa-video me-1"></i> Kamera Aktif &amp; Siap Mendeteksi Kartu QR';
+            btnSwitchCam.style.display = 'inline-flex';
+            btnStopCam.style.display = 'inline-flex';
+
+            statusBadge.className = 'badge bg-success bg-opacity-10 text-success border border-success px-3 py-2 rounded-pill fw-semibold';
+            statusBadge.innerHTML = '<i class="fa-solid fa-video me-1"></i> Kamera Aktif — Arahkan QR Code Kartu Siswa';
         })
         .catch(err => {
-            console.warn("Kamera belakang tidak ditemukan, mencoba kamera default:", err);
-            // Fallback coba kamera apa saja yang tersedia (Webcam PC/Laptop)
+            console.warn("Gagal membuka kamera dengan facingMode:", currentFacingMode, err);
+            // Fallback coba kamera apa saja tanpa batasan facingMode
             html5QrCode.start(
-                { facingMode: "user" }, 
+                { facingMode: (currentFacingMode === 'environment' ? 'user' : 'environment') }, 
                 config, 
                 onCameraScanSuccess, 
                 () => {}
             )
             .then(() => {
                 isCameraRunning = true;
-                placeholder.style.display = 'none';
+                loadingPlaceholder.style.display = 'none';
+                stoppedPlaceholder.style.display = 'none';
                 readerElem.style.display = 'block';
-                statusBadge.className = 'badge bg-success bg-opacity-10 text-success border border-success px-3 py-1.5 rounded-pill fw-semibold';
-                statusBadge.innerHTML = '<i class="fa-solid fa-video me-1"></i> Kamera Aktif &amp; Siap Mendeteksi Kartu QR';
+                btnSwitchCam.style.display = 'inline-flex';
+                btnStopCam.style.display = 'inline-flex';
+
+                statusBadge.className = 'badge bg-success bg-opacity-10 text-success border border-success px-3 py-2 rounded-pill fw-semibold';
+                statusBadge.innerHTML = '<i class="fa-solid fa-video me-1"></i> Kamera Aktif — Arahkan QR Code Kartu Siswa';
             })
             .catch(finalErr => {
-                console.error("Camera access denied or error:", finalErr);
-                placeholder.style.display = 'none';
-                readerElem.style.display = 'block';
-                statusBadge.className = 'badge bg-danger bg-opacity-10 text-danger border border-danger px-3 py-1.5 rounded-pill fw-semibold';
-                statusBadge.innerHTML = '<i class="fa-solid fa-triangle-exclamation me-1"></i> Izin kamera belum diberikan. Silakan izinkan akses kamera di browser Anda.';
+                console.error("Camera permission or hardware error:", finalErr);
+                loadingPlaceholder.style.display = 'none';
+                stoppedPlaceholder.style.display = 'block';
+                readerElem.style.display = 'none';
+                btnSwitchCam.style.display = 'none';
+                btnStopCam.style.display = 'none';
+
+                statusBadge.className = 'badge bg-danger bg-opacity-10 text-danger border border-danger px-3 py-2 rounded-pill fw-semibold';
+                statusBadge.innerHTML = '<i class="fa-solid fa-triangle-exclamation me-1"></i> Gagal membuka kamera. Pastikan izin kamera browser telah diizinkan.';
             });
         });
     }
@@ -301,8 +355,23 @@
         if (html5QrCode && isCameraRunning) {
             html5QrCode.stop().then(() => {
                 isCameraRunning = false;
+                document.getElementById('reader').style.display = 'none';
+                document.getElementById('cameraStoppedPlaceholder').style.display = 'block';
+                document.getElementById('btnSwitchCam').style.display = 'none';
+                document.getElementById('btnStopCam').style.display = 'none';
+                const statusBadge = document.getElementById('cameraStatusBadge');
+                statusBadge.className = 'badge bg-secondary bg-opacity-10 text-muted border px-3 py-2 rounded-pill fw-semibold';
+                statusBadge.innerHTML = '<i class="fa-solid fa-video-slash me-1"></i> Kamera Dinonaktifkan';
             }).catch(err => console.error("Error stopping camera:", err));
         }
+    }
+
+    function toggleCameraFacing() {
+        stopCameraScanner();
+        currentFacingMode = (currentFacingMode === 'environment') ? 'user' : 'environment';
+        setTimeout(() => {
+            startCameraScanner();
+        }, 300);
     }
 
     function onCameraScanSuccess(decodedText) {
@@ -310,14 +379,14 @@
         canScanCamera = false;
 
         processPresensi(decodedText, () => {
-            // Cooldown 2.5 detik sebelum siap menerima scan kartu berikutnya
+            // Cooldown 2.5 detik agar kartu tidak langsung ter-scan ganda
             setTimeout(() => {
                 canScanCamera = true;
             }, 2500);
         });
     }
 
-    // 4. USB Scanner Gun Input Listener
+    // 5. USB Scanner Gun Input Listener
     const qrInput = document.getElementById('qrInput');
     let scanTimeout = null;
 
@@ -346,7 +415,7 @@
         });
     }
 
-    // 5. Unified Core AJAX Process Scan
+    // 6. Unified Core AJAX Process Scan
     function processPresensi(token, callback) {
         token = token.trim();
         if (!token) {
@@ -443,12 +512,12 @@
         });
     }
 
-    // 6. Start Camera automatically on initial page load
+    // 7. Auto Start Camera on page load if permission was previously granted or triggered
     document.addEventListener('DOMContentLoaded', () => {
         startCameraScanner();
     });
 
-    // 7. Audio Feedback Synthesizer using Web Audio API
+    // 8. Audio Feedback Synthesizer using Web Audio API
     function playSuccessBeep() {
         try {
             const ctx = new (window.AudioContext || window.webkitAudioContext)();
