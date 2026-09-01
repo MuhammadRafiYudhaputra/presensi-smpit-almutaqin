@@ -141,28 +141,28 @@
 
 <div class="scanner-main-card text-center">
     <!-- Top Digital Clock Header -->
-    <div class="d-flex justify-content-center mb-3">
-        <div class="digital-clock-badge" id="liveClockBadge">
+    <div class="d-flex justify-content-center mb-4">
+        <div class="digital-clock-badge shadow-sm" id="liveClockBadge">
             <i class="fa-regular fa-clock text-primary"></i>
             <span id="liveClock">--.--.--</span>
         </div>
     </div>
 
     <!-- Mode Selector Tabs -->
-    <div class="d-flex justify-content-center mb-3">
-        <div class="nav nav-pills bg-light p-1 rounded-pill border" role="tablist">
-            <button class="nav-link active rounded-pill px-3.5 py-1.5 fw-bold d-flex align-items-center gap-2" id="tab-camera" type="button" onclick="switchScanMode('camera')">
+    <div class="d-flex justify-content-center mb-4">
+        <div class="nav nav-pills bg-light p-1.5 rounded-pill border shadow-sm" role="tablist">
+            <button class="nav-link active rounded-pill px-4 py-2 fw-bold d-flex align-items-center gap-2" id="tab-camera" type="button" onclick="switchScanMode('camera')">
                 <i class="fa-solid fa-camera"></i> Kamera HP / Webcam
             </button>
-            <button class="nav-link rounded-pill px-3.5 py-1.5 fw-bold d-flex align-items-center gap-2" id="tab-usb" type="button" onclick="switchScanMode('usb')">
+            <button class="nav-link rounded-pill px-4 py-2 fw-bold d-flex align-items-center gap-2" id="tab-usb" type="button" onclick="switchScanMode('usb')">
                 <i class="fa-solid fa-barcode"></i> Scanner USB Fisik
             </button>
         </div>
     </div>
 
     <!-- Mode 1: Native HTML5 Camera Scanner -->
-    <div id="cameraScanSection" class="mb-3">
-        <div class="camera-frame-wrapper">
+    <div id="cameraScanSection" class="mb-4">
+        <div class="camera-frame-wrapper mb-3">
             <!-- Native Video Feed -->
             <video id="cameraVideo" autoplay playsinline muted></video>
             
@@ -180,29 +180,29 @@
                 <i class="fa-solid fa-camera fs-1 mb-2 opacity-75 text-primary"></i>
                 <h6 class="fw-bold mb-1 text-white">Kamera HP / Webcam</h6>
                 <small class="text-white-50 d-block mb-3" style="font-size: 0.8rem;">Klik tombol di bawah untuk membuka kamera</small>
-                <button type="button" class="btn btn-primary rounded-pill px-4 py-2 fw-bold shadow-sm d-inline-flex align-items-center gap-2" onclick="startCamera()">
+                <button type="button" class="btn btn-primary rounded-pill px-4 py-2.5 fw-bold shadow-sm d-inline-flex align-items-center gap-2" onclick="startCamera()">
                     <i class="fa-solid fa-play"></i> Nyalakan Kamera
                 </button>
             </div>
         </div>
 
         <!-- Camera Actions Toolbar -->
-        <div class="d-flex align-items-center justify-content-center gap-2 mt-2.5 flex-wrap">
-            <span class="badge bg-primary bg-opacity-10 text-primary border border-primary px-3 py-1.5 rounded-pill fw-semibold" id="cameraStatusBadge" style="font-size: 0.78rem;">
-                <i class="fa-solid fa-camera me-1"></i> Siap Menyalakan Kamera
+        <div class="d-flex align-items-center justify-content-center flex-wrap mt-3" style="gap: 12px;">
+            <span class="badge bg-primary bg-opacity-10 text-primary border border-primary px-3.5 py-2 rounded-pill fw-semibold shadow-sm" id="cameraStatusBadge" style="font-size: 0.8rem;">
+                <i class="fa-solid fa-camera me-1.5"></i> Siap Menyalakan Kamera
             </span>
-            <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3 py-1.5 fw-semibold d-inline-flex align-items-center gap-1.5 shadow-none" id="btnSwitchCam" onclick="toggleCameraFacing()" style="font-size: 0.78rem; display: none;">
+            <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3.5 py-2 fw-semibold d-inline-flex align-items-center gap-1.5 shadow-sm" id="btnSwitchCam" onclick="toggleCameraFacing()" style="font-size: 0.8rem; display: none;">
                 <i class="fa-solid fa-camera-rotate"></i> Putar Kamera
             </button>
-            <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-3 py-1.5 fw-semibold d-inline-flex align-items-center gap-1.5 shadow-none" id="btnStopCam" onclick="stopCamera()" style="font-size: 0.78rem; display: none;">
+            <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-3.5 py-2 fw-semibold d-inline-flex align-items-center gap-1.5 shadow-sm" id="btnStopCam" onclick="stopCamera()" style="font-size: 0.8rem; display: none;">
                 <i class="fa-solid fa-stop"></i> Matikan Kamera
             </button>
         </div>
     </div>
 
     <!-- Mode 2: USB Scanner Gun Container -->
-    <div id="usbScanSection" style="display: none;">
-        <div class="scanner-target-box">
+    <div id="usbScanSection" class="mb-4" style="display: none;">
+        <div class="scanner-target-box mb-3">
             <i class="fa-solid fa-qrcode fs-2 mb-1 text-primary"></i>
             <span class="fw-bold text-dark fs-6 d-block">SCAN KARTU QR</span>
             <small class="text-muted" style="font-size: 0.75rem;">Dekatkan ke Scanner USB</small>
@@ -219,7 +219,7 @@
     </div>
 
     <!-- Result Display Card -->
-    <div class="result-display-card" id="resultContainer">
+    <div class="result-display-card shadow-sm mt-4" id="resultContainer">
         <div class="bg-primary bg-opacity-10 p-3 rounded-circle text-primary mb-2 d-inline-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
             <i class="fa-solid fa-id-card-clip fs-4"></i>
         </div>
