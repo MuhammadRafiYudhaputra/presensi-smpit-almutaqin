@@ -6,9 +6,11 @@
         background: #ffffff;
         border: 1px solid #e2e8f0;
         border-radius: 20px;
-        padding: 1.75rem 1.25rem;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+        padding: 2.25rem 1.5rem;
+        box-shadow: 0 4px 25px rgba(0, 0, 0, 0.03);
         position: relative;
+        max-width: 760px;
+        margin: 0 auto;
     }
 
     .digital-clock-badge {
@@ -16,99 +18,55 @@
         border: 1px solid #e2e8f0;
         color: #0284c7;
         font-weight: 800;
-        font-size: 1.2rem;
+        font-size: 1.25rem;
         letter-spacing: 0.5px;
-        padding: 0.35rem 1.15rem;
+        padding: 0.4rem 1.35rem;
         border-radius: 50rem;
         display: inline-flex;
         align-items: center;
         gap: 8px;
     }
 
-    /* Video Frame Container */
-    .camera-frame-wrapper {
-        position: relative;
-        width: 100%;
-        max-width: 380px;
-        margin: 0 auto;
-        border-radius: 20px;
-        overflow: hidden;
-        background: #0f172a;
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-        border: 2px solid rgba(37, 99, 235, 0.25);
-        aspect-ratio: 4 / 3;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    #cameraVideo {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: none;
-    }
-
-    /* Laser Scanner Beam Overlay */
-    .scanner-laser-beam {
-        position: absolute;
-        top: 20%;
-        left: 8%;
-        right: 8%;
-        height: 2.5px;
-        background: #22c55e;
-        box-shadow: 0 0 12px #22c55e, 0 0 24px #22c55e;
-        animation: laserScan 2s infinite ease-in-out;
-        border-radius: 2px;
-        z-index: 5;
-        pointer-events: none;
-    }
-
-    @keyframes laserScan {
-        0%, 100% { top: 18%; opacity: 0.3; }
-        50% { top: 82%; opacity: 1; }
-    }
-
-    /* Target Box Corners */
-    .target-box-guide {
-        position: absolute;
-        top: 15%;
-        left: 15%;
-        right: 15%;
-        bottom: 15%;
-        border: 2px solid rgba(255, 255, 255, 0.4);
-        border-radius: 16px;
-        pointer-events: none;
-        z-index: 4;
-    }
-
     .scanner-target-box {
-        width: 180px;
-        height: 180px;
-        margin: 1.5rem auto 1.25rem;
-        border-radius: 20px;
+        width: 190px;
+        height: 190px;
+        margin: 1.25rem auto 1.5rem;
+        border-radius: 24px;
         border: 2px dashed #2563eb;
-        background: rgba(37, 99, 235, 0.04);
+        background: rgba(37, 99, 235, 0.03);
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         text-align: center;
         position: relative;
+        transition: all 0.3s ease;
+    }
+
+    .scanner-target-box:hover {
+        border-color: #1d4ed8;
+        background: rgba(37, 99, 235, 0.06);
     }
 
     .scanner-input-group {
-        max-width: 620px;
-        margin: 1.25rem auto 1.25rem;
+        max-width: 580px;
+        margin: 0 auto 1.25rem;
     }
 
     .scanner-input {
         background: #ffffff;
         border: 2px solid #2563eb;
         color: #0f172a;
-        border-radius: 12px 0 0 12px;
-        padding: 0.85rem 1.25rem;
-        font-size: 1rem;
+        border-radius: 14px 0 0 14px !important;
+        padding: 0.9rem 1.25rem;
+        font-size: 1.05rem;
+        font-weight: 600;
+        box-shadow: none !important;
+    }
+
+    .scanner-input:focus {
+        border-color: #1d4ed8;
+        background: #f8fafc;
     }
 
     .scanner-btn {
@@ -116,120 +74,105 @@
         border: 2px solid #2563eb;
         color: #ffffff;
         font-weight: 700;
-        border-radius: 0 12px 12px 0;
-        padding: 0.85rem 1.75rem;
+        border-radius: 0 14px 14px 0 !important;
+        padding: 0.9rem 1.75rem;
         display: flex;
         align-items: center;
         gap: 8px;
+        transition: all 0.2s ease;
+    }
+
+    .scanner-btn:hover {
+        background: #1d4ed8;
+        border-color: #1d4ed8;
+        color: #ffffff;
     }
 
     .result-display-card {
         background: #f8fafc;
         border: 1px solid #e2e8f0;
-        border-radius: 16px;
-        padding: 1.5rem;
-        max-width: 620px;
+        border-radius: 18px;
+        padding: 1.75rem;
+        max-width: 580px;
         margin: 0 auto;
         text-align: center;
-        min-height: 120px;
+        min-height: 130px;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        transition: all 0.3s ease;
+    }
+
+    .pulse-indicator {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        background-color: #16a34a;
+        border-radius: 50%;
+        margin-right: 6px;
+        animation: pulseAnimation 1.5s infinite;
+    }
+
+    @keyframes pulseAnimation {
+        0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.7); }
+        70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(22, 163, 74, 0); }
+        100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(22, 163, 74, 0); }
     }
 </style>
 
 <div class="scanner-main-card text-center">
     <!-- Top Digital Clock Header -->
-    <div class="d-flex justify-content-center mb-4">
+    <div class="d-flex justify-content-center mb-3">
         <div class="digital-clock-badge shadow-sm" id="liveClockBadge">
             <i class="fa-regular fa-clock text-primary"></i>
             <span id="liveClock">--.--.--</span>
         </div>
     </div>
 
-    <!-- Mode Selector Tabs -->
-    <div class="d-flex justify-content-center mb-4">
-        <div class="nav nav-pills bg-light p-1.5 rounded-pill border shadow-sm" role="tablist">
-            <button class="nav-link active rounded-pill px-4 py-2 fw-bold d-flex align-items-center gap-2" id="tab-camera" type="button" onclick="switchScanMode('camera')">
-                <i class="fa-solid fa-camera"></i> Kamera HP / Webcam
-            </button>
-            <button class="nav-link rounded-pill px-4 py-2 fw-bold d-flex align-items-center gap-2" id="tab-usb" type="button" onclick="switchScanMode('usb')">
-                <i class="fa-solid fa-barcode"></i> Scanner USB Fisik
-            </button>
-        </div>
+    <!-- Scanner Target Visual -->
+    <div class="scanner-target-box">
+        <i class="fa-solid fa-qrcode fs-1 mb-2 text-primary"></i>
+        <span class="fw-bold text-dark fs-6 d-block">SCANNER USB AKTIF</span>
+        <small class="text-muted" style="font-size: 0.8rem;">Dekatkan Kartu QR Siswa</small>
     </div>
 
-    <!-- Mode 1: Native HTML5 Camera Scanner -->
-    <div id="cameraScanSection" class="mb-4">
-        <div class="camera-frame-wrapper mb-3">
-            <!-- Native Video Feed -->
-            <video id="cameraVideo" autoplay playsinline muted></video>
-            
-            <!-- Hidden Canvas for QR Frame Analysis -->
-            <canvas id="qrCanvas" style="display: none;"></canvas>
-
-            <!-- Guide Overlay -->
-            <div id="scannerOverlay" style="display: none;">
-                <div class="target-box-guide"></div>
-                <div class="scanner-laser-beam"></div>
-            </div>
-
-            <!-- Placeholder State Sebelum Dinyalakan -->
-            <div id="cameraStandbyBox" class="p-4 text-center text-white">
-                <i class="fa-solid fa-camera fs-1 mb-2 opacity-75 text-primary"></i>
-                <h6 class="fw-bold mb-1 text-white">Kamera HP / Webcam</h6>
-                <small class="text-white-50 d-block mb-3" style="font-size: 0.8rem;">Klik tombol di bawah untuk membuka kamera</small>
-                <button type="button" class="btn btn-primary rounded-pill px-4 py-2.5 fw-bold shadow-sm d-inline-flex align-items-center gap-2" onclick="startCamera()">
-                    <i class="fa-solid fa-play"></i> Nyalakan Kamera
-                </button>
-            </div>
-        </div>
-
-        <!-- Camera Actions Toolbar -->
-        <div class="d-flex align-items-center justify-content-center flex-wrap mt-3" style="gap: 12px;">
-            <span class="badge bg-primary bg-opacity-10 text-primary border border-primary px-3.5 py-2 rounded-pill fw-semibold shadow-sm" id="cameraStatusBadge" style="font-size: 0.8rem;">
-                <i class="fa-solid fa-camera me-1.5"></i> Siap Menyalakan Kamera
-            </span>
-            <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3.5 py-2 fw-semibold d-inline-flex align-items-center gap-1.5 shadow-sm" id="btnSwitchCam" onclick="toggleCameraFacing()" style="font-size: 0.8rem; display: none;">
-                <i class="fa-solid fa-camera-rotate"></i> Putar Kamera
-            </button>
-            <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-3.5 py-2 fw-semibold d-inline-flex align-items-center gap-1.5 shadow-sm" id="btnStopCam" onclick="stopCamera()" style="font-size: 0.8rem; display: none;">
-                <i class="fa-solid fa-stop"></i> Matikan Kamera
-            </button>
-        </div>
+    <!-- Ready Status Indicator -->
+    <div class="mb-3">
+        <span class="badge bg-success bg-opacity-10 text-success border border-success px-3.5 py-2 rounded-pill fw-semibold shadow-sm" style="font-size: 0.85rem;">
+            <span class="pulse-indicator"></span> Siap Memindai via Barcode / QR Scanner Gun
+        </span>
     </div>
 
-    <!-- Mode 2: USB Scanner Gun Container -->
-    <div id="usbScanSection" class="mb-4" style="display: none;">
-        <div class="scanner-target-box mb-3">
-            <i class="fa-solid fa-qrcode fs-2 mb-1 text-primary"></i>
-            <span class="fw-bold text-dark fs-6 d-block">SCAN KARTU QR</span>
-            <small class="text-muted" style="font-size: 0.75rem;">Dekatkan ke Scanner USB</small>
+    <!-- Scanner Input Form -->
+    <form id="formScan" onsubmit="event.preventDefault(); submitScan();" class="scanner-input-group">
+        <div class="input-group shadow-sm">
+            <input 
+                type="text" 
+                id="qrInput" 
+                class="form-control scanner-input" 
+                placeholder="Arahkan scanner ke kartu QR..." 
+                autocomplete="off" 
+                autofocus
+            >
+            <button type="submit" class="btn scanner-btn" id="btnSubmitScan">
+                <i class="fa-solid fa-qrcode"></i> Scan
+            </button>
         </div>
-
-        <form id="formScan" onsubmit="event.preventDefault(); submitUsbScan();" class="scanner-input-group">
-            <div class="input-group">
-                <input type="text" id="qrInput" class="form-control scanner-input" placeholder="Hasil scan USB akan tampil otomatis di sini..." autocomplete="off">
-                <button type="submit" class="btn scanner-btn">
-                    <i class="fa-solid fa-qrcode"></i> Scan
-                </button>
-            </div>
-        </form>
-    </div>
+        <small class="text-muted d-block mt-2" style="font-size: 0.8rem;">
+            <i class="fa-solid fa-circle-info text-primary me-1"></i> Sensor scanner akan otomatis memasukkan data dan memproses presensi secara instan.
+        </small>
+    </form>
 
     <!-- Result Display Card -->
-    <div class="result-display-card shadow-sm mt-4" id="resultContainer">
-        <div class="bg-primary bg-opacity-10 p-3 rounded-circle text-primary mb-2 d-inline-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+    <div class="result-display-card shadow-sm mt-3" id="resultContainer">
+        <div class="bg-primary bg-opacity-10 p-3 rounded-circle text-primary mb-2 d-inline-flex align-items-center justify-content-center" style="width: 52px; height: 52px;">
             <i class="fa-solid fa-id-card-clip fs-4"></i>
         </div>
         <h6 class="fw-bold text-dark mb-1">Siap Menerima Presensi Siswa</h6>
-        <small class="text-muted">Arahkan Kartu QR Siswa pada Kamera HP atau Sensor USB Scanner.</small>
+        <small class="text-muted">Arahkan sinar alat scanner pada QR Code kartu siswa.</small>
     </div>
 </div>
-
-<!-- jsQR High-Performance Scanner Library -->
-<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
 
 <script>
     // 1. Live Digital Clock
@@ -243,188 +186,46 @@
     setInterval(updateClock, 1000);
     updateClock();
 
-    // 2. State & Mode Handling
-    let activeMode = 'camera';
-    let currentFacingMode = "environment"; // "environment" = Kamera Belakang, "user" = Kamera Depan
-    let videoStream = null;
-    let isScanning = false;
-    let canProcessScan = true;
-
-    function switchScanMode(mode) {
-        activeMode = mode;
-        const cameraSection = document.getElementById('cameraScanSection');
-        const usbSection = document.getElementById('usbScanSection');
-        const tabCamera = document.getElementById('tab-camera');
-        const tabUsb = document.getElementById('tab-usb');
-        const qrInput = document.getElementById('qrInput');
-
-        if (mode === 'camera') {
-            tabCamera.classList.add('active');
-            tabUsb.classList.remove('active');
-            cameraSection.style.display = 'block';
-            usbSection.style.display = 'none';
-            startCamera();
-        } else {
-            tabUsb.classList.add('active');
-            tabCamera.classList.remove('active');
-            cameraSection.style.display = 'none';
-            usbSection.style.display = 'block';
-            stopCamera();
-            setTimeout(() => qrInput.focus(), 200);
-        }
-    }
-
-    // 3. Native Camera Streaming & jsQR Processing
-    async function startCamera() {
-        if (isScanning) return;
-
-        const video = document.getElementById('cameraVideo');
-        const standbyBox = document.getElementById('cameraStandbyBox');
-        const overlay = document.getElementById('scannerOverlay');
-        const statusBadge = document.getElementById('cameraStatusBadge');
-        const btnSwitch = document.getElementById('btnSwitchCam');
-        const btnStop = document.getElementById('btnStopCam');
-
-        try {
-            if (videoStream) {
-                videoStream.getTracks().forEach(t => t.stop());
-            }
-
-            const constraints = {
-                video: {
-                    facingMode: currentFacingMode,
-                    width: { ideal: 1280 },
-                    height: { ideal: 720 }
-                },
-                audio: false
-            };
-
-            videoStream = await navigator.mediaDevices.getUserMedia(constraints);
-            video.srcObject = videoStream;
-            video.setAttribute("playsinline", "true");
-            await video.play();
-
-            video.style.display = 'block';
-            standbyBox.style.display = 'none';
-            overlay.style.display = 'block';
-            btnSwitch.style.display = 'inline-flex';
-            btnStop.style.display = 'inline-flex';
-
-            statusBadge.className = 'badge bg-success bg-opacity-10 text-success border border-success px-3 py-1.5 rounded-pill fw-semibold';
-            statusBadge.innerHTML = '<i class="fa-solid fa-video me-1"></i> Kamera Aktif — Arahkan QR Code Kartu Siswa';
-
-            isScanning = true;
-            requestAnimationFrame(scanVideoFrame);
-        } catch (err) {
-            console.error("Camera Access Error:", err);
-            // Fallback coba tanpa batasan facingMode
-            try {
-                videoStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
-                video.srcObject = videoStream;
-                video.setAttribute("playsinline", "true");
-                await video.play();
-
-                video.style.display = 'block';
-                standbyBox.style.display = 'none';
-                overlay.style.display = 'block';
-                btnSwitch.style.display = 'inline-flex';
-                btnStop.style.display = 'inline-flex';
-
-                statusBadge.className = 'badge bg-success bg-opacity-10 text-success border border-success px-3 py-1.5 rounded-pill fw-semibold';
-                statusBadge.innerHTML = '<i class="fa-solid fa-video me-1"></i> Kamera Aktif — Arahkan QR Code Kartu Siswa';
-
-                isScanning = true;
-                requestAnimationFrame(scanVideoFrame);
-            } catch (fallbackErr) {
-                console.error("Fatal Camera Error:", fallbackErr);
-                statusBadge.className = 'badge bg-danger bg-opacity-10 text-danger border border-danger px-3 py-1.5 rounded-pill fw-semibold';
-                statusBadge.innerHTML = '<i class="fa-solid fa-triangle-exclamation me-1"></i> Izin kamera ditolak atau tidak didukung.';
-            }
-        }
-    }
-
-    function scanVideoFrame() {
-        if (!isScanning) return;
-
-        const video = document.getElementById('cameraVideo');
-        if (video.readyState === video.HAVE_ENOUGH_DATA) {
-            const canvas = document.getElementById('qrCanvas');
-            const ctx = canvas.getContext('2d');
-
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            
-            if (typeof jsQR !== 'undefined') {
-                const code = jsQR(imageData.data, imageData.width, imageData.height, {
-                    inversionAttempts: "dontInvert"
-                });
-
-                if (code && code.data && canProcessScan) {
-                    canProcessScan = false;
-                    processPresensi(code.data, () => {
-                        // Cooldown 2.5 detik sebelum scan berikutnya
-                        setTimeout(() => {
-                            canProcessScan = true;
-                        }, 2500);
-                    });
-                }
-            }
-        }
-
-        requestAnimationFrame(scanVideoFrame);
-    }
-
-    function stopCamera() {
-        isScanning = false;
-        if (videoStream) {
-            videoStream.getTracks().forEach(track => track.stop());
-            videoStream = null;
-        }
-
-        const video = document.getElementById('cameraVideo');
-        const standbyBox = document.getElementById('cameraStandbyBox');
-        const overlay = document.getElementById('scannerOverlay');
-        const btnSwitch = document.getElementById('btnSwitchCam');
-        const btnStop = document.getElementById('btnStopCam');
-        const statusBadge = document.getElementById('cameraStatusBadge');
-
-        video.style.display = 'none';
-        overlay.style.display = 'none';
-        standbyBox.style.display = 'block';
-        btnSwitch.style.display = 'none';
-        btnStop.style.display = 'none';
-
-        statusBadge.className = 'badge bg-secondary bg-opacity-10 text-muted border px-3 py-1.5 rounded-pill fw-semibold';
-        statusBadge.innerHTML = '<i class="fa-solid fa-video-slash me-1"></i> Kamera Dimatikan';
-    }
-
-    function toggleCameraFacing() {
-        currentFacingMode = (currentFacingMode === "environment") ? "user" : "environment";
-        stopCamera();
-        setTimeout(() => startCamera(), 200);
-    }
-
-    // 4. USB Scanner Gun Input Listener
+    // 2. Auto-Focus Handling for USB Scanner
     const qrInput = document.getElementById('qrInput');
     let scanTimeout = null;
 
-    qrInput.addEventListener('input', function() {
-        if (scanTimeout) clearTimeout(scanTimeout);
-        if (this.value.length >= 6) {
-            scanTimeout = setTimeout(() => submitUsbScan(), 250);
+    // Pastikan input selalu fokus saat halaman dimuat
+    document.addEventListener('DOMContentLoaded', () => {
+        if (qrInput) qrInput.focus();
+    });
+
+    // Otomatis kembalikan fokus jika user mengklik sembarang tempat di layar
+    document.addEventListener('click', (e) => {
+        if (qrInput && !e.target.closest('button') && !e.target.closest('a') && !e.target.closest('input')) {
+            qrInput.focus();
         }
     });
 
-    document.addEventListener('click', () => {
-        if (activeMode === 'usb') qrInput.focus();
+    // Deteksi input cepat dari USB Scanner gun
+    qrInput.addEventListener('input', function() {
+        if (scanTimeout) clearTimeout(scanTimeout);
+        // Jika karakter sudah mencukupi (panjang token atau NISN biasanya >= 6 digit)
+        if (this.value.length >= 6) {
+            scanTimeout = setTimeout(() => submitScan(), 250);
+        }
     });
 
-    function submitUsbScan() {
+    // Tangani event Enter dari scanner gun
+    qrInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            if (scanTimeout) clearTimeout(scanTimeout);
+            submitScan();
+        }
+    });
+
+    function submitScan() {
         const token = qrInput.value.trim();
-        if (!token) return;
+        if (!token) {
+            qrInput.focus();
+            return;
+        }
 
         qrInput.disabled = true;
         processPresensi(token, () => {
@@ -434,7 +235,7 @@
         });
     }
 
-    // 5. Core AJAX Process Scan
+    // 3. Core AJAX Process Scan
     function processPresensi(token, callback) {
         token = token.trim();
         if (!token) {
@@ -531,7 +332,7 @@
         });
     }
 
-    // 6. Audio Synthesizer
+    // 4. Audio Synthesizer Beeps
     function playSuccessBeep() {
         try {
             const ctx = new (window.AudioContext || window.webkitAudioContext)();
