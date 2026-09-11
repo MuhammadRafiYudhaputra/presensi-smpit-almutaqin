@@ -563,7 +563,7 @@
                         @elseif(request()->routeIs('admin.laporan.*'))
                             Generate Laporan
                         @elseif(request()->routeIs('guru.siswa.*'))
-                            Biodata Siswa Binaan
+                            Data Orang Tua / Wali Siswa
                         @elseif(request()->routeIs('presensi.scan'))
                             Scanner QR Code
                         @elseif(request()->routeIs('admin.fonnte.*'))
