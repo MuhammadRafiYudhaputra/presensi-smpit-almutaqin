@@ -290,11 +290,10 @@
                     <!-- Tombol Unduh Template -->
                     <div class="d-flex justify-content-between align-items-center mb-3 p-2.5 bg-light rounded-3 border">
                         <div>
-                            <span class="fw-bold d-block text-dark small"><i class="fa-solid fa-file-excel text-success me-1"></i> Format Template Guru</span>
-                            <small class="text-muted" style="font-size: 0.74rem;">Lihat susunan kolom data wali kelas</small>
+                            <span class="fw-bold text-dark small"><i class="fa-solid fa-file-excel text-success me-1.5"></i> Format Template Guru</span>
                         </div>
-                        <a href="{{ route('admin.guru.template.download') }}" class="btn btn-sm btn-outline-success rounded-pill px-3 fw-semibold shadow-sm d-inline-flex align-items-center gap-1.5" style="font-size: 0.8rem;">
-                            <i class="fa-solid fa-download"></i> Unduh Contoh
+                        <a href="{{ route('admin.guru.template.download') }}" class="btn btn-sm btn-outline-success rounded-pill px-3 py-1.5 fw-semibold shadow-sm d-inline-flex align-items-center gap-2" style="font-size: 0.8rem;">
+                            <i class="fa-solid fa-download me-1"></i> Unduh Contoh
                         </a>
                     </div>
 
