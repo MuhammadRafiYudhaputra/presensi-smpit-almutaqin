@@ -149,7 +149,14 @@
                     <td class="text-center">
                         <div class="d-inline-flex align-items-center gap-1">
                             <!-- Tombol Edit Siswa -->
-                            <button type="button" class="btn btn-primary btn-action-icon" title="Edit Data Siswa" onclick="openEditSiswaModal({{ json_encode($siswa) }})">
+                            <button type="button" class="btn btn-primary btn-action-icon" title="Edit Data Siswa"
+                                data-siswa-id="{{ $siswa->id }}"
+                                data-siswa-nisn="{{ $siswa->nisn }}"
+                                data-siswa-nama="{{ $siswa->nama }}"
+                                data-siswa-jenis-kelamin="{{ $siswa->jenis_kelamin }}"
+                                data-siswa-kelas-id="{{ $siswa->kelas_id }}"
+                                data-siswa-orang-tua-id="{{ $siswa->orang_tua_id }}"
+                                onclick="openEditSiswaModal(this)">
                                 <i class="fa-solid fa-pen"></i>
                             </button>
                             
@@ -342,13 +349,14 @@
 </div>
 
 <script>
-function openEditSiswaModal(siswa) {
-    document.getElementById('edit_nisn').value = siswa.nisn;
-    document.getElementById('edit_nama').value = siswa.nama;
-    document.getElementById('edit_jenis_kelamin').value = siswa.jenis_kelamin;
-    document.getElementById('edit_kelas_id').value = siswa.kelas_id || '';
-    document.getElementById('edit_orang_tua_id').value = siswa.orang_tua_id || '';
-    document.getElementById('formEditSiswa').action = `/admin/siswa/${siswa.id}`;
+function openEditSiswaModal(button) {
+    const siswa = button.dataset;
+    document.getElementById('edit_nisn').value = siswa.siswaNisn;
+    document.getElementById('edit_nama').value = siswa.siswaNama;
+    document.getElementById('edit_jenis_kelamin').value = siswa.siswaJenisKelamin;
+    document.getElementById('edit_kelas_id').value = siswa.siswaKelasId || '';
+    document.getElementById('edit_orang_tua_id').value = siswa.siswaOrangTuaId || '';
+    document.getElementById('formEditSiswa').action = `/admin/siswa/${siswa.siswaId}`;
     const modal = new bootstrap.Modal(document.getElementById('modalEditSiswa'));
     modal.show();
 }
