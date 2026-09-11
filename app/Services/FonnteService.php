@@ -68,7 +68,10 @@ class FonnteService
                 'countryCode' => '62', // Default Indonesia
             ]);
 
-            if ($response->successful()) {
+            $body = $response->json();
+            $accepted = $response->successful() && ($body['status'] ?? false) === true;
+
+            if ($accepted) {
                 Log::info("Fonnte WA Sent to {$target}: " . $response->body());
                 return true;
             } else {

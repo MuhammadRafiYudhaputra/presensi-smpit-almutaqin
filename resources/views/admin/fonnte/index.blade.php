@@ -45,6 +45,11 @@
                         <span class="input-group-text bg-white border-end-0 text-muted"><i class="fa-solid fa-shield-halved"></i></span>
                         <input type="password" name="api_token" class="form-control border-start-0" value="{{ old('api_token', $setting->api_token ?? '') }}" placeholder="Masukkan API Token Fonnte akun Anda..." required>
                     </div>
+                    <div class="form-check mt-2">
+                        <input type="hidden" name="is_active" value="0">
+                        <input type="checkbox" name="is_active" value="1" id="fonnte_active" class="form-check-input" {{ old('is_active', $setting->is_active ?? true) ? 'checked' : '' }}>
+                        <label for="fonnte_active" class="form-check-label small text-dark">Aktifkan pengiriman notifikasi WhatsApp</label>
+                    </div>
                 </div>
             </div>
         </div>
@@ -100,5 +105,31 @@
             </button>
         </div>
     </form>
+
+    <!-- Test Kirim WhatsApp -->
+    <div class="mt-4 pt-3 border-top">
+        <h6 class="fw-bold text-success mb-3 d-flex align-items-center gap-2">
+            <i class="fa-solid fa-paper-plane"></i>
+            <span>Test Kirim WhatsApp</span>
+        </h6>
+        <form action="{{ route('admin.fonnte.test') }}" method="POST" class="row g-3 align-items-end">
+            @csrf
+            <div class="col-md-4">
+                <label for="test_target_no_wa" class="form-label fw-semibold text-dark small">Nomor Tujuan</label>
+                <input type="text" name="target_no_wa" id="test_target_no_wa" class="form-control form-control-sm" placeholder="628123456789" value="{{ old('target_no_wa') }}" required>
+                <small class="text-muted">Contoh: 628123456789</small>
+            </div>
+            <div class="col-md-6">
+                <label for="test_message" class="form-label fw-semibold text-dark small">Pesan Uji</label>
+                <input type="text" name="message" id="test_message" class="form-control form-control-sm" value="{{ old('message', 'Test notifikasi WhatsApp dari sistem presensi SMP IT Al-Muttaqin.') }}" required>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-success btn-sm rounded-pill w-100 fw-bold d-inline-flex align-items-center justify-content-center gap-2">
+                    <i class="fa-solid fa-paper-plane"></i>
+                    <span>Kirim Test</span>
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
 @endsection
