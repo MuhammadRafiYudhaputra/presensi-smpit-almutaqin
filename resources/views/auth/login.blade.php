@@ -251,70 +251,6 @@
             transform: translateY(-1px);
         }
 
-        /* Demo Accounts Buttons */
-        .demo-box {
-            margin-top: 1.5rem;
-            padding-top: 1.25rem;
-            border-top: 1px solid #f1f5f9;
-        }
-
-        .demo-title {
-            font-size: 0.78rem;
-            font-weight: 700;
-            color: #64748b;
-            margin-bottom: 0.65rem;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .btn-demo {
-            border-radius: 10px;
-            padding: 0.55rem 0.75rem;
-            text-align: left;
-            flex: 1;
-            transition: all 0.15s ease;
-            cursor: pointer;
-            border: 1px solid transparent;
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-
-        .btn-demo-admin {
-            background-color: #eff6ff;
-            border-color: #bfdbfe;
-            color: #1e40af;
-        }
-
-        .btn-demo-admin:hover {
-            background-color: #dbeafe;
-            border-color: #93c5fd;
-        }
-
-        .btn-demo-guru {
-            background-color: #f0fdf4;
-            border-color: #bbf7d0;
-            color: #166534;
-        }
-
-        .btn-demo-guru:hover {
-            background-color: #dcfce7;
-            border-color: #86efac;
-        }
-
-        .demo-badge-title {
-            font-weight: 800;
-            font-size: 0.8rem;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .demo-badge-sub {
-            font-size: 0.72rem;
-            opacity: 0.85;
-        }
     </style>
 </head>
 <body>
@@ -370,7 +306,7 @@
                 <label class="form-label">Alamat Email</label>
                 <div class="input-group-custom">
                     <i class="fa-regular fa-envelope text-primary me-1"></i>
-                    <input type="email" name="email" id="email" placeholder="nama@almuttaqin.sch.id" value="{{ old('email', 'admin@almutaqin.sch.id') }}" required autofocus>
+                    <input type="email" name="email" id="email" placeholder="nama@almuttaqin.sch.id" value="{{ old('email') }}" required autofocus>
                 </div>
             </div>
 
@@ -379,7 +315,7 @@
                 <label class="form-label">Kata Sandi</label>
                 <div class="input-group-custom">
                     <i class="fa-solid fa-lock text-primary me-1"></i>
-                    <input type="password" name="password" id="password" placeholder="••••••••" value="admin123" required>
+                    <input type="password" name="password" id="password" placeholder="••••••••" required>
                     <i class="fa-regular fa-eye text-muted" id="togglePasswordIcon" style="cursor: pointer;" onclick="togglePasswordVisibility()" title="Lihat/Sembunyikan Kata Sandi"></i>
                 </div>
             </div>
@@ -392,30 +328,9 @@
             </div>
 
             <!-- Submit Button -->
-            <button type="submit" class="btn btn-primary text-uppercase fw-bold rounded-pill py-2.5 w-100 shadow-sm d-flex align-items-center justify-content-center gap-2 mb-3">
+            <button type="submit" class="btn btn-primary text-uppercase fw-bold rounded-pill py-2.5 w-100 shadow-sm d-flex align-items-center justify-content-center gap-2 mb-2">
                 <i class="fa-solid fa-right-to-bracket fs-6"></i> Masuk ke Sistem
             </button>
-
-            <!-- Quick Demo Login -->
-            <div class="demo-box">
-                <div class="demo-title">
-                    <i class="fa-solid fa-wand-magic-sparkles text-primary"></i> Akses Demo Cepat:
-                </div>
-                <div class="d-flex gap-2">
-                    <button type="button" class="btn btn-primary bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded-3 p-2.5 flex-fill text-start shadow-none" onclick="fillCreds('admin@almutaqin.sch.id', 'admin123')">
-                        <div class="fw-bold small d-flex align-items-center gap-1.5 mb-0.5">
-                            <i class="fa-solid fa-user-shield"></i> Admin TU
-                        </div>
-                        <small class="text-muted d-block" style="font-size: 0.72rem;">admin@almutaqin.sch.id</small>
-                    </button>
-                    <button type="button" class="btn btn-success bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded-3 p-2.5 flex-fill text-start shadow-none" onclick="fillCreds('guru@almutaqin.sch.id', '12345678')">
-                        <div class="fw-bold small d-flex align-items-center gap-1.5 mb-0.5">
-                            <i class="fa-solid fa-chalkboard-user"></i> Wali Kelas
-                        </div>
-                        <small class="text-muted d-block" style="font-size: 0.72rem;">guru@almutaqin.sch.id</small>
-                    </button>
-                </div>
-            </div>
         </form>
     </div>
 </div>
@@ -456,10 +371,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-function fillCreds(email, password) {
-    document.getElementById('email').value = email;
-    document.getElementById('password').value = password;
-}
 
 function togglePasswordVisibility() {
     const passwordInput = document.getElementById('password');
