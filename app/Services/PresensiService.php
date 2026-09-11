@@ -17,14 +17,12 @@ class PresensiService
     {
         $qrToken = trim($qrToken);
 
-        // 1. Coba pencarian presisi
         $siswa = Siswa::with(['kelas', 'orangTua'])
             ->where('qr_code_token', $qrToken)
             ->orWhere('nisn', $qrToken)
             ->orWhere('nis', $qrToken)
             ->first();
 
-        // 2. Jika belum ditemukan dan token berformat SMPIT-XXXXX, ekstrak NISN-nya
         if (!$siswa && str_contains($qrToken, 'SMPIT-')) {
             $parts = explode('-', $qrToken);
             $extractedNisn = $parts[1] ?? null;
@@ -37,7 +35,6 @@ class PresensiService
             }
         }
 
-        // 3. Jika token adalah angka NISN murni, coba juga wildcard token
         if (!$siswa && is_numeric($qrToken)) {
             $siswa = Siswa::with(['kelas', 'orangTua'])
                 ->where('nisn', $qrToken)
@@ -55,7 +52,7 @@ class PresensiService
         $today = Carbon::today('Asia/Jakarta')->toDateString();
         $nowTime = Carbon::now('Asia/Jakarta')->format('H:i:s');
 
-        // Ambil pengaturan jam presensi aktif (atau fallback default)
+        // Ambil pengaturan jam presensi aktif
         $jamSetting = JamPresensi::where('is_active', true)->first();
         $jamTerlambat = $jamSetting ? $jamSetting->jam_terlambat : '07:15:00';
         $jamPulangStandard = $jamSetting ? $jamSetting->jam_pulang : '15:00:00';
@@ -90,9 +87,8 @@ class PresensiService
                 'waktu' => $nowTime,
             ];
         } else {
-            // PRESENSI PULANG / SUDAH PRESENSI
+            // PRESENSI PULANG
             if (empty($kehadiran->jam_pulang)) {
-                // Cegah Scan Pulang Jika Belum Waktunya
                 if ($nowTime < $jamPulangStandard) {
                     return [
                         'success' => false,
@@ -108,7 +104,6 @@ class PresensiService
                     'jam_pulang' => $nowTime,
                 ]);
 
-                // Dispatch WhatsApp Notification Pulang
                 SendWhatsAppNotificationJob::dispatch($kehadiran->id, 'pulang');
 
                 return [

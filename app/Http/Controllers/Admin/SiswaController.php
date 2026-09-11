@@ -98,7 +98,6 @@ class SiswaController extends Controller
 
     public function store(Request $request)
     {
-        // Jika form mengirimkan file import dapodik
         if ($request->hasFile('file_dapodik')) {
             return $this->importDapodik($request);
         }

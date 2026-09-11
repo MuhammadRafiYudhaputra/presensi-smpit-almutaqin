@@ -16,7 +16,6 @@ use Carbon\Carbon;
 class PortalGuruController extends Controller
 {
     /**
-     * Dapatkan kelas yang diampu secara eksklusif oleh Wali Kelas yang sedang login
      */
     private function getGuruKelas()
     {

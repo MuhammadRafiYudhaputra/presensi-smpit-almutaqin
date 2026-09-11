@@ -18,7 +18,6 @@ class SettingAkademik extends Model
     ];
 
     /**
-     * Dapatkan setting akademik yang sedang aktif
      */
     public static function getActive()
     {

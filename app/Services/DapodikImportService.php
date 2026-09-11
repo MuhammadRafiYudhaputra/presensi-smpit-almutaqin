@@ -20,7 +20,6 @@ class DapodikImportService
     }
 
     /**
-     * Import siswa dari file Excel (.xlsx / .xls) atau CSV (Dapodik / Template)
      *
      * @param UploadedFile $file
      * @param int|null $defaultKelasId
@@ -90,7 +89,6 @@ class DapodikImportService
         DB::beginTransaction();
         try {
             foreach ($rows as $index => $row) {
-                // Lewati baris kosong
                 if (empty(array_filter($row, fn($v) => trim((string)$v) !== ''))) {
                     continue;
                 }
@@ -117,7 +115,7 @@ class DapodikImportService
                     continue;
                 }
 
-                // Normalisasi NISN (hanya angka)
+                // Normalisasi NISN
                 $nisn = preg_replace('/[^0-9]/', '', (string)$nisn);
                 if (empty($nisn)) {
                     $nisn = !empty($nis) ? preg_replace('/[^0-9]/', '', (string)$nis) : '00' . rand(10000000, 99999999);
@@ -132,7 +130,7 @@ class DapodikImportService
                     }
                 }
 
-                // Pencocokan Kelas (Rombel)
+                // Pencocokan Kelas
                 $kelasId = $this->resolveKelasId($kelasRaw, $kelases, $defaultKelasId);
 
                 // Normalisasi No WhatsApp (HP)
@@ -212,14 +210,12 @@ class DapodikImportService
     }
 
     /**
-     * Membaca file CSV dengan auto-detect delimiter dan pembersihan UTF-8 BOM
      */
     protected function readCsv(string $filePath): array
     {
         $content = file_get_contents($filePath);
         if ($content === false) return [];
 
-        // Hapus UTF-8 BOM jika ada
         if (substr($content, 0, 3) === "\xEF\xBB\xBF") {
             $content = substr($content, 3);
         }
@@ -227,7 +223,6 @@ class DapodikImportService
         $lines = preg_split('/\r\n|\r|\n/', trim($content));
         if (empty($lines)) return [];
 
-        // Deteksi delimiter (; , atau \t)
         $firstLine = $lines[0];
         $semicolonCount = substr_count($firstLine, ';');
         $commaCount = substr_count($firstLine, ',');
@@ -250,7 +245,6 @@ class DapodikImportService
     }
 
     /**
-     * Membaca file Excel (.xlsx / .xls) menggunakan PhpSpreadsheet
      */
     protected function readExcel(string $filePath): array
     {
@@ -271,7 +265,6 @@ class DapodikImportService
         $map = [];
 
         foreach ($headers as $colIndex => $header) {
-            // Normalisasi: lowercase, hapus spasi & tanda baca
             $clean = strtolower(trim((string)$header));
             $clean = str_replace(["\xEF\xBB\xBF", ' ' , '-', '_', '.', '/', ':', '(', ')'], '', $clean);
 
@@ -302,7 +295,6 @@ class DapodikImportService
     }
 
     /**
-     * Mencocokkan nilai nama rombel dengan ID kelas yang ada di database
      */
     protected function resolveKelasId(?string $kelasRaw, $kelases, ?int $defaultKelasId): int
     {
@@ -315,7 +307,6 @@ class DapodikImportService
             });
             if ($found) return $found->id;
 
-            // Cari partial match (misal di file 'Kelas 7' di db '7' atau sebaliknya)
             $found = $kelases->first(function($k) use ($clean) {
                 $kName = strtolower(str_replace(['kelas', ' '], '', $k->nama_kelas));
                 $cName = strtolower(str_replace(['kelas', ' '], '', $clean));
@@ -324,12 +315,10 @@ class DapodikImportService
             if ($found) return $found->id;
         }
 
-        // Gunakan default dari parameter jika tersedia
         if ($defaultKelasId && $kelases->where('id', $defaultKelasId)->isNotEmpty()) {
             return $defaultKelasId;
         }
 
-        // Otomatis masuk ke Kelas 7 sebagai kelas awal murid baru
         $kelas7 = $kelases->first(function($k) {
             return $k->tingkat == 7 || str_contains(strtolower($k->nama_kelas), '7');
         });
@@ -340,7 +329,6 @@ class DapodikImportService
     }
 
     /**
-     * Membersihkan nomor telepon agar standar format WA
      */
     protected function cleanPhoneNumber(?string $phone): string
     {

@@ -49,18 +49,18 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
-// Endpoint Public Kios Presensi QR Code Scanner (Bisa diakses langsung oleh alat scanner)
+// Endpoint Public Presensi QR Code Scanner
 Route::get('/scan', [ScanPresensiController::class, 'index'])->name('presensi.scan');
 Route::post('/scan/process', [ScanPresensiController::class, 'store'])->name('presensi.scan.store');
 
-// Guru (Wali Kelas) Routes Group (Wajib Login)
+// Guru (Wali Kelas) Routes Group
 Route::middleware(['auth'])->prefix('guru')->name('guru.')->group(function () {
     Route::get('/monitoring', [PortalGuruController::class, 'monitoring'])->name('monitoring');
     Route::get('/rekap', [PortalGuruController::class, 'rekap'])->name('rekap');
     Route::get('/siswa', [PortalGuruController::class, 'siswa'])->name('siswa.index');
 });
 
-// Admin Protected Routes Group (Wajib Login)
+// Admin Protected Routes Group
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 

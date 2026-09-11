@@ -29,12 +29,10 @@ class HariEfektif extends Model
     }
 
     /**
-     * Dapatkan jumlah hari efektif per kelas atau fallback ke default kalender
      */
     public static function getForKelas(string $mode, string $tahunAjaran, string $semester, ?int $bulan, int $tahun, ?int $kelasId, ?string $namaKelas = null): int
     {
         try {
-            // 1. Cek di database apakah ada entri custom untuk kelas_id ini
             if ($kelasId) {
                 $query = static::where('mode', $mode)
                     ->where('tahun_ajaran', $tahunAjaran)
@@ -72,7 +70,6 @@ class HariEfektif extends Model
                 return (int) $generalRecord->jumlah_hari;
             }
         } catch (\Throwable $e) {
-            // Jika tabel belum termigrasi di server hosting/Railway, fallback mulus tanpa error
         }
 
         // 3. Fallback: Hitung otomatis berdasarkan kalender kerja (Senin - Jumat non-libur nasional)
@@ -80,7 +77,6 @@ class HariEfektif extends Model
     }
 
     /**
-     * Hitung default hari kerja kalender
      */
     public static function calculateDefaultCalendar(string $mode, ?int $bulan, int $tahun, string $semester, ?string $namaKelas = null): int
     {
@@ -97,7 +93,6 @@ class HariEfektif extends Model
             }
             return max(1, $effectiveDays);
         } elseif ($mode === 'semester') {
-            // Khusus Kelas 9 Semester Genap, hari belajar lebih pendek (~85 hari)
             if ($namaKelas && str_contains(strtoupper($namaKelas), '9') && $semester === 'genap') {
                 return 85;
             }

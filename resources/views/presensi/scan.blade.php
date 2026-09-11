@@ -190,19 +190,17 @@
     const qrInput = document.getElementById('qrInput');
     let scanTimeout = null;
 
-    // Pastikan input selalu fokus saat halaman dimuat
     document.addEventListener('DOMContentLoaded', () => {
         if (qrInput) qrInput.focus();
     });
 
-    // Otomatis kembalikan fokus jika user mengklik sembarang tempat di layar
     document.addEventListener('click', (e) => {
         if (qrInput && !e.target.closest('button') && !e.target.closest('a') && !e.target.closest('input')) {
             qrInput.focus();
         }
     });
 
-    // Deteksi input cepat dari USB Scanner gun
+    // Deteksi input dari USB Scanner gun
     qrInput.addEventListener('input', function() {
         if (scanTimeout) clearTimeout(scanTimeout);
         if (this.value.length >= 6) {

@@ -2,7 +2,6 @@
 
 @section('content')
 <style>
-    /* Table Styling Selaras dengan Tema Website */
     .table-presensi-minimal {
         border-collapse: separate;
         border-spacing: 0;
@@ -71,7 +70,7 @@
         </div>
     </div>
 
-    <!-- Form Filter Tanggal (Tanpa Filter Kelas & Urutkan) -->
+    <!-- Form Filter Tanggal -->
     <form action="{{ route('guru.monitoring') }}" method="GET" class="row g-3 mb-4 align-items-end">
         <div class="col-md-6 col-lg-5">
             <label class="form-label fw-bold text-dark mb-1">Pilih Tanggal Presensi</label>
@@ -79,7 +78,6 @@
         </div>
     </form>
 
-    <!-- Ringkasan Cepat Hari Ini -->
     <div class="p-3 bg-light rounded-3 mb-4 border">
         <div class="row g-2 justify-content-around align-items-center text-center">
             <div class="col-6 col-sm-3 col-md-auto stat-metric-box px-3">
