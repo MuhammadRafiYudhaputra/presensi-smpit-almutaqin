@@ -242,10 +242,6 @@
             <form action="{{ route('admin.orangtua.import') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
-                    <div class="alert alert-info border-info small mb-3">
-                        <i class="fa-solid fa-circle-info me-1"></i> Unggah file data orang tua/wali format Excel (<code>.xlsx</code> / <code>.xls</code>) atau <code>.csv</code> untuk menambahkan data kontak WhatsApp secara massal.
-                    </div>
-
                     <!-- Tombol Unduh Template -->
                     <div class="d-flex justify-content-between align-items-center mb-3 p-2.5 bg-light rounded-3 border">
                         <div>
