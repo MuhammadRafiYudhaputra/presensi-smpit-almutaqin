@@ -333,18 +333,6 @@
                         <input type="file" name="file_dapodik" class="form-control" accept=".csv, .xlsx, .xls" required>
                         <small class="text-muted mt-1 d-block" style="font-size: 0.74rem;">Mendukung format file <code>.xlsx</code>, <code>.xls</code>, atau <code>.csv</code> (maks 15MB).</small>
                     </div>
-
-                    <!-- Kelas Default Opsional -->
-                    <div class="mb-2">
-                        <label class="form-label fw-semibold text-dark small">Rombel / Kelas Default (Opsional):</label>
-                        <select name="default_kelas_id" class="form-select">
-                            <option value="">-- Otomatis Deteksi dari Kolom Rombel --</option>
-                            @foreach($kelases as $k)
-                                <option value="{{ $k->id }}">{{ $k->nama_kelas }} (Tingkat {{ $k->tingkat }})</option>
-                            @endforeach
-                        </select>
-                        <small class="text-muted mt-1 d-block" style="font-size: 0.74rem;">Jika file memiliki kolom "Rombel Saat Ini", kelas akan ditentukan otomatis sesuai data siswa.</small>
-                    </div>
                 </div>
                 <div class="modal-footer border-0 pt-0">
                     <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Batal</button>

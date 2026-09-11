@@ -324,10 +324,16 @@ class DapodikImportService
             if ($found) return $found->id;
         }
 
-        // Gunakan default dari form jika tersedia
+        // Gunakan default dari parameter jika tersedia
         if ($defaultKelasId && $kelases->where('id', $defaultKelasId)->isNotEmpty()) {
             return $defaultKelasId;
         }
+
+        // Otomatis masuk ke Kelas 7 sebagai kelas awal murid baru
+        $kelas7 = $kelases->first(function($k) {
+            return $k->tingkat == 7 || str_contains(strtolower($k->nama_kelas), '7');
+        });
+        if ($kelas7) return $kelas7->id;
 
         // Fallback kelas pertama
         return $kelases->first() ? $kelases->first()->id : 1;
