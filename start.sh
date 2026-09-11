@@ -20,5 +20,8 @@ php artisan migrate --force || true
 echo "Running seeders..."
 php artisan db:seed --force || true
 
+echo "Starting queue worker..."
+php artisan queue:work --sleep=3 --tries=3 --timeout=90 > storage/logs/queue.log 2>&1 &
+
 echo "PHP server running on 0.0.0.0:$PORT..."
 exec php -S 0.0.0.0:$PORT -t public
