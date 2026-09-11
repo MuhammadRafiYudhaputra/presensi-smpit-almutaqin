@@ -12,12 +12,12 @@
         font-weight: 700;
         font-size: 0.88rem;
         border-bottom: 2px solid #e2e8f0;
-        padding: 0.9rem 1rem;
+        padding: 0.75rem 0.9rem;
         background: #f8fafc;
         letter-spacing: 0.3px;
     }
     .table-siswa-minimal tbody td {
-        padding: 0.85rem 1rem;
+        padding: 0.7rem 0.9rem;
         vertical-align: middle;
         border-bottom: 1px solid #f1f5f9;
         font-size: 0.88rem;
@@ -45,24 +45,24 @@
 
 <div class="card card-custom p-4 shadow-sm border-0 rounded-4">
     <!-- Header & Action Buttons -->
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4 pb-2 border-bottom">
         <div>
-            <h5 class="fw-bold mb-1 text-dark d-flex align-items-center">
-                <i class="fa-solid fa-users text-primary me-2 fs-4"></i> Data Siswa
+            <h5 class="fw-bold mb-0.5 text-dark d-flex align-items-center" style="font-size: 1.05rem;">
+                <i class="fa-solid fa-users text-primary me-3 fs-5"></i> Data Siswa
             </h5>
         </div>
-        <div class="d-flex gap-2 flex-wrap align-items-center">
-            <button type="button" class="btn btn-outline-primary rounded-pill px-3 py-2 fw-semibold shadow-sm btn-sm d-inline-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#modalImportDapodik">
+        <div class="d-flex gap-2 align-items-center flex-wrap flex-sm-nowrap flex-shrink-0">
+            <button type="button" class="btn btn-outline-primary rounded-pill px-3 py-1.5 fw-semibold shadow-sm btn-sm text-nowrap d-inline-flex align-items-center gap-1.5" data-bs-toggle="modal" data-bs-target="#modalImportDapodik" style="font-size: 0.82rem;">
                 <i class="fa-solid fa-file-import me-1"></i> Import CSV / Excel
             </button>
-            <button type="button" class="btn btn-primary rounded-pill px-3 py-2 fw-semibold shadow-sm btn-sm d-inline-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#modalAddSiswa">
+            <button type="button" class="btn btn-primary rounded-pill px-3.5 py-1.5 fw-semibold shadow-sm btn-sm text-nowrap d-inline-flex align-items-center gap-1.5" data-bs-toggle="modal" data-bs-target="#modalAddSiswa" style="font-size: 0.82rem;">
                 <i class="fa-solid fa-plus me-1"></i> Tambah Data Siswa
             </button>
         </div>
     </div>
 
     <!-- Status Filter Tabs (Siswa Aktif, Arsip Alumni, Semua Data) -->
-    <div class="d-flex align-items-center mb-4 flex-wrap gap-2">
+    <div class="d-flex align-items-center mb-3 flex-wrap gap-2">
         <div class="btn-group p-1 bg-light rounded-pill border" role="group">
             <a href="{{ route('admin.siswa.index', ['status' => 'aktif', 'search' => $search, 'kelas_id' => $kelasId]) }}" class="btn btn-sm rounded-pill {{ ($status ?? 'aktif') === 'aktif' ? 'btn-primary shadow-sm' : 'btn-light text-muted' }}">
                 <i class="fa-solid fa-user me-1"></i> Siswa Aktif
@@ -80,11 +80,11 @@
     </div>
 
     <!-- Search & Filter Bar -->
-    <form action="{{ route('admin.siswa.index') }}" method="GET" class="row g-3 mb-4 align-items-center">
+    <form action="{{ route('admin.siswa.index') }}" method="GET" class="row g-2 mb-4 align-items-center">
         <input type="hidden" name="status" value="{{ $status ?? 'aktif' }}">
         
         <!-- Search Input -->
-        <div class="col-md-7 col-lg-8">
+        <div class="col-12 col-md-8 col-lg-7">
             <div class="input-group shadow-sm">
                 <span class="input-group-text bg-white border-end-0 text-muted ps-3"><i class="fa-solid fa-magnifying-glass"></i></span>
                 <input type="text" name="search" class="form-control border-start-0 ps-2" placeholder="Cari NISN, Nama Siswa, atau Kontak WA..." value="{{ $search ?? '' }}">
@@ -93,7 +93,7 @@
         </div>
 
         <!-- Filter Kelas -->
-        <div class="col-md-5 col-lg-4">
+        <div class="col-12 col-md-4 col-lg-5">
             <div class="d-flex align-items-center gap-2">
                 <label class="form-label fw-bold text-nowrap mb-0 text-dark"><i class="fa-solid fa-filter text-primary me-1"></i> Kelas:</label>
                 <select name="kelas_id" class="form-select shadow-sm" onchange="this.form.submit()">
