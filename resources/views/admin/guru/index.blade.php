@@ -87,10 +87,10 @@
                     </td>
                     <td class="text-center">
                         <div class="d-inline-flex gap-2 justify-content-center align-items-center">
-                            <button type="button" class="btn btn-warning text-dark btn-sm rounded-2 d-inline-flex align-items-center justify-content-center shadow-sm" style="width: 30px; height: 30px;" title="Ubah Password Login" onclick="openResetPasswordModal({{ $guru->id }}, '{{ addslashes($guru->nama) }}')">
+                            <button type="button" class="btn btn-warning text-dark btn-sm rounded-2 d-inline-flex align-items-center justify-content-center shadow-sm" style="width: 30px; height: 30px;" title="Ubah Password Login" data-guru-id="{{ $guru->id }}" data-guru-nama="{{ $guru->nama }}" onclick="openResetPasswordModal(this)">
                                 <i class="fa-solid fa-key" style="font-size: 0.78rem;"></i>
                             </button>
-                            <button type="button" class="btn btn-primary btn-sm rounded-2 d-inline-flex align-items-center justify-content-center" style="width: 30px; height: 30px;" title="Edit Data Wali Kelas" onclick="openEditGuruModal({{ json_encode($guru) }}, {{ $guru->kelas ? $guru->kelas->id : 'null' }})">
+                            <button type="button" class="btn btn-primary btn-sm rounded-2 d-inline-flex align-items-center justify-content-center" style="width: 30px; height: 30px;" title="Edit Data Wali Kelas" data-guru="{{ json_encode($guru) }}" data-kelas-id="{{ $guru->kelas ? $guru->kelas->id : '' }}" onclick="openEditGuruModal(this)">
                                 <i class="fa-solid fa-pen" style="font-size: 0.78rem;"></i>
                             </button>
                             <form action="{{ route('admin.guru.destroy', $guru->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data guru ini?')">
@@ -315,7 +315,9 @@
 </div>
 
 <script>
-function openEditGuruModal(guru, kelasId) {
+function openEditGuruModal(button) {
+    const guru = JSON.parse(button.dataset.guru);
+    const kelasId = button.dataset.kelasId;
     document.getElementById('edit_guru_nip').value = guru.nip || '';
     document.getElementById('edit_guru_nama').value = guru.nama;
     document.getElementById('edit_guru_email').value = guru.user ? guru.user.email : '';
@@ -327,7 +329,9 @@ function openEditGuruModal(guru, kelasId) {
     modal.show();
 }
 
-function openResetPasswordModal(guruId, guruNama) {
+function openResetPasswordModal(button) {
+    const guruId = button.dataset.guruId;
+    const guruNama = button.dataset.guruNama;
     document.getElementById('reset_guru_nama').innerText = guruNama;
     document.getElementById('formResetPassword').action = `/admin/guru/${guruId}/reset-password`;
     const modal = new bootstrap.Modal(document.getElementById('modalResetPassword'));

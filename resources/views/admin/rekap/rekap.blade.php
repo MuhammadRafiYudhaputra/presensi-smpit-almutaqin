@@ -186,7 +186,7 @@
                         </span>
                     </td>
                     <td class="text-center val-hadir" title="{{ $row->hadir }} hari hadir">{{ $row->hadir }}</td>
-                    <td class="text-center val-terlambat" onclick="openRiwayatTerlambatModal('{{ addslashes($row->siswa->nama) }}', '{{ $row->siswa->nisn }}', '{{ $row->kelas_historis->nama_kelas ?? ($row->siswa->kelas->nama_kelas ?? '-') }}', {{ json_encode($row->riwayat_terlambat) }}, '{{ $row->siswa->orangTua->no_wa ?? '' }}')">
+                    <td class="text-center val-terlambat" data-riwayat-nama="{{ $row->siswa->nama }}" data-riwayat-nisn="{{ $row->siswa->nisn }}" data-riwayat-kelas="{{ $row->kelas_historis->nama_kelas ?? ($row->siswa->kelas->nama_kelas ?? '-') }}" data-riwayat="{{ json_encode($row->riwayat_terlambat) }}" data-riwayat-wa="{{ $row->siswa->orangTua->no_wa ?? '' }}" onclick="openRiwayatTerlambatModal(this)">
                         <span class="text-decoration-underline" title="Klik untuk rincian tanggal">{{ $row->terlambat }}x</span>
                         @if($row->terlambat > 4)
                             <span class="badge bg-warning bg-opacity-25 text-dark border border-warning ms-1" style="font-size: 0.7rem;" title="Perlu tindak lanjut BK (Lebih dari 4x terlambat)">
@@ -207,11 +207,11 @@
                     </td>
                     <td class="text-center">
                         @if($row->terlambat > 4)
-                            <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-2 py-1 bk-badge-btn" style="font-size: 0.75rem;" onclick="openRiwayatTerlambatModal('{{ addslashes($row->siswa->nama) }}', '{{ $row->siswa->nisn }}', '{{ $row->siswa->kelas->nama_kelas ?? '-' }}', {{ json_encode($row->riwayat_terlambat) }}, '{{ $row->siswa->orangTua->no_wa ?? '' }}')">
+                            <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-2 py-1 bk-badge-btn" style="font-size: 0.75rem;" data-riwayat-nama="{{ $row->siswa->nama }}" data-riwayat-nisn="{{ $row->siswa->nisn }}" data-riwayat-kelas="{{ $row->kelas_historis->nama_kelas ?? ($row->siswa->kelas->nama_kelas ?? '-') }}" data-riwayat="{{ json_encode($row->riwayat_terlambat) }}" data-riwayat-wa="{{ $row->siswa->orangTua->no_wa ?? '' }}" onclick="openRiwayatTerlambatModal(this)">
                                 <i class="fa-solid fa-user-shield me-1"></i> Perlu Tindak Lanjut BK
                             </button>
                         @elseif($row->terlambat > 0)
-                            <button type="button" class="btn btn-sm btn-outline-warning rounded-pill px-2 py-1 bk-badge-btn text-dark" style="font-size: 0.75rem;" onclick="openRiwayatTerlambatModal('{{ addslashes($row->siswa->nama) }}', '{{ $row->siswa->nisn }}', '{{ $row->siswa->kelas->nama_kelas ?? '-' }}', {{ json_encode($row->riwayat_terlambat) }}, '{{ $row->siswa->orangTua->no_wa ?? '' }}')">
+                            <button type="button" class="btn btn-sm btn-outline-warning rounded-pill px-2 py-1 bk-badge-btn text-dark" style="font-size: 0.75rem;" data-riwayat-nama="{{ $row->siswa->nama }}" data-riwayat-nisn="{{ $row->siswa->nisn }}" data-riwayat-kelas="{{ $row->kelas_historis->nama_kelas ?? ($row->siswa->kelas->nama_kelas ?? '-') }}" data-riwayat="{{ json_encode($row->riwayat_terlambat) }}" data-riwayat-wa="{{ $row->siswa->orangTua->no_wa ?? '' }}" onclick="openRiwayatTerlambatModal(this)">
                                 <i class="fa-regular fa-clock me-1 text-warning"></i> Catatan ({{ $row->terlambat }}x)
                             </button>
                         @else
@@ -219,8 +219,6 @@
                                 <i class="fa-solid fa-check me-1"></i> Tertib
                             </span>
                         @endif
-                    </td>
-                </tr>
                     </td>
                 </tr>
                 @empty
@@ -283,7 +281,7 @@
                         </span>
                     </td>
                     <td class="text-center val-hadir" title="{{ $row->hadir }} hari hadir">{{ $row->hadir }}</td>
-                    <td class="text-center val-terlambat" onclick="openRiwayatTerlambatModal('{{ addslashes($row->siswa->nama) }}', '{{ $row->siswa->nisn }}', '{{ $row->kelas_historis->nama_kelas ?? ($row->siswa->kelas->nama_kelas ?? '-') }}', {{ json_encode($row->riwayat_terlambat) }}, '{{ $row->siswa->orangTua->no_wa ?? '' }}')">
+                    <td class="text-center val-terlambat" data-riwayat-nama="{{ $row->siswa->nama }}" data-riwayat-nisn="{{ $row->siswa->nisn }}" data-riwayat-kelas="{{ $row->kelas_historis->nama_kelas ?? ($row->siswa->kelas->nama_kelas ?? '-') }}" data-riwayat="{{ json_encode($row->riwayat_terlambat) }}" data-riwayat-wa="{{ $row->siswa->orangTua->no_wa ?? '' }}" onclick="openRiwayatTerlambatModal(this)">
                         <span class="text-decoration-underline" title="Klik untuk rincian tanggal">{{ $row->terlambat }}x</span>
                         @if($row->terlambat > 4)
                             <span class="badge bg-warning bg-opacity-25 text-dark border border-warning ms-1" style="font-size: 0.7rem;" title="Perlu tindak lanjut BK">
@@ -304,11 +302,11 @@
                     </td>
                     <td class="text-center">
                         @if($row->terlambat > 4)
-                            <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-2 py-1 bk-badge-btn" style="font-size: 0.75rem;" onclick="openRiwayatTerlambatModal('{{ addslashes($row->siswa->nama) }}', '{{ $row->siswa->nisn }}', '{{ $row->siswa->kelas->nama_kelas ?? '-' }}', {{ json_encode($row->riwayat_terlambat) }}, '{{ $row->siswa->orangTua->no_wa ?? '' }}')">
+                            <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-2 py-1 bk-badge-btn" style="font-size: 0.75rem;" data-riwayat-nama="{{ $row->siswa->nama }}" data-riwayat-nisn="{{ $row->siswa->nisn }}" data-riwayat-kelas="{{ $row->kelas_historis->nama_kelas ?? ($row->siswa->kelas->nama_kelas ?? '-') }}" data-riwayat="{{ json_encode($row->riwayat_terlambat) }}" data-riwayat-wa="{{ $row->siswa->orangTua->no_wa ?? '' }}" onclick="openRiwayatTerlambatModal(this)">
                                 <i class="fa-solid fa-user-shield me-1"></i> Perlu Tindak Lanjut BK
                             </button>
                         @elseif($row->terlambat > 0)
-                            <button type="button" class="btn btn-sm btn-outline-warning rounded-pill px-2 py-1 bk-badge-btn text-dark" style="font-size: 0.75rem;" onclick="openRiwayatTerlambatModal('{{ addslashes($row->siswa->nama) }}', '{{ $row->siswa->nisn }}', '{{ $row->siswa->kelas->nama_kelas ?? '-' }}', {{ json_encode($row->riwayat_terlambat) }}, '{{ $row->siswa->orangTua->no_wa ?? '' }}')">
+                            <button type="button" class="btn btn-sm btn-outline-warning rounded-pill px-2 py-1 bk-badge-btn text-dark" style="font-size: 0.75rem;" data-riwayat-nama="{{ $row->siswa->nama }}" data-riwayat-nisn="{{ $row->siswa->nisn }}" data-riwayat-kelas="{{ $row->kelas_historis->nama_kelas ?? ($row->siswa->kelas->nama_kelas ?? '-') }}" data-riwayat="{{ json_encode($row->riwayat_terlambat) }}" data-riwayat-wa="{{ $row->siswa->orangTua->no_wa ?? '' }}" onclick="openRiwayatTerlambatModal(this)">
                                 <i class="fa-regular fa-clock me-1 text-warning"></i> Catatan ({{ $row->terlambat }}x)
                             </button>
                         @else
@@ -523,7 +521,13 @@
 @endif
 
 <script>
-function openRiwayatTerlambatModal(nama, nisn, kelas, riwayat, noWa) {
+function openRiwayatTerlambatModal(button) {
+    const data = button.dataset;
+    const nama = data.riwayatNama;
+    const nisn = data.riwayatNisn;
+    const kelas = data.riwayatKelas;
+    const riwayat = JSON.parse(data.riwayat || '[]');
+    const noWa = data.riwayatWa;
     document.getElementById('bk_siswa_nama').innerText = nama;
     document.getElementById('bk_siswa_nisn').innerText = nisn;
     document.getElementById('bk_siswa_kelas').innerText = 'Kelas ' + kelas;

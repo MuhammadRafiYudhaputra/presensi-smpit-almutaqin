@@ -143,7 +143,6 @@
         </div>
     </form>
 
-    <!-- Ringkasan Cepat Hari Ini -->
     <div class="p-3 bg-light rounded-3 mb-4 border">
         <div class="row g-2 justify-content-around align-items-center text-center">
             <div class="col-6 col-sm-3 col-md-auto stat-metric-box px-3">
@@ -229,7 +228,12 @@
                     <td class="text-center text-muted font-monospace">{{ $row->jam_pulang ?? '-' }}</td>
                     <td class="text-muted">{{ $row->keterangan ?? '-' }}</td>
                     <td class="text-center">
-                        <button type="button" class="btn-edit-action shadow-sm" onclick="openSetStatusModal({{ $row->siswa->id }}, '{{ addslashes($row->siswa->nama) }}', '{{ $row->status }}', '{{ addslashes($row->keterangan ?? '') }}')">
+                        <button type="button" class="btn-edit-action shadow-sm"
+                            data-siswa-id="{{ $row->siswa->id }}"
+                            data-siswa-nama="{{ $row->siswa->nama }}"
+                            data-status="{{ $row->status }}"
+                            data-keterangan="{{ $row->keterangan ?? '' }}"
+                            onclick="openSetStatusModal(this)">
                             <i class="fa-solid fa-pen"></i> EDIT
                         </button>
                     </td>
@@ -315,7 +319,13 @@
 </div>
 
 <script>
-function openSetStatusModal(siswaId, siswaNama, currentStatus, keterangan) {
+function openSetStatusModal(button) {
+    const data = button.dataset;
+    const siswaId = data.siswaId;
+    const siswaNama = data.siswaNama;
+    const currentStatus = data.status;
+    const keterangan = data.keterangan;
+
     document.getElementById('modal_siswa_id').value = siswaId;
     document.getElementById('modal_siswa_nama').innerText = siswaNama;
     document.getElementById('modal_keterangan').value = keterangan || '';

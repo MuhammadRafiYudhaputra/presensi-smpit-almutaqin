@@ -187,7 +187,12 @@
 
             <div class="p-3">
                 <div style="height: 145px; position: relative;">
-                    <canvas id="chartKehadiran"></canvas>
+                    <canvas id="chartKehadiran"
+                        data-chart-labels="{{ json_encode($chartLabels) }}"
+                        data-chart-hadir="{{ json_encode($chartHadir) }}"
+                        data-chart-sakit="{{ json_encode($chartSakit) }}"
+                        data-chart-izin="{{ json_encode($chartIzin) }}"
+                        data-chart-alfa="{{ json_encode($chartAlfa) }}"></canvas>
                 </div>
             </div>
         </div>
@@ -202,11 +207,11 @@
             new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: {!! json_encode($chartLabels) !!},
+                    labels: JSON.parse(ctx.dataset.chartLabels || '[]'),
                     datasets: [
                         {
                             label: 'Hadir',
-                            data: {!! json_encode($chartHadir) !!},
+                            data: JSON.parse(ctx.dataset.chartHadir || '[]'),
                             backgroundColor: '#22c55e',
                             borderRadius: 3,
                             barPercentage: 0.7,
@@ -214,7 +219,7 @@
                         },
                         {
                             label: 'Sakit',
-                            data: {!! json_encode($chartSakit) !!},
+                            data: JSON.parse(ctx.dataset.chartSakit || '[]'),
                             backgroundColor: '#f59e0b',
                             borderRadius: 3,
                             barPercentage: 0.7,
@@ -222,7 +227,7 @@
                         },
                         {
                             label: 'Izin',
-                            data: {!! json_encode($chartIzin) !!},
+                            data: JSON.parse(ctx.dataset.chartIzin || '[]'),
                             backgroundColor: '#06b6d4',
                             borderRadius: 3,
                             barPercentage: 0.7,
@@ -230,7 +235,7 @@
                         },
                         {
                             label: 'Alfa',
-                            data: {!! json_encode($chartAlfa) !!},
+                            data: JSON.parse(ctx.dataset.chartAlfa || '[]'),
                             backgroundColor: '#ef4444',
                             borderRadius: 3,
                             barPercentage: 0.7,

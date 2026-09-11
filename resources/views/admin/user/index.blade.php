@@ -81,14 +81,18 @@
                     <td class="text-center">
                         <div class="d-inline-flex gap-2 align-items-center">
                             <!-- Edit Button -->
-                            <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3 py-1 shadow-none d-inline-flex align-items-center gap-1.5" title="Edit Profil & Password" onclick="openEditModal({{ $admin->id }}, '{{ addslashes($admin->name) }}', '{{ $admin->email }}', {{ $admin->id === Auth::id() ? 'true' : 'false' }})">
+                            <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3 py-1 shadow-none d-inline-flex align-items-center gap-1.5" title="Edit Profil & Password"
+                                data-admin-id="{{ $admin->id }}"
+                                data-admin-name="{{ $admin->name }}"
+                                data-admin-email="{{ $admin->email }}"
+                                onclick="openEditModal(this)">
                                 <i class="fa-solid fa-pen-to-square"></i>
                                 <span>Edit</span>
                             </button>
 
                             <!-- Delete Button -->
                             @if($admin->id !== Auth::id())
-                            <form action="{{ route('admin.user.destroy', $admin->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus akun admin [{{ addslashes($admin->name) }}]?');">
+                            <form action="{{ route('admin.user.destroy', $admin->id) }}" method="POST" class="d-inline" data-admin-name="{{ $admin->name }}" onsubmit="return confirmDeleteAdmin(this);">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-2.5 py-1 shadow-none d-inline-flex align-items-center" title="Hapus Admin Ini">
@@ -193,14 +197,19 @@
 </div>
 
 <script>
-    function openEditModal(id, name, email, isSelf) {
+    function openEditModal(button) {
+        const admin = button.dataset;
         const form = document.getElementById('formEditAdmin');
-        form.action = `/admin/user/${id}`;
-        document.getElementById('editName').value = name;
-        document.getElementById('editEmail').value = email;
+        form.action = `/admin/user/${admin.adminId}`;
+        document.getElementById('editName').value = admin.adminName;
+        document.getElementById('editEmail').value = admin.adminEmail;
 
         const modal = new bootstrap.Modal(document.getElementById('modalEditAdmin'));
         modal.show();
+    }
+
+    function confirmDeleteAdmin(form) {
+        return window.confirm(`Apakah Anda yakin ingin menghapus akun admin [${form.dataset.adminName}]?`);
     }
 </script>
 @endsection

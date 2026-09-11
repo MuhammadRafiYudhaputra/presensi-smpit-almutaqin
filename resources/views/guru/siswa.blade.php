@@ -103,7 +103,9 @@
                         <span class="small text-dark">{{ $ot->alamat ?? '-' }}</span>
                     </td>
                     <td class="text-center">
-                        <button type="button" class="btn btn-outline-primary btn-sm rounded-pill px-2.5 py-1 fw-semibold shadow-sm d-inline-flex align-items-center gap-1" style="font-size: 0.78rem;" title="Lihat Rincian Kontak" onclick="openDetailOrangTuaModal({{ json_encode($ot) }})">
+                        <button type="button" class="btn btn-outline-primary btn-sm rounded-pill px-2.5 py-1 fw-semibold shadow-sm d-inline-flex align-items-center gap-1" style="font-size: 0.78rem;" title="Lihat Rincian Kontak"
+                            data-orang-tua="{{ htmlspecialchars(json_encode($ot), ENT_QUOTES, 'UTF-8') }}"
+                            onclick="openDetailOrangTuaModal(this)">
                             <i class="fa-solid fa-id-card"></i> Detail
                         </button>
                     </td>
@@ -177,7 +179,8 @@
 </div>
 
 <script>
-function openDetailOrangTuaModal(ot) {
+function openDetailOrangTuaModal(button) {
+    const ot = JSON.parse(button.dataset.orangTua);
     const namaUtama = ot.nama_ayah || ot.nama_ibu || ot.nama_wali || 'Orang Tua Siswa';
     document.getElementById('detTitleNama').innerText = namaUtama;
 

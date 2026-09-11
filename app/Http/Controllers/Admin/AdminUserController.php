@@ -50,7 +50,7 @@ class AdminUserController extends Controller
     }
 
     /**
-     * Update Data Admin Tertentu
+     * Update Data Admin
      */
     public function update(Request $request, $id)
     {
@@ -102,11 +102,11 @@ class AdminUserController extends Controller
     }
 
     /**
-     * Update Profil & Password Saya Sendiri
+     * Update Profil & Password
      */
     public function updateProfile(Request $request)
     {
-        $user = Auth::user();
+        $user = User::findOrFail(Auth::id());
 
         $request->validate([
             'name' => 'required|string|max:100',

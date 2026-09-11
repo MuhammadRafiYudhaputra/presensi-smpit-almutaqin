@@ -103,7 +103,7 @@
                     </td>
                     <td class="text-center">
                         <div class="d-inline-flex gap-1 justify-content-center">
-                            <button type="button" class="btn btn-primary btn-sm rounded-2 d-inline-flex align-items-center justify-content-center" style="width: 32px; height: 32px;" title="Edit Data Orang Tua / Wali" onclick="openEditOrangTuaModal({{ json_encode($ot) }})">
+                            <button type="button" class="btn btn-primary btn-sm rounded-2 d-inline-flex align-items-center justify-content-center" style="width: 32px; height: 32px;" title="Edit Data Orang Tua / Wali" data-orang-tua="{{ json_encode($ot) }}" onclick="openEditOrangTuaModal(this)">
                                 <i class="fa-solid fa-pen"></i>
                             </button>
                             <form action="{{ route('admin.orangtua.destroy', $ot->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data orang tua/wali ini?')">
@@ -270,7 +270,8 @@
 </div>
 
 <script>
-function openEditOrangTuaModal(ot) {
+function openEditOrangTuaModal(button) {
+    const ot = JSON.parse(button.dataset.orangTua);
     document.getElementById('edit_nama_ayah').value = ot.nama_ayah || '';
     document.getElementById('edit_nama_ibu').value = ot.nama_ibu || '';
     document.getElementById('edit_nama_wali').value = ot.nama_wali || '';

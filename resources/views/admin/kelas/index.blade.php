@@ -60,7 +60,7 @@
                     </td>
                     <td class="text-center">
                         <div class="d-inline-flex gap-1 justify-content-center">
-                            <button type="button" class="btn btn-primary btn-sm rounded-2 d-inline-flex align-items-center justify-content-center" style="width: 32px; height: 32px;" title="Edit Data Kelas" onclick="openEditKelasModal({{ json_encode($k) }})">
+                            <button type="button" class="btn btn-primary btn-sm rounded-2 d-inline-flex align-items-center justify-content-center" style="width: 32px; height: 32px;" title="Edit Data Kelas" data-kelas="{{ json_encode($k) }}" onclick="openEditKelasModal(this)">
                                 <i class="fa-solid fa-pen"></i>
                             </button>
                             <form action="{{ route('admin.kelas.destroy', $k->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data kelas ini?')">
@@ -147,7 +147,6 @@
                         <label class="form-label fw-semibold text-dark">Wali Kelas Penanggung Jawab</label>
                         <select name="guru_id" id="edit_guru_id" class="form-select">
                             <option value="">-- Belum Ditentukan --</option>
-                            <option value="">-- Belum Ditentukan --</option>
                             @foreach($gurus as $g)
                                 <option value="{{ $g->id }}">{{ $g->nama }} (NIP: {{ $g->nip ?? '-' }})</option>
                             @endforeach
@@ -220,7 +219,8 @@
 </div>
 
 <script>
-function openEditKelasModal(kelas) {
+function openEditKelasModal(button) {
+    const kelas = JSON.parse(button.dataset.kelas);
     document.getElementById('edit_nama_kelas').value = kelas.nama_kelas;
     document.getElementById('edit_guru_id').value = kelas.guru_id || '';
     document.getElementById('formEditKelas').action = `/admin/kelas/${kelas.id}`;
