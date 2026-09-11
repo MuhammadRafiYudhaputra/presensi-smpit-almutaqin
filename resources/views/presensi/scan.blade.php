@@ -140,7 +140,7 @@
     <!-- Ready Status Indicator -->
     <div class="mb-3">
         <span class="badge bg-success bg-opacity-10 text-success border border-success px-3.5 py-2 rounded-pill fw-semibold shadow-sm" style="font-size: 0.85rem;">
-            <span class="pulse-indicator"></span> Siap Memindai via Barcode / QR Scanner Gun
+            <span class="pulse-indicator"></span> Siap Memindai Barcode
         </span>
     </div>
 
@@ -205,13 +205,11 @@
     // Deteksi input cepat dari USB Scanner gun
     qrInput.addEventListener('input', function() {
         if (scanTimeout) clearTimeout(scanTimeout);
-        // Jika karakter sudah mencukupi (panjang token atau NISN biasanya >= 6 digit)
         if (this.value.length >= 6) {
             scanTimeout = setTimeout(() => submitScan(), 250);
         }
     });
 
-    // Tangani event Enter dari scanner gun
     qrInput.addEventListener('keydown', function(e) {
         if (e.key === 'Enter') {
             e.preventDefault();

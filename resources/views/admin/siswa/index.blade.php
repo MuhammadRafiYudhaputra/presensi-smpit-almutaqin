@@ -309,20 +309,49 @@
                 <h5 class="fw-bold text-dark"><i class="fa-solid fa-file-import me-2 text-primary"></i>Import Data Siswa dari Dapodik</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form action="{{ route('admin.siswa.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('admin.siswa.import') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
                     <div class="alert alert-info border-info small mb-3">
-                        <i class="fa-solid fa-circle-info me-1"></i> Unggah file data siswa format Excel (.xlsx / .csv). Sistem akan otomatis membuat akun siswa & generate token QR Code presensi.
+                        <i class="fa-solid fa-circle-info me-1"></i> Unggah file data siswa format Excel (<code>.xlsx</code> / <code>.xls</code>) atau <code>.csv</code>. Sistem secara cerdas akan otomatis memetakan kolom Dapodik, membuat data orang tua, akun siswa, dan generate token QR Code presensi.
                     </div>
+
+                    <!-- Tombol Unduh Template -->
+                    <div class="d-flex justify-content-between align-items-center mb-3 p-2.5 bg-light rounded-3 border">
+                        <div>
+                            <span class="fw-bold d-block text-dark small"><i class="fa-solid fa-file-excel text-success me-1"></i> Format Template Dapodik</span>
+                            <small class="text-muted" style="font-size: 0.74rem;">Lihat susunan kolom standar Dapodik</small>
+                        </div>
+                        <a href="{{ route('admin.siswa.template.download') }}" class="btn btn-sm btn-outline-success rounded-pill px-3 fw-semibold shadow-sm d-inline-flex align-items-center gap-1.5" style="font-size: 0.8rem;">
+                            <i class="fa-solid fa-download"></i> Unduh Contoh
+                        </a>
+                    </div>
+
+                    <!-- Input File -->
                     <div class="mb-3">
-                        <label class="form-label fw-semibold text-dark">Pilih File Excel / CSV Dapodik:</label>
-                        <input type="file" name="file_dapodik" class="form-control" accept=".csv, .xlsx, .xls">
+                        <label class="form-label fw-semibold text-dark small">Pilih File Excel / CSV Dapodik: <span class="text-danger">*</span></label>
+                        <input type="file" name="file_dapodik" class="form-control" accept=".csv, .xlsx, .xls" required>
+                        <small class="text-muted mt-1 d-block" style="font-size: 0.74rem;">Mendukung format file <code>.xlsx</code>, <code>.xls</code>, atau <code>.csv</code> (maks 15MB).</small>
+                    </div>
+
+                    <!-- Kelas Default Opsional -->
+                    <div class="mb-2">
+                        <label class="form-label fw-semibold text-dark small">Rombel / Kelas Default (Opsional):</label>
+                        <select name="default_kelas_id" class="form-select">
+                            <option value="">-- Otomatis Deteksi dari Kolom Rombel --</option>
+                            @foreach($kelases as $k)
+                                <option value="{{ $k->id }}">{{ $k->nama_kelas }} (Tingkat {{ $k->tingkat }})</option>
+                            @endforeach
+                        </select>
+                        <small class="text-muted mt-1 d-block" style="font-size: 0.74rem;">Jika file memiliki kolom "Rombel Saat Ini", kelas akan ditentukan otomatis sesuai data siswa.</small>
                     </div>
                 </div>
                 <div class="modal-footer border-0 pt-0">
                     <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm">Unggah & Import</button>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm d-inline-flex align-items-center gap-2">
+                        <i class="fa-solid fa-file-import"></i>
+                        <span>Unggah & Import</span>
+                    </button>
                 </div>
             </form>
         </div>

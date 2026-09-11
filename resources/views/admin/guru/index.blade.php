@@ -261,7 +261,7 @@
                     <div class="mb-2">
                         <label class="form-label fw-bold small text-dark mb-1">Password Baru:</label>
                         <input type="text" name="password" class="form-control px-3" value="12345678" placeholder="Masukkan kata sandi baru" required>
-                        <small class="text-muted mt-1 d-block" style="font-size: 0.78rem;">Password default cepat: <code>12345678</code></small>
+                        <small class="text-muted mt-1 d-block" style="font-size: 0.78rem;">Password default: <code>12345678</code></small>
                     </div>
                 </div>
                 <div class="modal-footer border-0 pt-0 d-flex justify-content-end gap-3">
@@ -284,20 +284,35 @@
                 <h5 class="fw-bold text-dark"><i class="fa-solid fa-file-import me-2 text-success"></i>Import Data Wali Kelas</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form action="{{ route('admin.guru.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('admin.guru.import') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
                     <div class="alert alert-info border-info small mb-3">
-                        <i class="fa-solid fa-circle-info me-1"></i> Unggah file data guru format Excel (.xlsx / .csv) untuk menambahkan akun guru secara massal.
+                        <i class="fa-solid fa-circle-info me-1"></i> Unggah file data guru format Excel (<code>.xlsx</code> / <code>.xls</code>) atau <code>.csv</code> untuk menambahkan akun guru secara massal.
                     </div>
+
+                    <!-- Tombol Unduh Template -->
+                    <div class="d-flex justify-content-between align-items-center mb-3 p-2.5 bg-light rounded-3 border">
+                        <div>
+                            <span class="fw-bold d-block text-dark small"><i class="fa-solid fa-file-excel text-success me-1"></i> Format Template Guru</span>
+                            <small class="text-muted" style="font-size: 0.74rem;">Lihat susunan kolom data wali kelas</small>
+                        </div>
+                        <a href="{{ route('admin.guru.template.download') }}" class="btn btn-sm btn-outline-success rounded-pill px-3 fw-semibold shadow-sm d-inline-flex align-items-center gap-1.5" style="font-size: 0.8rem;">
+                            <i class="fa-solid fa-download"></i> Unduh Contoh
+                        </a>
+                    </div>
+
                     <div class="mb-3">
-                        <label class="form-label fw-semibold text-dark">Pilih File Excel / CSV Guru:</label>
-                        <input type="file" name="file_guru" class="form-control" accept=".csv, .xlsx, .xls">
+                        <label class="form-label fw-semibold text-dark small">Pilih File Excel / CSV Guru: <span class="text-danger">*</span></label>
+                        <input type="file" name="file_guru" class="form-control" accept=".csv, .xlsx, .xls" required>
                     </div>
                 </div>
                 <div class="modal-footer border-0 pt-0">
                     <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-success rounded-pill px-4 fw-bold shadow-sm">Unggah & Import</button>
+                    <button type="submit" class="btn btn-success rounded-pill px-4 fw-bold shadow-sm d-inline-flex align-items-center gap-2">
+                        <i class="fa-solid fa-file-import"></i>
+                        <span>Unggah & Import</span>
+                    </button>
                 </div>
             </form>
         </div>

@@ -7,15 +7,18 @@ use App\Models\Siswa;
 use App\Models\Kelas;
 use App\Models\OrangTua;
 use App\Services\QrCodeService;
+use App\Services\DapodikImportService;
 use Illuminate\Http\Request;
 
 class SiswaController extends Controller
 {
     protected QrCodeService $qrCodeService;
+    protected DapodikImportService $dapodikImportService;
 
-    public function __construct(QrCodeService $qrCodeService)
+    public function __construct(QrCodeService $qrCodeService, DapodikImportService $dapodikImportService)
     {
         $this->qrCodeService = $qrCodeService;
+        $this->dapodikImportService = $dapodikImportService;
     }
 
     public function index(Request $request)
@@ -95,6 +98,11 @@ class SiswaController extends Controller
 
     public function store(Request $request)
     {
+        // Jika form mengirimkan file import dapodik
+        if ($request->hasFile('file_dapodik')) {
+            return $this->importDapodik($request);
+        }
+
         $request->validate([
             'nisn' => 'required|string|unique:siswas,nisn',
             'nis' => 'nullable|string|unique:siswas,nis',
@@ -127,6 +135,76 @@ class SiswaController extends Controller
         );
 
         return redirect()->back()->with('success', 'Data siswa berhasil ditambahkan & QR Code di-generate!');
+    }
+
+    /**
+     * Memproses import file Excel/CSV Dapodik
+     */
+    public function importDapodik(Request $request)
+    {
+        $request->validate([
+            'file_dapodik' => 'required|file|max:15360',
+            'default_kelas_id' => 'nullable|exists:kelas,id',
+        ], [
+            'file_dapodik.required' => 'Silakan pilih file Excel / CSV data siswa terlebih dahulu.',
+            'file_dapodik.max' => 'Ukuran file tidak boleh melebihi 15 MB.',
+        ]);
+
+        $result = $this->dapodikImportService->import(
+            $request->file('file_dapodik'),
+            $request->input('default_kelas_id') ? (int)$request->input('default_kelas_id') : null
+        );
+
+        if ($result['success']) {
+            return redirect()->route('admin.siswa.index')->with('success', $result['message']);
+        } else {
+            return redirect()->route('admin.siswa.index')->with('error', $result['message']);
+        }
+    }
+
+    /**
+     * Download format template CSV Dapodik untuk contoh
+     */
+    public function downloadTemplate()
+    {
+        $filename = 'template_import_siswa_dapodik.csv';
+        $headers = [
+            'Content-Type' => 'text/csv; charset=UTF-8',
+            'Content-Disposition' => "attachment; filename=\"$filename\"",
+            'Pragma' => 'no-cache',
+            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+            'Expires' => '0',
+        ];
+
+        $columns = [
+            'No', 'Nama', 'NIPD', 'JK', 'NISN', 'Tempat Lahir', 'Tanggal Lahir', 'NIK', 'Agama',
+            'Alamat', 'RT', 'RW', 'Dusun', 'Kelurahan', 'Kecamatan', 'Kode Pos',
+            'Jenis Tinggal', 'Alat Transportasi', 'HP', 'E-Mail', 'Penerima KPS',
+            'Data Ayah - Nama', 'Data Ibu - Nama', 'Data Wali - Nama', 'Rombel Saat Ini'
+        ];
+
+        $callback = function() use ($columns) {
+            $file = fopen('php://output', 'w');
+            fputs($file, "\xEF\xBB\xBF"); // UTF-8 BOM untuk Microsoft Excel
+            fputcsv($file, $columns);
+
+            fputcsv($file, [
+                '1', 'Ahmad Fadillah', '2425001', 'L', '0081234501', 'Tasikmalaya', '2011-05-12', '3206012345670001', 'Islam',
+                'Jl. Al-Muttaqin No. 10', '01', '02', 'Dusun I', 'Mangkubumi', 'Mangkubumi', '46181',
+                'Bersama orang tua', 'Sepeda Motor', '081234567891', 'ahmad@example.com', 'Tidak',
+                'Bapak Fadil', 'Ibu Fadilah', '', '7'
+            ]);
+            fputcsv($file, [
+                '2', 'Siti Aisyah', '2425002', 'P', '0081234502', 'Tasikmalaya', '2011-08-20', '3206012345670002', 'Islam',
+                'Jl. Sukalaya No. 25', '03', '04', 'Dusun II', 'Cihideung', 'Cihideung', '46122',
+                'Bersama orang tua', 'Jalan Kaki', '081234567892', 'siti@example.com', 'Tidak',
+                'Bapak Aisy', 'Ibu Aisyah', '', '8'
+            ]);
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
     }
 
     public function update(Request $request, $id)

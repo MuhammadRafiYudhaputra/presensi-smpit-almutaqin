@@ -65,10 +65,14 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Data Siswa & Generate QR Code Kartu
+    Route::post('/siswa/import', [SiswaController::class, 'importDapodik'])->name('siswa.import');
+    Route::get('/siswa/template/download', [SiswaController::class, 'downloadTemplate'])->name('siswa.template.download');
     Route::resource('/siswa', SiswaController::class)->except(['create', 'edit']);
     Route::get('/siswa/{id}/card', [SiswaController::class, 'printCard'])->name('siswa.card');
 
     // Data Guru & Reset Password 1-Klik
+    Route::post('/guru/import', [GuruController::class, 'importGuru'])->name('guru.import');
+    Route::get('/guru/template/download', [GuruController::class, 'downloadTemplate'])->name('guru.template.download');
     Route::resource('/guru', GuruController::class)->except(['create', 'edit']);
     Route::post('/guru/{id}/reset-password', [GuruController::class, 'resetPassword'])->name('guru.resetPassword');
 
@@ -79,6 +83,8 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::post('/kenaikan-kelas/pindah', [KenaikanKelasController::class, 'pindahRombel'])->name('kenaikan.pindah');
 
     // Data Orang Tua
+    Route::post('/orangtua/import', [OrangTuaController::class, 'importOrangTua'])->name('orangtua.import');
+    Route::get('/orangtua/template/download', [OrangTuaController::class, 'downloadTemplate'])->name('orangtua.template.download');
     Route::resource('/orangtua', OrangTuaController::class)->except(['create', 'edit']);
 
     // Jam Operasional Presensi
