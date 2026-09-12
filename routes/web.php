@@ -94,7 +94,6 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     // Setting Fonnte WhatsApp API
     Route::get('/fonnte', [FonnteSettingController::class, 'index'])->name('fonnte.index');
     Route::post('/fonnte', [FonnteSettingController::class, 'update'])->name('fonnte.update');
-    Route::post('/fonnte/test', [FonnteSettingController::class, 'testSend'])->name('fonnte.test');
 
     // Monitoring & Rekap Laporan
     Route::get('/monitoring', [RekapKehadiranController::class, 'monitoring'])->name('rekap.monitoring');

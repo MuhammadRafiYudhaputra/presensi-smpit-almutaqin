@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\SettingFonnte;
-use App\Services\FonnteService;
 use Illuminate\Http\Request;
 
 class FonnteSettingController extends Controller
@@ -52,24 +51,4 @@ class FonnteSettingController extends Controller
         return redirect()->back()->with('success', 'Pengaturan Notifikasi Fonnte WhatsApp berhasil disimpan!');
     }
 
-    public function testSend(Request $request, FonnteService $fonnteService)
-    {
-        $request->validate([
-            'target_no_wa' => 'required|string',
-            'message' => 'required|string',
-        ]);
-
-        $setting = SettingFonnte::first();
-        if (!$setting || empty($setting->api_token)) {
-            return redirect()->back()->with('error', 'API Token belum disimpan!');
-        }
-
-        $success = $fonnteService->sendRawMessage($setting->api_token, $request->target_no_wa, $request->message);
-
-        if ($success) {
-            return redirect()->back()->with('success', 'Pesan Uji Coba WhatsApp BERHASIL dikirim!');
-        } else {
-            return redirect()->back()->with('error', 'Gagal mengirim pesan uji coba. Cek log Fonnte!');
-        }
-    }
 }

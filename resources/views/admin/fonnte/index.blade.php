@@ -106,30 +106,5 @@
         </div>
     </form>
 
-    <!-- Test Kirim WhatsApp -->
-    <div class="mt-4 pt-3 border-top">
-        <h6 class="fw-bold text-success mb-3 d-flex align-items-center gap-2">
-            <i class="fa-solid fa-paper-plane"></i>
-            <span>Test Kirim WhatsApp</span>
-        </h6>
-        <form action="{{ route('admin.fonnte.test') }}" method="POST" class="row g-3 align-items-end">
-            @csrf
-            <div class="col-md-4">
-                <label for="test_target_no_wa" class="form-label fw-semibold text-dark small">Nomor Tujuan</label>
-                <input type="text" name="target_no_wa" id="test_target_no_wa" class="form-control form-control-sm" placeholder="628123456789" value="{{ old('target_no_wa') }}" required>
-                <small class="text-muted">Contoh: 628123456789</small>
-            </div>
-            <div class="col-md-6">
-                <label for="test_message" class="form-label fw-semibold text-dark small">Pesan Uji</label>
-                <input type="text" name="message" id="test_message" class="form-control form-control-sm" value="{{ old('message', 'Test notifikasi WhatsApp dari sistem presensi SMP IT Al-Muttaqin.') }}" required>
-            </div>
-            <div class="col-md-2">
-                <button type="submit" class="btn btn-success btn-sm rounded-pill w-100 fw-bold d-inline-flex align-items-center justify-content-center gap-2">
-                    <i class="fa-solid fa-paper-plane"></i>
-                    <span>Kirim Test</span>
-                </button>
-            </div>
-        </form>
-    </div>
 </div>
 @endsection
