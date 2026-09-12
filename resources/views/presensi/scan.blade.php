@@ -188,7 +188,27 @@
 
     // 2. Auto-Focus Handling for USB Scanner
     const qrInput = document.getElementById('qrInput');
+    const resultContainer = document.getElementById('resultContainer');
     let scanTimeout = null;
+    let resultResetTimeout = null;
+
+    function resetResultDisplay() {
+        resultContainer.innerHTML = `
+            <div class="bg-primary bg-opacity-10 p-3 rounded-circle text-primary mb-2 d-inline-flex align-items-center justify-content-center" style="width: 52px; height: 52px;">
+                <i class="fa-solid fa-id-card-clip fs-4"></i>
+            </div>
+            <h6 class="fw-bold text-dark mb-1">Siap Menerima Presensi Siswa</h6>
+            <small class="text-muted">Arahkan sinar alat scanner pada QR Code kartu siswa.</small>
+        `;
+    }
+
+    function scheduleResultReset() {
+        if (resultResetTimeout) clearTimeout(resultResetTimeout);
+        resultResetTimeout = setTimeout(() => {
+            resetResultDisplay();
+            resultResetTimeout = null;
+        }, 8000);
+    }
 
     document.addEventListener('DOMContentLoaded', () => {
         if (qrInput) qrInput.focus();
@@ -223,6 +243,7 @@
             return;
         }
 
+        if (resultResetTimeout) clearTimeout(resultResetTimeout);
         qrInput.disabled = true;
         processPresensi(token, () => {
             qrInput.value = '';
@@ -239,7 +260,7 @@
             return;
         }
 
-        const container = document.getElementById('resultContainer');
+        const container = resultContainer;
         container.innerHTML = `
             <div class="spinner-border text-primary mb-2" role="status" style="width: 2rem; height: 2rem;"></div>
             <div class="fw-bold text-dark small">Memproses Data Presensi...</div>
@@ -316,12 +337,14 @@
                     <small class="text-muted">${data.message || 'Token QR Code tidak valid.'}</small>
                 `;
             }
+            scheduleResultReset();
         })
         .catch(err => {
             console.error('Scan Error:', err);
             container.innerHTML = `
                 <div class="text-danger fw-bold"><i class="fa-solid fa-circle-exclamation me-1"></i> Terjadi kesalahan koneksi server. Silakan coba lagi.</div>
             `;
+            scheduleResultReset();
         })
         .finally(() => {
             if (callback) callback();
